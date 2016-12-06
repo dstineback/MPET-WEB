@@ -9,8 +9,17 @@ using System.Web.UI.WebControls;
 
 public partial class main : System.Web.UI.Page
 {
+    
+    
+
     protected void Page_Load(object sender, EventArgs e)
     {
-      
+        if (HttpContext.Current.Session["LogonInfo"] != null)
+        {
+            {
+                var userName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).Username.ToUpper();
+                divUser.Controls.Add(new LiteralControl (userName));
+            }
+        }
     }
 }

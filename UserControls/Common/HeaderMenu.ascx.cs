@@ -43,7 +43,7 @@ namespace UserControls.Common
                 MenuItem helpMenuItem = mainMenu.Items.Add("Logon", "helpMenuItem");
                 helpMenuItem.ItemStyle.CssClass = "helpMenuItem";
                 helpMenuItem.Image.Url = "~/Content/Images/UserWhite.png";
-                helpMenuItem.NavigateUrl = "~/LogOut.aspx"; 
+               
             }
         }
     }
