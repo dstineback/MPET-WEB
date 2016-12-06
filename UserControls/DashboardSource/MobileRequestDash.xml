@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="Request Dashboard" />
+  <DataConnections>
+    <DataConnection Name="Connection" ConnectionString="Data Source=ROOT5773;&#xD;&#xA;Initial Catalog=MPETNET_Lindt;&#xD;&#xA;Integrated Security=True;&#xD;&#xA;Asynchronous Processing=True;" />
+  </DataConnections>
+  <DataSources>
+    <DataSource ComponentName="dataSource1" Name="Connection">
+      <DataProvider DataConnection="Connection" Sql="DECLARE @RC int&#xD;&#xA;DECLARE @MatchJobType int&#xD;&#xA;DECLARE @MatchJobAgainst int&#xD;&#xA;DECLARE @JobIDLike varchar(8000)&#xD;&#xA;DECLARE @StartingReqDate datetime&#xD;&#xA;DECLARE @EndingReqDate datetime&#xD;&#xA;DECLARE @TitleContains varchar(8000)&#xD;&#xA;DECLARE @RequestedByMatch varchar(8000)&#xD;&#xA;DECLARE @ReasonCodeMatch varchar(8000)&#xD;&#xA;DECLARE @PriorityMatch varchar(8000)&#xD;&#xA;DECLARE @MatchArea varchar(8000)&#xD;&#xA;DECLARE @MatchObjectType varchar(8000)&#xD;&#xA;DECLARE @StateRouteMatch varchar(8000)&#xD;&#xA;DECLARE @MachineIDContains varchar(8000)&#xD;&#xA;DECLARE @ObjectDescr varchar(8000)&#xD;&#xA;DECLARE @UserID int&#xD;&#xA;DECLARE @RouteToID varchar(8000)&#xD;&#xA;DECLARE @Notes varchar(8000)&#xD;&#xA;DECLARE @MiscRef varchar(8000)&#xD;&#xA;DECLARE @ObjLocation varchar(8000)&#xD;&#xA;DECLARE @WorkOpID varchar(8000)&#xD;&#xA;DECLARE @SubAssembly varchar(8000)&#xD;&#xA;DECLARE @MilepostStart decimal(18,4)&#xD;&#xA;DECLARE @MilepostEnd decimal(18,4)&#xD;&#xA;DECLARE @MilepostDirection varchar(8000)&#xD;&#xA;DECLARE @ChargeCode varchar(8000)&#xD;&#xA;DECLARE @FundSource varchar(8000)&#xD;&#xA;DECLARE @WorkOrder varchar(8000)&#xD;&#xA;DECLARE @OrgCode varchar(8000)&#xD;&#xA;DECLARE @FundGroup varchar(8000)&#xD;&#xA;DECLARE @ControlSection varchar(8000)&#xD;&#xA;DECLARE @EquipNum varchar(8000)&#xD;&#xA;DECLARE @HasAttachments varchar(1)&#xD;&#xA;&#xD;&#xA;-- TODO: Set parameter values here.&#xD;&#xA;&#xD;&#xA;EXECUTE @RC = [dbo].[filter_GetFilteredWorkRequestsList] &#xD;&#xA;   @MatchJobType&#xD;&#xA;  ,@MatchJobAgainst&#xD;&#xA;  ,@JobIDLike&#xD;&#xA;  ,@StartingReqDate&#xD;&#xA;  ,@EndingReqDate&#xD;&#xA;  ,@TitleContains&#xD;&#xA;  ,@RequestedByMatch&#xD;&#xA;  ,@ReasonCodeMatch&#xD;&#xA;  ,@PriorityMatch&#xD;&#xA;  ,@MatchArea&#xD;&#xA;  ,@MatchObjectType&#xD;&#xA;  ,@StateRouteMatch&#xD;&#xA;  ,@MachineIDContains&#xD;&#xA;  ,@ObjectDescr&#xD;&#xA;  ,@UserID&#xD;&#xA;  ,@RouteToID&#xD;&#xA;  ,@Notes&#xD;&#xA;  ,@MiscRef&#xD;&#xA;  ,@ObjLocation&#xD;&#xA;  ,@WorkOpID&#xD;&#xA;  ,@SubAssembly&#xD;&#xA;  ,@MilepostStart&#xD;&#xA;  ,@MilepostEnd&#xD;&#xA;  ,@MilepostDirection&#xD;&#xA;  ,@ChargeCode&#xD;&#xA;  ,@FundSource&#xD;&#xA;  ,@WorkOrder&#xD;&#xA;  ,@OrgCode&#xD;&#xA;  ,@FundGroup&#xD;&#xA;  ,@ControlSection&#xD;&#xA;  ,@EquipNum&#xD;&#xA;  ,@HasAttachments&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;">
+        <Selection>
+          <Table Name="MaintenanceObjects">
+            <Columns>
+              <Column Name="n_objectid" Alias="n_objectid" />
+              <Column Name="objectid" Alias="objectid" />
+              <Column Name="description" Alias="description" />
+              <Column Name="AssignedGUID" Alias="AssignedGUID" />
+              <Column Name="tasknum" Alias="tasknum" />
+              <Column Name="n_parentobjectid" Alias="n_parentobjectid" />
+              <Column Name="n_areaid" Alias="n_areaid" />
+              <Column Name="n_costcodeid" Alias="n_costcodeid" />
+              <Column Name="n_locationid" Alias="n_locationid" />
+              <Column Name="n_mfgid" Alias="n_mfgid" />
+              <Column Name="n_objclassid" Alias="n_objclassid" />
+              <Column Name="n_objtypeid" Alias="n_objtypeid" />
+              <Column Name="n_prodlineid" Alias="n_prodlineid" />
+              <Column Name="n_storeroomid" Alias="n_storeroomid" />
+              <Column Name="Notes" Alias="Notes" />
+              <Column Name="assetnumber" Alias="assetnumber" />
+              <Column Name="b_active" Alias="b_active" />
+              <Column Name="b_chargeable" Alias="b_chargeable" />
+              <Column Name="charge_rate" Alias="charge_rate" />
+              <Column Name="b_oeefocus" Alias="b_oeefocus" />
+              <Column Name="b_route" Alias="b_route" />
+              <Column Name="fundmtltype" Alias="fundmtltype" />
+              <Column Name="GPS_X" Alias="GPS_X" />
+              <Column Name="GPS_Y" Alias="GPS_Y" />
+              <Column Name="GPS_Z" Alias="GPS_Z" />
+              <Column Name="logicalorder" Alias="logicalorder" />
+              <Column Name="idealcycle" Alias="idealcycle" />
+              <Column Name="inservicedate" Alias="inservicedate" />
+              <Column Name="mfgid" Alias="mfgid" />
+              <Column Name="mfgmodel" Alias="mfgmodel" />
+              <Column Name="miscrefnum" Alias="miscrefnum" />
+              <Column Name="objectcount" Alias="objectcount" />
+              <Column Name="purchasedate" Alias="purchasedate" />
+              <Column Name="purchaseprice" Alias="purchaseprice" />
+              <Column Name="remarks" Alias="remarks" />
+              <Column Name="serialnumber" Alias="serialnumber" />
+              <Column Name="statusdate" Alias="statusdate" />
+              <Column Name="warrantyexpdate" Alias="warrantyexpdate" />
+              <Column Name="n_OverheadRateID" Alias="n_OverheadRateID" />
+              <Column Name="n_ResponsiblePerson" Alias="n_ResponsiblePerson" />
+              <Column Name="CurrentConditionCode" Alias="CurrentConditionCode" />
+              <Column Name="ExpectedLifeExpirationDate" Alias="ExpectedLifeExpirationDate" />
+              <Column Name="PurchaseVendorID" Alias="PurchaseVendorID" />
+              <Column Name="MilePost" Alias="MilePost" />
+              <Column Name="n_MilePostDirection" Alias="n_MilePostDirection" />
+              <Column Name="n_StateRouteID" Alias="n_StateRouteID" />
+              <Column Name="Easting" Alias="Easting" />
+              <Column Name="Northing" Alias="Northing" />
+              <Column Name="WarrantyIntervalDays" Alias="WarrantyIntervalDays" />
+              <Column Name="LifeCycleIntervalDays" Alias="LifeCycleIntervalDays" />
+              <Column Name="CreatedBy" Alias="CreatedBy" />
+              <Column Name="CreatedOn" Alias="CreatedOn" />
+              <Column Name="ModifiedBy" Alias="ModifiedBy" />
+              <Column Name="LastModified" Alias="LastModified" />
+              <Column Name="SynchTimestamp" Alias="SynchTimestamp" />
+              <Column Name="n_UnitsOfMeasureID" Alias="n_UnitsOfMeasureID" />
+              <Column Name="MilePostTo" Alias="MilePostTo" />
+              <Column Name="Quantity" Alias="Quantity" />
+              <Column Name="availablehours" Alias="availablehours" />
+              <Column Name="pmhours" Alias="pmhours" />
+              <Column Name="totalavailablehours" Alias="totalavailablehours" />
+              <Column Name="n_FundSrcCodeID" Alias="n_FundSrcCodeID" />
+              <Column Name="n_WorkOrderCodeID" Alias="n_WorkOrderCodeID" />
+              <Column Name="n_WorkOpID" Alias="n_WorkOpID" />
+              <Column Name="n_OrganizationCodeID" Alias="n_OrganizationCodeID" />
+              <Column Name="n_FundingGroupCodeID" Alias="n_FundingGroupCodeID" />
+              <Column Name="n_ControlSectionID" Alias="n_ControlSectionID" />
+              <Column Name="n_EquipmentNumberID" Alias="n_EquipmentNumberID" />
+            </Columns>
+          </Table>
+          <Filters>
+            <Filter TableName="MaintenanceObjects" FilterString="" />
+          </Filters>
+        </Selection>
+      </DataProvider>
+    </DataSource>
+  </DataSources>
+  <Items>
+    <Chart ComponentName="chartDashboardItem2" Name="Requests By Activity" DataSource="dataSource1" Rotated="true">
+      <InteractivityOptions IsDrillDownEnabled="true" />
+      <DataItems>
+        <Measure DataMember="Jobid" SummaryType="Count" UniqueName="DataItem0" />
+        <Dimension DataMember="Requestor" ColoringMode="Hue" UniqueName="DataItem5" />
+        <Dimension DataMember="WorkOpID" ColoringMode="Hue" UniqueName="DataItem1" />
+        <Dimension DataMember="PriorityID" ColoringMode="Hue" UniqueName="DataItem4" />
+        <Dimension DataMember="ReasonID" ColoringMode="Hue" UniqueName="DataItem3" />
+      </DataItems>
+      <Arguments>
+        <Argument UniqueName="DataItem1" />
+        <Argument UniqueName="DataItem4" />
+        <Argument UniqueName="DataItem3" />
+        <Argument UniqueName="DataItem5" />
+      </Arguments>
+      <Panes>
+        <Pane Name="Pane 1">
+          <AxisY TitleVisible="false" />
+          <Series>
+            <Simple Name="Jobid (Count)">
+              <Value UniqueName="DataItem0" />
+            </Simple>
+          </Series>
+        </Pane>
+      </Panes>
+      <ChartLegend OutsidePosition="BottomCenterHorizontal" />
+      <AxisX Visible="false" Reverse="true" />
+    </Chart>
+    <RangeFilter ComponentName="rangeFilterDashboardItem1" Name="Request Date Range" ShowCaption="true" DataSource="dataSource1" FilterString="[DataItem0] &gt; #1960-01-01#">
+      <DataItems>
+        <Dimension DataMember="Request Date" DateTimeGroupInterval="MonthYear" UniqueName="DataItem0" />
+        <Measure DataMember="Jobid" SummaryType="Count" UniqueName="DataItem1" />
+      </DataItems>
+      <Argument UniqueName="DataItem0" />
+      <Series>
+        <Simple SeriesType="Area">
+          <Value UniqueName="DataItem1" />
+        </Simple>
+      </Series>
+    </RangeFilter>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical">
+      <LayoutGroup Weight="70.134638922888612">
+        <LayoutItem DashboardItem="chartDashboardItem2" Weight="70.134638922888612" />
+      </LayoutGroup>
+      <LayoutItem DashboardItem="rangeFilterDashboardItem1" Weight="29.865361077111384" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

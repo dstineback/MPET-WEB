@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="Dashboard" />
+  <DataSources>
+    <SqlDataSource ComponentName="dashboardSqlDataSource1">
+      <Name>SQL Data Source 1</Name>
+      <Connection Name="ROOT5773_MPETNET_LINDT_Connection" ProviderKey="MSSqlServer">
+        <Parameters>
+          <Parameter Name="server" Value="ROOT5773" />
+          <Parameter Name="database" Value="MPETNET_LINDT" />
+          <Parameter Name="useIntegratedSecurity" Value="True" />
+          <Parameter Name="read only" Value="1" />
+          <Parameter Name="generateConnectionHelper" Value="false" />
+          <Parameter Name="userid" Value="" />
+          <Parameter Name="password" Value="" />
+        </Parameters>
+      </Connection>
+      <Query Type="TableQuery" Name="HistCostSumm">
+        <Table Name="HistCostSumm">
+          <Column Name="TTLParts" />
+          <Column Name="TTLLabor" />
+          <Column Name="TTLEquipment" />
+          <Column Name="TTLOther" />
+          <Column Name="JobID" />
+        </Table>
+        <Table Name="Jobs" />
+        <Table Name="MaintenanceObjects" />
+        <Table Name="Jobsteps">
+          <Column Name="DateTimeCompleted" />
+        </Table>
+        <Table Name="objecttypes" />
+        <Table Name="objectclasses">
+          <Column Name="objclassid" />
+        </Table>
+        <Relation Type="Inner" Parent="HistCostSumm" Nested="Jobs">
+          <KeyColumn Parent="n_HistoryID" Nested="n_Jobid" />
+        </Relation>
+        <Relation Type="Inner" Parent="Jobs" Nested="MaintenanceObjects">
+          <KeyColumn Parent="n_MaintObjectID" Nested="n_objectid" />
+        </Relation>
+        <Relation Type="Inner" Parent="Jobs" Nested="Jobsteps">
+          <KeyColumn Parent="n_Jobid" Nested="n_jobid" />
+        </Relation>
+        <Relation Type="Inner" Parent="MaintenanceObjects" Nested="objecttypes">
+          <KeyColumn Parent="n_objtypeid" Nested="n_objtypeid" />
+        </Relation>
+        <Relation Type="Inner" Parent="MaintenanceObjects" Nested="objectclasses">
+          <KeyColumn Parent="n_objclassid" Nested="n_objclassid" />
+        </Relation>
+      </Query>
+      <ResultSchema>
+        <DataSet Name="SQL Data Source 1">
+          <View Name="HistCostSumm">
+            <Field Name="TTLParts" Type="Decimal" />
+            <Field Name="TTLLabor" Type="Decimal" />
+            <Field Name="TTLEquipment" Type="Decimal" />
+            <Field Name="TTLOther" Type="Decimal" />
+            <Field Name="JobID" Type="String" />
+            <Field Name="DateTimeCompleted" Type="DateTime" />
+            <Field Name="objclassid" Type="String" />
+          </View>
+        </DataSet>
+      </ResultSchema>
+    </SqlDataSource>
+  </DataSources>
+  <Items>
+    <Grid ComponentName="gridDashboardItem1" Name="Grid 1" DataSource="dashboardSqlDataSource1" DataMember="HistCostSumm">
+      <InteractivityOptions IsDrillDownEnabled="true" />
+      <DataItems>
+        <Dimension DataMember="objclassid" UniqueName="DataItem0" />
+        <Measure DataMember="TTLEquipment" UniqueName="DataItem2" />
+        <Measure DataMember="TTLLabor" UniqueName="DataItem3" />
+        <Measure DataMember="TTLOther" UniqueName="DataItem4" />
+        <Measure DataMember="TTLParts" UniqueName="DataItem5" />
+        <Dimension DataMember="JobID" UniqueName="DataItem6" />
+      </DataItems>
+      <GridColumns>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem0" />
+        </GridDimensionColumn>
+        <GridDimensionColumn>
+          <Dimension UniqueName="DataItem6" />
+        </GridDimensionColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem2" />
+        </GridMeasureColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem3" />
+        </GridMeasureColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem4" />
+        </GridMeasureColumn>
+        <GridMeasureColumn>
+          <Measure UniqueName="DataItem5" />
+        </GridMeasureColumn>
+      </GridColumns>
+      <GridOptions />
+    </Grid>
+    <RangeFilter ComponentName="rangeFilterDashboardItem1" Name="Range Filter 1" DataSource="dashboardSqlDataSource1" DataMember="HistCostSumm" FilterString="[DataItem1] &gt; 1960">
+      <DataItems>
+        <Measure DataMember="JobID" SummaryType="Count" UniqueName="DataItem0" />
+        <Dimension DataMember="DateTimeCompleted" UniqueName="DataItem1" />
+      </DataItems>
+      <Argument UniqueName="DataItem1" />
+      <Series>
+        <Simple SeriesType="Line">
+          <Value UniqueName="DataItem0" />
+        </Simple>
+      </Series>
+    </RangeFilter>
+  </Items>
+  <LayoutTree>
+    <LayoutGroup Orientation="Vertical">
+      <LayoutItem DashboardItem="gridDashboardItem1" Weight="74.468085106382972" />
+      <LayoutItem DashboardItem="rangeFilterDashboardItem1" Weight="25.531914893617021" />
+    </LayoutGroup>
+  </LayoutTree>
+</Dashboard>

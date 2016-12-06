@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dashboard CurrencyCulture="en-US">
+  <Title Text="Dashboard" />
+  <DataSources>
+    <SqlDataSource ComponentName="dashboardSqlDataSource1">
+      <Name>SQL Data Source 1</Name>
+      <Connection Name="ROOT5773_MPETNET_LINDT_Connection" ProviderKey="MSSqlServer">
+        <Parameters>
+          <Parameter Name="server" Value="ROOT5773" />
+          <Parameter Name="database" Value="MPETNET_LINDT" />
+          <Parameter Name="useIntegratedSecurity" Value="True" />
+          <Parameter Name="read only" Value="1" />
+          <Parameter Name="generateConnectionHelper" Value="false" />
+          <Parameter Name="userid" Value="" />
+          <Parameter Name="password" Value="" />
+        </Parameters>
+      </Connection>
+      <Query Type="CustomSqlQuery" Name="Query">
+        <Sql>SELECT  tbl_Jobs.n_Jobid ,
+        CASE tbl_Jobs.TypeOfJob
+          WHEN 1 THEN 'P'
+          WHEN 2 THEN 'C'
+          WHEN 3 THEN 'R'
+          WHEN 4 THEN 'B'
+          ELSE 'U'
+        END AS [T] ,
+        CASE tbl_Jobs.JobAgainstID
+          WHEN 1 THEN 'M'
+          WHEN 2 THEN 'L'
+          WHEN 3 THEN 'A'
+          WHEN 4 THEN 'G'
+          ELSE 'U'
+        END AS [A] ,
+        tbl_Jobs.Jobid ,
+        tbl_MaintObj.objectid AS [Object ID] ,
+        tbl_Jobs.Title ,
+        CASE tbl_Jobs.RequestDate
+          WHEN CAST('1/1/1960 23:59:59' AS DATETIME) THEN NULL
+          ELSE CAST(CAST(RequestDate AS VARCHAR(11)) AS DATETIME)
+        END AS [Request Date] ,
+        tbl_Jobs.AssignedGUID ,
+        tbl_MPETUsers.Username AS 'RouteToID' ,
+        tbl_WorkOp.WorkOpID ,
+        tbl_Priorities.priorityid AS 'PriorityID' ,
+        tbl_JobReasons.JobReasonID AS 'ReasonID' ,
+        tbl_SubAssembly.SubAssemblyName ,
+        CASE tbl_StateRoutes.StateRouteID
+          WHEN 'N/A' THEN NULL
+          ELSE tbl_StateRoutes.StateRouteID
+        END AS HwyRouteID ,
+        CASE tbl_Jobs.Milepost
+          WHEN 0.0000 THEN NULL
+          ELSE tbl_Jobs.Milepost
+        END AS Milepost ,
+        CASE tbl_MilePostDir.MilePostDirectionID
+          WHEN 'N/A' THEN NULL
+          ELSE tbl_MilePostDir.MilePostDirectionID
+        END AS MilePostDirID ,
+        tbl_Requestor.Username AS 'Requestor' ,
+        -1 AS 'FlaggedRecordID' ,
+        CASE [costcodeid]
+          WHEN 'N/A' THEN NULL
+          ELSE [costcodeid]
+        END AS [CostCodeID] ,
+        CASE [FundSrcCodeID]
+          WHEN 'N/A' THEN NULL
+          ELSE [FundSrcCodeID]
+        END AS [FundSrcCodeID] ,
+        CASE [WorkOrderCodeID]
+          WHEN 'N/A' THEN NULL
+          ELSE [WorkOrderCodeID]
+        END AS [WorkOrderCodeID] ,
+        CASE [OrganizationCodeID]
+          WHEN 'N/A' THEN NULL
+          ELSE [OrganizationCodeID]
+        END AS [OrganizationCodeID] ,
+        CASE [FundingGroupCodeID]
+          WHEN 'N/A' THEN NULL
+          ELSE [FundingGroupCodeID]
+        END AS [FundingGroupCodeID] ,
+        CASE [ControlSectionID]
+          WHEN 'N/A' THEN NULL
+          ELSE [ControlSectionID]
+        END AS [ControlSectionID] ,
+        CASE [EquipmentNumberID]
+          WHEN 'N/A' THEN NULL
+          ELSE [EquipmentNumberID]
+        END AS [EquipmentNumberID] ,
+        tbl_Jobs.MilePostTo AS 'MilePostTo' ,
+        tbl_MaintObj.areaid AS [Area ID] ,
+        tbl_Creator.Username AS 'Created By' ,
+        tbl_Jobs.CreationDate AS 'Created On' ,
+        tbl_Jobs.LastModified AS 'Modified By' ,
+        tbl_Modifier.Username AS 'Modified On'
+FROM    [dbo].[Jobs] tbl_Jobs
+        INNER JOIN ( SELECT tbl_MO.n_objectid ,
+                            tbl_MO.objectid ,
+                            tbl_MO.description ,
+                            tbl_Area.areaid
+                     FROM   dbo.MaintenanceObjects tbl_MO
+                            INNER JOIN ( SELECT tblArea.n_areaid ,
+                                                tblArea.areaid
+                                         FROM   dbo.Areas tblArea
+                                       ) tbl_Area ON tbl_MO.n_areaid = tbl_Area.n_areaid
+                            INNER JOIN ( SELECT tblObjectTypes.n_objtypeid ,
+                                                tblObjectTypes.objtypeid
+                                         FROM   dbo.objecttypes tblObjectTypes
+                                       ) tbl_ObjectTypes ON tbl_ObjectTypes.n_objtypeid = tbl_MO.n_objtypeid
+                            INNER JOIN ( SELECT tblLocations.n_locationid ,
+                                                tblLocations.locationid
+                                         FROM   dbo.locations tblLocations
+                                       ) tbl_Locations ON tbl_Locations.n_locationid = tbl_MO.n_locationid
+                   ) tbl_MaintObj ON tbl_Jobs.n_MaintObjectID = tbl_MaintObj.n_objectid
+        INNER JOIN ( SELECT tblRouteTo.UserID ,
+                            tblRouteTo.Username
+                     FROM   dbo.MPetUsers tblRouteTo
+                   ) tbl_MPETUsers ON tbl_Jobs.n_OwnerID = tbl_MPETUsers.UserID
+        INNER JOIN ( SELECT tblWorkOp.n_WorkOpID ,
+                            tblWorkOp.WorkOpID
+                     FROM   dbo.WorkOperations tblWorkOp
+                   ) tbl_WorkOp ON tbl_Jobs.n_worktypeid = tbl_WorkOp.n_WorkOpID
+        INNER JOIN ( SELECT tblPriorities.n_priorityid ,
+                            tblPriorities.priorityid
+                     FROM   dbo.Priorities tblPriorities
+                   ) tbl_Priorities ON tbl_Jobs.n_requestPriority = tbl_Priorities.n_priorityid
+        INNER JOIN ( SELECT tblJobReasons.nJobReasonID ,
+                            tblJobReasons.JobReasonID
+                     FROM   dbo.JobReasons tblJobReasons
+                   ) tbl_JobReasons ON tbl_Jobs.n_jobreasonid = tbl_JobReasons.nJobReasonID
+        LEFT JOIN ( SELECT  tblSubAssembly.nSubAssemblyID ,
+                            tblSubAssembly.SubAssemblyName
+                    FROM    dbo.SubAssemblyNames tblSubAssembly
+                  ) tbl_SubAssembly ON tbl_Jobs.SubAssemblyID = tbl_SubAssembly.nSubAssemblyID
+        INNER JOIN ( SELECT tblStateRoutes.n_StateRouteID ,
+                            tblStateRoutes.StateRouteID
+                     FROM   dbo.StateRoutes tblStateRoutes
+                   ) tbl_StateRoutes ON tbl_Jobs.n_StateRouteID = tbl_StateRoutes.n_StateRouteID
+        INNER JOIN ( SELECT tblMilepostDir.n_MilePostDirectionID ,
+                            tblMilepostDir.MilePostDirectionID
+                     FROM   dbo.MilePostDirections tblMilepostDir
+                   ) tbl_MilePostDir ON tbl_Jobs.IncreasingMP = tbl_MilePostDir.n_MilePostDirectionID
+        INNER JOIN ( SELECT tblRequestor.UserID ,
+                            tblRequestor.Username
+                     FROM   dbo.MPetUsers tblRequestor
+                   ) tbl_Requestor ON tbl_Jobs.n_requestor = tbl_Requestor.UserID
+        INNER JOIN ( SELECT tblCostCodes.n_costcodeid ,
+                            tblCostCodes.costcodeid ,
+                            tblCostCodes.SupplementalCode
+                     FROM   dbo.CostCodes tblCostCodes
+                   ) tbl_CostCodes ON tbl_Jobs.n_CostCodeID = tbl_CostCodes.n_costcodeid
+        INNER JOIN ( SELECT tblFundSource.n_FundSrcCodeID ,
+                            tblFundSource.FundSrcCodeID
+                     FROM   dbo.FundSrcCodes tblFundSource
+                   ) tbl_FundSource ON tbl_Jobs.n_FundSrcCodeID = tbl_FundSource.n_FundSrcCodeID
+        INNER JOIN ( SELECT tblWorkOrders.n_WorkOrderCodeID ,
+                            tblWorkOrders.WorkOrderCodeID
+                     FROM   dbo.WorkOrderCodes tblWorkOrders
+                   ) tbl_WorkOrders ON tbl_Jobs.n_WorkOrderCodeID = tbl_WorkOrders.n_WorkOrderCodeID
+        INNER JOIN ( SELECT tblOrgCode.n_OrganizationCodeID ,
+                            tblOrgCode.OrganizationCodeID
+                     FROM   dbo.OrganizationCodes tblOrgCode
+                   ) tbl_OrgCode ON tbl_Jobs.n_OrganizationCodeID = tbl_OrgCode.n_OrganizationCodeID
+        INNER JOIN ( SELECT tblFundGroup.n_FundingGroupCodeID ,
+                            tblFundGroup.FundingGroupCodeID
+                     FROM   dbo.FundingGroupCodes tblFundGroup
+                   ) tbl_FundGroup ON tbl_Jobs.n_FundingGroupCodeID = tbl_FundGroup.n_FundingGroupCodeID
+        INNER JOIN ( SELECT tblEquipNumber.n_EquipmentNumberID ,
+                            tblEquipNumber.EquipmentNumberID
+                     FROM   dbo.EquipmentNumber tblEquipNumber
+                   ) tbl_EquipNumber ON tbl_Jobs.n_EquipmentNumberID = tbl_EquipNumber.n_EquipmentNumberID
+        INNER JOIN ( SELECT tblControlSection.n_ControlSectionID ,
+                            tblControlSection.ControlSectionID
+                     FROM   dbo.ControlSections tblControlSection
+                   ) tbl_ControlSection ON tbl_Jobs.n_ControlSectionID = tbl_ControlSection.n_ControlSectionID
+        INNER JOIN ( SELECT dbo.MPetUsers.UserID ,
+                            CASE dbo.MPetUsers.UserID
+                              WHEN -1 THEN 'N/A'
+                              WHEN 0 THEN 'IMPORTED'
+                              ELSE dbo.MPetUsers.Username
+                            END AS Username
+                     FROM   dbo.MPetUsers
+                   ) tbl_Creator ON tbl_Jobs.CreatedBy = tbl_Creator.UserID
+        INNER JOIN ( SELECT dbo.MPetUsers.UserID ,
+                            CASE dbo.MPetUsers.UserID
+                              WHEN -1 THEN 'N/A'
+                              WHEN 0 THEN 'IMPORTED'
+                              ELSE dbo.MPetUsers.Username
+                            END AS Username
+                     FROM   dbo.MPetUsers
+                   ) tbl_Modifier ON tbl_Jobs.LastModifiedBy = tbl_Modifier.UserID
+WHERE   ( tbl_Jobs.n_Jobid &gt; 0 )
+        AND ( tbl_Jobs.IsHistory = 'N' )
+        AND ( tbl_Jobs.IsRequestOnly = 'Y' );</Sql>
+      </Query>
+      <ResultSchema>
+        <DataSet Name="SQL Data Source 1">
+          <View Name="Query">
+            <Field Name="n_Jobid" Type="Int32" />
+            <Field Name="T" Type="String" />
+            <Field Name="A" Type="String" />
+            <Field Name="Jobid" Type="String" />
+            <Field Name="Object ID" Type="String" />
+            <Field Name="Title" Type="String" />
+            <Field Name="Request Date" Type="DateTime" />
+            <Field Name="AssignedGUID" Type="String" />
+            <Field Name="RouteToID" Type="String" />
+            <Field Name="WorkOpID" Type="String" />
+            <Field Name="PriorityID" Type="String" />
+            <Field Name="ReasonID" Type="String" />
+            <Field Name="SubAssemblyName" Type="String" />
+            <Field Name="HwyRouteID" Type="String" />
+            <Field Name="Milepost" Type="Decimal" />
+            <Field Name="MilePostDirID" Type="String" />
+            <Field Name="Requestor" Type="String" />
+            <Field Name="FlaggedRecordID" Type="Int32" />
+            <Field Name="CostCodeID" Type="String" />
+            <Field Name="FundSrcCodeID" Type="String" />
+            <Field Name="WorkOrderCodeID" Type="String" />
+            <Field Name="OrganizationCodeID" Type="String" />
+            <Field Name="FundingGroupCodeID" Type="String" />
+            <Field Name="ControlSectionID" Type="String" />
+            <Field Name="EquipmentNumberID" Type="String" />
+            <Field Name="MilePostTo" Type="Decimal" />
+            <Field Name="Area ID" Type="String" />
+            <Field Name="Created By" Type="String" />
+            <Field Name="Created On" Type="DateTime" />
+            <Field Name="Modified By" Type="DateTime" />
+            <Field Name="Modified On" Type="String" />
+          </View>
+        </DataSet>
+      </ResultSchema>
+    </SqlDataSource>
+  </DataSources>
+</Dashboard>

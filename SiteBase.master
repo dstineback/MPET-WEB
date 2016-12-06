@@ -1,0 +1,157 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="SiteBase.master.cs" Inherits="SiteMasterBase" ViewStateMode="Disabled" %>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head runat="server">
+        <title>
+            <asp:ContentPlaceHolder ID="PageTitlePartPlaceHolder" runat="server"></asp:ContentPlaceHolder><%= " | Maintenance Productivity Enhancement Tool" %>
+        </title>
+        <link href="~/Content/Css/MpetWebStyle.css" rel="stylesheet" />
+        <script src="~/Content/Scripts/Helper.js"></script>
+        <script type="text/javascript">
+            function HidePopup() {
+                window.HelpMenuPopup.Hide();
+                window.MsgBoxPopup.Hide();
+            }
+        </script>
+        <style type="text/css">
+            .auto-style1 {
+                left: -10px;
+                top: 110px;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="form1" runat="server" class="auto-style1">
+            <dx:ASPxGlobalEvents ID="GlobalEvents" runat="server">
+            </dx:ASPxGlobalEvents>
+            <dx:ASPxPopupControl ID="HelpMenuPopup" ClientInstanceName="HelpMenuPopup" ShowCloseButton="False" HeaderText=""
+                                 CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowFooter="True"
+                                 CssClass="popup" CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter">
+                <ContentCollection>
+                    <dx:PopupControlContentControl>
+                        <div class="popup-text">
+                            <dx:ASPxFormLayout ID="ASPxLogonLayout" Width="98%" runat="server" Font-Size="Medium">
+                                <Items>
+                                    <dx:LayoutGroup Caption="Logon Information" >
+                                        <Items>
+                                                                    
+                                            <dx:LayoutItem Caption="Username">
+                                                <LayoutItemNestedControlCollection >
+                                                    <dx:LayoutItemNestedControlContainer>
+                                                        <dx:ASPxTextBox ID="txtUsername" 
+                                                                        ClientInstanceName="txtUsername"
+                                                                        runat="server" 
+                                                                        Theme="Mulberry" >
+                                                            <ValidationSettings>
+                                                                <RequiredField IsRequired="True" />
+                                                            </ValidationSettings>
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                            <dx:LayoutItem Caption="Password:">
+                                                <LayoutItemNestedControlCollection>
+                                                    <dx:LayoutItemNestedControlContainer>
+                                                        <dx:ASPxTextBox ID="txtPassword" 
+                                                                        ClientInstanceName="txtPassword" 
+                                                                        runat="server" Theme="Mulberry" Password="True" >                                                                
+                                                            <ValidationSettings>
+                                                                <RequiredField IsRequired="True" />
+                                                            </ValidationSettings>
+                                                        </dx:ASPxTextBox>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                        </Items>
+                                    </dx:LayoutGroup>
+
+                                </Items>
+                            </dx:ASPxFormLayout>
+                        </div>
+                    </dx:PopupControlContentControl>
+                </ContentCollection>
+                <FooterTemplate>
+                    <div class="popup-buttons">
+                        <dx:ASPxButton ID="LogonButton" AutoPostBack="True" runat="server" CssClass="button" Text="Logon" OnClick="btnSubmitLoginCredentials_Click" >
+                            <HoverStyle CssClass="hover"></HoverStyle>
+                        </dx:ASPxButton>
+                        <dx:ASPxButton ID="OkButton" AutoPostBack="True" runat="server" Text="Cancel" CssClass="button">
+                            <ClientSideEvents Click="HidePopup" />
+                            <HoverStyle CssClass="hover"></HoverStyle>
+                        </dx:ASPxButton>
+                    </div>
+                </FooterTemplate>
+            </dx:ASPxPopupControl>
+            <dx:ASPxPopupControl ID="MsgBoxPopup" ClientInstanceName="MsgBoxPopup" ShowCloseButton="false" HeaderText=""
+                                 CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
+                                 CssClass="popup" CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter">
+                <ContentCollection>
+                    <dx:PopupControlContentControl>
+                        <div class="popup-text">
+                            <dx:ASPxFormLayout ID="flError" runat="server" Font-Size="Medium">
+                                <Items>
+                                    <dx:LayoutGroup Caption="Error Information" >
+                                        <Items>
+                                                                    
+                                            <dx:LayoutItem Caption="" ShowCaption="False">
+                                                <LayoutItemNestedControlCollection >
+                                                    <dx:LayoutItemNestedControlContainer>
+                                                        <dx:ASPxMemo ID="txtErrorInfo" 
+                                                                        ClientInstanceName="txtErrorInfo"
+                                                                        runat="server"  
+                                                                        Theme="Mulberry" 
+                                                                         Height="100"
+                                                                         Width="400px"
+                                                                        ReadOnly="True">
+                                                        </dx:ASPxMemo>
+                                                    </dx:LayoutItemNestedControlContainer>
+                                                </LayoutItemNestedControlCollection>
+                                            </dx:LayoutItem>
+                                        </Items>
+                                    </dx:LayoutGroup>
+
+                                </Items>
+                            </dx:ASPxFormLayout>
+                        </div>
+                    </dx:PopupControlContentControl>
+                </ContentCollection>
+                <FooterTemplate>
+                    <div class="popup-buttons">
+                        <dx:ASPxButton ID="OkButton" AutoPostBack="True" runat="server" Text="Ok" CssClass="button">
+                            <ClientSideEvents Click="HidePopup" />
+                            <HoverStyle CssClass="hover"></HoverStyle>
+                        </dx:ASPxButton>
+                    </div>
+                </FooterTemplate>
+            </dx:ASPxPopupControl>
+            <div class="contentHolder">
+                <div class="header">
+                    <div class="contentBox">
+                        <uc:Header runat="server" ID="Header" />
+                    </div>
+                </div>
+                <div class="content" style="background-color: white;">
+                    <div class="contentBox">
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="contentBox">
+                        <asp:ContentPlaceHolder ID="BottomContentPlaceHolder" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                    <asp:ContentPlaceHolder ID="FooterRangeControlPlaceHolder" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+            </div>
+            <div class="footerHolder">
+                <footer class="footer">
+                    <div class="contentBox">
+                        <uc:Footer runat="server" ID="Footer" />
+                    </div>
+                </footer>
+            </div>
+        </form>
+    </body>
+</html>
