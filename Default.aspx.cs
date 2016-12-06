@@ -12,7 +12,7 @@ public partial class _Default : BasePage {
 
         if (HttpContext.Current.Session["LogonInfo"] != null)
         {
-            //Direct To Task Page When MPET logo is clicked
+            //Direct To Main Page When MPET logo is clicked
             Response.Redirect("~/main.aspx");
         }
     }
