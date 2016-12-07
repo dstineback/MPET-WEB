@@ -11,6 +11,7 @@
       <siteMapNode url="~/Pages/Objects/ObjectsList.aspx" title="Objects/Asset List" description="Edit/List Objects and Assets" />
     </siteMapNode>
     <siteMapNode url="" title="Jobs" description="Add/Edit/List Requests and Planned Jobs">
+      <siteMapNode url="~/Pages/PlannedJobs/myJobs.aspx" title="My Jobs" description="List of user jobs" />
       <siteMapNode url="~/Pages/WorkRequests/RequestsList.aspx" title="Work Requests" description="Add/Edit/List Requests">
         <siteMapNode url="~/Pages/WorkRequests/Requests.aspx" title="Add Work Request" description="Add New Work Request" />
         <siteMapNode url="~/Pages/FacilityRequests/FacilityRequests.aspx" title="Add Facility Requests" description="Add New Facility Requests" />

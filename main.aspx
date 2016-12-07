@@ -3,5 +3,7 @@
 <asp:Content ID="main" ContentPlaceHolderID="ContentPlaceHolder" runat="server">
   
       <div id="mainPageDiv" runat="server">Welcome to M-PET <div id="divUser" runat="server"></div>, <br />What would you like to do? </div>
+
+      <div id="divUserID" runat="server"></div>
    
 </asp:Content>

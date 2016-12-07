@@ -413,7 +413,7 @@ namespace Pages.PlannedJobs
                                         //Check Table Count
                                         if (_oJob.Ds.Tables.Count > 0)
                                         {
-                                            //Check Row Cunt
+                                            //Check Row Count
                                             if (_oJob.Ds.Tables[0].Rows.Count > 0)
                                             {
                                                 //Expected Job Schema
