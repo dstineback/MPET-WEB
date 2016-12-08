@@ -7,70 +7,10 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     This is the test MyJobs page
-    <asp:GridView runat="server" ID="myJobsGrid" AllowPaging="True" AllowSorting="True" DataSourceID="MyJobsDS" BorderStyle="Solid" CellPadding="4" ForeColor="#333333" GridLines="None">
+    <asp:GridView runat="server" ID="myJobsGrid" BorderStyle="Solid" CellPadding="4" ForeColor="#333333" GridLines="None">
          
         <AlternatingRowStyle BackColor="White" BorderStyle="Solid" />
          
-       <Columns>
-            <asp:CommandField ShowSelectButton="True" />
-            <asp:BoundField DataField="n_jobstepid" HeaderText="n_jobstepid" InsertVisible="False" ReadOnly="True" SortExpression="n_jobstepid" />
-            <asp:BoundField DataField="n_jobid" HeaderText="n_jobid" SortExpression="n_jobid" />
-            <asp:BoundField DataField="T" HeaderText="T" ReadOnly="True" SortExpression="T" />
-            <asp:BoundField DataField="A" HeaderText="A" ReadOnly="True" SortExpression="A" />
-            <asp:BoundField DataField="Jobid" HeaderText="Jobid" SortExpression="Jobid" />
-            <asp:BoundField DataField="Object ID" HeaderText="Object ID" SortExpression="Object ID" />
-            <asp:BoundField DataField="step" HeaderText="step" SortExpression="step" />
-            <asp:BoundField DataField="Step Title" HeaderText="Step Title" SortExpression="Step Title" />
-            <asp:BoundField DataField="Priority" HeaderText="Priority" SortExpression="Priority" />
-            <asp:BoundField DataField="Status" HeaderText="Status" SortExpression="Status" />
-            <asp:BoundField DataField="Requested" HeaderText="Requested" ReadOnly="True" SortExpression="Requested" />
-            <asp:BoundField DataField="Starting Date" HeaderText="Starting Date" ReadOnly="True" SortExpression="Starting Date" />
-            <asp:BoundField DataField="Labor Class" HeaderText="Labor Class" SortExpression="Labor Class" />
-            <asp:BoundField DataField="Group" HeaderText="Group" SortExpression="Group" />
-            <asp:BoundField DataField="Outcome" HeaderText="Outcome" SortExpression="Outcome" />
-            <asp:BoundField DataField="Supervisor" HeaderText="Supervisor" SortExpression="Supervisor" />
-            <asp:BoundField DataField="H" HeaderText="H" SortExpression="H" />
-            <asp:BoundField DataField="I" HeaderText="I" ReadOnly="True" SortExpression="I" />
-            <asp:BoundField DataField="cReasoncode" HeaderText="cReasoncode" SortExpression="cReasoncode" />
-            <asp:BoundField DataField="AssignedTaskID" HeaderText="AssignedTaskID" SortExpression="AssignedTaskID" />
-            <asp:BoundField DataField="Completion Date" HeaderText="Completion Date" ReadOnly="True" SortExpression="Completion Date" />
-            <asp:BoundField DataField="WorkOpID" HeaderText="WorkOpID" SortExpression="WorkOpID" />
-            <asp:BoundField DataField="HighwayRouteID" HeaderText="HighwayRouteID" ReadOnly="True" SortExpression="HighwayRouteID" />
-            <asp:BoundField DataField="MileMarker" HeaderText="MileMarker" ReadOnly="True" SortExpression="MileMarker" />
-            <asp:BoundField DataField="AssetNumber" HeaderText="AssetNumber" SortExpression="AssetNumber" />
-            <asp:BoundField DataField="ResponsiblePersonID" HeaderText="ResponsiblePersonID" ReadOnly="True" SortExpression="ResponsiblePersonID" />
-            <asp:BoundField DataField="nMaintObjectID" HeaderText="nMaintObjectID" InsertVisible="False" ReadOnly="True" SortExpression="nMaintObjectID" />
-            <asp:BoundField DataField="BreakdownJob" HeaderText="BreakdownJob" ReadOnly="True" SortExpression="BreakdownJob" />
-            <asp:BoundField DataField="DowntimeHrs" HeaderText="DowntimeHrs" SortExpression="DowntimeHrs" />
-            <asp:BoundField DataField="Ontime" HeaderText="Ontime" ReadOnly="True" SortExpression="Ontime" />
-            <asp:BoundField DataField="ReturnWithin" HeaderText="ReturnWithin" SortExpression="ReturnWithin" />
-            <asp:BoundField DataField="SubAssembly" HeaderText="SubAssembly" SortExpression="SubAssembly" />
-            <asp:BoundField DataField="AreaID" HeaderText="AreaID" SortExpression="AreaID" />
-            <asp:BoundField DataField="FlaggedRecordID" HeaderText="FlaggedRecordID" ReadOnly="True" SortExpression="FlaggedRecordID" />
-            <asp:BoundField DataField="ObjectDescr" HeaderText="ObjectDescr" SortExpression="ObjectDescr" />
-            <asp:BoundField DataField="CostCodeID" HeaderText="CostCodeID" ReadOnly="True" SortExpression="CostCodeID" />
-            <asp:BoundField DataField="FundSrcCodeID" HeaderText="FundSrcCodeID" ReadOnly="True" SortExpression="FundSrcCodeID" />
-            <asp:BoundField DataField="WorkOrderCodeID" HeaderText="WorkOrderCodeID" ReadOnly="True" SortExpression="WorkOrderCodeID" />
-            <asp:BoundField DataField="OrganizationCodeID" HeaderText="OrganizationCodeID" ReadOnly="True" SortExpression="OrganizationCodeID" />
-            <asp:BoundField DataField="FundingGroupCodeID" HeaderText="FundingGroupCodeID" ReadOnly="True" SortExpression="FundingGroupCodeID" />
-            <asp:BoundField DataField="ControlSectionID" HeaderText="ControlSectionID" ReadOnly="True" SortExpression="ControlSectionID" />
-            <asp:BoundField DataField="EquipmentNumberID" HeaderText="EquipmentNumberID" ReadOnly="True" SortExpression="EquipmentNumberID" />
-            <asp:BoundField DataField="MileMarkerTo" HeaderText="MileMarkerTo" ReadOnly="True" SortExpression="MileMarkerTo" />
-            <asp:BoundField DataField="EstimatedUnits" HeaderText="EstimatedUnits" SortExpression="EstimatedUnits" />
-            <asp:BoundField DataField="ActualUnits" HeaderText="ActualUnits" SortExpression="ActualUnits" />
-            <asp:BoundField DataField="ShiftID" HeaderText="ShiftID" SortExpression="ShiftID" />
-            <asp:BoundField DataField="Crew Assigned" HeaderText="Crew Assigned" ReadOnly="True" SortExpression="Crew Assigned" />
-            <asp:BoundField DataField="Parts Assigned" HeaderText="Parts Assigned" ReadOnly="True" SortExpression="Parts Assigned" />
-            <asp:BoundField DataField="Equip. Assigned" HeaderText="Equip. Assigned" ReadOnly="True" SortExpression="Equip. Assigned" />
-            <asp:BoundField DataField="Other Assigned" HeaderText="Other Assigned" ReadOnly="True" SortExpression="Other Assigned" />
-            <asp:BoundField DataField="Route To ID" HeaderText="Route To ID" ReadOnly="True" SortExpression="Route To ID" />
-            <asp:BoundField DataField="Created By" HeaderText="Created By" ReadOnly="True" SortExpression="Created By" />
-            <asp:BoundField DataField="Created On" HeaderText="Created On" ReadOnly="True" SortExpression="Created On" />
-            <asp:BoundField DataField="Modified By" HeaderText="Modified By" ReadOnly="True" SortExpression="Modified By" />
-            <asp:BoundField DataField="Modified On" HeaderText="Modified On" ReadOnly="True" SortExpression="Modified On" />
-            <asp:BoundField DataField="Quik-Post Job" HeaderText="Quik-Post Job" SortExpression="Quik-Post Job" />
-            <asp:BoundField DataField="Post Notes" HeaderText="Post Notes" ReadOnly="True" SortExpression="Post Notes" />
-        </Columns>
         <FooterStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
         <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
         <PagerStyle BackColor="#FFCC66" ForeColor="#333333" HorizontalAlign="Center" />
