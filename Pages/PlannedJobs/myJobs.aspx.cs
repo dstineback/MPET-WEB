@@ -74,24 +74,24 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             //Get Logon Info From Session
             _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
 
-            //    ////Load Form Permissions
-            //    //if (FormSetup(_oLogon.UserID))
-            //    //{
-            //    //    //Setup Buttons
-            //    //    Master.ShowSaveButton = false;
-            //    //    Master.ShowNewButton = _userCanAdd;
-            //    //    Master.ShowEditButton = _userCanEdit;
-            //    //    Master.ShowDeleteButton = _userCanDelete;
-            //    //    Master.ShowViewButton = _userCanView;
-            //    //    Master.ShowCopyJobButton = _userCanAdd;
-            //    //    Master.ShowIssueButton = _userCanEdit;
-            //    //    Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd);
-            //    //    Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
-            //    //    Master.ShowPrintButton = true;
-            //    //    Master.ShowPdfButton = false;
-            //    //    Master.ShowXlsButton = true;
-            //    //    Master.ShowMultiSelectButton = _userCanDelete;
-            //    //}
+            ////Load Form Permissions
+            if (FormSetup(_oLogon.UserID))
+            {
+                //Setup Buttons
+                Master.ShowSaveButton = false;
+                Master.ShowNewButton = _userCanAdd;
+                Master.ShowEditButton = _userCanEdit;
+                Master.ShowDeleteButton = _userCanDelete;
+                Master.ShowViewButton = _userCanView;
+                Master.ShowCopyJobButton = _userCanAdd;
+                Master.ShowIssueButton = _userCanEdit;
+                Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd);
+                Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
+                Master.ShowPrintButton = true;
+                Master.ShowPdfButton = false;
+                Master.ShowXlsButton = true;
+                Master.ShowMultiSelectButton = _userCanDelete;
+            }
             Console.Write(_oLogon);
         }
 
@@ -156,8 +156,12 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             {
                 con.Open();
                 myJobsGrid.EmptyDataText = "No Records Found";
+
+                
+               
                 myJobsGrid.DataSource = cmd.ExecuteReader();
                 myJobsGrid.DataBind();
+        
             }
             catch (Exception ex)
             {

@@ -7,24 +7,38 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     This is the test MyJobs page
-    <asp:GridView runat="server" ID="myJobsGrid" BorderStyle="Solid" CellPadding="4" ForeColor="#333333" GridLines="None">
+    <asp:GridView runat="server" ID="myJobsGrid" AllowSorting="True" Theme="Mulberry" 
+        KeyFieldName="n_jobstepid" 
+        Width="98%" 
+        KeyboardSupport="True" 
+        ClientInstanceName="PlannedGrid" 
+        AutoPostBack="True" 
+        Settings-HorizontalScrollBarMode="Auto" 
+        SettingsPager-Mode="ShowPager" 
+        SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
+        SettingsBehavior-AllowFocusedRow="True"
+        SelectionMode="Multiple">
          
-        <AlternatingRowStyle BackColor="White" BorderStyle="Solid" />
+        <AlternatingRowStyle BorderStyle="Solid" />
          
-        <FooterStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
-        <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
-        <PagerStyle BackColor="#FFCC66" ForeColor="#333333" HorizontalAlign="Center" />
-        <RowStyle BackColor="#FFFBD6" ForeColor="#333333" />
-        <SelectedRowStyle BackColor="#FFCC66" Font-Bold="True" ForeColor="Navy" />
-        <SortedAscendingCellStyle BackColor="#FDF5AC" />
-        <SortedAscendingHeaderStyle BackColor="#4D0000" />
-        <SortedDescendingCellStyle BackColor="#FCF6C0" />
-        <SortedDescendingHeaderStyle BackColor="#820000" />
     </asp:GridView>
+
+       <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
+                RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
+            <Header CssClass="gridViewHeader"></Header>
+
+            <Row CssClass="gridViewRow"></Row>
+
+            <RowHotTrack CssClass="gridViewRow"></RowHotTrack>
+
+            <FocusedRow CssClass="gridViewRowFocused"></FocusedRow>
+
+            <FilterRow CssClass="gridViewFilterRow"></FilterRow>
+        </Styles>
 
     <asp:SqlDataSource ID="MyJobsDS" runat="server" ConnectionString="<%$ ConnectionStrings:ClientConnectionString %>" SelectCommand="filter_GetFilteredPlannedJobstepsList" SelectCommandType="StoredProcedure">
         <SelectParameters>
-            <asp:Parameter DefaultValue="0" Name="MatchJobType" Type="Int32" />
+            <asp:Parameter DefaultValue="0" Name="MatchJobType" Type="Int32"/>
             <asp:Parameter DefaultValue="0" Name="MatchJobAgainst" Type="Int32" />
             <asp:Parameter Name="JobIDLike" Type="String" />
             <asp:Parameter DefaultValue="N" Name="FromHistoryYNB" Type="String" />
