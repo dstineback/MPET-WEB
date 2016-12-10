@@ -4,7 +4,7 @@
             if (e.item.parent == s.GetRootItem())
                 e.processOnServer = false;
         }
-    </script>
+    </script> 
 <div class="mainMenu">
     <dx:ASPxMenu ID="mainMenu" runat="server" Theme="Moderno" AutoPostBack="True" DataSourceID="siteMapDataSource" SelectParentItem="True" Width="539px">
         <ClientSideEvents ItemClick="OnItemClick" />

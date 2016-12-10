@@ -12,8 +12,8 @@ public partial class _Default : BasePage {
 
         if (HttpContext.Current.Session["LogonInfo"] != null)
         {
-            //Direct To Task Page When MPET logo is clicked
-            Response.Redirect("~/Pages/Tasks/Tasks.aspx");
+            //Direct To Main Page When MPET logo is clicked
+            Response.Redirect("~/main.aspx");
         }
     }
 

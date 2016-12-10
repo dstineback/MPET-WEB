@@ -49,6 +49,11 @@ h5 {
 .clear {
 	clear: both;
 }
+#mainPageDiv {
+   align-content:center;
+   font-size:3em;
+  
+}
 /* Layout */
 .contentBox {
 	min-width: 1224px;
@@ -688,3 +693,4 @@ div.mainMenu {
 	vertical-align: top;
 	display: inline-block;
 }
+

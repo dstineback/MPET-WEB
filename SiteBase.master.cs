@@ -169,6 +169,7 @@ public partial class SiteMasterBase : MasterPage {
 
             //Hide Menu
             Header.Visible = false;
+            
         }
         else
         {
@@ -383,6 +384,7 @@ public partial class SiteMasterBase : MasterPage {
 
                 //Hide Logon Details
                 HelpMenuPopup.ShowOnPageLoad = false;
+                Response.Redirect("~/main.aspx");
             }
             else
             {
