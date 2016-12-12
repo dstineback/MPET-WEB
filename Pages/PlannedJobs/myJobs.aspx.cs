@@ -11,18 +11,18 @@ using System.Configuration;
 
 public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
 {
-    
+
     private int UserID = 1;
     private LogonObject _oLogon;
-   
-    
-    private string userName = "";
+
+
+    private string UserName = "";
     private int MatchJobType = 0;
     private int MatchJobAgainst = 0;
     private string JobIDLike = "";
     private string FromHistoryYNB = "N";
     private string IsIssuedYNB = "B";
-    private DateTime StartingReqDate = new DateTime(1960,01,01,23,59,59);
+    private DateTime StartingReqDate = new DateTime(1960, 01, 01, 23, 59, 59);
     private DateTime EndingReqDate = new DateTime(1960, 01, 01, 23, 59, 59);
     private DateTime StartDateStart = new DateTime(1960, 01, 01, 23, 59, 59);
     private DateTime StartDateEnd = new DateTime(1960, 01, 01, 23, 59, 59);
@@ -40,7 +40,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
     private string MatchTaskID = "";
     private DateTime CompStartDate = new DateTime(1960, 01, 01, 23, 59, 59);
     private DateTime CompEndDate = new DateTime(1960, 01, 01, 23, 59, 59);
-    private string JobCrew = "userName";
+    private string JobCrew = "";
     private string JobSupervisor = "";
     private string MatchStateRoute = "";
     private string MatchLocation = "";
@@ -71,28 +71,8 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         //Check For Logon Class
         if (HttpContext.Current.Session["LogonInfo"] != null)
         {
-            //Get Logon Info From Session
-            _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
-
-            ////Load Form Permissions
-            if (FormSetup(_oLogon.UserID))
-            {
-                //Setup Buttons
-                Master.ShowSaveButton = false;
-                Master.ShowNewButton = _userCanAdd;
-                Master.ShowEditButton = _userCanEdit;
-                Master.ShowDeleteButton = _userCanDelete;
-                Master.ShowViewButton = _userCanView;
-                Master.ShowCopyJobButton = _userCanAdd;
-                Master.ShowIssueButton = _userCanEdit;
-                Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd);
-                Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
-                Master.ShowPrintButton = true;
-                Master.ShowPdfButton = false;
-                Master.ShowXlsButton = true;
-                Master.ShowMultiSelectButton = _userCanDelete;
-            }
-            Console.Write(_oLogon);
+            UserName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).Username;
+            UserID = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).UserID;
         }
 
 
@@ -107,7 +87,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             cmd.Parameters.Add("@MatchJobAgainst", SqlDbType.Int).Value = MatchJobAgainst;
             cmd.Parameters.Add("@JobIDLike", SqlDbType.VarChar).Value = JobIDLike;
             cmd.Parameters.Add("@UserID", SqlDbType.Int).Value = UserID;
-            cmd.Parameters.Add("@JobCrew", SqlDbType.VarChar).SqlValue = userName;
+            cmd.Parameters.Add("@JobCrew", SqlDbType.VarChar).SqlValue = UserName;
             cmd.Parameters.Add("@FromHistoryYNB", SqlDbType.VarChar).SqlValue = FromHistoryYNB;
             cmd.Parameters.Add("@IsIssuedYNB", SqlDbType.VarChar).SqlValue = IsIssuedYNB;
             cmd.Parameters.Add("@StartingReqDate", SqlDbType.DateTime).SqlValue = StartingReqDate;
@@ -148,20 +128,19 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             cmd.Parameters.Add("@FundGroupID", SqlDbType.VarChar).SqlValue = FundGroupID;
             cmd.Parameters.Add("@ControlSectionID", SqlDbType.VarChar).SqlValue = ControlSectionID;
             cmd.Parameters.Add("@EquipNumberID", SqlDbType.VarChar).SqlValue = EquipNmberID;
-            cmd.Parameters.Add("@IsBreakdownYNB", SqlDbType.VarChar).SqlValue = "B";
-            cmd.Parameters.Add("@HasAttachments", SqlDbType.VarChar).SqlValue = "B";
+            cmd.Parameters.Add("@IsBreakdownYNB", SqlDbType.VarChar).SqlValue = IsBreakdownYNB;
+            cmd.Parameters.Add("@HasAttachments", SqlDbType.VarChar).SqlValue = HasAttachments;
+
+
 
             cmd.Connection = con;
             try
             {
                 con.Open();
-                myJobsGrid.EmptyDataText = "No Records Found";
 
-                
-               
                 myJobsGrid.DataSource = cmd.ExecuteReader();
                 myJobsGrid.DataBind();
-        
+
             }
             catch (Exception ex)
             {
