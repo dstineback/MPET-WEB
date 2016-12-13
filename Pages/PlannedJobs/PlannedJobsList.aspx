@@ -240,19 +240,100 @@
                 <Columns>
                     <dxe:GridViewDataTextColumn FieldName="n_jobid" ReadOnly="True" ShowInCustomizationForm="True" Visible="False" VisibleIndex="6">
                     </dxe:GridViewDataTextColumn>
-                    <dxe:GridViewDataTextColumn FieldName="T" ShowInCustomizationForm="True" Width="60px" Caption="Type" VisibleIndex="8">
+                    <dxe:GridViewDataTextColumn FieldName="T" ShowInCustomizationForm="True" Width="60px" Caption="Type" VisibleIndex="10">
                     </dxe:GridViewDataTextColumn>
-                    <dxe:GridViewDataTextColumn FieldName="step" ShowInCustomizationForm="True" Width="60px" Caption="Step #" VisibleIndex="7">
+                    <dxe:GridViewDataTextColumn FieldName="step" ShowInCustomizationForm="True" Width="60px" Caption="Step #" VisibleIndex="8">
                     </dxe:GridViewDataTextColumn>
                     <dxe:GridViewDataTextColumn FieldName="Step Title" ShowInCustomizationForm="True" Width="300px" Caption="Description" VisibleIndex="5">
                     </dxe:GridViewDataTextColumn>
-                    <dxe:GridViewDataTextColumn FieldName="Priority" ShowInCustomizationForm="True" Width="100px" Caption="Priority" VisibleIndex="9">
+                    <dxe:GridViewDataTextColumn FieldName="Priority" ShowInCustomizationForm="True" Width="100px" Caption="Priority" VisibleIndex="12">
                     </dxe:GridViewDataTextColumn>
-                    <dxe:GridViewDataTextColumn FieldName="Status" ShowInCustomizationForm="True" Width="100px" Caption="Status" VisibleIndex="10">
+                    <dxe:GridViewDataTextColumn FieldName="Status" ShowInCustomizationForm="True" Width="100px" Caption="Status" VisibleIndex="14">
                     </dxe:GridViewDataTextColumn>
-                    <dxe:GridViewDataTextColumn FieldName="Requested" ReadOnly="True" ShowInCustomizationForm="True" Width="120px" Caption="Requested" VisibleIndex="11">
+                    <dxe:GridViewDataTextColumn FieldName="Requested" ReadOnly="True" ShowInCustomizationForm="True" Width="120px" Caption="Requested" VisibleIndex="16">
                     </dxe:GridViewDataTextColumn>
-                    <dxe:GridViewDataTextColumn FieldName="Ontime" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Ontime" VisibleIndex="25">
+                    <dxe:GridViewDataTextColumn FieldName="Labor Class" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Labor Class" VisibleIndex="19">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="I" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Issued" VisibleIndex="20">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="cReasoncode" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Reason" VisibleIndex="21">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="AssignedTaskID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Task" VisibleIndex="22">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Completion Date" ReadOnly="True" ShowInCustomizationForm="True" Width="120px" Caption="Completed" VisibleIndex="23">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="WorkOpID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Work Op" VisibleIndex="24">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="HighwayRouteID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Hwy. Route" VisibleIndex="25">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="MileMarker" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="MM. From" VisibleIndex="26">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="MileMarkerTo" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="MM. To" VisibleIndex="45">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="AssetNumber" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Asset #" VisibleIndex="27">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="ResponsiblePersonID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Resp. Person" VisibleIndex="28">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="nMaintObjectID" ReadOnly="True" ShowInCustomizationForm="True" Visible="False" VisibleIndex="29"></dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="BreakdownJob" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Breakdown" VisibleIndex="30">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="DowntimeHrs" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Dt. Hours" VisibleIndex="31">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Ontime" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Ontime" VisibleIndex="32">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="ReturnWithin" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Rtn W/in" VisibleIndex="34">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="SubAssembly" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Sub. Asmbly" VisibleIndex="35">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="AreaID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Area" VisibleIndex="36">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="ObjectDescr" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Obj. Descr." VisibleIndex="37">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="CostCodeID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Cost Code" VisibleIndex="38">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="FundSrcCodeID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Fund. Src." VisibleIndex="39">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="WorkOrderCodeID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Work Order" VisibleIndex="40">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="OrganizationCodeID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Org. Code" VisibleIndex="41">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="FundingGroupCodeID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Fund. Group" VisibleIndex="42">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="ControlSectionID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Ctl. Section" VisibleIndex="43">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="EquipmentNumberID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Equip. #" VisibleIndex="44">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="EstimatedUnits" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Est. Units" VisibleIndex="46">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="ActualUnits" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Act. Units" VisibleIndex="47">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="ShiftID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Shift" VisibleIndex="48">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Crew Assigned" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Crew Asgd." VisibleIndex="49">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Parts Assigned" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Parts Asgd." VisibleIndex="50">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Equip. Assigned" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Equip. Asgd." VisibleIndex="51">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Other Assigned" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Other Asgd." VisibleIndex="52">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Route To ID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Route To" VisibleIndex="53">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="n_jobid" ReadOnly="True" ShowInCustomizationForm="True" Visible="False" VisibleIndex="9">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="T" ShowInCustomizationForm="True" Width="60px" Caption="Type" VisibleIndex="13">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="step" ShowInCustomizationForm="True" Width="60px" Caption="Step #" VisibleIndex="11">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Step Title" ShowInCustomizationForm="True" Width="300px" Caption="Description" VisibleIndex="7">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Priority" ShowInCustomizationForm="True" Width="100px" Caption="Priority" VisibleIndex="15">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Status" ShowInCustomizationForm="True" Width="100px" Caption="Status" VisibleIndex="17">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Requested" ReadOnly="True" ShowInCustomizationForm="True" Width="120px" Caption="Requested" VisibleIndex="18">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Ontime" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Ontime" VisibleIndex="33">
                     </dxe:GridViewDataTextColumn>
                 </Columns>
 

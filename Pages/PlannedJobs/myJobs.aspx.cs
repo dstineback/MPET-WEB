@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
-
+using DevExpress.Web;
 
 public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
 {
@@ -147,5 +147,11 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
                 throw ex;
             }
         }
+    }
+
+    protected string GetUrl(GridViewDataItemTemplateContainer container)
+    {
+        var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
+        return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
     }
 }
