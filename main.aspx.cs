@@ -19,8 +19,7 @@ public partial class main : System.Web.UI.Page
             {
                 var userName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FullName;
                 divUser.Controls.Add(new LiteralControl (userName));
-                var userID = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).UserID.ToString();
-                divUserID.Controls.Add(new LiteralControl(userID));
+              
             }
         }
     }
