@@ -27,216 +27,235 @@
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField> 
     <asp:UpdatePanel ID="UpdatePanel4" runat="server" OnUnload="UpdatePanel_Unload">
         <ContentTemplate>
-    <dx:ASPxGridView 
-        ID="PlannedGrid" 
-        runat="server" 
-        Theme="Mulberry" 
-        KeyFieldName="n_jobstepid" 
-        Width="98%" 
-        KeyboardSupport="True" 
-        ClientInstanceName="PlannedGrid" 
-        AutoPostBack="True" 
-        Settings-HorizontalScrollBarMode="Auto" 
-        SettingsPager-Mode="ShowPager" 
-        SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
-        SettingsBehavior-AllowFocusedRow="True"
-        SelectionMode="Multiple"
-        DataSourceID="ObjectGridDataSource"
-        OnHtmlDataCellPrepared="ASPxGridView1_HtmlRowPrepared">
-        <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
-                RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
-            <Header CssClass="gridViewHeader"></Header>
+            <dx:ASPxGridView
+                ID="PlannedGrid"
+                runat="server"
+                Theme="Mulberry"
+                KeyFieldName="n_jobstepid"
+                Width="98%"
+                KeyboardSupport="True"
+                ClientInstanceName="PlannedGrid"
+                AutoPostBack="True"
+                Settings-HorizontalScrollBarMode="Auto"
+                SettingsPager-Mode="ShowPager"
+                SettingsBehavior-ProcessFocusedRowChangedOnServer="True"
+                SettingsBehavior-AllowFocusedRow="True"
+                SelectionMode="Multiple"
+                DataSourceID="ObjectGridDataSource"
+                OnHtmlDataCellPrepared="ASPxGridView1_HtmlRowPrepared" AutoGenerateColumns="False">
+                <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused"
+                    RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow">
+                    <Header CssClass="gridViewHeader"></Header>
 
-            <Row CssClass="gridViewRow"></Row>
+                    <Row CssClass="gridViewRow"></Row>
 
-            <RowHotTrack CssClass="gridViewRow"></RowHotTrack>
+                    <RowHotTrack CssClass="gridViewRow"></RowHotTrack>
 
-            <FocusedRow CssClass="gridViewRowFocused"></FocusedRow>
+                    <FocusedRow CssClass="gridViewRowFocused"></FocusedRow>
 
-            <FilterRow CssClass="gridViewFilterRow"></FilterRow>
-        </Styles>
-        <ClientSideEvents RowClick="function(s, e) {
+                    <FilterRow CssClass="gridViewFilterRow"></FilterRow>
+                </Styles>
+                <ClientSideEvents RowClick="function(s, e) {
                         PlannedGrid.GetRowValues(e.visibleIndex, 'Jobid;n_jobid;n_jobstepid;step', OnGetRowId);
                         
                     }" />
-        <Columns>
-            <dx:GridViewCommandColumn FixedStyle="Left"  ShowSelectCheckbox="True" Visible="false" VisibleIndex="0" />
-            <dx:GridViewDataTextColumn FieldName="n_jobstepid" ReadOnly="True" Visible="false" VisibleIndex="1">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="n_jobid" ReadOnly="True" Visible="false" VisibleIndex="5">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="T" Caption="Type" Width="60px" VisibleIndex="7">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Jobid" FixedStyle="Left" HeaderStyle-Font-Bold="True" Caption="Job ID" Width="120px" VisibleIndex="3">
-                <CellStyle Wrap="False"></CellStyle>
-                <%--<PropertiesHyperLinkEdit NavigateUrl="<%# GetUrl(Container) %>"></PropertiesHyperLinkEdit>--%>
-                <DataItemTemplate>
-						<dxe:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="<%# GetUrl(Container) %>"
-                            Text='<%# Eval("Jobid") %>' Width="100%" Theme="Mulberry" >
-						</dxe:ASPxHyperLink>
-					</DataItemTemplate>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Object ID" Caption="Object ID" Width="120px" VisibleIndex="4">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="step" Caption="Step #" Width="60px" VisibleIndex="6">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Step Title" Caption="Description" Width="300px" VisibleIndex="4">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Priority" Caption="Priority" Width="100px" VisibleIndex="8">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Status" Caption="Status" Width="100px" VisibleIndex="9">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Requested" Caption="Requested" Width="120px"
-                                                Settings-AllowHeaderFilter="True" ReadOnly="True" VisibleIndex="10">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-                <PropertiesTextEdit DisplayFormatString="MM/dd/yyyy" />
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataDateColumn FieldName="Starting Date" FixedStyle="Left" Caption="Starting" Width="120px"
-                                                Settings-AllowHeaderFilter="True" SortOrder="Descending" ReadOnly="True" VisibleIndex="2">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-                <PropertiesDateEdit DisplayFormatString="MM/dd/yyyy">
-                </PropertiesDateEdit>
-            </dx:GridViewDataDateColumn>
-            <dx:GridViewDataTextColumn FieldName="Labor Class" Caption="Labor Class" Width="100px" ReadOnly="True" VisibleIndex="12">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="I" Caption="Issued" Width="100px" ReadOnly="True" VisibleIndex="13">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="cReasoncode" Caption="Reason" Width="100px" ReadOnly="True" VisibleIndex="14">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="AssignedTaskID" Caption="Task" Width="100px" ReadOnly="True" VisibleIndex="15">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Completion Date" Caption="Completed" Width="120px"
-                                                Settings-AllowHeaderFilter="True" ReadOnly="True" VisibleIndex="16">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-                <PropertiesTextEdit DisplayFormatString="MM/dd/yyyy" />
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="WorkOpID" Caption="Work Op" Width="100px" ReadOnly="True" VisibleIndex="17">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="HighwayRouteID" Caption="Hwy. Route" Width="100px" ReadOnly="True" VisibleIndex="18">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="MileMarker" Caption="MM. From" Width="100px" ReadOnly="True" VisibleIndex="19">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="MileMarkerTo" Caption="MM. To" Width="100px" ReadOnly="True" VisibleIndex="37">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="AssetNumber" Caption="Asset #" Width="100px" ReadOnly="True" VisibleIndex="20">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ResponsiblePersonID" Caption="Resp. Person" Width="100px" ReadOnly="True" VisibleIndex="21">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="nMaintObjectID" ReadOnly="True" Visible="false" VisibleIndex="22">
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="BreakdownJob" Caption="Breakdown" Width="100px" ReadOnly="True" VisibleIndex="23">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="DowntimeHrs" Caption="Dt. Hours" Width="100px" ReadOnly="True" VisibleIndex="24">
-                <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Ontime" Caption="Ontime" Width="100px" ReadOnly="True" VisibleIndex="24">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ReturnWithin" Caption="Rtn W/in" Width="100px" ReadOnly="True" VisibleIndex="26">
-                <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="SubAssembly" Caption="Sub. Asmbly" Width="100px" ReadOnly="True" VisibleIndex="27">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="AreaID" Caption="Area" Width="100px" ReadOnly="True" VisibleIndex="28">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ObjectDescr" Caption="Obj. Descr." Width="100px" ReadOnly="True" VisibleIndex="29">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="CostCodeID" Caption="Cost Code" Width="100px" ReadOnly="True" VisibleIndex="30">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="FundSrcCodeID" Caption="Fund. Src." Width="100px" ReadOnly="True" VisibleIndex="31">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" Caption="Work Order" Width="100px" ReadOnly="True" VisibleIndex="32">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="OrganizationCodeID" Caption="Org. Code" Width="100px" ReadOnly="True" VisibleIndex="33">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" Caption="Fund. Group" Width="100px" ReadOnly="True" VisibleIndex="34">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ControlSectionID" Caption="Ctl. Section" Width="100px" ReadOnly="True" VisibleIndex="35">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="EquipmentNumberID" Caption="Equip. #" Width="100px" ReadOnly="True" VisibleIndex="36">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="EstimatedUnits" Caption="Est. Units" Width="100px" ReadOnly="True" VisibleIndex="38">
-                <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ActualUnits" Caption="Act. Units" Width="100px" ReadOnly="True" VisibleIndex="39">
-                <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ShiftID" Caption="Shift" Width="100px" ReadOnly="True" VisibleIndex="40">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Crew Assigned" Caption="Crew Asgd." Width="100px" ReadOnly="True" VisibleIndex="41">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Parts Assigned" Caption="Parts Asgd." Width="100px" ReadOnly="True" VisibleIndex="42">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Equip. Assigned" Caption="Equip. Asgd." Width="100px" ReadOnly="True" VisibleIndex="43">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Other Assigned" Caption="Other Asgd." Width="100px" ReadOnly="True" VisibleIndex="44">
-                <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-            </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Route To ID" Caption="Route To" Width="100px" ReadOnly="True" VisibleIndex="45">
-                <CellStyle Wrap="False"></CellStyle>
-            </dx:GridViewDataTextColumn>
-        </Columns>
+                <Columns>
+                    <dx:GridViewCommandColumn FixedStyle="Left" ShowSelectCheckbox="True" Visible="false" VisibleIndex="0" />
+                    <dx:GridViewDataTextColumn FieldName="n_jobstepid" ReadOnly="True" Visible="false" VisibleIndex="1">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="n_jobid" ReadOnly="True" Visible="false" VisibleIndex="5">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="T" Caption="Type" Width="60px" VisibleIndex="7">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Jobid" FixedStyle="Left" HeaderStyle-Font-Bold="True" Caption="Job ID" Width="120px" VisibleIndex="3">
+                        <CellStyle Wrap="False"></CellStyle>
+                        <%--<PropertiesHyperLinkEdit NavigateUrl="<%# GetUrl(Container) %>"></PropertiesHyperLinkEdit>--%>
+                        <DataItemTemplate>
+                            <dxe:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="<%# GetUrl(Container) %>"
+                                Text='<%# Eval("Jobid") %>' Width="100%" Theme="Mulberry">
+                            </dxe:ASPxHyperLink>
+                        </DataItemTemplate>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Object ID" Caption="Object ID" Width="120px" VisibleIndex="4">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="step" Caption="Step #" Width="60px" VisibleIndex="6">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Step Title" Caption="Description" Width="300px" VisibleIndex="4">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Priority" Caption="Priority" Width="100px" VisibleIndex="8">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Status" Caption="Status" Width="100px" VisibleIndex="9">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Requested" Caption="Requested" Width="120px"
+                        Settings-AllowHeaderFilter="True" ReadOnly="True" VisibleIndex="10">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                        <PropertiesTextEdit DisplayFormatString="MM/dd/yyyy" />
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataDateColumn FieldName="Starting Date" FixedStyle="Left" Caption="Starting" Width="120px"
+                        Settings-AllowHeaderFilter="True" SortOrder="Descending" ReadOnly="True" VisibleIndex="2">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                        <PropertiesDateEdit DisplayFormatString="MM/dd/yyyy">
+                        </PropertiesDateEdit>
+                    </dx:GridViewDataDateColumn>
+                    <dx:GridViewDataTextColumn FieldName="Labor Class" Caption="Labor Class" Width="100px" ReadOnly="True" VisibleIndex="12">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="I" Caption="Issued" Width="100px" ReadOnly="True" VisibleIndex="13">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="cReasoncode" Caption="Reason" Width="100px" ReadOnly="True" VisibleIndex="14">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="AssignedTaskID" Caption="Task" Width="100px" ReadOnly="True" VisibleIndex="15">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Completion Date" Caption="Completed" Width="120px"
+                        Settings-AllowHeaderFilter="True" ReadOnly="True" VisibleIndex="16">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                        <PropertiesTextEdit DisplayFormatString="MM/dd/yyyy" />
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="WorkOpID" Caption="Work Op" Width="100px" ReadOnly="True" VisibleIndex="17">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="HighwayRouteID" Caption="Hwy. Route" Width="100px" ReadOnly="True" VisibleIndex="18">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="MileMarker" Caption="MM. From" Width="100px" ReadOnly="True" VisibleIndex="19">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="MileMarkerTo" Caption="MM. To" Width="100px" ReadOnly="True" VisibleIndex="37">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="AssetNumber" Caption="Asset #" Width="100px" ReadOnly="True" VisibleIndex="20">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="ResponsiblePersonID" Caption="Resp. Person" Width="100px" ReadOnly="True" VisibleIndex="21">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="nMaintObjectID" ReadOnly="True" Visible="false" VisibleIndex="22">
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="BreakdownJob" Caption="Breakdown" Width="100px" ReadOnly="True" VisibleIndex="23">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="DowntimeHrs" Caption="Dt. Hours" Width="100px" ReadOnly="True" VisibleIndex="24">
+                        <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Ontime" Caption="Ontime" Width="100px" ReadOnly="True" VisibleIndex="24">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="ReturnWithin" Caption="Rtn W/in" Width="100px" ReadOnly="True" VisibleIndex="26">
+                        <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="SubAssembly" Caption="Sub. Asmbly" Width="100px" ReadOnly="True" VisibleIndex="27">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="AreaID" Caption="Area" Width="100px" ReadOnly="True" VisibleIndex="28">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="ObjectDescr" Caption="Obj. Descr." Width="100px" ReadOnly="True" VisibleIndex="29">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="CostCodeID" Caption="Cost Code" Width="100px" ReadOnly="True" VisibleIndex="30">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="FundSrcCodeID" Caption="Fund. Src." Width="100px" ReadOnly="True" VisibleIndex="31">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" Caption="Work Order" Width="100px" ReadOnly="True" VisibleIndex="32">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="OrganizationCodeID" Caption="Org. Code" Width="100px" ReadOnly="True" VisibleIndex="33">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" Caption="Fund. Group" Width="100px" ReadOnly="True" VisibleIndex="34">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="ControlSectionID" Caption="Ctl. Section" Width="100px" ReadOnly="True" VisibleIndex="35">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="EquipmentNumberID" Caption="Equip. #" Width="100px" ReadOnly="True" VisibleIndex="36">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="EstimatedUnits" Caption="Est. Units" Width="100px" ReadOnly="True" VisibleIndex="38">
+                        <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="ActualUnits" Caption="Act. Units" Width="100px" ReadOnly="True" VisibleIndex="39">
+                        <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="ShiftID" Caption="Shift" Width="100px" ReadOnly="True" VisibleIndex="40">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Crew Assigned" Caption="Crew Asgd." Width="100px" ReadOnly="True" VisibleIndex="41">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Parts Assigned" Caption="Parts Asgd." Width="100px" ReadOnly="True" VisibleIndex="42">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Equip. Assigned" Caption="Equip. Asgd." Width="100px" ReadOnly="True" VisibleIndex="43">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Other Assigned" Caption="Other Asgd." Width="100px" ReadOnly="True" VisibleIndex="44">
+                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Route To ID" Caption="Route To" Width="100px" ReadOnly="True" VisibleIndex="45">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                </Columns>
                 <SettingsSearchPanel Visible="true" />
-                <SettingsBehavior 
-                    EnableRowHotTrack="True" 
-                    AllowFocusedRow="True" 
-                    AllowClientEventsOnLoad="false" 
+                <SettingsBehavior
+                    EnableRowHotTrack="True"
+                    AllowFocusedRow="True"
+                    AllowClientEventsOnLoad="false"
                     ColumnResizeMode="NextColumn" />
-                <SettingsDataSecurity 
-                    AllowDelete="False" 
+                <SettingsDataSecurity
+                    AllowDelete="False"
                     AllowInsert="False" />
                 <SettingsPopup HeaderFilter-Width="360" HeaderFilter-Height="360"></SettingsPopup>
+                <Columns>
+                    <dxe:GridViewDataTextColumn FieldName="n_jobid" ReadOnly="True" ShowInCustomizationForm="True" Visible="False" VisibleIndex="6">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="T" ShowInCustomizationForm="True" Width="60px" Caption="Type" VisibleIndex="8">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="step" ShowInCustomizationForm="True" Width="60px" Caption="Step #" VisibleIndex="7">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Step Title" ShowInCustomizationForm="True" Width="300px" Caption="Description" VisibleIndex="5">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Priority" ShowInCustomizationForm="True" Width="100px" Caption="Priority" VisibleIndex="9">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Status" ShowInCustomizationForm="True" Width="100px" Caption="Status" VisibleIndex="10">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Requested" ReadOnly="True" ShowInCustomizationForm="True" Width="120px" Caption="Requested" VisibleIndex="11">
+                    </dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="Ontime" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Ontime" VisibleIndex="25">
+                    </dxe:GridViewDataTextColumn>
+                </Columns>
+
                 <Settings 
                     ShowFilterBar="Visible"
                     VerticalScrollBarMode="Visible" 

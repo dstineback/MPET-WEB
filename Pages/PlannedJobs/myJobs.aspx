@@ -9,8 +9,18 @@
     This is the test MyJobs page
     <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="1012px" AutoGenerateColumns="False" EnableTheming="True">
 
+        <Styles>
+            <SelectedRow BackColor="#FF3300">
+            </SelectedRow>
+            <FocusedRow BackColor="#FF3300">
+            </FocusedRow>
+            <InlineEditCell BackColor="#FFFFCC">
+            </InlineEditCell>
+            <SearchPanel Border-BorderColor="Black" Border-BorderStyle="Solid">
+            </SearchPanel>
+        </Styles>
 
-        <Settings ShowFilterRow="True" ShowGroupPanel="True" AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True"></Settings>
+        <Settings ShowFilterRow="True" ShowGroupPanel="True" AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Auto" VerticalScrollBarStyle="Virtual" ShowFooter="True"></Settings>
 
         <SettingsCommandButton>
             <ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
@@ -19,129 +29,152 @@
         </SettingsCommandButton>
 
         <SettingsDataSecurity AllowDelete="False"></SettingsDataSecurity>
-        <SettingsSearchPanel Visible="True"></SettingsSearchPanel>
+        <SettingsSearchPanel Visible="True" ShowApplyButton="True" ShowClearButton="True"></SettingsSearchPanel>
         <Columns>
-            <dx:GridViewCommandColumn ShowClearFilterButton="True" VisibleIndex="0"></dx:GridViewCommandColumn>
-            <dx:GridViewDataTextColumn FieldName="n_jobstepid" ReadOnly="True" VisibleIndex="1">
+            <dx:GridViewCommandColumn ShowClearFilterButton="True" VisibleIndex="0" ShowEditButton="True"></dx:GridViewCommandColumn>
+            <dx:GridViewDataTextColumn FieldName="n_jobstepid" ReadOnly="True" VisibleIndex="9" Visible="False">
                 <EditFormSettings Visible="False" />
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="n_jobid" VisibleIndex="2">
+            <dx:GridViewDataTextColumn FieldName="n_jobid" VisibleIndex="4" FixedStyle="Left" Visible="False">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="T" ReadOnly="True" VisibleIndex="3">
+            <dx:GridViewDataTextColumn FieldName="T" ReadOnly="True" VisibleIndex="6" Caption="Type">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="A" ReadOnly="True" VisibleIndex="4">
+            <dx:GridViewDataTextColumn FieldName="A" ReadOnly="True" VisibleIndex="45" Caption="Job Against">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Object ID" VisibleIndex="6">
+            <dx:GridViewDataTextColumn FieldName="Object ID" VisibleIndex="8" Caption="Object ID">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="step" VisibleIndex="7">
+            <dx:GridViewDataTextColumn FieldName="step" VisibleIndex="5" Caption="Step #">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Step Title" VisibleIndex="8">
+            <dx:GridViewDataTextColumn FieldName="Step Title" VisibleIndex="3" Caption="Description">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Priority" VisibleIndex="9">
+            <dx:GridViewDataTextColumn FieldName="Priority" VisibleIndex="10" Caption="Priority">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Status" VisibleIndex="10">
+            <dx:GridViewDataTextColumn FieldName="Status" VisibleIndex="11" Caption="Status">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataDateColumn FieldName="Requested" ReadOnly="True" VisibleIndex="11">
+            <dx:GridViewDataDateColumn FieldName="Requested" ReadOnly="True" VisibleIndex="12" Caption="Requested">
             </dx:GridViewDataDateColumn>
-            <dx:GridViewDataDateColumn FieldName="Starting Date" ReadOnly="True" VisibleIndex="12">
+            <dx:GridViewDataDateColumn FieldName="Starting Date" ReadOnly="True" VisibleIndex="1" FixedStyle="Left" Caption="Starting">
             </dx:GridViewDataDateColumn>
-            <dx:GridViewDataTextColumn FieldName="Labor Class" VisibleIndex="13">
+            <dx:GridViewDataTextColumn FieldName="Labor Class" VisibleIndex="13" Caption="Labor Class">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Group" VisibleIndex="14">
+            <dx:GridViewDataTextColumn FieldName="Group" VisibleIndex="46" Caption="Group">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Outcome" VisibleIndex="15">
+            <dx:GridViewDataTextColumn FieldName="Outcome" VisibleIndex="47" Caption="Outcome">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Supervisor" VisibleIndex="16">
+            <dx:GridViewDataTextColumn FieldName="Supervisor" VisibleIndex="48" Caption="Supervisor">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="H" VisibleIndex="17">
+            <dx:GridViewDataTextColumn FieldName="H" VisibleIndex="49" Caption="History">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="I" ReadOnly="True" VisibleIndex="18">
+            <dx:GridViewDataTextColumn FieldName="I" ReadOnly="True" VisibleIndex="7" Caption="Issued">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="cReasoncode" VisibleIndex="19">
+            <dx:GridViewDataTextColumn FieldName="cReasoncode" VisibleIndex="14" Caption="Reason">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="AssignedTaskID" VisibleIndex="20">
+            <dx:GridViewDataTextColumn FieldName="AssignedTaskID" VisibleIndex="15" Caption="Task">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataDateColumn FieldName="Completion Date" ReadOnly="True" VisibleIndex="21">
+            <dx:GridViewDataDateColumn FieldName="Completion Date" ReadOnly="True" VisibleIndex="16" Caption="Completed">
             </dx:GridViewDataDateColumn>
-            <dx:GridViewDataTextColumn FieldName="WorkOpID" VisibleIndex="22">
+            <dx:GridViewDataTextColumn FieldName="WorkOpID" VisibleIndex="17" Caption="Work Op">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="HighwayRouteID" ReadOnly="True" VisibleIndex="23">
+            <dx:GridViewDataTextColumn FieldName="HighwayRouteID" ReadOnly="True" VisibleIndex="18" Caption="Hwy. Route">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="MileMarker" ReadOnly="True" VisibleIndex="24">
+            <dx:GridViewDataTextColumn FieldName="MileMarker" ReadOnly="True" VisibleIndex="19" Caption="MM. Form">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="AssetNumber" VisibleIndex="25">
+            <dx:GridViewDataTextColumn FieldName="AssetNumber" VisibleIndex="20" Caption="Asset #">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ResponsiblePersonID" ReadOnly="True" VisibleIndex="26">
+            <dx:GridViewDataTextColumn FieldName="ResponsiblePersonID" ReadOnly="True" VisibleIndex="21" Caption="Resp. Person">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="nMaintObjectID" ReadOnly="True" VisibleIndex="27">
+            <dx:GridViewDataTextColumn FieldName="nMaintObjectID" ReadOnly="True" VisibleIndex="50" Visible="False">
                 <EditFormSettings Visible="False" />
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="BreakdownJob" ReadOnly="True" VisibleIndex="28">
+            <dx:GridViewDataTextColumn FieldName="BreakdownJob" ReadOnly="True" VisibleIndex="22" Caption="Breakdown">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="DowntimeHrs" VisibleIndex="29">
+            <dx:GridViewDataTextColumn FieldName="DowntimeHrs" VisibleIndex="23" Caption="DT Hours">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Ontime" ReadOnly="True" VisibleIndex="30">
+            <dx:GridViewDataTextColumn FieldName="Ontime" ReadOnly="True" VisibleIndex="24" Caption="Ontime">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ReturnWithin" VisibleIndex="31">
+            <dx:GridViewDataTextColumn FieldName="ReturnWithin" VisibleIndex="25" Caption="Rtn W/in">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="SubAssembly" VisibleIndex="32">
+            <dx:GridViewDataTextColumn FieldName="SubAssembly" VisibleIndex="26" Caption="Sub Assembly">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="AreaID" VisibleIndex="33">
+            <dx:GridViewDataTextColumn FieldName="AreaID" VisibleIndex="27" Caption="Area">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="FlaggedRecordID" ReadOnly="True" VisibleIndex="34">
+            <dx:GridViewDataTextColumn FieldName="FlaggedRecordID" ReadOnly="True" VisibleIndex="51" Caption="Flagged Record">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ObjectDescr" VisibleIndex="35">
+            <dx:GridViewDataTextColumn FieldName="ObjectDescr" VisibleIndex="28" Caption="Object Descr">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="CostCodeID" ReadOnly="True" VisibleIndex="36">
+            <dx:GridViewDataTextColumn FieldName="CostCodeID" ReadOnly="True" VisibleIndex="29" Caption="Cost Code">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="FundSrcCodeID" ReadOnly="True" VisibleIndex="37">
+            <dx:GridViewDataTextColumn FieldName="FundSrcCodeID" ReadOnly="True" VisibleIndex="30" Caption="Funding Group">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" ReadOnly="True" VisibleIndex="38">
+            <dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" ReadOnly="True" VisibleIndex="31" Caption="Work Order Code">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="OrganizationCodeID" ReadOnly="True" VisibleIndex="39">
+            <dx:GridViewDataTextColumn FieldName="OrganizationCodeID" ReadOnly="True" VisibleIndex="32" Caption="Org. Code">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" ReadOnly="True" VisibleIndex="40">
+            <dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" ReadOnly="True" VisibleIndex="33">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ControlSectionID" ReadOnly="True" VisibleIndex="41">
+            <dx:GridViewDataTextColumn FieldName="ControlSectionID" ReadOnly="True" VisibleIndex="34" Caption="Ctl. Section">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="EquipmentNumberID" ReadOnly="True" VisibleIndex="42">
+            <dx:GridViewDataTextColumn FieldName="EquipmentNumberID" ReadOnly="True" VisibleIndex="35" Caption="Equip #">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="MileMarkerTo" ReadOnly="True" VisibleIndex="43">
+            <dx:GridViewDataTextColumn FieldName="MileMarkerTo" ReadOnly="True" VisibleIndex="36" Caption="MM To">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="EstimatedUnits" VisibleIndex="44">
+            <dx:GridViewDataTextColumn FieldName="EstimatedUnits" VisibleIndex="37" Caption="Est. Units">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ActualUnits" VisibleIndex="45">
+            <dx:GridViewDataTextColumn FieldName="ActualUnits" VisibleIndex="38" Caption="Actual Units">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ShiftID" VisibleIndex="46">
+            <dx:GridViewDataTextColumn FieldName="ShiftID" VisibleIndex="39" Caption="Shift">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Crew Assigned" ReadOnly="True" VisibleIndex="47">
+            <dx:GridViewDataTextColumn FieldName="Crew Assigned" ReadOnly="True" VisibleIndex="40" Caption="Crew Assigned">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Parts Assigned" ReadOnly="True" VisibleIndex="48">
+            <dx:GridViewDataTextColumn FieldName="Parts Assigned" ReadOnly="True" VisibleIndex="41" Caption="Parts Assigned">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Equip. Assigned" ReadOnly="True" VisibleIndex="49">
+            <dx:GridViewDataTextColumn FieldName="Equip. Assigned" ReadOnly="True" VisibleIndex="42" Caption="Equip. Assigned">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Other Assigned" ReadOnly="True" VisibleIndex="50">
+            <dx:GridViewDataTextColumn FieldName="Other Assigned" ReadOnly="True" VisibleIndex="43" Caption="Other Assigned">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Route To ID" ReadOnly="True" VisibleIndex="51">
+            <dx:GridViewDataTextColumn FieldName="Route To ID" ReadOnly="True" VisibleIndex="44" Caption="Route To">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Created By" ReadOnly="True" VisibleIndex="52">
+            <dx:GridViewDataTextColumn FieldName="Created By" ReadOnly="True" VisibleIndex="52" Caption="Created By">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataDateColumn FieldName="Created On" ReadOnly="True" VisibleIndex="53">
+            <dx:GridViewDataDateColumn FieldName="Created On" ReadOnly="True" VisibleIndex="53" Caption="Created On">
             </dx:GridViewDataDateColumn>
-            <dx:GridViewDataTextColumn FieldName="Modified By" ReadOnly="True" VisibleIndex="54">
+            <dx:GridViewDataTextColumn FieldName="Modified By" ReadOnly="True" VisibleIndex="54" Caption="Modified By">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataDateColumn FieldName="Modified On" ReadOnly="True" VisibleIndex="55">
+            <dx:GridViewDataDateColumn FieldName="Modified On" ReadOnly="True" VisibleIndex="55" Caption="Modified On">
             </dx:GridViewDataDateColumn>
-            <dx:GridViewDataTextColumn FieldName="Quik-Post Job" VisibleIndex="56">
+            <dx:GridViewDataTextColumn FieldName="Quik-Post Job" VisibleIndex="56" Caption="Quick Post Job">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Post Notes" ReadOnly="True" VisibleIndex="57">
+            <dx:GridViewDataTextColumn FieldName="Post Notes" ReadOnly="True" VisibleIndex="57" Caption="Post Notes">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Jobid" VisibleIndex="5">
+            <dx:GridViewDataTextColumn FieldName="Jobid" VisibleIndex="2" Caption="Job ID" FixedStyle="Left">
                 <PropertiesTextEdit DisplayFormatString="{0}">
                 </PropertiesTextEdit>
                 <Settings AllowSort="False" />
             </dx:GridViewDataTextColumn>
         </Columns>
+        <TotalSummary>
+            <dx:ASPxSummaryItem ShowInColumn="n_jobid" SummaryType="Sum" />
+        </TotalSummary>
+
+        <Styles FilterRow-CssClass="gridViewFilterRow" FocusedRow-CssClass="gridViewRowFocused" Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" RowHotTrack-CssClass="gridViewRow">
+            <Header CssClass="gridViewHeader">
+            </Header>
+            <Row CssClass="gridViewRow">
+            </Row>
+            <RowHotTrack CssClass="gridViewRow">
+            </RowHotTrack>
+            <SelectedRow BackColor="#FF3300">
+            </SelectedRow>
+            <FocusedRow BackColor="#FF3300" CssClass="gridViewRowFocused">
+            </FocusedRow>
+            <FilterRow CssClass="gridViewFilterRow">
+            </FilterRow>
+            <InlineEditCell BackColor="#FFFFCC">
+            </InlineEditCell>
+            <SearchPanel Border-BorderColor="#E2E1E0" Border-BorderStyle="Solid" Border-BorderWidth="1px">
+            </SearchPanel>
+        </Styles>
+
     </dx:ASPxGridView>
 &nbsp;
     
