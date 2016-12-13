@@ -274,7 +274,8 @@
                     </dxe:GridViewDataTextColumn>
                     <dxe:GridViewDataTextColumn FieldName="ResponsiblePersonID" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Resp. Person" VisibleIndex="28">
                     </dxe:GridViewDataTextColumn>
-                    <dxe:GridViewDataTextColumn FieldName="nMaintObjectID" ReadOnly="True" ShowInCustomizationForm="True" Visible="False" VisibleIndex="29"></dxe:GridViewDataTextColumn>
+                    <dxe:GridViewDataTextColumn FieldName="nMaintObjectID" ReadOnly="True" ShowInCustomizationForm="True" Visible="False" VisibleIndex="29">
+                    </dxe:GridViewDataTextColumn>
                     <dxe:GridViewDataTextColumn FieldName="BreakdownJob" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Breakdown" VisibleIndex="30">
                     </dxe:GridViewDataTextColumn>
                     <dxe:GridViewDataTextColumn FieldName="DowntimeHrs" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Dt. Hours" VisibleIndex="31">

@@ -6,7 +6,7 @@
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">MY Jobs</asp:Content>
 
 <asp:Content runat="server" ContentPlaceHolderID="ContentPlaceHolder">
-    This is the test MyJobs page
+    <h1>My Jobs</h1>
     <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="1012px" AutoGenerateColumns="False" EnableTheming="True" SettingsCommandButton-ApplyFilterButton-Styles-FocusRectStyle-HoverStyle-BackColor="Turquoise" SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid">
 
         <Styles>
@@ -49,7 +49,9 @@
         <SettingsDataSecurity AllowDelete="False"></SettingsDataSecurity>
         <SettingsSearchPanel Visible="True" ShowApplyButton="True" ShowClearButton="True"></SettingsSearchPanel>
         <Columns>
-            <dx:GridViewCommandColumn ShowClearFilterButton="True" VisibleIndex="0" ></dx:GridViewCommandColumn>
+            <dx:GridViewCommandColumn ShowClearFilterButton="True" VisibleIndex="0" Width="100px">
+                <CellStyle HorizontalAlign="Left" Wrap="False"></CellStyle>
+            </dx:GridViewCommandColumn>
             <dx:GridViewDataTextColumn FieldName="n_jobstepid" ReadOnly="True" VisibleIndex="9" Visible="False">
                 <EditFormSettings Visible="False" />
             </dx:GridViewDataTextColumn>
