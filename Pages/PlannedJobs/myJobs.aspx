@@ -55,7 +55,7 @@
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="n_jobid" VisibleIndex="4" FixedStyle="Left" Visible="False">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="T" ReadOnly="True" VisibleIndex="6" Caption="Type" Width="20px">
+            <dx:GridViewDataTextColumn FieldName="T" ReadOnly="True" VisibleIndex="6" Caption="Type" Width="75px">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="A" ReadOnly="True" VisibleIndex="45" Caption="Job Against">
             </dx:GridViewDataTextColumn>
@@ -63,15 +63,15 @@
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="step" VisibleIndex="5" Caption="Step #" Width="50px">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Step Title" VisibleIndex="3" Caption="Description" Width="300px">
+            <dx:GridViewDataTextColumn FieldName="Step Title" VisibleIndex="3" Caption="Description" Width="300px" CellStyle-Wrap="False">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="Priority" VisibleIndex="10" Caption="Priority">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Status" VisibleIndex="11" Caption="Status">
+            <dx:GridViewDataTextColumn FieldName="Status" VisibleIndex="11" Caption="Status" Settings-AllowSort="True" Settings-AllowFilterBySearchPanel="True">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataDateColumn FieldName="Requested" ReadOnly="True" VisibleIndex="12" Caption="Requested">
             </dx:GridViewDataDateColumn>
-            <dx:GridViewDataDateColumn FieldName="Starting Date" ReadOnly="True" VisibleIndex="1" FixedStyle="Left" Caption="Starting" Width="50px">
+            <dx:GridViewDataDateColumn FieldName="Starting Date" ReadOnly="True" VisibleIndex="1" FixedStyle="Left" Caption="Starting" Width="75px" Settings-AllowSort="True" Settings-AllowFilterBySearchPanel="True">
                 <CellStyle HorizontalAlign="Center" VerticalAlign="Middle">
                 </CellStyle>
             </dx:GridViewDataDateColumn>
@@ -164,9 +164,9 @@
             </dx:GridViewDataDateColumn>
             <dx:GridViewDataTextColumn FieldName="Quik-Post Job" VisibleIndex="56" Caption="Quick Post Job">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Post Notes" ReadOnly="True" VisibleIndex="57" Caption="Post Notes">
+            <dx:GridViewDataTextColumn FieldName="Post Notes" ReadOnly="True" VisibleIndex="57" Caption="Post Notes" CellStyle-Wrap="False" Width="200">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Jobid" VisibleIndex="2" Caption="Job ID" FixedStyle="Left">
+            <dx:GridViewDataTextColumn FieldName="Jobid" VisibleIndex="2" Caption="Job ID" FixedStyle="Left" Settings-AllowSort="True" Settings-AllowFilterBySearchPanel="True">
                 <DataItemTemplate>
                     <asp:HyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="<%# GetUrl(Container) %>"
                                 Text='<%# Eval("Jobid") %>' Width="100%" Theme="Mulberry"></asp:HyperLink>
