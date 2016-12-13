@@ -29,6 +29,9 @@ h5 {
 	margin: 0;
 	padding: 0;
 }
+a {
+    text-decoration: none;
+}
 .createDbMessage {
 	margin: 20px 0 10px;
 }
@@ -52,8 +55,13 @@ h5 {
 #mainPageDiv {
    align-content:center;
    font-size:3em;
+   padding-bottom: 20px;
   
 }
+#divUser {
+    font-size: 30px;
+}
+
 /* Layout */
 .contentBox {
 	min-width: 1224px;
@@ -440,6 +448,7 @@ div.mainMenu {
     border-radius: 5px;
     margin: 10px;
     padding: 10px;
+
 }
 .button > .dxb {
 	padding: 7px 35px !important;
@@ -447,6 +456,8 @@ div.mainMenu {
 .button.hover {
 	background-color: #87464F !important;
 }
+
+
 
 /* Charts */
 .chart-subtitle {
