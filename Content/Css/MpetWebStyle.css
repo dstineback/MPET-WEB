@@ -437,6 +437,9 @@ div.mainMenu {
 	color: white;
 	border-style: none;
     background-color: #da5859;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
 }
 .button > .dxb {
 	padding: 7px 35px !important;
