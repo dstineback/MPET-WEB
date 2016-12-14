@@ -16,7 +16,7 @@
         }
     </script>
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField> 
-    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="1012px" AutoGenerateColumns="False" EnableTheming="True" ClientInstanceName="myJobsGrid"  SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid">
+    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="1012px" AutoGenerateColumns="False" EnableTheming="True" ClientInstanceName="myJobsGrid"  SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-AllowSelectByRowClick="false" KeyFieldName="n_jobstepid">
 
         <Styles>
 <Header CssClass="gridViewHeader"></Header>
@@ -39,12 +39,6 @@
             <SearchPanel Border-BorderColor="Black" Border-BorderStyle="Solid">
             </SearchPanel>
         </Styles>
-       <%-- <ClientSideEvents RowClick="function(s, e) {
-                        myJobsGrid.GetRowValues(e.visibleIndex, 'Jobid;n_jobid;n_jobstepid;step', OnGetRowId);    
-            }" />--%>
-
-      
-
         <StylesContextMenu>
             <Row>
                 <Link HoverColor="#66FFFF">
@@ -52,9 +46,11 @@
             </Row>
         </StylesContextMenu>
 
-        <Settings ShowFilterRow="True" ShowGroupPanel="True" AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" ShowFooter="True" VerticalScrollableHeight="450" VerticalScrollBarMode="Visible"></Settings>
+        <SettingsPager Position="Top"></SettingsPager>
 
-        <SettingsBehavior AllowFocusedRow="True" AllowSelectByRowClick="True" ProcessSelectionChangedOnServer="True" AllowSelectSingleRowOnly="True"></SettingsBehavior>
+        <Settings AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Visible" ShowFooter="True" VerticalScrollableHeight="450" VerticalScrollBarMode="Visible"></Settings>
+
+        <SettingsBehavior AllowSelectByRowClick="True" AllowSelectSingleRowOnly="True"></SettingsBehavior>
 
         <SettingsCommandButton>
             <ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
@@ -62,10 +58,10 @@
             <HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
         </SettingsCommandButton>
 
-        <SettingsDataSecurity AllowDelete="False"></SettingsDataSecurity>
-        <SettingsSearchPanel Visible="True" ShowApplyButton="True" ShowClearButton="True"></SettingsSearchPanel>
+        <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False"></SettingsDataSecurity>
+        <SettingsSearchPanel ShowApplyButton="True" ShowClearButton="True" Visible="True"></SettingsSearchPanel>
         <Columns>
-            <dx:GridViewCommandColumn ShowClearFilterButton="True" VisibleIndex="0" Width="100px" FixedStyle="Left" Visible="False">
+            <dx:GridViewCommandColumn VisibleIndex="0" Width="100px" FixedStyle="Left" Visible="False">
                 <CellStyle HorizontalAlign="Left" Wrap="False"></CellStyle>
             </dx:GridViewCommandColumn>
             <dx:GridViewDataTextColumn FieldName="n_jobstepid" ReadOnly="True" VisibleIndex="9" Visible="False">
@@ -73,23 +69,28 @@
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="n_jobid" VisibleIndex="4" FixedStyle="Left" Visible="False">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="T" ReadOnly="True" VisibleIndex="6" Caption="Type" Width="75px">
+            <dx:GridViewDataTextColumn FieldName="T" ReadOnly="True" VisibleIndex="6" Caption="Type" Width="50px">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="A" ReadOnly="True" VisibleIndex="45" Caption="Job Against">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="Object ID" VisibleIndex="8" Caption="Object ID">
+                <CellStyle HorizontalAlign="Center" VerticalAlign="Middle"></CellStyle>
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="step" VisibleIndex="5" Caption="Step #" Width="50px">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="Step Title" VisibleIndex="3" Caption="Description" Width="300px" CellStyle-Wrap="False">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="Priority" VisibleIndex="10" Caption="Priority">
+                <CellStyle HorizontalAlign="Center" VerticalAlign="Middle" Wrap="False"></CellStyle>
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="Status" VisibleIndex="11" Caption="Status" Settings-AllowSort="True" Settings-AllowFilterBySearchPanel="True">
+                <CellStyle HorizontalAlign="Center" VerticalAlign="Middle" Wrap="False"></CellStyle>
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataDateColumn FieldName="Requested" ReadOnly="True" VisibleIndex="12" Caption="Requested">
             </dx:GridViewDataDateColumn>
             <dx:GridViewDataDateColumn FieldName="Starting Date" ReadOnly="True" VisibleIndex="1" FixedStyle="Left" Caption="Starting" Width="75px" Settings-AllowSort="True" Settings-AllowFilterBySearchPanel="True">
+                <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle"></HeaderStyle>
+
                 <CellStyle HorizontalAlign="Center" VerticalAlign="Middle">
                 </CellStyle>
             </dx:GridViewDataDateColumn>
@@ -104,8 +105,14 @@
             <dx:GridViewDataTextColumn FieldName="H" VisibleIndex="49" Caption="History">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="I" ReadOnly="True" VisibleIndex="7" Caption="Issued">
+                <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle"></HeaderStyle>
+
+                <CellStyle Wrap="False"></CellStyle>
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="cReasoncode" VisibleIndex="14" Caption="Reason">
+                <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle"></HeaderStyle>
+
+                <CellStyle HorizontalAlign="Center" VerticalAlign="Middle" Wrap="False"></CellStyle>
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="AssignedTaskID" VisibleIndex="15" Caption="Task">
             </dx:GridViewDataTextColumn>
@@ -138,7 +145,7 @@
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="FlaggedRecordID" ReadOnly="True" VisibleIndex="51" Caption="Flagged Record">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="ObjectDescr" VisibleIndex="28" Caption="Object Descr">
+            <dx:GridViewDataTextColumn FieldName="ObjectDescr" VisibleIndex="28" Caption="Object Descr" Width="200px">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="CostCodeID" ReadOnly="True" VisibleIndex="29" Caption="Cost Code">
             </dx:GridViewDataTextColumn>
@@ -187,7 +194,7 @@
             <dx:GridViewDataTextColumn FieldName="Jobid" VisibleIndex="2" Caption="Job ID" FixedStyle="Left" Settings-AllowSort="True" Settings-AllowFilterBySearchPanel="True">
                 <DataItemTemplate>
                     <asp:HyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="<%# GetUrl(Container) %>"
-                                Text='<%# Eval("Jobid") %>' Width="100%" Theme="Mulberry"></asp:HyperLink>
+                        Text='<%# Eval("Jobid") %>' Width="100%" Theme="Mulberry"></asp:HyperLink>
                 </DataItemTemplate>
                 <PropertiesTextEdit DisplayFormatString="{0}">
                 </PropertiesTextEdit>
@@ -202,12 +209,16 @@
 
         <Styles FilterRow-CssClass="gridViewFilterRow" FocusedRow-CssClass="gridViewRowFocused" Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" RowHotTrack-CssClass="gridViewRow">
             <Header CssClass="gridViewHeader"></Header>
-            <Row CssClass="gridViewRow" ></Row>
-            
+            <Row CssClass="gridViewRow"></Row>
+
             <RowHotTrack CssClass="gridViewRow"></RowHotTrack>
             <SelectedRow BackColor="#FF3300"></SelectedRow>
             <FocusedRow BackColor="#FF3300" CssClass="gridViewRowFocused"></FocusedRow>
             <FilterRow CssClass="gridViewFilterRow"></FilterRow>
+            <PagerBottomPanel>
+                <Paddings Padding="1px"></Paddings>
+            </PagerBottomPanel>
+
             <InlineEditCell BackColor="#FFFFCC"> </InlineEditCell>
             <SearchPanel Border-BorderColor="#E2E1E0" Border-BorderStyle="Solid" Border-BorderWidth="1px"></SearchPanel>
         </Styles>

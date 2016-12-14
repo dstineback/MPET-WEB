@@ -99,8 +99,6 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
                 //Enable/Disable Buttons
             Master.ShowNewButton = true;
             Master.ShowEditButton = true;
-            Master.ShowViewButton = true;
-            Master.ShowPrintButton = true;
 
         //Get Control That Caused Post Back
         var controlName = Request.Params.Get("__EVENTTARGET");
@@ -120,12 +118,6 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
                         EditSelectedRow();
                         break;
                     }
-                case "ViewButton":
-                {
-                        //Call View Routine
-                        ViewSelectedRow();
-                        break;
-                }
                 default:
                 {
                         //Do Nothing
@@ -210,11 +202,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             }
         }
 
-    private void ViewSelectedRow()
-    {
-        throw new NotImplementedException();
-    }
-
+     //Edit select logic for Edit button 
     private void EditSelectedRow()
     {
         var i = myJobsGrid.FocusedRowIndex;
@@ -226,6 +214,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         }
     }
 
+    //Add new logic for Add button
     private void AddNewRow()
     {
         if (true)
