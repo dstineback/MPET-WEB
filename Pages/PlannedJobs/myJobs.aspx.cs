@@ -12,10 +12,24 @@ using DevExpress.Web;
 public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
 {
 
-    private int UserID = 1;
+
+    //settings for buttons
     private LogonObject _oLogon;
+   
+    private WorkOrder _oJob;
+    private WorkOrderJobStep _oJobStep;
+    private bool _userCanDelete;
+    private bool _userCanAdd;
+    private bool _userCanEdit;
+    private bool _userCanView;
+    private const int AssignedFormId = 55;
+    private readonly DateTime _nullDate = Convert.ToDateTime("1/1/1960 23:59:59");
+    private string _connectionString = "";
+    private bool _useWeb;
+    private JobPoolType _poolType = JobPoolType.Global;
 
-
+    //Params that are set for Sql Stored Procedure
+    private int UserID = 1;
     private string UserName = "";
     private int MatchJobType = 0;
     private int MatchJobAgainst = 0;
@@ -75,7 +89,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             UserID = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).UserID;
         }
 
-
+        //Sql Stored Procedure connection
         String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
 
         using (SqlConnection con = new SqlConnection(strConnString))
@@ -138,6 +152,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             {
                 con.Open();
 
+                //MUST have to bind Sql SP to GridView
                 myJobsGrid.DataSource = cmd.ExecuteReader();
                 myJobsGrid.DataBind();
 
@@ -149,6 +164,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         }
     }
 
+    //hyperlink the Jobs ID on GridView to actual Job
     protected string GetUrl(GridViewDataItemTemplateContainer container)
     {
         var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
