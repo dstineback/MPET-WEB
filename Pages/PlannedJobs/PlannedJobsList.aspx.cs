@@ -54,10 +54,10 @@ namespace Pages.PlannedJobs
                     Master.ShowIssueButton = _userCanEdit;
                     Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd);
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
+                    Master.ShowMultiSelectButton = _userCanDelete;
                     Master.ShowPrintButton = true;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = true;
-                    Master.ShowMultiSelectButton = _userCanDelete;
                 }
             }
 
