@@ -7,7 +7,16 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <h1>My Jobs</h1>
-    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="1012px" AutoGenerateColumns="False" EnableTheming="True" SettingsCommandButton-ApplyFilterButton-Styles-FocusRectStyle-HoverStyle-BackColor="Turquoise" SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid">
+    <script type="text/javascript">
+        function OnGetRowID(idValue) {
+            Selection.Set('Jobid', idValue[0].toString());
+            Selection.Set('n_Jobid', idValue[1].toString());
+            Selection.Set('n_jobstepid', idValue[2].toString());
+            Selection.Set('step', idValue[3].toString());
+        }
+    </script>
+    <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField> 
+    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="1012px" AutoGenerateColumns="False" EnableTheming="True" ClientInstanceName="myJobsGrid"  SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid">
 
         <Styles>
 <Header CssClass="gridViewHeader"></Header>
@@ -30,6 +39,11 @@
             <SearchPanel Border-BorderColor="Black" Border-BorderStyle="Solid">
             </SearchPanel>
         </Styles>
+       <%-- <ClientSideEvents RowClick="function(s, e) {
+                        myJobsGrid.GetRowValues(e.visibleIndex, 'Jobid;n_jobid;n_jobstepid;step', OnGetRowId);    
+            }" />--%>
+
+      
 
         <StylesContextMenu>
             <Row>
@@ -38,7 +52,9 @@
             </Row>
         </StylesContextMenu>
 
-        <Settings ShowFilterRow="True" ShowGroupPanel="True" AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" ShowFooter="True" VerticalScrollableHeight="500" VerticalScrollBarMode="Visible"></Settings>
+        <Settings ShowFilterRow="True" ShowGroupPanel="True" AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" ShowFooter="True" VerticalScrollableHeight="450" VerticalScrollBarMode="Visible"></Settings>
+
+        <SettingsBehavior AllowFocusedRow="True" AllowSelectByRowClick="True" ProcessSelectionChangedOnServer="True" AllowSelectSingleRowOnly="True"></SettingsBehavior>
 
         <SettingsCommandButton>
             <ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
@@ -49,7 +65,7 @@
         <SettingsDataSecurity AllowDelete="False"></SettingsDataSecurity>
         <SettingsSearchPanel Visible="True" ShowApplyButton="True" ShowClearButton="True"></SettingsSearchPanel>
         <Columns>
-            <dx:GridViewCommandColumn ShowClearFilterButton="True" VisibleIndex="0" Width="100px">
+            <dx:GridViewCommandColumn ShowClearFilterButton="True" VisibleIndex="0" Width="100px" FixedStyle="Left" Visible="False">
                 <CellStyle HorizontalAlign="Left" Wrap="False"></CellStyle>
             </dx:GridViewCommandColumn>
             <dx:GridViewDataTextColumn FieldName="n_jobstepid" ReadOnly="True" VisibleIndex="9" Visible="False">
