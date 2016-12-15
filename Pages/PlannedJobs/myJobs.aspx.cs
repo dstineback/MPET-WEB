@@ -90,13 +90,13 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             switch (controlName.Replace("ctl00$Footer$", ""))
             {
                 case "NewButton":
-                    {
+                    {   //Call Add Row
                         AddNewRow();
                         break;
                     }
                 case "EditButton":
                     {
-                        //Call View Routine
+                        //Call Edit on Selection
                         EditSelectedRow();
                         break;
                     }
