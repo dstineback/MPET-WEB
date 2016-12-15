@@ -71,10 +71,42 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         //Check For Logon Class
         if (HttpContext.Current.Session["LogonInfo"] != null)
         {
+            //Get Logon Info From Session
+            _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
             UserName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).Username;
             UserID = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).UserID;
         }
 
+        //Enable/Disable Buttons
+        Master.ShowNewButton = true;
+        Master.ShowEditButton = true;
+
+        //Get Control That Caused Post Back
+        var controlName = Request.Params.Get("__EVENTTARGET");
+
+        if (!string.IsNullOrEmpty(controlName))
+        {
+            switch (controlName.Replace("ctl00$Footer$", ""))
+            {
+                case "NewButton":
+                    {
+                        AddNewRow();
+                        break;
+                    }
+                case "EditButton":
+                    {
+                        //Call View Routine
+                        EditSelectedRow();
+                        break;
+                    }
+                default:
+                    {
+                        //Do Nothing
+                        break;
+                    }
+            }
+        }
 
         String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
 
@@ -146,6 +178,32 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             {
                 throw ex;
             }
+        }
+    }
+
+    //Edit select logic for Edit button 
+    private void EditSelectedRow()
+    {
+        var i = myJobsGrid.FocusedRowIndex;
+        var v = myJobsGrid.GetRowValues(i, new[] { "n_jobstepid" });
+
+        if (v != null)
+        {
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + v);
+        }
+    }
+
+    //Add new logic for Add button
+    private void AddNewRow()
+    {
+        if (true)
+        {
+            //Redirect To Edit Page With Job ID
+            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+        }
+        else
+        {
+            throw new NotImplementedException();
         }
     }
 

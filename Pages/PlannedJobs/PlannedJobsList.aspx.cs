@@ -58,6 +58,7 @@ namespace Pages.PlannedJobs
                     Master.ShowPrintButton = true;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = true;
+                    
                 }
             }
 
