@@ -1636,7 +1636,7 @@
                                                                                 Text='<%# Eval("ObjectID") %>' Width="100%" Theme="Mulberry"> 
                                                                                 <ClientSideEvents Click="onHyperLinkClick" />
                                                                             </dx:ASPxHyperLink>
-                                                                        <</DataItemTemplate>
+                                                                        </DataItemTemplate>
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="ObjectDescription" ReadOnly="True" Caption="Description" Width="450px" VisibleIndex="6">
                                                                         <CellStyle Wrap="False"></CellStyle>
