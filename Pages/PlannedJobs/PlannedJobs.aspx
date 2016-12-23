@@ -2,7 +2,22 @@
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Planned Jobs</asp:Content>
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/> 
+
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>  
+    <%--<script type="text/javascript">
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+            function OnGetCrewRowId(idValue) {
+                Selection.Set("RecordID", idValue[0].toString());
+                Selection.Set("DMRKEY", idValue[1].toString());
+            }
+
+        }
+    </script>--%>
+     <script type="text/javascript">
+        ASPx.TouchUIHelper.isNativeScrollingAllowed = false;
+    </script>
+
     <script type="text/javascript">
         DXUploadedFilesContainer = {
             nameCellStyle: "",
@@ -246,9 +261,32 @@
             window.CrewGrid.CancelEdit();
         }
 
+        function onHyperLinkClick(sender) {
+            //console.log('sender', sender);
+            //window._xyz = sender.GetMainElement();
+            var s = sender.GetMainElement();
+          
+            var crewGrid = s.parentNode.parentNode;
+            var click = new MouseEvent('dblclick', {
+                'view': window,
+                'bubbles': true,
+                'cancelable': true
+            });
+            var dblClick = new MouseEvent('click', {
+                'view': window,
+                'bubbles': true,
+                'cancelable': true
+            });
+            crewGrid.dispatchEvent(click);
+            crewGrid.dispatchEvent(dblClick);
+        }
+
+      
+
     </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
-    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="Mulberry" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="Mulberry" runat="server" Text="Step: "></dx:ASPxLabel>
+    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="Mulberry" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="Mulberry" runat="server" Text="Step: "></dx:ASPxLabel> <br />
+    <dx:ASPxHyperLink ID="myJobsBackLink" runat="server" Font-Size="16" Theme="Mulberry" Text="MY JOBS" NavigateUrl="~/Pages/PlannedJobs/myJobs.aspx" />
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxHiddenField ID="MultiGrid" ViewStateMode="Enabled"  ClientInstanceName="MultiGrid" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxFormLayout ID="WorkRequestDescLayout" runat="server" Width="98%" Paddings="0,0" RequiredMarkDisplayMode="RequiredOnly" RequiredMark="" EnableViewState="True" >
@@ -267,12 +305,14 @@
                                 </dx:ASPxMemo>
 
                             </dx:LayoutItemNestedControlContainer>
+                            <%--TODO: Add note about double clicking bring up pop up edit--%>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup>
         </Items>
     </dx:ASPxFormLayout>  
+    <dx:ASPxLabel ID="dbclciklable" Font-Size="Small" Theme="Mulberry" runat="server" Text="*Double Click to Edit" ></dx:ASPxLabel>
     <dx:ASPxFormLayout ID="WorkReqDetailLayout" runat="server" Width="98%" Paddings="0,0" RequiredMarkDisplayMode="RequiredOnly" RequiredMark="" EnableViewState="True" >
         <Items>
             <dx:LayoutGroup Caption="" Width="98%" ColCount="2" SettingsItemCaptions-Location="Top" GroupBoxDecoration="None">
@@ -280,7 +320,7 @@
                     <dx:LayoutItem Name="DescLabel" Caption="" HelpText="">
                         <LayoutItemNestedControlCollection >
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxPageControl ID="StepTab" Height="500px" Width="98%" ClientInstanceName="StepTab" TabPosition="Top" Theme="Mulberry" runat="server" ActiveTabIndex="0" EnableHierarchyRecreation="True">
+                                <dx:ASPxPageControl ID="StepTab" Height="500px" Width="98%" ClientInstanceName="StepTab" TabPosition="Top" Theme="Mulberry" runat="server" ActiveTabIndex="6" EnableHierarchyRecreation="True">
                                     <TabPages>
                                         <dx:TabPage Text="JOB STEP" ToolTip="Allows Input Of Jobstep Details">
                                             <ContentCollection>
@@ -290,7 +330,9 @@
                                                             ActiveTabChanged="function(s, e) { ActiveTabChanged(e); }"
                                                             />
                                                         <TabPages>                                      
-                                                            <dx:TabPage Text="OBJECT/ASSET" ToolTip="Allows Input Of Jobstep Object/Asset Information">
+                                                           <%--//Start of side tabs on the Job Step Page--%> 
+
+                                                             <dx:TabPage Text="OBJECT/ASSET" ToolTip="Allows Input Of Jobstep Object/Asset Information">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl1" runat="server">
                                                                         <dx:ASPxFormLayout ID="ASPxFormLayout1" ColCount="2" runat="server">
@@ -422,6 +464,8 @@
                                                                                                                           ReadOnly="True"
                                                                                                                           AllowMouseWheel="False"
                                                                                                                           SpinButtons-ClientVisible="False">
+<SpinButtons ClientVisible="False"></SpinButtons>
+
                                                                                                             <ClearButton Visibility="True"></ClearButton>
                                                                                                         </dx:ASPxSpinEdit>
                                                                                                             </dx:LayoutItemNestedControlContainer>
@@ -444,6 +488,8 @@
                                                                                                                           ReadOnly="True"
                                                                                                                           AllowMouseWheel="False"
                                                                                                                           SpinButtons-ClientVisible="False">
+<SpinButtons ClientVisible="False"></SpinButtons>
+
                                                                                                             <ClearButton Visibility="True"></ClearButton>
                                                                                                         </dx:ASPxSpinEdit>
                                                                                                             </dx:LayoutItemNestedControlContainer>
@@ -466,6 +512,8 @@
                                                                                                                           ReadOnly="True"
                                                                                                                           AllowMouseWheel="False"
                                                                                                                           SpinButtons-ClientVisible="False">
+<SpinButtons ClientVisible="False"></SpinButtons>
+
                                                                                                             <ClearButton Visibility="True"></ClearButton>
                                                                                                         </dx:ASPxSpinEdit>
                                                                                                             </dx:LayoutItemNestedControlContainer>
@@ -1363,6 +1411,8 @@
                                                                                                                           HorizontalAlign="Right"
                                                                                                                           AllowMouseWheel="False"
                                                                                                                           SpinButtons-ClientVisible="False">
+<SpinButtons ClientVisible="False"></SpinButtons>
+
                                                                                                             <ClearButton Visibility="True"></ClearButton>
                                                                                                         </dx:ASPxSpinEdit>                                                                                                    
                                                                                                 </dx:LayoutItemNestedControlContainer>
@@ -1472,7 +1522,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage>
-                                                            <dx:TabPage Text="NOTES" ToolTip="Allows Input Of Jobstep Notes">
+                                                            <dx:TabPage Text="PROCEDURES" ToolTip="Allows Input Of Jobstep Notes">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl7" runat="server">
                                                                         <dx:ASPxFormLayout ID="AdditionalContentLayoutGroup" Theme="Mulberry" runat="server" Width="98%" Paddings="0,0">
@@ -1587,6 +1637,11 @@
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="ObjectID" ReadOnly="True" Caption="Object ID" SortOrder="Ascending" Width="250px" VisibleIndex="5">
                                                                         <CellStyle Wrap="False"></CellStyle>
+                                                                        <%--<DataItemTemplate>
+                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="<%# GetUrl(Container) %>"
+                                                                                Text='<%# Eval("ObjectID") %>' Width="100%" Theme="Mulberry"> 
+                                                                            </dx:ASPxHyperLink>--%>
+                                                                        <%--</DataItemTemplate>--%>
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="ObjectDescription" ReadOnly="True" Caption="Description" Width="450px" VisibleIndex="6">
                                                                         <CellStyle Wrap="False"></CellStyle>
@@ -1661,7 +1716,7 @@
                                                                                                                          runat="server" 
                                                                                                                          TextField = "WorkDate" 
                                                                                                                          ValueField = "WorkDate"
-                                                                                                                         Value='<%# Bind("WorkDate") %>' 
+                                                                                                                         Value='<%# Bind("WorkDate") %>'
                                                                                                                          ValueType="System.DateTime"
                                                                                                                          NullText="MM/DD/YYYY"
                                                                                                                          EditFormat="Custom"
@@ -1764,15 +1819,11 @@
                                                                 KeyboardSupport="True" 
                                                                 ClientInstanceName="CrewGrid" 
                                                                 AutoPostBack="True" 
-                                                                EnableCallBacks="true"
-                                                                Settings-HorizontalScrollBarMode="Auto" 
-                                                                SettingsPager-Mode="ShowPager" 
-                                                                SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
-                                                                SettingsBehavior-AllowFocusedRow="True" 
-                                                                DataSourceID="CrewDataSource"
-                                                                OnDataBound="CrewGridBound"
-                                                                OnRowUpdating="CrewGrid_RowUpdating">
-                                                                <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
+                                                                EnableCallBacks="true" 
+                                                                Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="True" SettingsBehavior-AllowFocusedRow="False" 
+                                                                SettingsBehavior-AllowSelectByRowClick="true" DataSourceID="CrewDataSource" OnDataBound="CrewGridBound" OnRowUpdating="CrewGrid_RowUpdating" >
+                                                               
+                                                                 <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
                                                                         RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
                                                                     <Header CssClass="gridViewHeader"></Header>
 
@@ -1786,11 +1837,25 @@
                                                                 </Styles>
                                                                 <ClientSideEvents RowClick="function(s, e) {
                                                                         CrewGrid.GetRowValues(e.visibleIndex, 'RecordID;DMRKEY', OnGetCrewRowId);
-                        
-                                                                    }" 
-                                                                                  RowDblClick="function(s, e) {
-                                                                    s.StartEditRow(e.visibleIndex);
-                                                                }" />
+                                                                        
+                                                                        window._myRowClickObject = window._myRowClickObject || {};
+                                                                        _myRowClickObject.s = s;
+                                                                        _myRowClickObject.e = e;
+                                                                        
+                                                                        console.log('s', s);
+                                                                        console.log('e vis', e.visibleIndex);
+                                                                    }"
+                                                                                RowDblClick="function(s, e) {
+                                                                                window._myRowBblClickObject = window._myRowBblClickObject || {};
+                                                                                _myRowBblClickObject.s = s;
+                                                                                _myRowBblClickObject.e = e;
+                                                                    
+                                                                                s.StartEditRow(e.visibleIndex);
+                                                                                console.log('s db', s);
+                                                                                
+                                                                                console.log('e vis db', e.visibleIndex);
+                                                                        
+                                                                    }" />
                                                                 <Columns>
                                                                     <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowEditButton="True" Visible="false" VisibleIndex="0" />
                                                                     <dx:GridViewDataTextColumn FieldName="RecordID" ReadOnly="True" Visible="false" VisibleIndex="1">
@@ -1808,8 +1873,21 @@
                                                                     <dx:GridViewDataTextColumn FieldName="n_PayCodeID" ReadOnly="True" Visible="false" VisibleIndex="5">
                                                                         <CellStyle Wrap="False"></CellStyle>
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataComboBoxColumn FieldName="CrewMemberTextID"  Caption="User ID" Width="100px" VisibleIndex="6">
+                                                                   
+                                                                    <dx:GridViewDataComboBoxColumn FieldName="CrewMemberTextID" Caption="User ID" Width="100px" VisibleIndex="6">
                                                                         <CellStyle Wrap="False"></CellStyle>
+                                                                    
+                                                                        <DataItemTemplate>
+                                                                          
+                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("CrewMemberTextID") %>' Width="100%" Theme="Mulberry">
+                                                                                <ClientSideEvents Click="onHyperLinkClick" />
+                                                                                    
+                                                                                   
+                                                                                    
+                                                                                    
+                                                              
+                                                                            </dx:ASPxHyperLink>
+                                                                        </DataItemTemplate>
                                                                         <PropertiesComboBox ClientInstanceName="gridComboCrewUser" TextField="Username" IncrementalFilteringMode="Contains" ValueField="UserID" DataSourceID="CrewIDGridLookupDataSource">
                                                                                                             <Columns>
                                                                                                                 <dx:ListBoxColumn FieldName="UserID" Visible="False" />
@@ -1926,7 +2004,7 @@
                                                                 <SettingsEditing Mode="PopupEditForm" 
                                                                                  PopupEditFormHorizontalAlign="WindowCenter"
                                                                                  PopupEditFormVerticalAlign="WindowCenter" 
-                                                                                 PopupEditFormWidth="800px" 
+                                                                                 PopupEditFormWidth="500px" 
                                                                                  PopupEditFormModal="True" 
                                                                                  PopupEditFormShowHeader="False"></SettingsEditing>
                                                                 <SettingsPager PageSize="10">
@@ -1938,7 +2016,7 @@
                                                                     <dx:ASPxSummaryItem FieldName="ActualHrs"  SummaryType="Sum" />
                                                                 </TotalSummary>
                                                                 <SettingsPopup>
-                                                                    <EditForm Width="800px" Modal="true" />
+                                                                    <EditForm Width="500px" Modal="false" AllowResize="true" />
                                                                 </SettingsPopup>
                                                                 <Templates>
                                                                     <EditForm>
@@ -2055,7 +2133,7 @@
                                                                                                                          runat="server" 
                                                                                                                          TextField = "ActualHrs" 
                                                                                                                          ValueField = "ActualHrs"
-                                                                                                                         Value='<%# Bind("ActualHrs") %>' 
+                                                                                                                         Value='<%# Bind("ActualHrs") %>'
                                                                                                                          ValueType="System.Decimal"
                                                                                                                          DisplayFormatString="F2"
                                                                                                                          NullText="Enter Act. Hours"
@@ -2195,7 +2273,7 @@
                                                                                                                          runat="server" 
                                                                                                                          TextField = "WorkDate" 
                                                                                                                          ValueField = "WorkDate"
-                                                                                                                         Value='<%# Bind("WorkDate") %>' 
+                                                                                                                         Value='<%# Bind("WorkDate") %>'
                                                                                                                          ValueType="System.DateTime"
                                                                                                                          NullText="MM/DD/YYYY"
                                                                                                                          EditFormat="Custom"
@@ -2545,6 +2623,13 @@
                                                             AllowFocusedRow="True" 
                                                             AllowClientEventsOnLoad="false" 
                                                             ColumnResizeMode="NextColumn" />
+
+<SettingsCommandButton>
+<ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
+
+<HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
+</SettingsCommandButton>
+
                                                         <SettingsDataSecurity 
                                                             AllowDelete="False" 
                                                             AllowInsert="False" 
@@ -2658,7 +2743,7 @@
                                                                                                                           runat="server" 
                                                                                                                           TextField = "qtyplanned" 
                                                                                                                           ValueField = "qtyplanned"
-                                                                                                                          Value='<%# Bind("qtyplanned") %>' 
+                                                                                                                          Value='<%# Bind("qtyplanned") %>'
                                                                                                                           ValueType="System.Decimal"
                                                                                                                           DisplayFormatString="F2"
                                                                                                                           NullText="Enter Est. Units"
@@ -2713,7 +2798,7 @@
                                                                                                                          runat="server" 
                                                                                                                          TextField = "qtyused" 
                                                                                                                          ValueField = "qtyused"
-                                                                                                                         Value='<%# Bind("qtyused") %>' 
+                                                                                                                         Value='<%# Bind("qtyused") %>'
                                                                                                                          ValueType="System.Decimal"
                                                                                                                          DisplayFormatString="F2"
                                                                                                                          NullText="Enter Act. Units"
@@ -3070,7 +3155,7 @@
                                                                                                                           runat="server" 
                                                                                                                           TextField = "EquipCost" 
                                                                                                                           ValueField = "EquipCost"
-                                                                                                                          Value='<%# Bind("EquipCost") %>' 
+                                                                                                                          Value='<%# Bind("EquipCost") %>'
                                                                                                                           ValueType="System.Decimal"
                                                                                                                           DisplayFormatString="C4"
                                                                                                                           NullText="Enter Equip. Rate"
@@ -3090,7 +3175,7 @@
                                                                                                                           runat="server" 
                                                                                                                           TextField = "StartMeter" 
                                                                                                                           ValueField = "StartMeter"
-                                                                                                                          Value='<%# Bind("StartMeter") %>' 
+                                                                                                                          Value='<%# Bind("StartMeter") %>'
                                                                                                                           ValueType="System.Decimal"
                                                                                                                           DisplayFormatString="F2"
                                                                                                                           NullText="Enter Start Meter"
@@ -3110,7 +3195,7 @@
                                                                                                                           runat="server" 
                                                                                                                           TextField = "EndMeter" 
                                                                                                                           ValueField = "EndMeter"
-                                                                                                                          Value='<%# Bind("EndMeter") %>' 
+                                                                                                                          Value='<%# Bind("EndMeter") %>'
                                                                                                                           ValueType="System.Decimal"
                                                                                                                           DisplayFormatString="F2"
                                                                                                                           NullText="Enter End Meter"
@@ -3148,7 +3233,7 @@
                                                                                                                           runat="server" 
                                                                                                                           TextField = "qtyplanned" 
                                                                                                                           ValueField = "qtyplanned"
-                                                                                                                          Value='<%# Bind("qtyplanned") %>' 
+                                                                                                                          Value='<%# Bind("qtyplanned") %>'
                                                                                                                           ValueType="System.Decimal"
                                                                                                                           DisplayFormatString="F2"
                                                                                                                           NullText="Enter Est. Units"
@@ -3168,7 +3253,7 @@
                                                                                                                          runat="server" 
                                                                                                                          TextField = "qtyused" 
                                                                                                                          ValueField = "qtyused"
-                                                                                                                         Value='<%# Bind("qtyused") %>' 
+                                                                                                                         Value='<%# Bind("qtyused") %>'
                                                                                                                          ValueType="System.Decimal"
                                                                                                                          DisplayFormatString="F2"
                                                                                                                          NullText="Enter Act. Units"
@@ -3206,7 +3291,7 @@
                                                                                                                            runat="server" 
                                                                                                                            TextField = "MiscellaneousReference" 
                                                                                                                            ValueField = "MiscellaneousReference"
-                                                                                                                           Value='<%# Bind("MiscellaneousReference") %>' 
+                                                                                                                           Value='<%# Bind("MiscellaneousReference") %>'
                                                                                                                            ValueType="System.String"
                                                                                                                            NullText="Enter Misc. Ref.">
                                                                                                             <ClearButton Visibility="True"></ClearButton>
@@ -3423,7 +3508,7 @@
                                                                                                                           runat="server" 
                                                                                                                           TextField = "qtyplanned" 
                                                                                                                           ValueField = "qtyplanned"
-                                                                                                                          Value='<%# Bind("qtyplanned") %>' 
+                                                                                                                          Value='<%# Bind("qtyplanned") %>'
                                                                                                                           ValueType="System.Decimal"
                                                                                                                           DisplayFormatString="F2"
                                                                                                                           NullText="Enter Est. Qty."
@@ -3443,7 +3528,7 @@
                                                                                                                          runat="server" 
                                                                                                                          TextField = "qtyused" 
                                                                                                                          ValueField = "qtyused"
-                                                                                                                         Value='<%# Bind("qtyused") %>' 
+                                                                                                                         Value='<%# Bind("qtyused") %>'
                                                                                                                          ValueType="System.Decimal"
                                                                                                                          DisplayFormatString="F2"
                                                                                                                          NullText="Enter Act. Qty."
@@ -3462,7 +3547,7 @@
                                                                                                                          runat="server" 
                                                                                                                          TextField = "OtherCost" 
                                                                                                                          ValueField = "OtherCost"
-                                                                                                                         Value='<%# Bind("OtherCost") %>' 
+                                                                                                                         Value='<%# Bind("OtherCost") %>'
                                                                                                                          ValueType="System.Decimal"
                                                                                                                          DisplayFormatString="C4"
                                                                                                                          NullText="Enter Cost"
@@ -3482,7 +3567,7 @@
                                                                                                                          runat="server" 
                                                                                                                          TextField = "WorkDate" 
                                                                                                                          ValueField = "WorkDate"
-                                                                                                                         Value='<%# Bind("WorkDate") %>' 
+                                                                                                                         Value='<%# Bind("WorkDate") %>'
                                                                                                                          ValueType="System.DateTime"
                                                                                                                          NullText="MM/DD/YYYY"
                                                                                                                          EditFormat="Custom"
@@ -3501,7 +3586,7 @@
                                                                                                                            runat="server" 
                                                                                                                            TextField = "MiscellaneousReference" 
                                                                                                                            ValueField = "MiscellaneousReference"
-                                                                                                                           Value='<%# Bind("MiscellaneousReference") %>' 
+                                                                                                                           Value='<%# Bind("MiscellaneousReference") %>'
                                                                                                                            ValueType="System.String"
                                                                                                                            NullText="Enter Misc. Ref.">
                                                                                                             <ClearButton Visibility="True"></ClearButton>
@@ -3807,6 +3892,13 @@
                                                                                 </Columns>
                                                                                 <SettingsSearchPanel Visible="true" />
                                                                                 <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
+
+<SettingsCommandButton>
+<ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
+
+<HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
+</SettingsCommandButton>
+
                                                                                 <SettingsDataSecurity AllowDelete="False" AllowInsert="True" />
                                                                                 <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350"  />
                                                                                 <SettingsEditing Mode="Inline"></SettingsEditing>
@@ -3968,6 +4060,13 @@
                                                                                 </Columns>
                                                                                 <SettingsSearchPanel Visible="true" />
                                                                                 <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
+
+<SettingsCommandButton>
+<ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
+
+<HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
+</SettingsCommandButton>
+
                                                                                 <SettingsDataSecurity AllowDelete="False" AllowInsert="True" />
                                                                                 <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350"  />
                                                                                 <SettingsEditing Mode="Inline"></SettingsEditing>
@@ -4128,6 +4227,13 @@
                                                                                 </Columns>
                                                                                 <SettingsSearchPanel Visible="true" />
                                                                                 <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
+
+<SettingsCommandButton>
+<ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
+
+<HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
+</SettingsCommandButton>
+
                                                                                 <SettingsDataSecurity AllowDelete="False" AllowInsert="True" />
                                                                                 <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350"  />
                                                                                 <SettingsEditing Mode="Inline"></SettingsEditing>
@@ -4359,6 +4465,13 @@
                                                                                 </Columns>
                                                                                 <SettingsSearchPanel Visible="true" />
                                                                                 <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
+
+<SettingsCommandButton>
+<ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
+
+<HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
+</SettingsCommandButton>
+
                                                                                 <SettingsDataSecurity AllowDelete="False" AllowInsert="True" />
                                                                                 <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350"  />
                                                                                 <SettingsEditing Mode="Inline"></SettingsEditing>
@@ -4574,6 +4687,13 @@
                                                                                 </Columns>
                                                                                 <SettingsSearchPanel Visible="true" />
                                                                                 <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
+
+<SettingsCommandButton>
+<ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
+
+<HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
+</SettingsCommandButton>
+
                                                                                 <SettingsDataSecurity AllowDelete="False" AllowInsert="True" />
                                                                                 <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350"  />
                                                                                 <SettingsEditing Mode="Inline"></SettingsEditing>
@@ -4682,6 +4802,13 @@
                                                                                 </Columns>
                                                                                 <SettingsSearchPanel Visible="true" />
                                                                                 <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
+
+<SettingsCommandButton>
+<ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
+
+<HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
+</SettingsCommandButton>
+
                                                                                 <SettingsDataSecurity AllowDelete="False" AllowInsert="True" />
                                                                                 <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350"  />
                                                                                 <SettingsEditing Mode="Inline"></SettingsEditing>

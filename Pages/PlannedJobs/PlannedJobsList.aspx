@@ -36,10 +36,10 @@
                 KeyboardSupport="True"
                 ClientInstanceName="PlannedGrid"
                 AutoPostBack="True"
-                Settings-HorizontalScrollBarMode="Auto"
+                Settings-HorizontalScrollBarMode="Auto" Settings-VerticalScrollBarMode="Visible" Settings-VerticalScrollBarStyle="Standard" SettingsBehavior-AllowSelectByRowClick="true"
                 SettingsPager-Mode="ShowPager"
-                SettingsBehavior-ProcessFocusedRowChangedOnServer="True"
-                SettingsBehavior-AllowFocusedRow="True"
+                SettingsBehavior-ProcessFocusedRowChangedOnServer="False"
+                SettingsBehavior-AllowFocusedRow="False"
                 SelectionMode="Multiple"
                 DataSourceID="ObjectGridDataSource"
                 OnHtmlDataCellPrepared="ASPxGridView1_HtmlRowPrepared" AutoGenerateColumns="False">

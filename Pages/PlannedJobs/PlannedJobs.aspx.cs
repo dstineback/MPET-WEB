@@ -47,6 +47,8 @@ namespace Pages.PlannedJobs
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            DevExpress.Web.ASPxWebControl.RegisterBaseScript(Page);
+
             #region Attempt To Load Logon Info
 
             //Check For Logon Class
@@ -174,7 +176,7 @@ namespace Pages.PlannedJobs
                         case"EditButton":
                         {
                             //Call Edit Routine
-                            EditItems();
+                            EditItems();        
                             break;
                         }
                         case "DeleteButton":
@@ -1501,7 +1503,7 @@ namespace Pages.PlannedJobs
 
             //Enable/Disable Buttons
             Master.ShowNewButton = showButtons;
-            Master.ShowEditButton = showButtons;
+            Master.ShowEditButton = (showButtons && (HttpContext.Current.Session[""] != null));
             Master.ShowViewButton = false;
             Master.ShowPrintButton = showButtons;
             Master.ShowIssueButton = showButtons;
@@ -10637,6 +10639,14 @@ namespace Pages.PlannedJobs
             }
         }
 
+
+
+        protected string GetUrl(GridViewDataItemTemplateContainer container)
+        {
+            var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
+            return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+        }
+
         /// <summary>
         /// Sets Up Run Units For Specified Object
         /// </summary>
@@ -10727,6 +10737,11 @@ namespace Pages.PlannedJobs
                 //Show Error
                 Master.ShowError(ex.Message);
             }
+        }
+
+        protected void Unnamed_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using DevExpress.Web;
+using System.Diagnostics;
 
 public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
 {
@@ -108,9 +109,14 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             }
         }
 
-        String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
+        Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/LindtTest");
 
-        using (SqlConnection con = new SqlConnection(strConnString))
+        ConnectionStringSettings strConnString = rootWebConfig.ConnectionStrings.ConnectionStrings["connection"];
+
+        //String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
+
+
+        using (SqlConnection con = new SqlConnection(strConnString.ConnectionString))
         {
             SqlCommand cmd = new SqlCommand();
             cmd.CommandType = CommandType.StoredProcedure;
@@ -168,11 +174,13 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             cmd.Connection = con;
             try
             {
+               
                 con.Open();
-
+                
                 myJobsGrid.DataSource = cmd.ExecuteReader();
                 myJobsGrid.DataBind();
-
+                
+               
             }
             catch (Exception ex)
             {

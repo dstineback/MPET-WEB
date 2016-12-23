@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/SiteBase.master" CodeFile="myJobs.aspx.cs" Inherits="Pages_PlannedJobs_myJobs" %>
+﻿ <%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/SiteBase.master" CodeFile="myJobs.aspx.cs" Inherits="Pages_PlannedJobs_myJobs" %>
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
 
 <%@ Register assembly="Infragistics4.WebUI.WebResizingExtender.v15.1, Version=15.1.20151.2400, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" namespace="Infragistics.WebUI" tagprefix="igui" %>
@@ -7,7 +7,9 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <h1>My Jobs</h1>
-    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="1012px" AutoGenerateColumns="False" EnableTheming="True" SettingsCommandButton-ApplyFilterButton-Styles-FocusRectStyle-HoverStyle-BackColor="Turquoise" SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid">
+    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="1012px" AutoGenerateColumns="False" EnableTheming="True" SettingsBehavior-AllowFocusedRow="false" SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid" SettingsText-EmptyDataRow="No Data" SettingsText-EmptyHeaders="No Data">
+
+        <SettingsAdaptivity AdaptivityMode="HideDataCells"></SettingsAdaptivity>
 
         <Styles>
 <Header CssClass="gridViewHeader"></Header>
@@ -38,7 +40,10 @@
             </Row>
         </StylesContextMenu>
 
-        <Settings ShowFilterRow="True" ShowGroupPanel="True" AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" ShowFooter="True" VerticalScrollableHeight="500" VerticalScrollBarMode="Visible"></Settings>
+       
+        <SettingsPager Position="Top"></SettingsPager>
+
+        <Settings ShowFilterRow="True" ShowGroupPanel="True" AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Visible" ShowFooter="True" VerticalScrollableHeight="500" VerticalScrollBarMode="Visible"></Settings>
 
         <SettingsCommandButton>
             <ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
