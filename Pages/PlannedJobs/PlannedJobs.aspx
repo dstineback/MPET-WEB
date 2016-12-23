@@ -2,18 +2,11 @@
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Planned Jobs</asp:Content>
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
+    <%--use this meta tag to stop double click zoom on Ipad--%>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/> 
 
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>  
-    <%--<script type="text/javascript">
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
-            function OnGetCrewRowId(idValue) {
-                Selection.Set("RecordID", idValue[0].toString());
-                Selection.Set("DMRKEY", idValue[1].toString());
-            }
-
-        }
-    </script>--%>
+   
      <script type="text/javascript">
         ASPx.TouchUIHelper.isNativeScrollingAllowed = false;
     </script>
@@ -312,6 +305,7 @@
             </dx:LayoutGroup>
         </Items>
     </dx:ASPxFormLayout>  
+        <%--This labe is set below the Description box--%>
     <dx:ASPxLabel ID="dbclciklable" Font-Size="Small" Theme="Mulberry" runat="server" Text="*Double Click to Edit" ></dx:ASPxLabel>
     <dx:ASPxFormLayout ID="WorkReqDetailLayout" runat="server" Width="98%" Paddings="0,0" RequiredMarkDisplayMode="RequiredOnly" RequiredMark="" EnableViewState="True" >
         <Items>
@@ -1637,11 +1631,12 @@
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="ObjectID" ReadOnly="True" Caption="Object ID" SortOrder="Ascending" Width="250px" VisibleIndex="5">
                                                                         <CellStyle Wrap="False"></CellStyle>
-                                                                        <%--<DataItemTemplate>
-                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="<%# GetUrl(Container) %>"
+                                                                       <DataItemTemplate>
+                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="javascript:void(0)"
                                                                                 Text='<%# Eval("ObjectID") %>' Width="100%" Theme="Mulberry"> 
-                                                                            </dx:ASPxHyperLink>--%>
-                                                                        <%--</DataItemTemplate>--%>
+                                                                                <ClientSideEvents Click="onHyperLinkClick" />
+                                                                            </dx:ASPxHyperLink>
+                                                                        <</DataItemTemplate>
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="ObjectDescription" ReadOnly="True" Caption="Description" Width="450px" VisibleIndex="6">
                                                                         <CellStyle Wrap="False"></CellStyle>
@@ -1873,19 +1868,11 @@
                                                                     <dx:GridViewDataTextColumn FieldName="n_PayCodeID" ReadOnly="True" Visible="false" VisibleIndex="5">
                                                                         <CellStyle Wrap="False"></CellStyle>
                                                                     </dx:GridViewDataTextColumn>
-                                                                   
                                                                     <dx:GridViewDataComboBoxColumn FieldName="CrewMemberTextID" Caption="User ID" Width="100px" VisibleIndex="6">
                                                                         <CellStyle Wrap="False"></CellStyle>
-                                                                    
                                                                         <DataItemTemplate>
-                                                                          
                                                                             <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("CrewMemberTextID") %>' Width="100%" Theme="Mulberry">
                                                                                 <ClientSideEvents Click="onHyperLinkClick" />
-                                                                                    
-                                                                                   
-                                                                                    
-                                                                                    
-                                                              
                                                                             </dx:ASPxHyperLink>
                                                                         </DataItemTemplate>
                                                                         <PropertiesComboBox ClientInstanceName="gridComboCrewUser" TextField="Username" IncrementalFilteringMode="Contains" ValueField="UserID" DataSourceID="CrewIDGridLookupDataSource">
@@ -1894,7 +1881,6 @@
                                                                                                                 <dx:ListBoxColumn FieldName="Username" Caption="Username" Width="75px" ToolTip="M-PET.NET User's Username"/>
                                                                                                                 <dx:ListBoxColumn FieldName="FullName" Caption="Full Name" Width="150px" ToolTip="M-PET.NET User's Full Name"/>
                                                                                                             </Columns>
- 
                                                                         </PropertiesComboBox>
                                                                     </dx:GridViewDataComboBoxColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="CrewMemberName" ReadOnly="True" Caption="Full Name" Width="150px" VisibleIndex="7">
@@ -2497,6 +2483,11 @@
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="b_nonstocked" ReadOnly="True" Caption="N/S" ToolTip="Nonstocked Yes/No?" Width="50px" VisibleIndex="1">
                                                                 <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                                                                    <DataItemTemplate>
+                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("b_nonstocked") %>' Width="100%" Theme="Mulberry">
+                                                                                <ClientSideEvents Click="onHyperLinkClick" />
+                                                                            </dx:ASPxHyperLink>
+                                                                        </DataItemTemplate>
                                                                 <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="miscrefnum" ReadOnly="False" Caption="Misc. Ref." ToolTip="M-PET.NET Jobstep Part Misc. Ref." Width="100px" VisibleIndex="9">
@@ -3056,6 +3047,11 @@
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="JobEquipID" ReadOnly="True" Caption="Equip. ID" ToolTip="Jobstep Equipment ID" SortOrder="Ascending" Width="200px" VisibleIndex="5">
                                                                         <CellStyle Wrap="False"></CellStyle>
+                                                                            <DataItemTemplate>
+                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("JobEquipID") %>' Width="100%" Theme="Mulberry">
+                                                                                <ClientSideEvents Click="onHyperLinkClick" />
+                                                                            </dx:ASPxHyperLink>
+                                                                        </DataItemTemplate>
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="EquipDescr" ReadOnly="True" Caption="Description" ToolTip="Jobstep Equipment Description" Width="300px" VisibleIndex="6">
                                                                         <CellStyle Wrap="False"></CellStyle>
@@ -3424,6 +3420,11 @@
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="OtherDescr" ReadOnly="False" Caption="Description" SortOrder="Ascending" Width="250px" VisibleIndex="4">
                                                                         <CellStyle Wrap="False"></CellStyle>
+                                                                         <DataItemTemplate>
+                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("OtherDescr") %>' Width="100%" Theme="Mulberry">
+                                                                                <ClientSideEvents Click="onHyperLinkClick" />
+                                                                            </dx:ASPxHyperLink>
+                                                                         </DataItemTemplate>
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="OtherCost" ReadOnly="False" Caption="Cost" Width="150px" VisibleIndex="5">
                                                                         <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
@@ -3771,6 +3772,11 @@
                                                                                                 </dx:GridViewDataTextColumn>
                                                                                                 <dx:GridViewDataTextColumn FieldName="ShortName" Caption="Name" Width="200px" VisibleIndex="3">
                                                                                                     <CellStyle Wrap="False"></CellStyle>
+                                                                                                     <DataItemTemplate>
+                                                                                                        <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("ShortName") %>' Width="100%" Theme="Mulberry">
+                                                                                                            <ClientSideEvents Click="onHyperLinkClick" />
+                                                                                                        </dx:ASPxHyperLink>
+                                                                                                     </DataItemTemplate>
                                                                                                 </dx:GridViewDataTextColumn>
                                                                                                 <dx:GridViewDataTextColumn FieldName="DocType" Caption="Name" Width="100px" VisibleIndex="4">
                                                                                                     <CellStyle Wrap="False"></CellStyle>
