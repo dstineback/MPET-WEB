@@ -221,6 +221,9 @@
         function OnPartCancelClick() {
             window.PartGrid.CancelEdit();
         }
+        function OnPartDeleteClick() {
+            window.PartGrid.DeletEdit();
+        }
 
         function OnEquipUpateClick() {
             window.EquipGrid.UpdateEdit();
@@ -298,14 +301,13 @@
                                 </dx:ASPxMemo>
 
                             </dx:LayoutItemNestedControlContainer>
-                            <%--TODO: Add note about double clicking bring up pop up edit--%>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup>
         </Items>
     </dx:ASPxFormLayout>  
-        <%--This labe is set below the Description box--%>
+        <%--This label is set below the Description box--%>
     <dx:ASPxLabel ID="dbclciklable" Font-Size="Small" Theme="Mulberry" runat="server" Text="*Double Click to Edit" ></dx:ASPxLabel>
     <dx:ASPxFormLayout ID="WorkReqDetailLayout" runat="server" Width="98%" Paddings="0,0" RequiredMarkDisplayMode="RequiredOnly" RequiredMark="" EnableViewState="True" >
         <Items>
@@ -326,7 +328,7 @@
                                                         <TabPages>                                      
                                                            <%--//Start of side tabs on the Job Step Page--%> 
 
-                                                             <dx:TabPage Text="OBJECT/ASSET" ToolTip="Allows Input Of Jobstep Object/Asset Information">
+                                                            <dx:TabPage Text="OBJECT/ASSET" ToolTip="Allows Input Of Jobstep Object/Asset Information">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl1" runat="server">
                                                                         <dx:ASPxFormLayout ID="ASPxFormLayout1" ColCount="2" runat="server">
@@ -415,7 +417,6 @@
                                                                                                             </dx:LayoutItemNestedControlContainer>
                                                                                                         </LayoutItemNestedControlCollection>
 
-                                                                                                        <CaptionSettings Location="Top"></CaptionSettings>
                                                                                                     </dx:LayoutItem>
 
                                                                                                     <dx:LayoutItem Caption="Location:" ColSpan="3"  CaptionSettings-Location="Top">
@@ -534,7 +535,7 @@
                                                                         </dx:ASPxFormLayout>
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--OBJECTS & Assests--%>
                                                             <dx:TabPage Text="ORIGINATOR" ToolTip="Allows Input Of Jobstep Originator Information">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl2" runat="server">
@@ -651,7 +652,7 @@
                                                                         </dx:ASPxFormLayout>                            
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--Originators--%>
                                                             <dx:TabPage Text="GPS" ToolTip="Allows Input Of Jobstep GPS Coordinates">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl3" runat="server">
@@ -786,7 +787,7 @@
                                                                         </dx:ASPxFormLayout>                           
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--GPS--%>
                                                             <dx:TabPage Text="COSTING" ToolTip="Allows Input Of Jobstep Costing Information">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl4" runat="server">
@@ -955,7 +956,7 @@
                                                                         </dx:ASPxFormLayout>                            
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--Costing--%>
                                                             <dx:TabPage Text="ESTIMATES" ToolTip="Allows Input Of Jobstep Estimate Costs">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobEstContent" runat="server">
@@ -1076,7 +1077,7 @@
                                                                         </dx:ASPxFormLayout>                         
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--Estimates--%>
                                                             <dx:TabPage Text="ACTUALS" ToolTip="Allows Input Of Jobstep Actual Costs">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobActContent" runat="server">
@@ -1197,7 +1198,7 @@
                                                                         </dx:ASPxFormLayout>                            
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--Actuals--%>
                                                             <dx:TabPage Text="FACILITY" ToolTip="Allows Input Of Jobstep Facility Information">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl5" runat="server">
@@ -1343,7 +1344,7 @@
                                                                         </dx:ASPxFormLayout>                              
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--Facilty--%>
                                                             <dx:TabPage Text="TRACKING" ToolTip="Allows Input Of Jobstep Tracking Information">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobTrackingCC" runat="server">
@@ -1357,7 +1358,7 @@
                                                                         </dx:ASPxFormLayout>                            
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--Tracking--%>
                                                             <dx:TabPage Text="ASSIGNMENTS" ToolTip="Allows Input Of Jobstep Assignment Information">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobAssignmentsCC" runat="server">
@@ -1371,7 +1372,7 @@
                                                                         </dx:ASPxFormLayout>                            
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--Assignments--%>
                                                             <dx:TabPage Text="COMPLETION" ToolTip="Allows Input Of Jobstep Completion Information">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobCompCC" runat="server">
@@ -1515,7 +1516,7 @@
                                                                         </dx:ASPxFormLayout>                            
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>
+                                                            </dx:TabPage> <%--Completion--%>
                                                             <dx:TabPage Text="PROCEDURES" ToolTip="Allows Input Of Jobstep Notes">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl7" runat="server">
@@ -1542,7 +1543,7 @@
                                                                         </dx:ASPxFormLayout>  
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>                                                                                                
+                                                            </dx:TabPage> <%--Procedures --%>                                                                                              
                                                             <dx:TabPage Text="POST NOTES" ToolTip="Allows Input Of Jobstep Post Notes">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobPostCC" runat="server">
@@ -1569,8 +1570,8 @@
                                                                         </dx:ASPxFormLayout>  
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
-                                                            </dx:TabPage>  
-                                                        </TabPages>
+                                                            </dx:TabPage> <%--Post Notes--%>
+                                                        </TabPages> <%--Job Step side tabs--%>
                                                     </dx:ASPxPageControl>                                                        
                                                 </dx:ContentControl>
                                             </ContentCollection>
@@ -1799,7 +1800,7 @@
                                                     </asp:UpdatePanel>                                                    
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Members--%>
                                         <dx:TabPage Name="StepCrew" Text="CREW" ToolTip="Allows Input Of Jobstep Crew">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl10" runat="server">
@@ -2431,29 +2432,27 @@
                                                     </asp:UpdatePanel>
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Crew--%>
                                         <dx:TabPage Text="PARTS" ToolTip="Allows Input Of Jobstep Parts">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl11" runat="server">
-                                                    <dx:ASPxGridView 
-                                                        ID="PartGrid" 
-                                                        runat="server" 
-                                                        Theme="Mulberry" 
-                                                        KeyFieldName="n_jobpartid" 
-                                                        Width="98%" 
-                                                        KeyboardSupport="True" 
-                                                        ClientInstanceName="PartGrid" 
-                                                        AutoPostBack="True" 
-                                                        EnableCallBacks="true"
-                                                        Settings-HorizontalScrollBarMode="Auto" 
-                                                        SettingsPager-Mode="ShowPager" 
-                                                        SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
+                                                    <dx:ASPxGridView
+                                                        ID="PartGrid"
+                                                        runat="server"
+                                                        Theme="Mulberry"
+                                                        Width="98%"
+                                                        KeyboardSupport="True"
+                                                        ClientInstanceName="PartGrid"
+                                                        AutoPostBack="True"
+                                                        Settings-HorizontalScrollBarMode="Auto"
+                                                        SettingsPager-Mode="ShowPager"
+                                                        SettingsBehavior-ProcessFocusedRowChangedOnServer="True"
                                                         SettingsBehavior-AllowFocusedRow="True"
                                                         DataSourceID="PartDataSource"
                                                         OnDataBound="PartGridBound"
-                                                        OnRowUpdating="PartGrid_RowUpdating">
-                                                        <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
-                                                                RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
+                                                        OnRowUpdating="PartGrid_RowUpdating" AutoGenerateColumns="False" KeyFieldName="n_jobpartid">
+                                                        <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused"
+                                                            RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow">
                                                             <Header CssClass="gridViewHeader"></Header>
 
                                                             <Row CssClass="gridViewRow"></Row>
@@ -2466,12 +2465,12 @@
                                                         </Styles>
                                                         <ClientSideEvents RowClick="function(s, e) {
                                                                         PartGrid.GetRowValues(e.visibleIndex, 'n_jobpartid;DMRKey;n_masterpartid', OnGetPartRowId);
-                                                                    }" 
-                                                                          RowDblClick="function(s, e) {
+                                                                    }"
+                                                            RowDblClick="function(s, e) {
                                                                     s.StartEditRow(e.visibleIndex);
                                                                 }" />
                                                         <Columns>
-                                                            <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowEditButton="True" Visible="false" VisibleIndex="0" />                                 
+                                                            <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowEditButton="True" Visible="false" VisibleIndex="0" />
                                                             <dx:GridViewDataTextColumn FieldName="n_jobpartid" ReadOnly="True" Visible="false" VisibleIndex="23">
                                                                 <CellStyle Wrap="False"></CellStyle>
                                                             </dx:GridViewDataTextColumn>
@@ -2483,11 +2482,11 @@
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="b_nonstocked" ReadOnly="True" Caption="N/S" ToolTip="Nonstocked Yes/No?" Width="50px" VisibleIndex="1">
                                                                 <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                                                                    <DataItemTemplate>
-                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("b_nonstocked") %>' Width="100%" Theme="Mulberry">
-                                                                                <ClientSideEvents Click="onHyperLinkClick" />
-                                                                            </dx:ASPxHyperLink>
-                                                                        </DataItemTemplate>
+                                                                <DataItemTemplate>
+                                                                    <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("b_nonstocked") %>' Width="100%" Theme="Mulberry">
+                                                                        <ClientSideEvents Click="onHyperLinkClick" />
+                                                                    </dx:ASPxHyperLink>
+                                                                </DataItemTemplate>
                                                                 <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="miscrefnum" ReadOnly="False" Caption="Misc. Ref." ToolTip="M-PET.NET Jobstep Part Misc. Ref." Width="100px" VisibleIndex="9">
@@ -2511,7 +2510,7 @@
                                                                 <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
                                                                 <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
                                                                 <PropertiesTextEdit DisplayFormatString="f2" />
-                                                            </dx:GridViewDataTextColumn>                 
+                                                            </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="qtyused" ReadOnly="False" Caption="Act. Qty." ToolTip="M-PET.NET Actual Jobstep Part Quantity" Width="100px" VisibleIndex="5">
                                                                 <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
                                                                 <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
@@ -2607,24 +2606,82 @@
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="bin" ReadOnly="True" Caption="Bin" ToolTip="M-PET.NET Jobstep Part Bin Location" Width="100px" VisibleIndex="22">
                                                                 <CellStyle Wrap="False"></CellStyle>
-                                                            </dx:GridViewDataTextColumn>                                                                                                                                                                          
+                                                            </dx:GridViewDataTextColumn>
                                                         </Columns>
-                                                        <SettingsBehavior 
-                                                            EnableRowHotTrack="True" 
-                                                            AllowFocusedRow="True" 
-                                                            AllowClientEventsOnLoad="false" 
-                                                            ColumnResizeMode="NextColumn" />
+                                                        <SettingsBehavior
+                                                            EnableRowHotTrack="True"
+                                                            AllowFocusedRow="True"
+                                                            AllowClientEventsOnLoad="false"
+                                                            ColumnResizeMode="NextColumn" ConfirmDelete="True" />
 
-<SettingsCommandButton>
-<ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
+                                                        <SettingsCommandButton>
+                                                            <ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
 
-<HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
-</SettingsCommandButton>
+                                                            <HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
+                                                        </SettingsCommandButton>
+                                                        <Columns>
+                                                            <dx:GridViewDataTextColumn FieldName="n_jobpartid" ReadOnly="True" VisibleIndex="1">
+                                                                <EditFormSettings Visible="False"></EditFormSettings>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_masterpartid" VisibleIndex="2"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_storeroomid" VisibleIndex="3"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="b_nonstocked" VisibleIndex="4"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="miscrefnum" VisibleIndex="5"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="nspartid" VisibleIndex="6"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="nspartcost" VisibleIndex="7"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="NSMfgPartID" VisibleIndex="8"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="NSPartDescr" VisibleIndex="9"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="qtyplanned" VisibleIndex="10"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="qtyused" VisibleIndex="11"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_MfgPartID" VisibleIndex="12"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="DMRKey" VisibleIndex="13"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataDateColumn FieldName="WorkDate" ReadOnly="True" VisibleIndex="14"></dx:GridViewDataDateColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="storeroomid" VisibleIndex="15"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="cWorkDate" ReadOnly="True" VisibleIndex="16"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="time_batchid" VisibleIndex="17"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="xactionnum" ReadOnly="True" VisibleIndex="18"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_partatlocid" VisibleIndex="19"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_FundSrcCodeID" ReadOnly="True" VisibleIndex="20">
+                                                                <EditFormSettings Visible="False"></EditFormSettings>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="FundSrcCodeID" VisibleIndex="21"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_WorkOrderCodeID" ReadOnly="True" VisibleIndex="22">
+                                                                <EditFormSettings Visible="False"></EditFormSettings>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" VisibleIndex="23"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_WorkOpID" ReadOnly="True" VisibleIndex="24">
+                                                                <EditFormSettings Visible="False"></EditFormSettings>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="WorkOpID" VisibleIndex="25"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_OrganizationCodeID" ReadOnly="True" VisibleIndex="26">
+                                                                <EditFormSettings Visible="False"></EditFormSettings>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="OrganizationCodeID" VisibleIndex="27"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_FundingGroupCodeID" ReadOnly="True" VisibleIndex="28">
+                                                                <EditFormSettings Visible="False"></EditFormSettings>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" VisibleIndex="29"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_ObjectCodeID" ReadOnly="True" VisibleIndex="30">
+                                                                <EditFormSettings Visible="False"></EditFormSettings>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="ObjectCodeID" VisibleIndex="31"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_ControlSectionID" ReadOnly="True" VisibleIndex="32">
+                                                                <EditFormSettings Visible="False"></EditFormSettings>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="ControlSectionID" VisibleIndex="33"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_EquipmentNumberID" ReadOnly="True" VisibleIndex="34">
+                                                                <EditFormSettings Visible="False"></EditFormSettings>
+                                                            </dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="EquipmentNumberID" VisibleIndex="35"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="Entered From" VisibleIndex="36"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_StoresIssueID" VisibleIndex="37"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_StoresIssueItemid" VisibleIndex="38"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="aisle" VisibleIndex="39"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="shelf" VisibleIndex="40"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="bin" VisibleIndex="41"></dx:GridViewDataTextColumn>
 
-                                                        <SettingsDataSecurity 
-                                                            AllowDelete="False" 
-                                                            AllowInsert="False" 
-                                                            AllowEdit="True"/>
+                                                            <dx:GridViewCommandColumn ShowNewButton="True" ShowEditButton="True" ShowDeleteButton="True" VisibleIndex="0"></dx:GridViewCommandColumn>
+                                                        </Columns>
                                                         <Settings 
                                                             VerticalScrollBarMode="Visible" 
                                                             VerticalScrollBarStyle="Virtual" 
@@ -2865,7 +2922,7 @@
                                                                             <dx:ASPxButton ID="btnCancelPart" AutoPostBack="False" runat="server" Text="Cancel" CssClass="button">
                                                                                 <ClientSideEvents Click="function (s, e) { OnPartCancelClick(s, e); }" />
                                                                                 <HoverStyle CssClass="hover"></HoverStyle>
-                                                                            </dx:ASPxButton>                                                                            
+                                                                            </dx:ASPxButton> 
                                                                         </div>
                                                                     </EditForm>
                                                                 </Templates>
@@ -2989,7 +3046,7 @@
                                                     </asp:SqlDataSource>                                                                                                                                                           
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Parts--%>
                                         <dx:TabPage Text="EQUIPMENT" ToolTip="Allows Input Of Jobstep Equipment">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl12" runat="server">
@@ -3364,7 +3421,7 @@
                                                     </asp:UpdatePanel>                                                              
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Equipment--%>
                                         <dx:TabPage Text="OTHER" ToolTip="Allows Input Of Jobstep Other">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl13" runat="server">
@@ -3675,7 +3732,7 @@
                                                     </asp:UpdatePanel>                                                                                                        
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Other--%>
                                         <dx:TabPage Text="ATTACHMENTS" ToolTip="Allows Input Of Jobstep Attachments">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl14" runat="server">
@@ -3815,8 +3872,8 @@
                                                     </dx:ASPxFormLayout>                                                    
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
-                                    </TabPages>
+                                        </dx:TabPage> <%--Attachments--%>
+                                    </TabPages> <%--Planned Job tabs--%>
                                 </dx:ASPxPageControl>
                                 <dx:ASPxPopupControl ID="AddCrewPopup" ClientInstanceName="AddCrewPopup" ShowCloseButton="false" ShowHeader="false" HeaderText=""
                                                      CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
@@ -4339,7 +4396,7 @@
                                 </dx:ASPxPopupControl>     
                                 <dx:ASPxPopupControl ID="AddPartPopup" ClientInstanceName="AddPartPopup" ShowCloseButton="false" ShowHeader="false" HeaderText=""
                                                      CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
-                                                     CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" Width="600px">
+                                                     CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" Width="600px" AllowDragging="true">
                                     <ContentCollection>
                                         <dx:PopupControlContentControl>
                                             <div class="popup-text">

@@ -2,6 +2,12 @@
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
 <%@ Register Src="~/UserControls/UploadedFilesContainer.ascx" TagName="UploadedFilesContainer" TagPrefix="dx" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Requests</asp:Content>
+
+    
+
+
+
+
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>  
     <script type="text/javascript">
@@ -767,7 +773,7 @@
                                                     </dx:ASPxFormLayout>                            
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Costing Tab--%>
                 
                                         <dx:TabPage Text="FACILITY">
                                             <ContentCollection>
@@ -891,7 +897,7 @@
                                                     </dx:ASPxFormLayout>                              
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Facility Tab--%>
                 
                                         <dx:TabPage Text="ATTACHMENTS">
                                             <ContentCollection>
@@ -1031,7 +1037,7 @@
                                                         
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Attachment--%>
                                         <dx:TabPage Text="NOTES">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl7" runat="server">
@@ -1058,7 +1064,7 @@
                                                     </dx:ASPxFormLayout>  
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>                                                                                                
+                                        </dx:TabPage> <%--Notes --%>                                                                                             
 
                                     </TabPages>
                                 </dx:ASPxPageControl>     

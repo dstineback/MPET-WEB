@@ -14,7 +14,7 @@ namespace Pages.ServiceRequests
     /// <summary>
     /// Service Request Page
     /// </summary>
-    public partial class ServiceRequest : Page
+    public partial class ServiceRequests : Page
     {
         #region Page Variables
 
@@ -189,7 +189,7 @@ namespace Pages.ServiceRequests
                 }
 
                 //Set Flag
-                Master.ShowMenu = false;
+                Master.ShowMenu = true;
 
 
 

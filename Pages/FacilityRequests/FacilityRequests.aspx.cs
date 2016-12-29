@@ -189,7 +189,7 @@ namespace Pages.FacilityRequests
                 }
 
                 //Set Flag
-                Master.ShowMenu = false;
+                Master.ShowMenu = true;
 
 
 

@@ -1505,6 +1505,7 @@ namespace Pages.PlannedJobs
             Master.ShowNewButton = showButtons;
             Master.ShowEditButton = (showButtons && (HttpContext.Current.Session[""] != null));
             Master.ShowViewButton = false;
+            
             Master.ShowPrintButton = showButtons;
             Master.ShowIssueButton = showButtons;
             Master.ShowCopyJobButton = showButtons;
@@ -1822,6 +1823,54 @@ namespace Pages.PlannedJobs
             }
         }
 
+        protected void UploadControl_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
+        {
+            // RemoveFileWithDelay(e.UploadedFile.FileNameInStorage, 5);
+
+            string name = e.UploadedFile.FileName;
+            string url = GetImageUrl(e.UploadedFile.FileNameInStorage);
+            long sizeInKilobytes = e.UploadedFile.ContentLength / 1024;
+            string sizeText = sizeInKilobytes + " KB";
+            e.CallbackData = name + "|" + url + "|" + sizeText;
+
+            //INSERT JOB ATTACHMENT ROUTINE HERE!!!!
+
+            //Check For Job ID
+            if (HttpContext.Current.Session["editingJobID"] != null)
+            {
+                //Check For Previous Session Variable
+                if (HttpContext.Current.Session["LogonInfo"] != null)
+                {
+                    //Get Logon Info From Session
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
+                    if (_oAttachments.Add(Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
+                        -1,
+                        _oLogon.UserID,
+                        url,
+                        "JPG",
+                        "Mobile Web Attachment",
+                        name.Trim()))
+                    {
+                        //Check For Prior Value
+                        if (HttpContext.Current.Session["HasAttachments"] != null)
+                        {
+                            //Remove Old One
+                            HttpContext.Current.Session.Remove("HasAttachments");
+                        }
+
+                        //Add New Value
+                        HttpContext.Current.Session.Add("HasAttachments", true);
+
+                        //Refresh Attachments
+                        AttachmentGrid.DataBind();
+                        //ScriptManager.RegisterStartupScript(this, GetType(), "refreshAttachments", "refreshAttachments();", true);
+
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Determins Grid Calling And Opens Up Edit Template For Edits
         /// </summary>
@@ -2046,9 +2095,9 @@ namespace Pages.PlannedJobs
         private void SetupForViewing()
         {
             //Setup Buttons
-            Master.ShowSaveButton = false;
+            Master.ShowSaveButton = (_userCanAdd || _userCanEdit);
             Master.ShowNewButton = _userCanAdd;
-            Master.ShowDeleteButton = false;
+            Master.ShowDeleteButton = _userCanDelete;
             Master.ShowPrintButton = true;
 
         }
@@ -2195,53 +2244,6 @@ namespace Pages.PlannedJobs
 
         }
 
-        protected void UploadControl_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
-        {
-            // RemoveFileWithDelay(e.UploadedFile.FileNameInStorage, 5);
-
-            string name = e.UploadedFile.FileName;
-            string url = GetImageUrl(e.UploadedFile.FileNameInStorage);
-            long sizeInKilobytes = e.UploadedFile.ContentLength / 1024;
-            string sizeText = sizeInKilobytes.ToString() + " KB";
-            e.CallbackData = name + "|" + url + "|" + sizeText;
-
-            //INSERT JOB ATTACHMENT ROUTINE HERE!!!!
-
-            //Check For Job ID
-            if (HttpContext.Current.Session["editingJobID"] != null)
-            {
-                if ((HttpContext.Current.Session["editingJobStepID"] != null))
-                {
-                    //Check For Previous Session Variable
-                    if (HttpContext.Current.Session["LogonInfo"] != null)
-                    {
-                        //Get Logon Info From Session
-                        _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
-
-                        if (_oAttachments.Add(Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
-                            Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString()),
-                            _oLogon.UserID,
-                            url,
-                            "JPG",
-                            "Mobile Web Attachment",
-                            name.Trim()))
-                        {
-                            //Check For Prior Value
-                            if (HttpContext.Current.Session["HasAttachments"] != null)
-                            {
-                                //Remove Old One
-                                HttpContext.Current.Session.Remove("HasAttachments");
-                            }
-
-                            //Add New Value
-                            HttpContext.Current.Session.Add("HasAttachments", true);
-
-                            AttachmentGrid.DataBind();
-                        }
-                    }
-                }
-            }
-        }
 
         string GetImageUrl(string fileName)
         {
