@@ -21,10 +21,10 @@
       <siteMapNode url="~/Pages/History/JobsHistoryList.aspx" title="Job History" description="Job History List" />
       <siteMapNode url="~/Pages/History/JobHistoryCostList.aspx" title="Job Costs" description="Job History Cost List" />
     </siteMapNode>
-    <siteMapNode url="" title="Tasks" description="Add/Edit/List PM Tasks and Schedules">
+    <!--<siteMapNode url="" title="Tasks" description="Add/Edit/List PM Tasks and Schedules">
       <siteMapNode url="~/Pages/Tasks/TasksList.aspx" title="PM Tasks List" description="Add/Edit/List PM Tasks" />
       <siteMapNode url="~/Pages/Tasks/TaskScheduleList.aspx" title="Task Schedule" description="Add/Edit/List Task Schedules" />
-    </siteMapNode>
+    </siteMapNode>-->
     <siteMapNode url="~/Pages/LogOut.aspx" title="Log Out" />
   </siteMapNode>
 </siteMap>

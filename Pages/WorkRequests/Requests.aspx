@@ -3,11 +3,6 @@
 <%@ Register Src="~/UserControls/UploadedFilesContainer.ascx" TagName="UploadedFilesContainer" TagPrefix="dx" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Requests</asp:Content>
 
-    
-
-
-
-
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>  
     <script type="text/javascript">
@@ -360,7 +355,7 @@
                                                     </dx:ASPxFormLayout>
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Object/Assets--%>
                                         <dx:TabPage Text="ORIGINATOR">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl2" runat="server">
@@ -475,7 +470,7 @@
                                                     </dx:ASPxFormLayout>                            
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Originator--%>
                                         <dx:TabPage Text="GPS">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl3" runat="server">
@@ -604,7 +599,7 @@
                                                     </dx:ASPxFormLayout>                           
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--GPS does not show up--%>
                                         <dx:TabPage Text="COSTING">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl4" runat="server">

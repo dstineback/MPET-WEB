@@ -1505,7 +1505,7 @@ namespace Pages.PlannedJobs
             Master.ShowNewButton = showButtons;
             Master.ShowEditButton = (showButtons && (HttpContext.Current.Session[""] != null));
             Master.ShowViewButton = false;
-            
+           
             Master.ShowPrintButton = showButtons;
             Master.ShowIssueButton = showButtons;
             Master.ShowCopyJobButton = showButtons;
