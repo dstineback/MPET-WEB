@@ -135,6 +135,8 @@ public class LogonObject
     private StoresWantAlerts _oSwlAlerts;
     private StoresIssueAlerts _oSiAlerts;
     private string _sFullName = "";
+    private string _sFirstName = "";
+    private string _sLastName = "";
     private string _sLastError = "";
 
     #region Job Coloring
@@ -1326,6 +1328,15 @@ public class LogonObject
         set { _nGroupID = value; }
     }
 
+    public string FirstName
+    {
+        get { return _sFirstName; }
+    }
+
+    public string LastName
+    {
+        get { return _sLastName; }
+    }
     public string FullName
     {
         get { return _sFullName; }
@@ -3257,6 +3268,8 @@ public class LogonObject
                                 _sFullName = oLogInUser.FirstName;
                                 _sFullName = _sFullName.Trim() + " " + oLogInUser.LastName;
                                 _sFullName = _sFullName.Trim();
+                                _sFirstName = oLogInUser.FirstName;
+                                _sLastName = oLogInUser.LastName;
                                 PasswordExpires = oLogInUser.PasswordExpiresSetting;
                                 PasswordExpirationDate = oLogInUser.PasswordExpirationDate;
                                 PasswordExpiresIn = oLogInUser.NumberOfDaysUntilExpiration;

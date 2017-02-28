@@ -112,12 +112,15 @@
                     <dx:LayoutItem Caption="First Name:" CaptionSettings-Location="Top" ColSpan="1">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxTextBox ID="txtFN" 
+                                <dx:ASPxTextBox ID="txtFN"  
                                                 Width="200" 
                                                 MaxLength="100"
-                                                ClientInstanceName="txtFN"
+                                                ClientInstanceName="txtFN"                                            
                                                 runat="server" 
-                                                Theme="Mulberry">
+                                                Theme="Mulberry"  >
+                                    
+                                    
+                                    
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>

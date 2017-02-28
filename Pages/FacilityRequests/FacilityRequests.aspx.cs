@@ -37,7 +37,7 @@ namespace Pages.FacilityRequests
         /// <summary>
         /// Logon Object Class
         /// </summary>
-        private LogonObject _oLogon;
+        public LogonObject _oLogon;
 
         /// <summary>
         /// Job ID Generator Class
@@ -164,6 +164,9 @@ namespace Pages.FacilityRequests
         /// Connection String
         /// </summary>
         private string _connectionString = "";
+        public string userFirstName;
+        public string userLastName;
+
 
         #endregion
 
@@ -186,6 +189,9 @@ namespace Pages.FacilityRequests
                 {
                     //Get Logon Info From Session
                     _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
+                    //userName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FullName.ToString();
+                    userFirstName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FirstName.ToString();
+                    userLastName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).LastName.ToString();
                 }
 
                 //Set Flag
@@ -665,14 +671,22 @@ namespace Pages.FacilityRequests
                     if (HttpContext.Current.Session["txtFN"] != null)
                     {
                         //Get Info From Session
-                        txtFN.Value = (HttpContext.Current.Session["txtFN"].ToString());
+                        //txtFN.Value = (HttpContext.Current.Session["txtFN"].ToString());
+                        txtFN.Value = userFirstName;
+                    } else
+                    {
+                        txtFN.Value = userFirstName;
                     }
 
                     //Check For Previous Session Variables
                     if (HttpContext.Current.Session["txtLN"] != null)
                     {
                         //Get Info From Session
-                        txtLN.Value = (HttpContext.Current.Session["txtLN"].ToString());
+                        //txtLN.Value = (HttpContext.Current.Session["txtLN"].ToString());
+                        txtLN.Value = userLastName;
+                    } else
+                    {
+                        txtLN.Value = userLastName;
                     }
 
                     //Check For Previous Session Variables
