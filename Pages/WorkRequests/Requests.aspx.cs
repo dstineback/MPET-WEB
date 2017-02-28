@@ -28,6 +28,8 @@ namespace Pages.WorkRequests
         private const int AssignedFormId = 3;
         private string _connectionString = "";
         private bool _useWeb;
+        private string userFirstName = "";
+        private string userLastName = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -38,6 +40,8 @@ namespace Pages.WorkRequests
             {
                 //Get Logon Info From Session
                 _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
+                userFirstName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FirstName.ToString();
+                userLastName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).LastName.ToString();
 
                 //Load Form Permissions
                 if (FormSetup(_oLogon.UserID))
@@ -729,14 +733,20 @@ namespace Pages.WorkRequests
                 if (HttpContext.Current.Session["txtFN"] != null)
                 {
                     //Get Info From Session
-                    txtFN.Value = (HttpContext.Current.Session["txtFN"].ToString());
+                    txtFN.Value = userFirstName;
+                } else
+                {
+                    txtFN.Value = userFirstName;
                 }
 
                 //Check For Previous Session Variables
                 if (HttpContext.Current.Session["txtLN"] != null)
                 {
                     //Get Info From Session
-                    txtLN.Value = (HttpContext.Current.Session["txtLN"].ToString());
+                    txtLN.Value = userLastName;
+                } else
+                {
+                    txtLN.Value = userLastName;
                 }
 
                 //Check For Previous Session Variables
