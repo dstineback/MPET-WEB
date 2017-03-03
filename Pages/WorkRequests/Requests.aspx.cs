@@ -30,6 +30,8 @@ namespace Pages.WorkRequests
         private bool _useWeb;
         private string userFirstName = "";
         private string userLastName = "";
+        private int requestorValue = -1;
+        private string requestorText = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -42,6 +44,7 @@ namespace Pages.WorkRequests
                 _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
                 userFirstName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FirstName.ToString();
                 userLastName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).LastName.ToString();
+                
 
                 //Load Form Permissions
                 if (FormSetup(_oLogon.UserID))
@@ -144,7 +147,7 @@ namespace Pages.WorkRequests
                             }
                             else
                             {
-                                //Save Session Data
+                                //Save Session Data 
                                 SaveSessionData();
 
                                 //Update Job
@@ -334,6 +337,10 @@ namespace Pages.WorkRequests
 
                             HttpContext.Current.Session.Add("ComboRequestor", _oJob.Ds.Tables[0].Rows[0]["UserID"]);
                             HttpContext.Current.Session.Add("ComboRequestorText", _oJob.Ds.Tables[0].Rows[0]["Username"]);
+                            requestorValue = Convert.ToInt32(HttpContext.Current.Session["ComboRequestor"]);
+                            requestorText = HttpContext.Current.Session["ComboRequestorText"].ToString();
+
+
 
                             #endregion
 
@@ -624,7 +631,7 @@ namespace Pages.WorkRequests
             //Setup User Defined Fields
             SetupUserDefinedFields();
 
-            if (!IsPostBack)
+          if (!IsPostBack)
             {
                 //Check For Previous Session Variables
                 if (HttpContext.Current.Session["txtWorkDescription"] != null)
@@ -865,26 +872,53 @@ namespace Pages.WorkRequests
                     : DateTime.Now;
 
                 //Check For Previous Session Variables
-                if ((HttpContext.Current.Session["ComboRequestor"] != null) &&
-                    (HttpContext.Current.Session["ComboRequestorText"] != null))
+                if (requestorValue > -1 && requestorText != null)
                 {
-                    //Get Info From Session
-                    ComboRequestor.Value = Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()));
-                    ComboRequestor.Text = (HttpContext.Current.Session["ComboRequestorText"].ToString());
+                    ComboRequestor.Value = requestorValue;
+                    ComboRequestor.Text = requestorText;
+
+                    HttpContext.Current.Session.Add("ComboRequestor", requestorValue);
+                    HttpContext.Current.Session.Add("ComboRequestorText", requestorText);
                 }
                 else if (HttpContext.Current.Session["LogonInfo"] != null)
                 {
-                    //Get Logon Info
-                    _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
 
                     //Set Requestor
                     ComboRequestor.Value = _oLogon.UserID;
-                    ComboRequestor.Text = _oLogon.Username;
+                    ComboRequestor.Text = _oLogon.Username + "-" + _oLogon.FullName;
 
-                    //Add Session Variables
                     HttpContext.Current.Session.Add("ComboRequestor", _oLogon.UserID);
                     HttpContext.Current.Session.Add("ComboRequestorText", _oLogon.Username);
                 }
+
+                //if ((HttpContext.Current.Session["ComboRequestor"] != null) &&
+                //    (HttpContext.Current.Session["ComboRequestorText"] != null))
+                //{
+                //    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
+                //    //Set Requestor
+                //    ComboRequestor.Value = HttpContext.Current.Session["ComboRequestor"];
+                //    ComboRequestor.Text = HttpContext.Current.Session["ComboRequestorText"].ToString();
+
+                //    //HttpContext.Current.Session.Add("ComboRequestor", _oLogon.UserID);
+                //    //HttpContext.Current.Session.Add("ComboRequestorText", _oLogon.Username);
+
+                //}
+                //else if (HttpContext.Current.Session["LogonInfo"] != null)
+                //{
+                //    //Get Logon Info
+                //    _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
+
+                //    //Set Requestor
+                //    ComboRequestor.Value = _oLogon.UserID;
+                //    ComboRequestor.Text = _oLogon.Username + "-" + _oLogon.FullName;
+
+
+                //    //Add Session Variables
+                //    HttpContext.Current.Session.Add("ComboRequestor", _oLogon.UserID);
+                //    HttpContext.Current.Session.Add("ComboRequestorText", _oLogon.Username);
+                //}
 
                 //Check For Previous Session Variables
                 if ((HttpContext.Current.Session["ComboPriority"] != null) &&
@@ -1491,11 +1525,22 @@ namespace Pages.WorkRequests
             RequestorSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString(CultureInfo.InvariantCulture));
             RequestorSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString(CultureInfo.InvariantCulture));
             comboBox.DataSource = RequestorSqlDatasource;
+            if(requestorValue > 0)
+            { }else
+            {
+                comboBox.Value = _oLogon.UserID;
+                comboBox.Text = _oLogon.Username;
+            }
+
             comboBox.DataBind();
+
+     
         }
+        
 
         protected void ComboRequestor_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
         {
+
             long value;
             if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
                 return;
@@ -1512,6 +1557,9 @@ namespace Pages.WorkRequests
             RequestorSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
             comboBox.DataSource = RequestorSqlDatasource;
             comboBox.DataBind();
+           
+
+
         }
 
         protected void ComboPriority_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
@@ -1538,6 +1586,7 @@ namespace Pages.WorkRequests
             PrioritySqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString(CultureInfo.InvariantCulture));
             comboBox.DataSource = PrioritySqlDatasource;
             comboBox.DataBind();
+            
         }
 
         protected void ComboPriority_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
@@ -2329,6 +2378,7 @@ namespace Pages.WorkRequests
             AreaSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
             comboBox.DataSource = AreaSqlDatasource;
             comboBox.DataBind();
+            comboBox.Text = HttpContext.Current.Session["ComboRequestorText"].ToString();
         }
 
         #endregion 
@@ -2644,7 +2694,7 @@ namespace Pages.WorkRequests
         protected bool AddRequest()
         {
             //Set Defaults
-            const int actionPriority = -1;
+            const int actionPriority = -1;  
             const int mobileEquip = -1;
             const bool additionalDamage = false;
             const decimal percentOverage = 0;
@@ -2657,7 +2707,7 @@ namespace Pages.WorkRequests
             if ((HttpContext.Current.Session["ComboRequestor"] != null))
             {
                 //Get Info From Session
-                requestor = Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()));
+                 requestor = Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()));
             }
             else if (HttpContext.Current.Session["LogonInfo"] != null)
             {

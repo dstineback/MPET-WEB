@@ -382,7 +382,7 @@
                                                                         <LayoutItemNestedControlCollection>
                                                                             <dx:LayoutItemNestedControlContainer>
                                                                                 <dx:ASPxComboBox ID="ComboRequestor" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
-                                                                                                 ValueType="System.String" ValueField="UserID"
+                                                                                                 ValueType="System.String" ValueField="UserID" 
                                                                                                  OnItemsRequestedByFilterCondition="ComboRequestor_OnItemsRequestedByFilterCondition_SQL"
                                                                                                  OnItemRequestedByValue="ComboRequestor_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
                                                                                                  Width="400px" DropDownStyle="DropDown" Theme="Mulberry" TextField="Username" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboRequestor">
@@ -448,7 +448,7 @@
                                                                         <LayoutItemNestedControlCollection>
                                                                             <dx:LayoutItemNestedControlContainer>
                                                                                 <dx:ASPxComboBox ID="comboRouteTo" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
-                                                                                                 ValueType="System.String" ValueField="UserID"
+                                                                                                 ValueType="System.String" ValueField="UserID" 
                                                                                                  OnItemsRequestedByFilterCondition="comboRouteTo_OnItemsRequestedByFilterCondition_SQL"
                                                                                                  OnItemRequestedByValue="comboRouteTo_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
                                                                                                  Width="400px" DropDownStyle="DropDown" Theme="Mulberry" TextField="Username" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="comboRouteTo">
