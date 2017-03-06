@@ -10,39 +10,48 @@
     <form id="form1" runat="server">
     <div>
     
+        Request &gt;
+        <br />
+    
     </div>
         <dx:ASPxFormLayout ID="ASPxFormLayout1" 
             runat="server" EnableTheming="True" 
-            Theme="Mulberry" Width="934px">
+            Theme="iOS" Width="1438px" Height="400px">
             <Items>
-                <dx:LayoutGroup ColCount="3" 
+                <dx:LayoutItem Caption="Description of Work" 
+                    RowSpan="2">
+                    <LayoutItemNestedControlCollection>
+                        <dx:LayoutItemNestedControlContainer runat="server">
+                            <dx:ASPxTextBox ID="ASPxFormLayout1_E6" 
+                                runat="server" Height="84px" Width="946px">
+                            </dx:ASPxTextBox>
+                        </dx:LayoutItemNestedControlContainer>
+                    </LayoutItemNestedControlCollection>
+                </dx:LayoutItem>
+                <dx:LayoutGroup ColCount="2" 
                     GroupBoxDecoration="Box">
                     <Items>
-                        <dx:LayoutItem>
+                        <dx:LayoutItem Caption="Object/Asset:" 
+                            RequiredMarkDisplayMode="Hidden">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" 
-                                        runat="server" 
-                                        ErrorMessage="Need to have First Name"></asp:RequiredFieldValidator>
-                                    <dx:ASPxTextBox ID="ASPxFormLayout1_E1" 
+                                    <dx:ASPxTextBox ID="ASPxFormLayout1_E10" 
                                         runat="server">
                                     </dx:ASPxTextBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
-                        <dx:LayoutItem>
+                        <dx:LayoutItem Caption="Object Description" 
+                            RequiredMarkDisplayMode="Optional">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" 
-                                        runat="server" 
-                                        ErrorMessage="RequiredFieldValidator"></asp:RequiredFieldValidator>
-                                    <dx:ASPxTextBox ID="ASPxFormLayout1_E2" 
+                                    <dx:ASPxTextBox ID="ASPxFormLayout1_E9" 
                                         runat="server">
                                     </dx:ASPxTextBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
-                        <dx:LayoutItem>
+                        <dx:LayoutItem Caption="Reason:">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
                                     <dx:ASPxComboBox ID="ASPxFormLayout1_E3" 
@@ -51,7 +60,7 @@
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
-                        <dx:LayoutItem>
+                        <dx:LayoutItem Caption="Priority:">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
                                     <dx:ASPxTextBox ID="ASPxFormLayout1_E4" 
@@ -62,9 +71,12 @@
                         </dx:LayoutItem>
                     </Items>
                 </dx:LayoutGroup>
-                <dx:LayoutItem>
+                <dx:LayoutItem Caption="Attachments:">
                     <LayoutItemNestedControlCollection>
                         <dx:LayoutItemNestedControlContainer runat="server">
+                            <dx:ASPxUploadControl ID="ASPxFormLayout1_E8" 
+                                runat="server">
+                            </dx:ASPxUploadControl>
                         </dx:LayoutItemNestedControlContainer>
                     </LayoutItemNestedControlCollection>
                 </dx:LayoutItem>
