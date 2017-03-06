@@ -156,7 +156,7 @@
 
     </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
-    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="Mulberry" Text="REQUESTS" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel>
+      <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel>
     <dx:ASPxHiddenField ID="Navigation" ViewStateMode="Enabled"  ClientInstanceName="Navigation" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxFormLayout ID="WorkRequestDescLayout" runat="server" Width="98%" Paddings="0,0" RequiredMarkDisplayMode="RequiredOnly" RequiredMark="" EnableViewState="True" >
         <Items>
@@ -190,7 +190,7 @@
                                     Height="500px" Width="98%" 
                                     ClientInstanceName="requestTab" 
                                     TabPosition="Right" Theme="Mulberry" 
-                                    runat="server" ActiveTabIndex="6" 
+                                    runat="server" ActiveTabIndex="5" 
                                     EnableHierarchyRecreation="True">
                                     <ClientSideEvents
                                         ActiveTabChanged="function(s, e) { ActiveTabChanged(e); }"

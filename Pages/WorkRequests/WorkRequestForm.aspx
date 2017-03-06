@@ -29,7 +29,7 @@
                     </LayoutItemNestedControlCollection>
                 </dx:LayoutItem>
                 <dx:LayoutGroup ColCount="2" 
-                    GroupBoxDecoration="Box">
+                    GroupBoxDecoration="Box" Caption="">
                     <Items>
                         <dx:LayoutItem Caption="Object/Asset:" 
                             RequiredMarkDisplayMode="Hidden">
