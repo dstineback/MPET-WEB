@@ -186,7 +186,12 @@
                     <dx:LayoutItem Name="DescLabel" Caption="" HelpText="">
                         <LayoutItemNestedControlCollection >
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxPageControl ID="requestTab" Height="500px" Width="98%" ClientInstanceName="requestTab" TabPosition="Right" Theme="Mulberry" runat="server" ActiveTabIndex="0" EnableHierarchyRecreation="True">
+                                <dx:ASPxPageControl ID="requestTab" 
+                                    Height="500px" Width="98%" 
+                                    ClientInstanceName="requestTab" 
+                                    TabPosition="Right" Theme="Mulberry" 
+                                    runat="server" ActiveTabIndex="6" 
+                                    EnableHierarchyRecreation="True">
                                     <ClientSideEvents
                                         ActiveTabChanged="function(s, e) { ActiveTabChanged(e); }"
                                         Init='function(s, e) {

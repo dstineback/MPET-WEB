@@ -1556,10 +1556,7 @@ namespace Pages.WorkRequests
             RequestorSqlDatasource.SelectParameters.Clear();
             RequestorSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
             comboBox.DataSource = RequestorSqlDatasource;
-            comboBox.DataBind();
-           
-
-
+            comboBox.DataBind();          
         }
 
         protected void ComboPriority_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
