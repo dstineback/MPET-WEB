@@ -84,7 +84,7 @@
                     <dx:LayoutItemNestedControlContainer>'
                      <asp:UpdatePanel runat="server">
                          <ContentTemplate>
-                             <dx:ASPxGridview runat="server" Id="AttachmentGrid" Theme="iOS" KeyFieldName="LocationOrURL" Width="95%" KeyboardSupport="true" ClientInstanceName="AttachmentGrid" AutoPostBack="true" Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" SettingsBehavior-AllowFocusedRow="true" EnableCallBacks="true" AutoGenerateColumns="false" DataSourceID="AttachmentDataSource">
+                             <dx:ASPxGridView runat="server" Id="AttachmentGrid" Theme="iOS" KeyFieldName="LocationOrURL" Width="95%" KeyboardSupport="true" ClientInstanceName="AttachmentGrid" AutoPostBack="true" Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" SettingsBehavior-AllowFocusedRow="true" EnableCallBacks="true" AutoGenerateColumns="false" DataSourceID="AttachmentDataSource">
                                  <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
                                                                                                     RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
                                     <Header CssClass="gridViewHeader"></Header>
@@ -125,12 +125,17 @@
                                 <SettingsDataSecurity AllowDelete="False" AllowInsert="False" />
                                 <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" />
                                 <SettingsPager PageSize="10">
-                                    <PageSizeItemSettings Visible="true" />
-                             </dx:ASPxGridview>
+                                 <PageSizeItemSettings Visible="true" />
+                             </dx:ASPxGridView> 
+                              <asp:SqlDataSource ID="AttachmentDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="SELECT [ID], [nJobID], [nJobstepID], [DocType], [Description], [LocationOrURL], [ShortName] FROM [Attachments] WHERE (([nJobID] = @nJobID) AND ([nJobstepID] = @nJobstepID))">
+                                    <SelectParameters>
+                                        <asp:SessionParameter DefaultValue="0" Name="nJobID" SessionField="editingJobID" Type="Int32" />
+                                        <asp:Parameter DefaultValue="-1" Name="nJobstepID" Type="Int32" />
+                                    </SelectParameters>
+                              </asp:SqlDataSource>
                          </ContentTemplate>
                      </asp:UpdatePanel>
                     </dx:LayoutItemNestedControlContainer>
-
                    </LayoutItemNestedControlCollection>
                 </dx:LayoutItem>
             </Items>
