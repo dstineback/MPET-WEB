@@ -1542,7 +1542,7 @@ namespace Pages.WorkRequests
         {
 
             long value;
-            if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
+             if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
                 return;
             var comboBox = (ASPxComboBox)source;
             RequestorSqlDatasource.SelectCommand = @"SELECT  tblUsers.[UserID] ,

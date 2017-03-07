@@ -40,6 +40,7 @@ namespace Pages.PlannedJobs
             {
                 //Get Logon Info From Session
                 _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+                this.Session["UserID"] = _oLogon.UserID;
 
                 //Load Form Permissions
                 if (FormSetup(_oLogon.UserID))

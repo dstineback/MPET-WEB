@@ -169,7 +169,7 @@
                     <dx:GridViewDataTextColumn FieldName="SubAssembly" Caption="Sub. Asmbly" Width="100px" ReadOnly="True" VisibleIndex="27">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn FieldName="AreaID" Caption="Area" Width="100px" ReadOnly="True" VisibleIndex="28">
+                    <dx:GridViewDataTextColumn FieldName="AreaID" Settings-AllowHeaderFilter="True" Caption="Area" Width="100px" ReadOnly="True" VisibleIndex="3">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
                     <dx:GridViewDataTextColumn FieldName="ObjectDescr" Caption="Obj. Descr." Width="100px" ReadOnly="True" VisibleIndex="29">
@@ -237,7 +237,7 @@
                     AllowDelete="False"
                     AllowInsert="False" />
                 <SettingsPopup HeaderFilter-Width="360" HeaderFilter-Height="360"></SettingsPopup>
-                <Columns>
+               <%-- <Columns>
                     <dxe:GridViewDataTextColumn FieldName="n_jobid" ReadOnly="True" ShowInCustomizationForm="True" Visible="False" VisibleIndex="6">
                     </dxe:GridViewDataTextColumn>
                     <dxe:GridViewDataTextColumn FieldName="T" ShowInCustomizationForm="True" Width="60px" Caption="Type" VisibleIndex="10">
@@ -336,7 +336,7 @@
                     </dxe:GridViewDataTextColumn>
                     <dxe:GridViewDataTextColumn FieldName="Ontime" ReadOnly="True" ShowInCustomizationForm="True" Width="100px" Caption="Ontime" VisibleIndex="33">
                     </dxe:GridViewDataTextColumn>
-                </Columns>
+                </Columns>--%>
 
                 <Settings 
                     ShowFilterBar="Visible"
@@ -351,7 +351,7 @@
             <asp:SqlDataSource ID="ObjectGridDataSource" 
                                runat="server" 
                                ConnectionString="<%$ ConnectionStrings:connection %>"  
-                               SelectCommand="--Create/Set Null Date
+                               SelectCommand="
                                 DECLARE @NullDate DATETIME
                                 SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
                             
@@ -363,15 +363,14 @@
                                        FROM     dbo.UsersAreaFilter WITH ( NOLOCK )
                                        WHERE    UsersAreaFilter.UserID = @UserID
                                                 AND UsersAreaFilter.FilterActive = 'Y'
-                                     ) <> 0 )
+                                     ) > 0 )
                                     BEGIN
                                         SET @areaFilteringOn = 'Y'
                                     END
                                 ELSE
                                     BEGIN
                                         SET @areaFilteringOn = 'N'
-                                    END
-                            
+                                    END                           
                             ;
 WITH    cte_Jobsteps
               AS ( SELECT   tbl_Jobsteps.n_jobstepid ,
@@ -716,8 +715,9 @@ WITH    cte_Jobsteps
                 cte_Jobsteps.RouteToID AS 'Route To ID' 
         FROM    cte_Jobsteps">
                                                         <SelectParameters>
-                                                            <asp:SessionParameter DefaultValue="-1" Name="UserID" SessionField="UserID" />
+                                                            <asp:SessionParameter Name="UserID" SessionField="UserID" Type="Int32" />
                                                         </SelectParameters>
+                                                        
                                                     </asp:SqlDataSource>
                                         </ContentTemplate>
 
