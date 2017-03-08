@@ -8,5 +8,7 @@
         <asp:LinkButton runat="server" class="mainButton" ID="plannedJObsButton" href="Pages/PlannedJobs/PlannedJobsList.aspx">Planned Jobs list</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="jobHistoryButton" href="Pages/History/JobsHistoryList.aspx">Job History</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="Planned" href="Pages/PlannedJobs/PlannedJobs.aspx">Planned Jobs</asp:LinkButton>
+        <asp:LinkButton runat="server" class="mainButton" ID="LinkButton1" href="Pages/WorkRequests/WorkRequestForm.aspx">NEW JOBS</asp:LinkButton>
+
     </div> 
 </asp:Content>

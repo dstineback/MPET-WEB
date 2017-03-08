@@ -153,35 +153,41 @@
         //    }
         //}
     </script>
-
+    <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
     <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel>
     <dx:ASPxHiddenField ID="Navigation" ViewStateMode="Enabled"  ClientInstanceName="Navigation" runat="server"></dx:ASPxHiddenField>
         
     
     
-        <dx:ASPxFormLayout ID="WorkResquestFormLayout" runat="server" EnableTheming="True" Theme="iOS" Width="1438px" Height="400px">
-            
-           <%-- Description of work--%>
-              <Items>
-                <dx:LayoutItem Caption="Description of Work" RowSpan="2" Width="95%" CaptionSettings-Location="Top" >
-                    <LayoutItemNestedControlCollection>
-                        <dx:LayoutItemNestedControlContainer runat="server">
-                            <dx:ASPxTextBox ID="txtWorkDescription" runat="server" Height="84px" Width="80%" ClientInstanceName="txtWorkDescription" Theme="iOS" >
-                                <ValidationSettings SetFocusOnError="true" Display="Dynamic" ErrorDisplayMode="Text">
-                                    <RequiredField IsRequired="true" />
-                                </ValidationSettings>
-                            </dx:ASPxTextBox>
-                        </dx:LayoutItemNestedControlContainer>
-                    </LayoutItemNestedControlCollection>
-                </dx:LayoutItem>
-               
-                 <dx:LayoutGroup  ColCount="2"  GroupBoxDecoration="Box" Caption="">
+    <dx:ASPxFormLayout ID="WorkResquestFormLayout" runat="server"
+        EnableTheming="True" Theme="iOS" Width="1438px"
+        Height="400px" ColCount="2" Colspan="2">
+
+        <%-- Description of work--%>
+        <Items>
+            <dx:LayoutItem Caption="Description of Work" RowSpan="2"
+                Width="95%" CaptionSettings-Location="Top" ColSpan="2">
+                <LayoutItemNestedControlCollection>
+                    <dx:LayoutItemNestedControlContainer runat="server">
+                        <dx:ASPxTextBox ID="txtWorkDescription" runat="server"
+                            Height="84px" Width="80%" ClientInstanceName="txtWorkDescription"
+                            Theme="iOS">
+                            <ValidationSettings SetFocusOnError="true" Display="Dynamic"
+                                ErrorDisplayMode="Text">
+                                <RequiredField IsRequired="true" />
+                            </ValidationSettings>
+                        </dx:ASPxTextBox>
+                    </dx:LayoutItemNestedControlContainer>
+                </LayoutItemNestedControlCollection>
+            </dx:LayoutItem>
+            <dx:LayoutGroup ColSpan="2" GroupBoxDecoration="Box"
+                Caption="" ColCount="2">
                     <Items>
                         <%--Object Combo Box--%>
                         <dx:LayoutItem Caption="Object/Asset:" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                     <dx:ASPxComboBox ID="ObjectIDcombo" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="500px" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                    <dx:ASPxComboBox ID="ObjectIDCombo" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="500px" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
                                         <ClientSideEvents ValueChanged="function(s, e) {
                                                                                                     var objectHasValue = ObjectIDCombo.GetValue();
                                                                                                     var selectedItem = s.GetSelectedItem();
@@ -227,31 +233,64 @@
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
+                        <dx:LayoutItem Caption="Priority:" HelpText="" CaptionSettings-Location="Top">
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer>
+                                    <dx:ASPxComboBox runat="server" DropDownStyle="DropDown"
+                                        CallbackPageSize="10" EnableCallbackMode="True"
+                                        TextField="priorityid" ValueField="n_priorityid"
+                                        TextFormatString="{0} - {1}" Width="400px" ClientInstanceName="ComboPriority"
+                                        Theme="iOS" ID="ComboPriority" OnItemsRequestedByFilterCondition="ComboPriority_OnItemsRequestedByFilterCondition_SQL"
+                                        OnItemRequestedByValue="ComboPriority_OnItemRequestedByValue_SQL">
+                                        <Columns>
+                                            <dx:ListBoxColumn FieldName="n_priorityid" Visible="False">
+                                            </dx:ListBoxColumn>
+                                            <dx:ListBoxColumn FieldName="priorityid" Width="75px"
+                                                Caption="Priority ID" ToolTip="M-PET.NET Priority ID">
+                                            </dx:ListBoxColumn>
+                                            <dx:ListBoxColumn FieldName="description" Width="150px"
+                                                Caption="Description" ToolTip="M-PET.NET Priority Description">
+                                            </dx:ListBoxColumn>
+                                        </Columns>
+                                    </dx:ASPxComboBox>
+
+
+                                </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+                            <CaptionSettings Location="Top"></CaptionSettings>
+                        </dx:LayoutItem>
                         <%--Work Request Priority--%>
-                        <dx:LayoutItem Caption="Priority:" CaptionSettings-Location="Top">
+                        <dx:LayoutItem Caption="Reason:" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxComboBox ID="ComboPriority" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_priorityid" OnItemsRequestedByFilterCondition="ComboPriority_OnItemsRequestedByFilterCondition_SQL" OnItemRequestedByValue="ComboPriority_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}" Width="400px" DropDownStyle="DropDown" Theme="iOS" TextField="priorityid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ComboPriority">
+                                    <dx:ASPxComboBox ID="ComboReason" runat="server" EnableCallbackMode="true"
+                                        CallbackPageSize="10" ValueType="System.String"
+                                        ValueField="n_reasonid" OnItemsRequestedByFilterCondition="comboReason_OnItemsRequestedByFilterCondition_SQL"
+                                        OnItemRequestedByValue="comboReason_OnItemRequestedByValue_SQL"
+                                        TextFormatString="{0} - {1}" Width="400px" DropDownStyle="DropDown"
+                                        Theme="iOS" TextField="reasonid" DropDownButton-Enabled="true"
+                                        AutoPostBack="false" ClientInstanceName="comboReason">
                                         <Columns>
-                                            <dx:ListBoxColumn FieldName="n_priorityid" Visible="False" />
-                                            <dx:ListBoxColumn FieldName="priorityid" Caption="Priority ID" Width="75px" ToolTip="M-PET.NET Priority ID"/>
-                                            <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET Priority Description"/>
+                                            <dx:ListBoxColumn FieldName="n_reasonid" Visible="False" />
+                                            <dx:ListBoxColumn FieldName="reasonid" Caption="Reason ID"
+                                                Width="75px" ToolTip="M-PET.NET Reason ID" />
+                                            <dx:ListBoxColumn FieldName="description" Caption="Description"
+                                                Width="150px" ToolTip="M-PET.NET Reason Description" />
                                         </Columns>
                                     </dx:ASPxComboBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
-                       <%-- Work Request Reason--%>
-                        <dx:LayoutItem Caption="Reason:" CaptionSettings-Location="Top">
+                        <%-- Work Request Reason--%>
+                        <dx:LayoutItem Caption="" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxComboBox ID="ComboReason" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_reasonid" OnItemsRequestedByFilterCondition="comboReason_OnItemsRequestedByFilterCondition_SQL" OnItemRequestedByValue="comboReason_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"  Width="400px" DropDownStyle="DropDown" Theme="iOS" TextField="reasonid" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="comboReason">
-                                        <Columns>
-                                            <dx:ListBoxColumn FieldName="n_reasonid" Visible="False" />
-                                            <dx:ListBoxColumn FieldName="reasonid" Caption="Reason ID" Width="75px" ToolTip="M-PET.NET Reason ID"/>
-                                            <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET Reason Description"/>
-                                        </Columns>
-                                    </dx:ASPxComboBox>
+                                    <dx:ASPxImage runat="server" ImageUrl="~/Content/Images/noImage.png"
+                                        AlternateText="No Picture Associated" ShowLoadingImage="True"
+                                        ImageAlign="Left" Width="200px" ClientInstanceName="objectImg"
+                                        Theme="Mulberry" ID="objectImg"></dx:ASPxImage>
+
+
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
@@ -261,69 +300,80 @@
                     <LayoutItemNestedControlCollection>
                         <dx:LayoutItemNestedControlContainer runat="server">
                             <dx:ASPxUploadControl runat="server" ID="UploadControl" Theme="iOS" ClientInstanceName="UploadControl" Width="95%" UploadMode="Auto" UploadStorage="Azure" FileUploadMode="OnPageLoad" ShowUploadButton="true" ShowProgressPanel="true" OnFileUploadComplete="UploadControl_FileUploadComplete" ShowAddRemoveButtons="true">
-                            <AdvancedModeSettings EnableDragAndDrop="true" EnableFileList="false" EnableMultiSelect="true">
-                                <FileListItemStyle CssClass="pending dxucFileListItem"></FileListItemStyle>
-                            </AdvancedModeSettings>
-                            <ValidationSettings MaxFileSize="4194304"  AllowedFileExtensions=".jpg,.jpeg,.gif,.png"> </ValidationSettings>
-                            <ClientSideEvents FileUploadComplete="onFileUploadComplete"/>
+                                <AdvancedModeSettings EnableDragAndDrop="true" EnableFileList="false" EnableMultiSelect="true">
+                                    <FileListItemStyle CssClass="pending dxucFileListItem">
+                                    </FileListItemStyle>
+                                </AdvancedModeSettings>
+                                <ValidationSettings MaxFileSize="4194304"  AllowedFileExtensions=".jpg,.jpeg,.gif,.png">
+                                </ValidationSettings>
+                                <ClientSideEvents FileUploadComplete="onFileUploadComplete"/>
                             </dx:ASPxUploadControl>
                         </dx:LayoutItemNestedControlContainer>
                     </LayoutItemNestedControlCollection>
                 </dx:LayoutItem>
                 <dx:LayoutItem Caption="" ShowCaption="False" ColSpan="2" CaptionSettings-Location="Top">
-                   <LayoutItemNestedControlCollection>
-                    <dx:LayoutItemNestedControlContainer>'
-                     <asp:UpdatePanel runat="server">
-                         <ContentTemplate>
-                             <dx:ASPxGridView runat="server" Id="AttachmentGrid" Theme="iOS" KeyFieldName="LocationOrURL" Width="95%" KeyboardSupport="true" ClientInstanceName="AttachmentGrid" AutoPostBack="true" Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" SettingsBehavior-AllowFocusedRow="true" EnableCallBacks="true" AutoGenerateColumns="false" DataSourceID="AttachmentDataSource">
-                                 <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
+                    <LayoutItemNestedControlCollection>
+                        <dx:LayoutItemNestedControlContainer>
+                            '
+                            <asp:UpdatePanel runat="server">
+                                <ContentTemplate>
+                                    <dx:ASPxGridView runat="server" Id="AttachmentGrid" Theme="iOS" KeyFieldName="LocationOrURL" Width="95%" KeyboardSupport="true" ClientInstanceName="AttachmentGrid" AutoPostBack="true" Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" SettingsBehavior-AllowFocusedRow="true" EnableCallBacks="true" AutoGenerateColumns="false" DataSourceID="AttachmentDataSource">
+                                        <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
                                                                                                     RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
-                                    <Header CssClass="gridViewHeader"></Header>
-
-                                    <Row CssClass="gridViewRow"></Row>
-
-                                    <RowHotTrack CssClass="gridViewRow"></RowHotTrack>
-
-                                    <FocusedRow CssClass="gridViewRowFocused"></FocusedRow>
-
-                                    <FilterRow CssClass="gridViewFilterRow"></FilterRow>
-                                </Styles>
-                                <Columns>
-                                    <dx:GridViewDataTextColumn FieldName="ID" ReadOnly="True" Visible="false" VisibleIndex="0">
-                                        <CellStyle Wrap="False"></CellStyle>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="nJobID" ReadOnly="True" Visible="false" VisibleIndex="1">
-                                        <CellStyle Wrap="False"></CellStyle>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="nJobstepID" ReadOnly="True" Visible="false" VisibleIndex="2">
-                                        <CellStyle Wrap="False"></CellStyle>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="ShortName" Caption="Name" Width="200px" VisibleIndex="3">
-                                        <CellStyle Wrap="False"></CellStyle>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="DocType" Caption="Name" Width="100px" VisibleIndex="4">
-                                        <CellStyle Wrap="False"></CellStyle>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataTextColumn FieldName="Description" Visible="false" Caption="Description" Width="400px" VisibleIndex="5">
-                                        <CellStyle Wrap="False"></CellStyle>
-                                    </dx:GridViewDataTextColumn>
-                                    <dx:GridViewDataHyperLinkColumn FieldName="LocationOrURL" Caption="Location/URL" Width="600px" VisibleIndex="6">
-                                        <CellStyle Wrap="False"></CellStyle>
-                                        <PropertiesHyperLinkEdit ></PropertiesHyperLinkEdit>
-                                    </dx:GridViewDataHyperLinkColumn>
-                                </Columns>
-                                <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
-                                <SettingsDataSecurity AllowDelete="False" AllowInsert="False" />
-                                <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" />
-                               
-                             </dx:ASPxGridView> 
-                         </ContentTemplate>
-                     </asp:UpdatePanel>
-                    </dx:LayoutItemNestedControlContainer>
-                   </LayoutItemNestedControlCollection>
+                                            <Header CssClass="gridViewHeader">
+                                            </Header>
+                                            <Row CssClass="gridViewRow">
+                                            </Row>
+                                            <RowHotTrack CssClass="gridViewRow">
+                                            </RowHotTrack>
+                                            <FocusedRow CssClass="gridViewRowFocused">
+                                            </FocusedRow>
+                                            <FilterRow CssClass="gridViewFilterRow">
+                                            </FilterRow>
+                                        </Styles>
+                                        <Columns>
+                                            <dx:GridViewDataTextColumn FieldName="ID" ReadOnly="True" Visible="false" VisibleIndex="0">
+                                                <CellStyle Wrap="False">
+                                                </CellStyle>
+                                            </dx:GridViewDataTextColumn>
+                                            <dx:GridViewDataTextColumn FieldName="nJobID" ReadOnly="True" Visible="false" VisibleIndex="1">
+                                                <CellStyle Wrap="False">
+                                                </CellStyle>
+                                            </dx:GridViewDataTextColumn>
+                                            <dx:GridViewDataTextColumn FieldName="nJobstepID" ReadOnly="True" Visible="false" VisibleIndex="2">
+                                                <CellStyle Wrap="False">
+                                                </CellStyle>
+                                            </dx:GridViewDataTextColumn>
+                                            <dx:GridViewDataTextColumn FieldName="ShortName" Caption="Name" Width="200px" VisibleIndex="3">
+                                                <CellStyle Wrap="False">
+                                                </CellStyle>
+                                            </dx:GridViewDataTextColumn>
+                                            <dx:GridViewDataTextColumn FieldName="DocType" Caption="Name" Width="100px" VisibleIndex="4">
+                                                <CellStyle Wrap="False">
+                                                </CellStyle>
+                                            </dx:GridViewDataTextColumn>
+                                            <dx:GridViewDataTextColumn FieldName="Description" Visible="false" Caption="Description" Width="400px" VisibleIndex="5">
+                                                <CellStyle Wrap="False">
+                                                </CellStyle>
+                                            </dx:GridViewDataTextColumn>
+                                            <dx:GridViewDataHyperLinkColumn FieldName="LocationOrURL" Caption="Location/URL" Width="600px" VisibleIndex="6">
+                                                <CellStyle Wrap="False">
+                                                </CellStyle>
+                                                <PropertiesHyperLinkEdit >
+                                                </PropertiesHyperLinkEdit>
+                                            </dx:GridViewDataHyperLinkColumn>
+                                        </Columns>
+                                        <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
+                                        <SettingsDataSecurity AllowDelete="False" AllowInsert="False" />
+                                        <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" />
+                                    </dx:ASPxGridView>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+                        </dx:LayoutItemNestedControlContainer>
+                    </LayoutItemNestedControlCollection>
                 </dx:LayoutItem>
             </Items>
-        </dx:ASPxFormLayout>
+    </dx:ASPxFormLayout>
     <asp:SqlDataSource ID="AttachmentDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" 
         SelectCommand="SELECT [ID], [nJobID], [nJobstepID], [DocType], [Description], [LocationOrURL], [ShortName] 
         FROM [Attachments] 
