@@ -154,7 +154,8 @@
         //}
     </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
-    <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel>
+    <dx:ASPxHyperLink ID="WorkRequestListBackLink" runat="server" Font-Size="20px" Theme="iOS" Text="WORK REQUEST" NavigateUrl="RequestsList.aspx" />
+    <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="iOS" runat="server" Text="ADD"></dx:ASPxLabel>
     <dx:ASPxHiddenField ID="Navigation" ViewStateMode="Enabled"  ClientInstanceName="Navigation" runat="server"></dx:ASPxHiddenField>
         
     

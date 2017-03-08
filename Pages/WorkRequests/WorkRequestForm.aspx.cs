@@ -446,81 +446,7 @@ namespace Pages.WorkRequests
                                 _oJob.Ds.Tables[0].Rows[0]["EquipmentNumberID"]);
 
                             #endregion
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["txtFN"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("txtFN");
-                            //}
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["txtLN"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("txtLN");
-                            //}
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["txtEmail"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("txtEmail");
-                            //}
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["txtPhone"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("txtPhone");
-                            //}
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["txtExt"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("txtExt");
-                            //}
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["txtMail"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("txtMail");
-                            //}
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["txtBuilding"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("txtBuilding");
-                            //}
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["txtRoomNum"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("txtRoomNum");
-                            //}
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["ComboServiceOffice"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("ComboServiceOffice");
-                            //}
-
-                            ////Check For Prior Value
-                            //if (HttpContext.Current.Session["ComboServiceOfficeText"] != null)
-                            //{
-                            //    //Remove Old One
-                            //    HttpContext.Current.Session.Remove("ComboServiceOfficeText");
-                            //}
-
-                            
-
-                       
-
+ 
                             //Load Object Attachments To Get First Photo
                             if (_oObjAttachments.GetAttachments(((int)_oJob.Ds.Tables[0].Rows[0]["n_MaintObjectID"])))
                             {
@@ -905,7 +831,7 @@ namespace Pages.WorkRequests
 
                         //Refresh Attachments
                         AttachmentGrid.DataBind();
-                        //ScriptManager.RegisterStartupScript(this, GetType(), "refreshAttachments", "refreshAttachments();", true);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "refreshAttachments", "refreshAttachments();", true);
 
                     }
                 }
