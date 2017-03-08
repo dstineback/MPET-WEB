@@ -1,66 +1,257 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="WorkRequestForm.aspx.cs" MasterPageFile="~/SiteBase.master" Inherits="Pages.WorkRequests.WorkRequestForm" %>
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
+<%@ Register Src="~/UserControls/UploadedFilesContainer.ascx" TagName="UploadedFilesContainer" TagPrefix="dx" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Request</asp:Content>
 
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
+<script type="text/javascript">
+        DXUploadedFilesContainer = {
+            nameCellStyle: "",
+            sizeCellStyle: "",
+            useExtendedPopup: false,
+
+            AddFile: function(fileName, fileUrl, fileSize) {
+                var self = DXUploadedFilesContainer;
+                var builder = ["<tr>"];
+
+                builder.push("<td class='nameCell'");
+                if (self.nameCellStyle)
+                    builder.push(" style='" + self.nameCellStyle + "'");
+                builder.push(">");
+                self.BuildLink(builder, fileName, fileUrl);
+                builder.push("</td>");
+
+                builder.push("<td class='sizeCell'");
+                if (self.sizeCellStyle)
+                    builder.push(" style='" + self.sizeCellStyle + "'");
+                builder.push(">");
+                builder.push(fileSize);
+                builder.push("</td>");
+
+                builder.push("</tr>");
+
+                var html = builder.join("");
+                DXUploadedFilesContainer.AddHtml(html);
+            },
+            Clear: function() {
+                DXUploadedFilesContainer.ReplaceHtml("");
+            },
+            BuildLink: function(builder, text, url) {
+                builder.push("<a target='blank' onclick='return DXDemo.ShowScreenshotWindow(event, this, " + this.useExtendedPopup + ");'");
+                builder.push(" href='" + url + "'>");
+                builder.push(text);
+                builder.push("</a>");
+            },
+            AddHtml: function(html) {
+                var fileContainer = document.getElementById("uploadedFilesContainer"),
+                    fullHtml = html;
+                if (fileContainer) {
+                    var containerBody = fileContainer.tBodies[0];
+                    fullHtml = containerBody.innerHTML + html;
+                }
+                DXUploadedFilesContainer.ReplaceHtml(fullHtml);
+            },
+            ReplaceHtml: function(html) {
+                var builder = ["<table id='uploadedFilesContainer' class='uploadedFilesContainer'><tbody>"];
+                builder.push(html);
+                builder.push("</tbody></table>");
+                var contentHtml = builder.join("");
+                window.FilesRoundPanel.SetContentHtml(contentHtml);
+            },
+            ApplySettings: function(nameCellStyle, sizeCellStyle, useExtendedPopup) {
+                var self = DXUploadedFilesContainer;
+                self.nameCellStyle = nameCellStyle;
+                self.sizeCellStyle = sizeCellStyle;
+                self.useExtendedPopup = useExtendedPopup;
+            }
+        };
+
+        function onFileUploadComplete(s, e) {
+            if (e.callbackData) {
+                var fileData = e.callbackData.split('|');
+                var fileName = fileData[0],
+                    fileUrl = fileData[1],
+                    fileSize = fileData[2];
+                //DXUploadedFilesContainer.AddFile(fileName, fileUrl, fileSize);
+                window.AttachmentGrid.Refresh();
+            }
+        }
+
+        //function getLocation() {
+
+        //    if (navigator.geolocation) {
+        //        navigator.geolocation.getCurrentPosition(showPosition, showError);
+        //    } else {
+        //        showError("Geolocation is not supported by this browser.");
+        //    }
+        //}
+
+        //function showPosition(position) {
+
+        //    var lat = position.coords.latitude;
+        //    var lon = position.coords.longitude;
+        //    var alt = position.coords.altitude;
+        //    var latlon = new window.google.maps.LatLng(lat, lon);
+        //    var mapholder = document.getElementById('map');
+        //    mapholder.style.height = '225px';
+        //    mapholder.style.width = '100%';
+
+        //    window.GPSX.SetText(lat);
+        //    window.GPSY.SetText(lon);
+        //    window.GPSZ.SetText(alt);
+
+
+        //    var myOptions = {
+        //        center: latlon,
+        //        zoom: 15,
+        //        mapTypeId: window.google.maps.MapTypeId.TERRAIN,
+        //        mapTypeControl: false,
+        //        navigationControlOptions: { style: window.google.maps.NavigationControlStyle.SMALL }
+        //    };
+        //    var map = new window.google.maps.Map(document.getElementById("map"), myOptions);
+        //    var marker = new window.google.maps.Marker({ position: latlon, map: map, title: "Current Location" });
+        //}
+
+        function showError(error) {
+            alert(error.code);
+
+        }
+
+        function updateLabel() {
+            var reqLabel = window.Navigation.Get("RequestLabel");
+            window.lblHeaderText.SetText(reqLabel);
+        }
+
+        //function ActiveTabChanged(e) {
+
+        //    var index = window.requestTab.GetActiveTabIndex();
+
+        //    if (index == 2) {
+        //        var x = window.GPSX.GetValue();
+        //        var y = window.GPSY.GetValue();
+
+        //        if ((x != null) && (y != null)) {
+        //            var latlng = new window.google.maps.LatLng(x, y);
+        //            var myOptions = {
+        //                zoom: 15,
+        //                center: latlng,
+        //                mapTypeId: window.google.maps.MapTypeId.TERRAIN
+        //            };
+        //            var map = new window.google.maps.Map(document.getElementById("map"), myOptions);
+        //            var marker = new window.google.maps.Marker({ position: latlng, map: map, title: "Current Location" });
+        //        } else {
+
+        //            var latlng = new window.google.maps.LatLng(32.8470987, -117.2727893);
+        //            var myOptions = {
+        //                zoom: 15,
+        //                center: latlng,
+        //                mapTypeId: window.google.maps.MapTypeId.TERRAIN
+        //            };
+        //            var map = new window.google.maps.Map(document.getElementById("map"), myOptions);
+
+        //        }
+        //    }
+        //}
+    </script>
 
     <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel>
     <dx:ASPxHiddenField ID="Navigation" ViewStateMode="Enabled"  ClientInstanceName="Navigation" runat="server"></dx:ASPxHiddenField>
         
     
     
-        <dx:ASPxFormLayout ID="ASPxFormLayout1" 
-            runat="server" EnableTheming="True" 
-            Theme="iOS" Width="1438px" Height="400px">
-            <Items>
-                <dx:LayoutItem Caption="Description of Work" 
-                    RowSpan="2">
+        <dx:ASPxFormLayout ID="WorkResquestFormLayout" runat="server" EnableTheming="True" Theme="iOS" Width="1438px" Height="400px">
+            
+           <%-- Description of work--%>
+              <Items>
+                <dx:LayoutItem Caption="Description of Work" RowSpan="2" Width="95%" CaptionSettings-Location="Top" >
                     <LayoutItemNestedControlCollection>
                         <dx:LayoutItemNestedControlContainer runat="server">
-                            <dx:ASPxTextBox ID="ASPxFormLayout1_E6" 
-                                runat="server" Height="84px" Width="946px">
+                            <dx:ASPxTextBox ID="txtWorkDescription" runat="server" Height="84px" Width="80%" ClientInstanceName="txtWorkDescription" Theme="iOS" >
+                                <ValidationSettings SetFocusOnError="true" Display="Dynamic" ErrorDisplayMode="Text">
+                                    <RequiredField IsRequired="true" />
+                                </ValidationSettings>
                             </dx:ASPxTextBox>
                         </dx:LayoutItemNestedControlContainer>
                     </LayoutItemNestedControlCollection>
                 </dx:LayoutItem>
-                <dx:LayoutGroup ColCount="2" 
-                    GroupBoxDecoration="Box" Caption="">
+               
+                 <dx:LayoutGroup  ColCount="2"  GroupBoxDecoration="Box" Caption="">
                     <Items>
-                        <dx:LayoutItem Caption="Object/Asset:" 
-                            RequiredMarkDisplayMode="Hidden">
+                        <%--Object Combo Box--%>
+                        <dx:LayoutItem Caption="Object/Asset:" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxTextBox ID="ASPxFormLayout1_E10" 
-                                        runat="server">
-                                    </dx:ASPxTextBox>
-                                </dx:LayoutItemNestedControlContainer>
-                            </LayoutItemNestedControlCollection>
-                        </dx:LayoutItem>
-                        <dx:LayoutItem Caption="Object Description" 
-                            RequiredMarkDisplayMode="Optional">
-                            <LayoutItemNestedControlCollection>
-                                <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxTextBox ID="ASPxFormLayout1_E9" 
-                                        runat="server">
-                                    </dx:ASPxTextBox>
-                                </dx:LayoutItemNestedControlContainer>
-                            </LayoutItemNestedControlCollection>
-                        </dx:LayoutItem>
-                        <dx:LayoutItem Caption="Reason:">
-                            <LayoutItemNestedControlCollection>
-                                <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxComboBox ID="ASPxFormLayout1_E3" 
-                                        runat="server">
+                                     <dx:ASPxComboBox ID="ObjectIDcombo" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="500px" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                        <ClientSideEvents ValueChanged="function(s, e) {
+                                                                                                    var objectHasValue = ObjectIDCombo.GetValue();
+                                                                                                    var selectedItem = s.GetSelectedItem();
+                                                                                                    if(objectHasValue!=null)
+                                                                                                    {
+                                                                                                        txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
+                                                                                                        txtObjectArea.SetText(selectedItem.GetColumnText('areaid'));
+                                                                                                        txtObjectLocation.SetText(selectedItem.GetColumnText('locationid'));
+                                                                                                        txtObjectAssetNumber.SetText(selectedItem.GetColumnText('assetnumber'));
+                                                                                                        objectImg.SetImageUrl(selectedItem.GetColumnText('LocationOrURL'));
+                                                                                                    }
+                                                                                                    else
+                                                                                                    {
+                                                                                                        txtObjectDescription.SetText('');
+                                                                                                        txtObjectArea.SetText('');
+                                                                                                        txtObjectLocation.SetText('');
+                                                                                                        txtObjectAssetNumber.SetText('');
+                                                                                                    }
+
+                                                                                                }"  />
+                                        <Columns>
+                                            <dx:ListBoxColumn FieldName="n_objectid" Visible="False" />
+                                            <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
+                                            <dx:ListBoxColumn FieldName="description" Caption="Description" Width="250px" ToolTip="M-PET.NET Maintenance Object Description"/>
+                                            <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
+                                            <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
+                                            <dx:ListBoxColumn FieldName="assetnumber" Caption="Asset #" Width="50px" ToolTip="M-PET.NET Maintenance Object Asset Number"/>
+                                            <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
+                                            <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
+                                            <dx:ListBoxColumn FieldName="OrganizationCodeID" Caption="Org. Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Org. Code ID" />
+                                            <dx:ListBoxColumn FieldName="FundingGroupCodeID" Caption="Fund. Group Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Funding Group Code ID" />
+                                        </Columns>
                                     </dx:ASPxComboBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
-                        <dx:LayoutItem Caption="Priority:">
+                        <%--Object Description--%>
+                        <dx:LayoutItem Caption="Object Description" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxTextBox ID="ASPxFormLayout1_E4" 
-                                        runat="server">
+                                    <dx:ASPxTextBox ID="txtObjectDescription" runat="server" ClientInstanceName="txtObjectDescription" Width="500px" Height="100px" ReadOnly="true" Theme="iOS">
                                     </dx:ASPxTextBox>
+                                </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+                        </dx:LayoutItem>
+                        <%--Work Request Priority--%>
+                        <dx:LayoutItem Caption="Priority:" CaptionSettings-Location="Top">
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer runat="server">
+                                    <dx:ASPxComboBox ID="ComboPriority" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_priorityid" OnItemsRequestedByFilterCondition="ComboPriority_OnItemsRequestedByFilterCondition_SQL" OnItemRequestedByValue="ComboPriority_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}" Width="400px" DropDownStyle="DropDown" Theme="iOS" TextField="priorityid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ComboPriority">
+                                        <Columns>
+                                            <dx:ListBoxColumn FieldName="n_priorityid" Visible="False" />
+                                            <dx:ListBoxColumn FieldName="priorityid" Caption="Priority ID" Width="75px" ToolTip="M-PET.NET Priority ID"/>
+                                            <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET Priority Description"/>
+                                        </Columns>
+                                    </dx:ASPxComboBox>
+                                </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+                        </dx:LayoutItem>
+                       <%-- Work Request Reason--%>
+                        <dx:LayoutItem Caption="Reason:" CaptionSettings-Location="Top">
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer runat="server">
+                                    <dx:ASPxComboBox ID="ComboReason" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_reasonid" OnItemsRequestedByFilterCondition="comboReason_OnItemsRequestedByFilterCondition_SQL" OnItemRequestedByValue="comboReason_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"  Width="400px" DropDownStyle="DropDown" Theme="iOS" TextField="reasonid" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="comboReason">
+                                        <Columns>
+                                            <dx:ListBoxColumn FieldName="n_reasonid" Visible="False" />
+                                            <dx:ListBoxColumn FieldName="reasonid" Caption="Reason ID" Width="75px" ToolTip="M-PET.NET Reason ID"/>
+                                            <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET Reason Description"/>
+                                        </Columns>
+                                    </dx:ASPxComboBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
@@ -69,7 +260,7 @@
                 <dx:LayoutItem Caption="Attachments:">
                     <LayoutItemNestedControlCollection>
                         <dx:LayoutItemNestedControlContainer runat="server">
-                            <dx:ASPxUploadControl runat="server" ID="UploadControl" Theme="iOS" ClientInstanceName="Uploadcontrol" Width="95%" UploadMode="Auto" UploadStorage="Azure" FileUploadMode="OnPageLoad" ShowUploadButton="true" ShowProgressPanel="true" OnFileUploadComplete="UploadControl_FileUploadComplete" ShowAddRemoveButtons="true">
+                            <dx:ASPxUploadControl runat="server" ID="UploadControl" Theme="iOS" ClientInstanceName="UploadControl" Width="95%" UploadMode="Auto" UploadStorage="Azure" FileUploadMode="OnPageLoad" ShowUploadButton="true" ShowProgressPanel="true" OnFileUploadComplete="UploadControl_FileUploadComplete" ShowAddRemoveButtons="true">
                             <AdvancedModeSettings EnableDragAndDrop="true" EnableFileList="false" EnableMultiSelect="true">
                                 <FileListItemStyle CssClass="pending dxucFileListItem"></FileListItemStyle>
                             </AdvancedModeSettings>
@@ -124,15 +315,8 @@
                                 <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
                                 <SettingsDataSecurity AllowDelete="False" AllowInsert="False" />
                                 <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" />
-                                <SettingsPager PageSize="10">
-                                 <PageSizeItemSettings Visible="true" />
+                               
                              </dx:ASPxGridView> 
-                              <asp:SqlDataSource ID="AttachmentDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="SELECT [ID], [nJobID], [nJobstepID], [DocType], [Description], [LocationOrURL], [ShortName] FROM [Attachments] WHERE (([nJobID] = @nJobID) AND ([nJobstepID] = @nJobstepID))">
-                                    <SelectParameters>
-                                        <asp:SessionParameter DefaultValue="0" Name="nJobID" SessionField="editingJobID" Type="Int32" />
-                                        <asp:Parameter DefaultValue="-1" Name="nJobstepID" Type="Int32" />
-                                    </SelectParameters>
-                              </asp:SqlDataSource>
                          </ContentTemplate>
                      </asp:UpdatePanel>
                     </dx:LayoutItemNestedControlContainer>
@@ -140,5 +324,30 @@
                 </dx:LayoutItem>
             </Items>
         </dx:ASPxFormLayout>
+    <asp:SqlDataSource ID="AttachmentDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" 
+        SelectCommand="SELECT [ID], [nJobID], [nJobstepID], [DocType], [Description], [LocationOrURL], [ShortName] 
+        FROM [Attachments] 
+        WHERE (([nJobID] = @nJobID) AND ([nJobstepID] = @nJobstepID))">
+        <SelectParameters>
+            <asp:SessionParameter DefaultValue="0" Name="nJobID" SessionField="editingJobID" Type="Int32" />
+            <asp:Parameter DefaultValue="-1" Name="nJobstepID" Type="Int32" />
+        </SelectParameters>
+    </asp:SqlDataSource>
+    <asp:SqlDataSource ID="ObjectDataSource" runat="server" />
+    <asp:SqlDataSource ID="HwyRouteSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="CostCodeSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="FundSourceSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="WorkOrderSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="WorkOpSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="OrgCodeSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="FundGroupSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="CtlSectionSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="EquipNumSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="AreaSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="MilePostDirSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="PrioritySqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="ReasonSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="RequestorSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="RouteToSqlDatasource" runat="server" />
   </asp:Content>
 
