@@ -241,7 +241,7 @@ namespace Pages.WorkRequests
         private void AddNewRow()
         {
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx",true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx",true);
         }
 
         private void EditSelectedRow()
@@ -250,7 +250,7 @@ namespace Pages.WorkRequests
             if (Selection.Contains("Jobid"))
             {
                 //Redirect To Edit Page With Job ID
-                Response.Redirect("~/Pages/WorkRequests/Requests.aspx?jobid=" + Selection.Get("Jobid"), true);
+                Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + Selection.Get("Jobid"), true);
             }
         }
 

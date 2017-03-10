@@ -580,7 +580,28 @@ namespace Pages.WorkRequests
                     ComboReason.Value = Convert.ToInt32((HttpContext.Current.Session["comboReason"].ToString()));
                     ComboReason.Text = (HttpContext.Current.Session["comboReasonText"].ToString());
                 }
-                
+
+                //Check For Previous Session Variables
+                if (requestorValue > -1 && requestorText != null)
+                {
+                    ComboRequestor.Value = requestorValue;
+                    ComboRequestor.Text = requestorText;
+
+                    HttpContext.Current.Session.Add("ComboRequestor", requestorValue);
+                    HttpContext.Current.Session.Add("ComboRequestorText", requestorText);
+                }
+                else if (HttpContext.Current.Session["LogonInfo"] != null)
+                {
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
+                    //Set Requestor
+                    ComboRequestor.Value = _oLogon.UserID;
+                    ComboRequestor.Text = _oLogon.Username + "-" + _oLogon.FullName;
+
+                    HttpContext.Current.Session.Add("ComboRequestor", _oLogon.UserID);
+                    HttpContext.Current.Session.Add("ComboRequestorText", _oLogon.Username);
+                }
+
                 //Check For Prior Value
                 if (HttpContext.Current.Session["ObjectPhoto"] != null)
                 {
@@ -598,7 +619,7 @@ namespace Pages.WorkRequests
             ResetSession();
 
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
         }
 
         public void DeleteGridViewAttachment()
@@ -802,6 +823,7 @@ namespace Pages.WorkRequests
             ObjectDataSource.ConnectionString = _connectionString;
             PrioritySqlDatasource.ConnectionString = _connectionString;
             ReasonSqlDatasource.ConnectionString = _connectionString;
+            RequestorSqlDatasource.ConnectionString = _connectionString;
             
 
             //Setup Fields
@@ -986,6 +1008,7 @@ namespace Pages.WorkRequests
             {
                 //Get Info From Session
                 _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+                
                 requestor = _oLogon.UserID;
             }
 
@@ -1143,12 +1166,71 @@ namespace Pages.WorkRequests
             ObjectDataSource.SelectParameters.Clear();
             ObjectDataSource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
             comboBox.DataSource = ObjectDataSource;
+            txtObjectDescription.Text = comboBox.TextField[1].ToString();
             comboBox.DataBind();
         }
 
-     
+        protected void ComboRequestor_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
+        {
+            var comboBox = (ASPxComboBox)source;
+            RequestorSqlDatasource.SelectCommand =
+                @"SELECT  [UserID] ,
+                            [username] ,
+                            [FullName] 
+                    FROM    ( SELECT    tblUsers.[UserID] ,
+                                        tblUsers.[Username] ,
+                                        tblUsers.[lastname] + ', ' + tblUsers.[firstname] AS 'FullName' ,
+                                        ROW_NUMBER() OVER ( ORDER BY tblUsers.[UserID] ) AS [rn]
+                              FROM      dbo.MPetUsers AS tblUsers
+                              WHERE     ( ( [Username] + ' ' + [firstname] + ' ' + [lastname] ) LIKE @filter )
+                                        AND tblUsers.Active = 1
+                                        AND tblUsers.UserID > 0
+                            ) AS st
+                    WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
 
-        #endregion 
+            RequestorSqlDatasource.SelectParameters.Clear();
+            RequestorSqlDatasource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
+            RequestorSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString(CultureInfo.InvariantCulture));
+            RequestorSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString(CultureInfo.InvariantCulture));
+            comboBox.DataSource = RequestorSqlDatasource;
+            if (requestorValue > 0)
+            { }
+            else
+            {
+                comboBox.Value = _oLogon.UserID;
+                comboBox.Text = _oLogon.Username;
+            }
+
+            comboBox.DataBind();
+
+
+        }
+
+
+        protected void ComboRequestor_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
+        {
+
+            long value;
+            if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
+                return;
+            var comboBox = (ASPxComboBox)source;
+            RequestorSqlDatasource.SelectCommand = @"SELECT  tblUsers.[UserID] ,
+                                                        tblUsers.[Username] ,
+                                                        tblUsers.[lastname] + ', ' + tblUsers.[firstname] AS 'FullName' ,
+                                                        ROW_NUMBER() OVER ( ORDER BY tblUsers.[UserID] ) AS [rn]
+                                                FROM    dbo.MPetUsers AS tblUsers
+                                                WHERE   ( UserID = @ID )
+                                                ORDER BY Username";
+
+            RequestorSqlDatasource.SelectParameters.Clear();
+            RequestorSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
+            comboBox.DataSource = RequestorSqlDatasource;
+            comboBox.DataBind();
+        }
+
+
+
+        #endregion
 
         /// <summary>
         /// Updates Work Reqeust
@@ -2368,7 +2450,49 @@ namespace Pages.WorkRequests
 
             #endregion
 
-            
+            #region Requestor
+
+            if (ComboRequestor.Value != null)
+            {
+                #region Combo Value
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["ComboRequestor"] != null)
+                {
+                    //See If Value Changed
+                    if (HttpContext.Current.Session["ComboRequestorText"].ToString() != ComboRequestor.Text)
+                    {
+                        //Remove Old One
+                        HttpContext.Current.Session.Remove("ComboRequestor");
+
+                        //Add New Value
+                        HttpContext.Current.Session.Add("ComboRequestor", ComboRequestor.Value.ToString());
+                    }
+                }
+                else
+                {
+                    //Add New Value
+                    HttpContext.Current.Session.Add("ComboRequestor", ComboRequestor.Value.ToString());
+                }
+
+                #endregion
+
+                #region Combo Text
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["ComboRequestorText"] != null)
+                {
+                    //Remove Old One
+                    HttpContext.Current.Session.Remove("ComboRequestorText");
+                }
+
+                //Add New Value
+                HttpContext.Current.Session.Add("ComboRequestorText", ComboRequestor.Text.Trim());
+
+                #endregion
+            }
+            #endregion
+
         }
 
         protected void AttachmentGrid_DataBinding(object sender, EventArgs e)
@@ -2705,7 +2829,7 @@ namespace Pages.WorkRequests
                         ResetSession();
 
                         //Forward User To New Job
-                        Response.Redirect("~/Pages/WorkRequests/Requests.aspx?jobid=" + newCloneJobId, true);
+                        Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + newCloneJobId, true);
                     }
                 }
             }

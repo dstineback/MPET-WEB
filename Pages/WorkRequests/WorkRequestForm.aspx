@@ -184,6 +184,8 @@
                         </dx:ASPxTextBox>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
+
+<CaptionSettings Location="Top"></CaptionSettings>
             </dx:LayoutItem>
             <dx:LayoutGroup ColSpan="2" GroupBoxDecoration="Box"
                 Caption="" ColCount="2">
@@ -198,8 +200,8 @@
                                                                                                     var selectedItem = s.GetSelectedItem();
                                                                                                     if(objectHasValue!=null)
                                                                                                     {
-                                                                                                        ObjectIDComboText.SetText(selectedItem.GetColumnText('objectid'));
                                                                                                         txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
+                                                                                                        ObjectIDComboText.SetText(selectedItem.GetColumnText('objectid'));
                                                                                                         txtObjectArea.SetText(selectedItem.GetColumnText('areaid'));
                                                                                                         txtObjectLocation.SetText(selectedItem.GetColumnText('locationid'));
                                                                                                         txtObjectAssetNumber.SetText(selectedItem.GetColumnText('assetnumber'));
@@ -228,6 +230,8 @@
                                     </dx:ASPxComboBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
+
+<CaptionSettings Location="Top"></CaptionSettings>
                         </dx:LayoutItem>
                         <%--Object Description--%>
                         <dx:LayoutItem Caption="Object Description" CaptionSettings-Location="Top">
@@ -237,6 +241,8 @@
                                     </dx:ASPxTextBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
+
+<CaptionSettings Location="Top"></CaptionSettings>
                         </dx:LayoutItem>
                         <dx:LayoutItem Caption="Priority:" HelpText="" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
@@ -283,6 +289,7 @@
                                     </dx:ASPxComboBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
+                            <CaptionSettings Location="Top"></CaptionSettings>
                         </dx:LayoutItem>
                         <%-- Work Request Reason--%>
                         <dx:LayoutItem Caption="" CaptionSettings-Location="Top">
@@ -292,6 +299,28 @@
                                         AlternateText="No Picture Associated" ShowLoadingImage="True"
                                         ImageAlign="Left" Width="200px" ClientInstanceName="objectImg"
                                         Theme="Mulberry" ID="objectImg"></dx:ASPxImage>
+                                </dx:LayoutItemNestedControlContainer>
+                            </LayoutItemNestedControlCollection>
+
+                        <CaptionSettings Location="Top"></CaptionSettings>
+                       
+                            <%--Work Request Requester--%>
+                        </dx:LayoutItem>
+                        <dx:LayoutItem Caption="Requester" CaptionSettings-Location="Top">
+                            <LayoutItemNestedControlCollection>
+                                <dx:LayoutItemNestedControlContainer runat="server">
+                                    <dx:ASPxComboBox ID="ComboRequestor" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
+                                                                                                 ValueType="System.String" ValueField="UserID" 
+                                                                                                 OnItemsRequestedByFilterCondition="ComboRequestor_OnItemsRequestedByFilterCondition_SQL"
+                                                                                                 OnItemRequestedByValue="ComboRequestor_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
+                                                                                                 Width="400px" DropDownStyle="DropDown" Theme="Mulberry" TextField="Username" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboRequestor">
+                                                                                               
+                                                                                    <Columns>
+                                                                                        <dx:ListBoxColumn FieldName="UserID" Visible="False" />
+                                                                                        <dx:ListBoxColumn FieldName="Username" Caption="Username" Width="75px" ToolTip="M-PET.NET User's Username"/>
+                                                                                        <dx:ListBoxColumn FieldName="FullName" Caption="Full Name" Width="150px" ToolTip="M-PET.NET User's Full Name"/>
+                                                                                    </Columns>
+                                    </dx:ASPxComboBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
@@ -311,6 +340,10 @@
                             </dx:ASPxUploadControl>
                         </dx:LayoutItemNestedControlContainer>
                     </LayoutItemNestedControlCollection>
+
+<HelpTextSettings Position="Bottom"></HelpTextSettings>
+
+<HelpTextStyle Font-Italic="True" ForeColor="LightGray"></HelpTextStyle>
                 </dx:LayoutItem>
                 <dx:LayoutItem Caption="" ShowCaption="False" ColSpan="2" CaptionSettings-Location="Top">
                     <LayoutItemNestedControlCollection>
@@ -381,6 +414,8 @@
                             </asp:UpdatePanel>
                         </dx:LayoutItemNestedControlContainer>
                     </LayoutItemNestedControlCollection>
+
+<CaptionSettings Location="Top"></CaptionSettings>
                 </dx:LayoutItem>                
             </Items>
     </dx:ASPxFormLayout>
