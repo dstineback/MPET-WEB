@@ -21,6 +21,7 @@ namespace Pages.WorkRequests
     {
         private LogonObject _oLogon;
         private WorkOrder _oJob;
+        private AttachmentObject _oAttachments;
         private bool _userCanDelete;
         private bool _userCanAdd;
         private bool _userCanEdit;
@@ -272,6 +273,8 @@ namespace Pages.WorkRequests
             return rightsLoaded;
         }
 
+       
+
         private void DeleteSelectedRow()
         {
             //Check Permissions
@@ -286,11 +289,14 @@ namespace Pages.WorkRequests
                 //Create Deletion Key
                 var recordToDelete = -1;
 
+              
                 //Check For Multi Selection
                 if ((ReqGrid.Columns[0].Visible))
                 {
                     //Get Selections
                     var recordIdSelection = ReqGrid.GetSelectedFieldValues("n_Jobid");
+
+                    
 
                     //Process Multi Selection
                     foreach (var record in recordIdSelection)

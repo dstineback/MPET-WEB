@@ -65,7 +65,7 @@
                                                     Width="100px" 
                                                     VisibleIndex="3">
                         <CellStyle Wrap="False"></CellStyle>
-                        <PropertiesHyperLinkEdit NavigateUrlFormatString="~/Pages/WorkRequests/Requests.aspx?jobid={0}"></PropertiesHyperLinkEdit>
+                        <PropertiesHyperLinkEdit NavigateUrlFormatString="~/Pages/WorkRequests/WorkRequestForm.aspx?jobid={0}"></PropertiesHyperLinkEdit>
                     </dx:GridViewDataHyperLinkColumn>
                     <dx:GridViewDataTextColumn FieldName="Object ID" Caption="Object ID" Width="150px" VisibleIndex="4">
                         <CellStyle Wrap="False"></CellStyle>

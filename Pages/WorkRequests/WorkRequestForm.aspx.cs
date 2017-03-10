@@ -98,6 +98,9 @@ namespace Pages.WorkRequests
                     SetupForAdding();
 
                     //Check Tab
+                    txtWorkDescription.Focus();
+                    AttachmentGrid.Visible = false;
+                    UploadControl.Visible = false;
                     
                 }
             }
@@ -598,6 +601,21 @@ namespace Pages.WorkRequests
             Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
         }
 
+        public void DeleteGridViewAttachment()
+        {
+            for (int i = 0; i < AttachmentGrid.VisibleRowCount; i++)
+            {
+                if (AttachmentGrid.GetRowLevel(i) == AttachmentGrid.GroupCount)
+                {
+                    object keyValue = AttachmentGrid.GetRowValues(i, new string[] { "ID" });
+                    var id = Convert.ToInt32(keyValue.ToString());
+                    if (keyValue != null)
+
+                        _oAttachments.Delete(id);
+                }
+            }
+        }
+
         private void DeleteSelectedRow()
         {
             //Check Permissions
@@ -610,6 +628,7 @@ namespace Pages.WorkRequests
 
                 //Create Deletion Key
                 var recordToDelete = -1;
+                DeleteGridViewAttachment();
 
 
                 //Check For Job ID
@@ -800,6 +819,10 @@ namespace Pages.WorkRequests
             string sizeText = sizeInKilobytes + " KB";
             e.CallbackData = name + "|" + url + "|" + sizeText;
 
+            //HttpContext.Current.Session.Add("editingJobID",
+            //                   ((int)_oJob.Ds.Tables[0].Rows[0]["n_Jobid"]));
+            //var ed = HttpContext.Current.Session["editingJobID"].ToString();
+
             //INSERT JOB ATTACHMENT ROUTINE HERE!!!!
 
             //Check For Job ID
@@ -810,6 +833,9 @@ namespace Pages.WorkRequests
                 {
                     //Get Logon Info From Session
                     _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
+                    //var att = new AttachmentObject(_connectionString, true);
+
 
                     if (_oAttachments.Add(Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
                         -1,
@@ -2390,6 +2416,8 @@ namespace Pages.WorkRequests
             // ReSharper disable once PossibleNullReferenceException
             return dataTable.Table;
         }
+
+  
 
         protected void UpdatePanel_Unload(object sender, EventArgs e)
         {

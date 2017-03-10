@@ -44,7 +44,8 @@ namespace Pages.WorkRequests
                 _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
                 userFirstName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FirstName.ToString();
                 userLastName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).LastName.ToString();
-                
+               
+
 
                 //Load Form Permissions
                 if (FormSetup(_oLogon.UserID))
@@ -999,9 +1000,27 @@ namespace Pages.WorkRequests
             //Redirect To Edit Page With Job ID
             Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
         }
-
-        private void DeleteSelectedRow()
+        
+        public void DeleteGridViewAttachment()
         {
+            
+            
+
+            for (int i = 0; i < AttachmentGrid.VisibleRowCount; i++)
+            {
+                if (AttachmentGrid.GetRowLevel(i) == AttachmentGrid.GroupCount)
+                {
+                    object keyValue = AttachmentGrid.GetRowValues(i, new string[] { "ID" });
+                    var id = Convert.ToInt32(keyValue.ToString());
+                    if (keyValue != null)
+                                                
+                         _oAttachments.Delete(id);   
+                                       
+                }
+            }
+        }
+        private void DeleteSelectedRow()
+        { 
             //Check Permissions
             if (_userCanDelete)
             {
@@ -1012,7 +1031,7 @@ namespace Pages.WorkRequests
 
                 //Create Deletion Key
                 var recordToDelete = -1;
-
+                DeleteGridViewAttachment();
 
                 //Check For Job ID
                 if (HttpContext.Current.Session["editingJobID"] != null)
@@ -1030,6 +1049,8 @@ namespace Pages.WorkRequests
                     //Clear Errors
                     _oJob.ClearErrors();
 
+                    
+                    
                     //Delete Jobstep
                     if (_oJob.Delete(recordToDelete))
                     {
@@ -1252,7 +1273,7 @@ namespace Pages.WorkRequests
             e.CallbackData = name + "|" + url + "|" + sizeText;
 
             //INSERT JOB ATTACHMENT ROUTINE HERE!!!!
-
+          
             //Check For Job ID
             if (HttpContext.Current.Session["editingJobID"] != null)
             {
@@ -4807,6 +4828,13 @@ namespace Pages.WorkRequests
                 //Show Error
                 Master.ShowError(ex.Message);
             }
+        }
+
+     public void OnClickButtonDel(object sender, ClientSideEvents e)
+        {
+
+            DeleteGridViewAttachment();
+            
         }
 
         /// <summary>

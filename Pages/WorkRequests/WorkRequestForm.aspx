@@ -151,7 +151,11 @@
 
         //        }
         //    }
-        //}
+    //}
+        function OnClickButtonDel(s, e) {
+            grid.PerformCallback('Delete');
+        }
+
     </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
     <dx:ASPxHyperLink ID="WorkRequestListBackLink" runat="server" Font-Size="20px" Theme="iOS" Text="WORK REQUEST" NavigateUrl="RequestsList.aspx" />
@@ -188,12 +192,13 @@
                         <dx:LayoutItem Caption="Object/Asset:" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxComboBox ID="ObjectIDCombo" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="500px" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
-                                        <ClientSideEvents ValueChanged="function(s, e) {
-                                                                                                    var objectHasValue = ObjectIDCombo.GetValue();
+                                    <dx:ASPxComboBox ID="ObjectIDCombo" TextFormatString="{0}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="500px" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                        <ClientSideEvents ValueChanged="function(s, e) { 
+                                            var objectHasValue = ObjectIDCombo.GetValue();
                                                                                                     var selectedItem = s.GetSelectedItem();
                                                                                                     if(objectHasValue!=null)
                                                                                                     {
+                                                                                                        ObjectIDComboText.SetText(selectedItem.GetColumnText('objectid'));
                                                                                                         txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
                                                                                                         txtObjectArea.SetText(selectedItem.GetColumnText('areaid'));
                                                                                                         txtObjectLocation.SetText(selectedItem.GetColumnText('locationid'));
@@ -207,8 +212,7 @@
                                                                                                         txtObjectLocation.SetText('');
                                                                                                         txtObjectAssetNumber.SetText('');
                                                                                                     }
-
-                                                                                                }"  />
+                                             }"  />
                                         <Columns>
                                             <dx:ListBoxColumn FieldName="n_objectid" Visible="False" />
                                             <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
@@ -254,8 +258,6 @@
                                             </dx:ListBoxColumn>
                                         </Columns>
                                     </dx:ASPxComboBox>
-
-
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                             <CaptionSettings Location="Top"></CaptionSettings>
@@ -290,14 +292,12 @@
                                         AlternateText="No Picture Associated" ShowLoadingImage="True"
                                         ImageAlign="Left" Width="200px" ClientInstanceName="objectImg"
                                         Theme="Mulberry" ID="objectImg"></dx:ASPxImage>
-
-
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
                     </Items>
-                </dx:LayoutGroup>
-                <dx:LayoutItem Caption="Attachments:">
+                </dx:LayoutGroup>            
+             <dx:LayoutItem Caption="" HelpText="Save work Request allow attachments" HelpTextSettings-Position="Bottom" HelpTextStyle-Font-Italic="true" HelpTextStyle-ForeColor="LightGray" >
                     <LayoutItemNestedControlCollection>
                         <dx:LayoutItemNestedControlContainer runat="server">
                             <dx:ASPxUploadControl runat="server" ID="UploadControl" Theme="iOS" ClientInstanceName="UploadControl" Width="95%" UploadMode="Auto" UploadStorage="Azure" FileUploadMode="OnPageLoad" ShowUploadButton="true" ShowProgressPanel="true" OnFileUploadComplete="UploadControl_FileUploadComplete" ShowAddRemoveButtons="true">
@@ -318,9 +318,8 @@
                             '
                             <asp:UpdatePanel runat="server">
                                 <ContentTemplate>
-                                    <dx:ASPxGridView runat="server" Id="AttachmentGrid" Theme="iOS" KeyFieldName="LocationOrURL" Width="95%" KeyboardSupport="true" ClientInstanceName="AttachmentGrid" AutoPostBack="true" Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" SettingsBehavior-AllowFocusedRow="true" EnableCallBacks="true" AutoGenerateColumns="false" DataSourceID="AttachmentDataSource">
-                                        <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
-                                                                                                    RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
+                                    <dx:ASPxGridView SettingsDataSecurity-AllowDelete="true" runat="server" Id="AttachmentGrid" Theme="iOS" KeyFieldName="LocationOrURL" Width="95%" KeyboardSupport="true" ClientInstanceName="AttachmentGrid" AutoPostBack="true" Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" SettingsBehavior-AllowFocusedRow="true" EnableCallBacks="true" AutoGenerateColumns="false" DataSourceID="AttachmentDataSource">
+                                        <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused"                                                                                                   RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
                                             <Header CssClass="gridViewHeader">
                                             </Header>
                                             <Row CssClass="gridViewRow">
@@ -333,6 +332,13 @@
                                             </FilterRow>
                                         </Styles>
                                         <Columns>
+                                            <dx:GridViewCommandColumn VisibleIndex="0" ShowDeleteButton="true" ShowSelectCheckbox="true">
+                                                <FooterTemplate>
+                                                    <dx:ASPxButton ID="buttonDel" AutoPostBack="false" runat="server" Text="Delete">
+                                                        <ClientSideEvents Click="onClickButtonDel()" />
+                                                    </dx:ASPxButton>
+                                                </FooterTemplate>
+                                            </dx:GridViewCommandColumn>
                                             <dx:GridViewDataTextColumn FieldName="ID" ReadOnly="True" Visible="false" VisibleIndex="0">
                                                 <CellStyle Wrap="False">
                                                 </CellStyle>
@@ -367,12 +373,15 @@
                                         <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
                                         <SettingsDataSecurity AllowDelete="False" AllowInsert="False" />
                                         <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" />
+                                        <SettingsPager PageSize="10">
+                                            <PageSizeItemSettings Visible="true" />
+                                        </SettingsPager>
                                     </dx:ASPxGridView>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
                         </dx:LayoutItemNestedControlContainer>
                     </LayoutItemNestedControlCollection>
-                </dx:LayoutItem>
+                </dx:LayoutItem>                
             </Items>
     </dx:ASPxFormLayout>
     <asp:SqlDataSource ID="AttachmentDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" 

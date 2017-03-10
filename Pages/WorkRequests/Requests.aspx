@@ -154,6 +154,11 @@
             }
         }
 
+        function OnClickButtonDel(s, e) {
+            DeleteGridViewAttachment()
+        }
+       
+
     </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
       <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel>
@@ -956,7 +961,7 @@
                                                                             <dx:LayoutItemNestedControlContainer>
                                                                                 <asp:UpdatePanel ID="UpdatePanel1" runat="server" OnUnload="UpdatePanel_Unload">
                                                                                     <ContentTemplate>
-                                                                                        <dx:ASPxGridView 
+                                                                                        <dx:ASPxGridView SettingsDataSecurity-AllowDelete="true" SettingsCommandButton-DeleteButton-Styles-Native="true"
                                                                                             ID="AttachmentGrid" 
                                                                                             runat="server" 
                                                                                             Theme="Mulberry" 
@@ -964,7 +969,7 @@
                                                                                             Width="98%" 
                                                                                             KeyboardSupport="True" 
                                                                                             ClientInstanceName="AttachmentGrid" 
-                                                                                            AutoPostBack="true" 
+                                                                                            AutoPostBack="true"  
                                                     
                                                                                             Settings-HorizontalScrollBarMode="Auto" 
                                                                                             SettingsPager-Mode="ShowPager" 
@@ -984,6 +989,13 @@
                                                                                                 <FilterRow CssClass="gridViewFilterRow"></FilterRow>
                                                                                             </Styles>
                                                                                             <Columns>
+                                                                                                <dx:GridViewCommandColumn VisibleIndex="0" ShowDeleteButton="true" ShowSelectCheckbox="true">
+                                                                                                    <FooterTemplate>
+                                                                                                        <dx:ASPxButton ID="buttonDel" AutoPostBack="false" runat="server" Text="Delete">
+                                                                                                            <ClientSideEvents Click="OnClickButtonDel()" />
+                                                                                                        </dx:ASPxButton>
+                                                                                                    </FooterTemplate>
+                                                                                                    </dx:GridViewCommandColumn>
                                                                                                 <dx:GridViewDataTextColumn FieldName="ID" ReadOnly="True" Visible="false" VisibleIndex="0">
                                                                                                     <CellStyle Wrap="False"></CellStyle>
                                                                                                 </dx:GridViewDataTextColumn>
@@ -1006,13 +1018,15 @@
                                                                                                     <CellStyle Wrap="False"></CellStyle>
                                                                                                     <PropertiesHyperLinkEdit ></PropertiesHyperLinkEdit>
                                                                                                 </dx:GridViewDataHyperLinkColumn>
+                                                                                                <dx:GridViewCommandColumn ShowDeleteButton="true" />
                                                                                             </Columns>
                                                                                             <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
                                                                                             <SettingsDataSecurity AllowDelete="False" AllowInsert="False" />
-                                                                                            <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" />
+                                                                                            <Settings ShowFooter="true" VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" />
                                                                                             <SettingsPager PageSize="10">
                                                                                                 <PageSizeItemSettings Visible="true" />
                                                                                             </SettingsPager>
+                                                                                            
                                                                                         </dx:ASPxGridView>      
                                                                                         <asp:SqlDataSource ID="AttachmentDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="SELECT [ID], [nJobID], [nJobstepID], [DocType], [Description], [LocationOrURL], [ShortName] FROM [Attachments] WHERE (([nJobID] = @nJobID) AND ([nJobstepID] = @nJobstepID))">
                                                                                             <SelectParameters>
