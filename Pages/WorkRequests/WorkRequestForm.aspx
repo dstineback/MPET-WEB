@@ -165,7 +165,7 @@
     
     
     <dx:ASPxFormLayout ID="WorkResquestFormLayout" runat="server"
-        EnableTheming="True" Theme="iOS" Width="1438px"
+        EnableTheming="True" Theme="iOS" Width="95%"
         Height="400px" ColCount="2" Colspan="2">
 
         <%-- Description of work--%>
@@ -175,7 +175,7 @@
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
                         <dx:ASPxTextBox ID="txtWorkDescription" runat="server"
-                            Height="84px" Width="80%" ClientInstanceName="txtWorkDescription"
+                            Height="100px" Width="100%" ClientInstanceName="txtWorkDescription"
                             Theme="iOS">
                             <ValidationSettings SetFocusOnError="true" Display="Dynamic"
                                 ErrorDisplayMode="Text">
@@ -185,16 +185,19 @@
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
 
-<CaptionSettings Location="Top"></CaptionSettings>
+        <CaptionSettings Location="Top"></CaptionSettings>
             </dx:LayoutItem>
             <dx:LayoutGroup ColSpan="2" GroupBoxDecoration="Box"
                 Caption="" ColCount="2">
-                    <Items>
+                <CellStyle>
+                    <Paddings PaddingTop="10px" PaddingBottom="10px"></Paddings>
+                </CellStyle>
+                <Items>
                         <%--Object Combo Box--%>
                         <dx:LayoutItem Caption="Object/Asset:" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxComboBox ID="ObjectIDCombo" TextFormatString="{0}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="500px" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                    <dx:ASPxComboBox ID="ObjectIDCombo" TextFormatString="{0}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
                                         <ClientSideEvents ValueChanged="function(s, e) { 
                                             var objectHasValue = ObjectIDCombo.GetValue();
                                                                                                     var selectedItem = s.GetSelectedItem();
@@ -237,7 +240,7 @@
                         <dx:LayoutItem Caption="Object Description" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxTextBox ID="txtObjectDescription" runat="server" ClientInstanceName="txtObjectDescription" Width="500px" Height="100px" ReadOnly="true" Theme="iOS">
+                                    <dx:ASPxTextBox ID="txtObjectDescription" runat="server" ClientInstanceName="txtObjectDescription" Width="90%" Height="100px" ReadOnly="true" Theme="iOS">
                                     </dx:ASPxTextBox>
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
@@ -250,9 +253,10 @@
                                     <dx:ASPxComboBox runat="server" DropDownStyle="DropDown"
                                         CallbackPageSize="10" EnableCallbackMode="True"
                                         TextField="priorityid" ValueField="n_priorityid"
-                                        TextFormatString="{0} - {1}" Width="400px" ClientInstanceName="ComboPriority"
+                                        TextFormatString="{0} - {1}" ClientInstanceName="ComboPriority"
                                         Theme="iOS" ID="ComboPriority" OnItemsRequestedByFilterCondition="ComboPriority_OnItemsRequestedByFilterCondition_SQL"
-                                        OnItemRequestedByValue="ComboPriority_OnItemRequestedByValue_SQL">
+                                        OnItemRequestedByValue="ComboPriority_OnItemRequestedByValue_SQL" Width="90%">
+                                        
                                         <Columns>
                                             <dx:ListBoxColumn FieldName="n_priorityid" Visible="False">
                                             </dx:ListBoxColumn>
@@ -276,7 +280,7 @@
                                         CallbackPageSize="10" ValueType="System.String"
                                         ValueField="n_reasonid" OnItemsRequestedByFilterCondition="comboReason_OnItemsRequestedByFilterCondition_SQL"
                                         OnItemRequestedByValue="comboReason_OnItemRequestedByValue_SQL"
-                                        TextFormatString="{0} - {1}" Width="400px" DropDownStyle="DropDown"
+                                        TextFormatString="{0} - {1}" Width="90%" DropDownStyle="DropDown"
                                         Theme="iOS" TextField="reasonid" DropDownButton-Enabled="true"
                                         AutoPostBack="false" ClientInstanceName="comboReason">
                                         <Columns>
@@ -313,7 +317,7 @@
                                                                                                  ValueType="System.String" ValueField="UserID" 
                                                                                                  OnItemsRequestedByFilterCondition="ComboRequestor_OnItemsRequestedByFilterCondition_SQL"
                                                                                                  OnItemRequestedByValue="ComboRequestor_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                                                                 Width="400px" DropDownStyle="DropDown" Theme="Mulberry" TextField="Username" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboRequestor">
+                                                                                                 Width="90%" DropDownStyle="DropDown" Theme="Mulberry" TextField="Username" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboRequestor">
                                                                                                
                                                                                     <Columns>
                                                                                         <dx:ListBoxColumn FieldName="UserID" Visible="False" />
@@ -325,7 +329,8 @@
                             </LayoutItemNestedControlCollection>
                         </dx:LayoutItem>
                     </Items>
-                </dx:LayoutGroup>            
+                <SettingsItems VerticalAlign="Top"></SettingsItems>
+            </dx:LayoutGroup>            
              <dx:LayoutItem Caption="" HelpText="Save work Request allow attachments" HelpTextSettings-Position="Bottom" HelpTextStyle-Font-Italic="true" HelpTextStyle-ForeColor="LightGray" >
                     <LayoutItemNestedControlCollection>
                         <dx:LayoutItemNestedControlContainer runat="server">
