@@ -292,36 +292,84 @@
                     <dx:LayoutItem Caption="Object/Asset">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox ID="ASPxFormLayout1_E3" 
-                                    runat="server">
+                                <dx:ASPxComboBox ID="ObjectIDCombo" runat="server"  EnableCallbackMode="true"  CallbackPageSize="10" 
+                                                                                                                    ValueType="System.String" 
+                                                                                                                    ValueField="n_objectid" 
+                                                                                                                    OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" 
+                                                                                                                    OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
+                                                                                                                    TextFormatString="{0} - {1} - {2} - {3} - {4}" 
+                                                                                                                    Width="600px" 
+                                                                                                                    DropDownStyle="DropDown" 
+                                                                                                                    Theme="Mulberry" 
+                                                                                                                    TextField="objectid" 
+                                                                                                                    DropDownButton-Enabled="True" 
+                                                                                                                    AutoPostBack="False" 
+                                                                                                                    ClientInstanceName="ObjectIDCombo">
+                                    <ClientSideEvents ValueChanged="function(s, e) {
+                                                                                        var objectHasValue = ObjectIDCombo.GetValue();
+                                                                                        var selectedItem = s.GetSelectedItem();
+                                                                                        if(objectHasValue!=null)
+                                                                                        {
+                                                                                            txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
+                                                                                            txtObjectArea.SetText(selectedItem.GetColumnText('areaid'));
+                                                                                            txtObjectLocation.SetText(selectedItem.GetColumnText('locationid'));
+                                                                                            txtObjectAssetNumber.SetText(selectedItem.GetColumnText('assetnumber'));
+                                                                                            objectImg.SetImageUrl(selectedItem.GetColumnText('LocationOrURL'));
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            txtObjectDescription.SetText('');
+                                                                                            txtObjectArea.SetText('');
+                                                                                            txtObjectLocation.SetText('');
+                                                                                            txtObjectAssetNumber.SetText('');
+                                                                                        }
+
+                                                                                    }" />
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="n_objectid" Visible="False" />
+                                        <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
+                                        <dx:ListBoxColumn FieldName="description" Caption="Description" Width="250px" ToolTip="M-PET.NET Maintenance Object Description"/>
+                                        <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
+                                        <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
+                                        <dx:ListBoxColumn FieldName="assetnumber" Caption="Asset #" Width="50px" ToolTip="M-PET.NET Maintenance Object Asset Number"/>
+                                        <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
+                                        <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
+                                    </Columns>
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem> <%--Object/Asset--%>
 
-                    <dx:LayoutItem Caption="Description">
+                    <dx:LayoutItem Caption="Description" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxTextBox ID="ASPxFormLayout1_E4" 
-                                    runat="server">
+                                <dx:ASPxTextBox ID="txtObjectDescription" Height="100px" Width="600px" MaxLength="254" ClientInstanceName="txtObjectDescription" runat="server" ReadOnly="True"  Theme="Mulberry">
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem> <%--Description--%>
-                    <dx:LayoutItem Caption="Location">
+                    <dx:LayoutItem Caption="Location" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox ID="ASPxFormLayout1_E5" 
+                                <dx:ASPxTextBox ID="txtObjectLocation" ClientInstanceName="txtObjectLocation" Theme="iOS" ReadOnly="true" 
                                     runat="server">
-                                </dx:ASPxComboBox>
+                                </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem> <%--Location--%>
-                    <dx:LayoutItem Caption="Line">
+                    <dx:LayoutItem Caption="Line" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox ID="ASPxFormLayout1_E6" 
-                                    runat="server">
+                                <dx:ASPxComboBox ID="ComboFundSource" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
+                                                    ValueType="System.String" ValueField="n_FundSrcCodeID"
+                                                    OnItemsRequestedByFilterCondition="ComboFundSource_OnItemsRequestedByFilterCondition_SQL"
+                                                    OnItemRequestedByValue="ComboFundSource_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
+                                                    Width="iOS" DropDownStyle="DropDown" Theme="iOS" TextField="FundSrcCodeID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboFundSource">                                                           
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="n_FundSrcCodeID" Visible="False" />
+                                        <dx:ListBoxColumn FieldName="FundSrcCodeID" Caption="Cost Code ID" Width="75px" ToolTip="M-PET.NET Fund Source ID"/>
+                                        <dx:ListBoxColumn FieldName="Description" Caption="Description" Width="150px" ToolTip="M-PET.NET Fund Source Description"/>
+                                    </Columns>
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
@@ -331,38 +379,62 @@
       <%-- Requestor Group --%>
             <dx:LayoutGroup Caption="Requestor" ColCount="2">
                 <Items>
-                    <dx:LayoutItem Caption="Request Date">
+                    <dx:LayoutItem Caption="Request Date" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxCalendar ID="ASPxFormLayout1_E7" 
-                                    runat="server">
-                                </dx:ASPxCalendar>
+                                <dx:ASPxDateEdit ID="TxtWorkRequestDate" ClientInstanceName="TxtWorkRequestDate"Theme="IOS"DisplayFormatString="D" Width="50%" runat="server">
+                                </dx:ASPxDateEdit>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem> <%--Request Date--%>
-                    <dx:LayoutItem Caption="Requestor">
+                    <dx:LayoutItem Caption="Requestor" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox ID="ASPxFormLayout1_E8" 
-                                    runat="server">
+                                <dx:ASPxComboBox ID="ComboRequestor" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
+                                                ValueType="System.String" ValueField="UserID"
+                                                OnItemsRequestedByFilterCondition="ComboRequestor_OnItemsRequestedByFilterCondition_SQL"
+                                                OnItemRequestedByValue="ComboRequestor_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
+                                                Width="50%" DropDownStyle="DropDown" Theme="IOS" TextField="Username" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboRequestor">
+                                     <Columns>
+                                        <dx:ListBoxColumn FieldName="UserID" Visible="False" />
+                                        <dx:ListBoxColumn FieldName="Username" Caption="Username" Width="75px" ToolTip="M-PET.NET User's Username"/>
+                                        <dx:ListBoxColumn FieldName="FullName" Caption="Full Name" Width="150px" ToolTip="M-PET.NET User's Full Name"/>
+                                    </Columns>
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem> <%--Requestor--%>
-                    <dx:LayoutItem Caption="Priority">
+                    <dx:LayoutItem Caption="Priority" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox ID="ASPxFormLayout1_E9" 
-                                    runat="server">
+                                <dx:ASPxComboBox ID="ComboPriority" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
+                                                ValueType="System.String" ValueField="n_priorityid"
+                                                OnItemsRequestedByFilterCondition="ComboPriority_OnItemsRequestedByFilterCondition_SQL"
+                                                OnItemRequestedByValue="ComboPriority_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
+                                                Width="400px" DropDownStyle="DropDown" Theme="Mulberry" TextField="priorityid" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboPriority">
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="n_priorityid" Visible="False" />
+                                        <dx:ListBoxColumn FieldName="priorityid" Caption="Priority ID" Width="75px" ToolTip="M-PET.NET Priority ID"/>
+                                        <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET Priority Description"/>
+                                    </Columns>
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem> <%--Priority--%>
-                    <dx:LayoutItem Caption="Reason">
+                    <dx:LayoutItem Caption="Reason" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox ID="ASPxFormLayout1_E10" 
-                                    runat="server">
+                                <dx:ASPxComboBox ID="comboReason" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
+                                                ValueType="System.String" ValueField="n_reasonid"
+                                                OnItemsRequestedByFilterCondition="comboReason_OnItemsRequestedByFilterCondition_SQL"
+                                                OnItemRequestedByValue="comboReason_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
+                                                Width="400px" DropDownStyle="DropDown" Theme="IOS" TextField="reasonid" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="comboReason">
+                                                                                               
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="n_reasonid" Visible="False" />
+                                        <dx:ListBoxColumn FieldName="reasonid" Caption="Reason ID" Width="75px" ToolTip="M-PET.NET Reason ID"/>
+                                        <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET Reason Description"/>
+                                    </Columns> 
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
@@ -385,38 +457,65 @@
             <dx:LayoutGroup Caption="Scheduled Dates" 
                 ColCount="2">
                 <Items>
-                    <dx:LayoutItem Caption="Start Date">
+                    <dx:LayoutItem Caption="Start Date" Name="fldStartDate" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxCalendar ID="ASPxFormLayout1_E11" 
-                                    runat="server">
-                                </dx:ASPxCalendar>
+                                <dx:ASPxDateEdit ID="TxtWorkStartDate" 
+                                                ClientInstanceName="TxtWorkStartDate"
+                                                DisplayFormatString="D"
+                                                Theme="Mulberry"
+                                                Width="450px" 
+                                                runat="server" >
+                                </dx:ASPxDateEdit>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>     <%--Start Date--%>
-                    <dx:LayoutItem Caption="Due Date">
+                    <dx:LayoutItem Caption="Due Date" Name="fldReturnWithin" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxCalendar ID="ASPxFormLayout1_E12" 
-                                    runat="server">
-                                </dx:ASPxCalendar>
+                                <dx:ASPxSpinEdit ID="txtReturnWithin" 
+                                                ClientInstanceName="txtReturnWithin"
+                                                Theme="IOS"
+                                                runat="server" 
+                                                ValueType="System.Integer"
+                                                MinValue="0"
+                                                MaxValue="79228162514264337593543950335"
+                                                Width="50%"
+                                                HorizontalAlign="Right"
+                                                AllowMouseWheel="False" 
+                                                SpinButtons-ClientVisible="False">
+                                <SpinButtons ClientVisible="True"></SpinButtons>
+                                <ClearButton Visibility="True"></ClearButton>
+                                </dx:ASPxSpinEdit>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>     <%--Return with in (Due Date)--%>
-                    <dx:LayoutItem Caption="Completion Date">
+                    <dx:LayoutItem Caption="Completion Date" Name="fldCompDate" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxCalendar ID="ASPxFormLayout1_E13" 
-                                    runat="server">
+                                <dx:ASPxCalendar ID="TxtWorkCompDate" 
+                                                ClientInstanceName="TxtWorkCompDate"
+                                                DisplayFormatString="D"
+                                                Theme="iOS"
+                                                Width="50%" 
+                                                runat="server" >
                                 </dx:ASPxCalendar>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>     <%--Completion Date--%>
-                    <dx:LayoutItem Caption="Outcome Code">
+                    <dx:LayoutItem Caption="Outcome Code" Name="fldOutcome" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox ID="ASPxFormLayout1_E14" 
-                                    runat="server">
+                                <dx:ASPxComboBox ID="ComboOutcome" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
+                                                    ValueType="System.String" ValueField="n_outcomecodeid"
+                                                    OnItemsRequestedByFilterCondition="ComboOutcomeCode_OnItemsRequestedByFilterCondition_SQL"
+                                                    OnItemRequestedByValue="ComboOutcomeCode_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
+                                                    Width="50%" DropDownStyle="DropDown" Theme="iOS" TextField="outcomecodeid" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboOutcome">
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="n_outcomecodeid" Visible="False" />
+                                        <dx:ListBoxColumn FieldName="outcomecodeid" Caption="Outcome Code ID" Width="75px" ToolTip="M-PET.NET Outcome Code ID"/>
+                                        <dx:ListBoxColumn FieldName="Description" Caption="Description" Width="150px" ToolTip="M-PET.NET Outcome Code Description"/>
+                                    </Columns>
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
@@ -437,7 +536,27 @@
     </dx:ASPxFormLayout>
 
 
-   
+   <asp:SqlDataSource ID="StoreroomPartDS" runat="server" />
+    <asp:SqlDataSource ID="ObjectDataSource" runat="server" />
+    <asp:SqlDataSource ID="HwyRouteSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="CostCodeSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="FundSourceSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="WorkOrderSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="WorkOpSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="OrgCodeSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="FundGroupSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="CtlSectionSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="EquipNumSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="AreaSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="MilePostDirSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="PrioritySqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="ReasonSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="RequestorSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="RouteToSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="CrewUserDataSource" runat="server" />
+    <asp:SqlDataSource ID="CompletedByDataSource" runat="server" />
+    <asp:SqlDataSource ID="PostedByDataSource" runat="server" />
+    <asp:SqlDataSource ID="OutcomeCodeDS" runat="server" />
 </asp:Content>
 
 
