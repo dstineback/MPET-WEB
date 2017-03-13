@@ -277,10 +277,16 @@
 
     <%-- Heading Script Manager, HyperLinks, and Hidden Fields --%>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
-    <dx:ASPxFormLayout ID="ASPxFormLayout1" 
-        runat="server">
+    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="Mulberry" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="Mulberry" runat="server" Text="Step: "></dx:ASPxLabel> <br />
+    <dx:ASPxHyperLink ID="myJobsBackLink" runat="server" Font-Size="16" Theme="Mulberry" Text="MY JOBS" NavigateUrl="~/Pages/PlannedJobs/myJobs.aspx" />
+    <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField>
+    <dx:ASPxHiddenField ID="MultiGrid" ViewStateMode="Enabled"  ClientInstanceName="MultiGrid" runat="server"></dx:ASPxHiddenField>
+    
+    <%-- Form Layout --%>
+    <dx:ASPxFormLayout ID="ASPxFormLayout1" runat="server">
         <Items>
-            <dx:LayoutGroup Caption="Object/Asset" 
+      <%-- Object/Asset --%>
+             <dx:LayoutGroup Caption="Object/Asset" 
                 ColCount="4">
                 <Items>
                     <dx:LayoutItem Caption="Object/Asset">
@@ -291,7 +297,8 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem> <%--Object/Asset--%>
+
                     <dx:LayoutItem Caption="Description">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -300,7 +307,7 @@
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem> <%--Description--%>
                     <dx:LayoutItem Caption="Location">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -309,7 +316,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem> <%--Location--%>
                     <dx:LayoutItem Caption="Line">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -318,9 +325,10 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem> <%--Line--%>
                 </Items>
             </dx:LayoutGroup>
+      <%-- Requestor Group --%>
             <dx:LayoutGroup Caption="Requestor" ColCount="2">
                 <Items>
                     <dx:LayoutItem Caption="Request Date">
@@ -331,7 +339,7 @@
                                 </dx:ASPxCalendar>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem> <%--Request Date--%>
                     <dx:LayoutItem Caption="Requestor">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -340,7 +348,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem> <%--Requestor--%>
                     <dx:LayoutItem Caption="Priority">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -349,7 +357,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem> <%--Priority--%>
                     <dx:LayoutItem Caption="Reason">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -358,18 +366,22 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem> <%--Reason--%>
                 </Items>
             </dx:LayoutGroup>
-            <dx:LayoutItem Caption="Description Of Work">
+      <%-- Description of Work --%>
+            <dx:LayoutItem Name="DescLable" Caption="Description Of Work">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
-                        <dx:ASPxTextBox ID="ASPxFormLayout1_E2" 
-                            runat="server">
+                        <dx:ASPxTextBox ID="txtWorkDescription" Height="75px" Width="95%" ClientInstanceName="txtWorkDescription" Theme="iOS" runat="server">
+                            <ValidationSettings SetFocusOnError="True" Display="Dynamic" ErrorDisplayMode="Text">
+                                        <RequiredField IsRequired="True"/>
+                            </ValidationSettings>
                         </dx:ASPxTextBox>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
-            </dx:LayoutItem>
+            </dx:LayoutItem> <%--Description of Work--%>
+      <%-- Scheduled Dates Group --%>
             <dx:LayoutGroup Caption="Scheduled Dates" 
                 ColCount="2">
                 <Items>
@@ -381,7 +393,7 @@
                                 </dx:ASPxCalendar>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem>     <%--Start Date--%>
                     <dx:LayoutItem Caption="Due Date">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -390,7 +402,7 @@
                                 </dx:ASPxCalendar>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem>     <%--Return with in (Due Date)--%>
                     <dx:LayoutItem Caption="Completion Date">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -399,7 +411,7 @@
                                 </dx:ASPxCalendar>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem>     <%--Completion Date--%>
                     <dx:LayoutItem Caption="Outcome Code">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -408,9 +420,10 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
+                    </dx:LayoutItem>     <%--Outcome Code--%>
                 </Items>
             </dx:LayoutGroup>
+      <%-- Breakdown --%>
             <dx:LayoutItem Caption="Breakdown">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
@@ -419,13 +432,9 @@
                         </dx:ASPxTextBox>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
-            </dx:LayoutItem>
+            </dx:LayoutItem>    <%--Breakdown--%>
         </Items>
     </dx:ASPxFormLayout>
-    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="Mulberry" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="Mulberry" runat="server" Text="Step: "></dx:ASPxLabel> <br />
-    <dx:ASPxHyperLink ID="myJobsBackLink" runat="server" Font-Size="16" Theme="Mulberry" Text="MY JOBS" NavigateUrl="~/Pages/PlannedJobs/myJobs.aspx" />
-    <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField>
-    <dx:ASPxHiddenField ID="MultiGrid" ViewStateMode="Enabled"  ClientInstanceName="MultiGrid" runat="server"></dx:ASPxHiddenField>
 
 
    
