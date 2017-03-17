@@ -6087,14 +6087,14 @@ namespace Pages.PlannedJobs
             #region Milepost
 
             //Check For Prior Value
-            if (HttpContext.Current.Session["txtMilepost"] != null)
-            {
-                //Remove Old One
-                HttpContext.Current.Session.Remove("txtMilepost");
-            }
+            //if (HttpContext.Current.Session["txtMilepost"] != null)
+            //{
+            //    //Remove Old One
+            //    HttpContext.Current.Session.Remove("txtMilepost");
+            //}
 
-            //Add New Value
-            HttpContext.Current.Session.Add("txtMilepost", txtMilepost.Value.ToString());
+            ////Add New Value
+            //HttpContext.Current.Session.Add("txtMilepost", txtMilepost.Value.ToString());
 
             #endregion
 
