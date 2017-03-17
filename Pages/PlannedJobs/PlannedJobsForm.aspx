@@ -393,21 +393,21 @@
 
                                                                                             <CaptionSettings Location="Top"></CaptionSettings>
                                                                                         </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Description" 
-                        CaptionSettings-Location="Top" ColSpan="2">
-                    </dx:LayoutItem> 
-                    <dx:LayoutItem Caption="" HelpText="" 
-                        CaptionSettings-Location="Top" ColSpan="2">
+                                                                                <dx:LayoutItem Caption="Description" 
+                                                                                    CaptionSettings-Location="Top" ColSpan="2">
                                                                                     <LayoutItemNestedControlCollection>
                                                                                         <dx:LayoutItemNestedControlContainer runat="server">
                                                                                             <dx:ASPxTextBox ID="txtObjectDescription" 
                                                                                                 runat="server" 
                                                                                                 ClientInstanceName="txtObjectDescription" 
                                                                                                 Height="100px" MaxLength="254" ReadOnly="True" 
-                                                                                                Theme="iOS" Width="100%">
+                                                                                                Theme="iOS" Width="90%">
                                                                                             </dx:ASPxTextBox>
                                                                                         </dx:LayoutItemNestedControlContainer>
                                                                                     </LayoutItemNestedControlCollection>
+                                                                                </dx:LayoutItem> 
+                                                                                <dx:LayoutItem Caption="" HelpText="" 
+                                                                                    CaptionSettings-Location="Top" ColSpan="2">
 
                                                                                     <CaptionSettings Location="Top"></CaptionSettings>
                                                                                     <LayoutItemNestedControlCollection>
@@ -417,13 +417,13 @@
                                                                                                 ClientInstanceName="objectImg" ImageAlign="Left" 
                                                                                                 ImageUrl="~/Content/Images/noImage.png" 
                                                                                                 ShowLoadingImage="True" Theme="Mulberry" 
-                                                                                                Width="90%">
+                                                                                                Width="100px" Height="100px">
                                                                                             </dx:ASPxImage>
                                                                                         </dx:LayoutItemNestedControlContainer>
                                                                                     </LayoutItemNestedControlCollection>
                                                                                     <CaptionSettings Location="Top" />
                                                                                 </dx:LayoutItem>                        
-                </Items>
+                                                                    </Items>
 
 <SettingsItemCaptions Location="Top"></SettingsItemCaptions>
             </dx:LayoutGroup>
