@@ -167,7 +167,16 @@ namespace Pages.WorkRequests
                         case "PlanJob":
                             {
                                 //Call Plan Event
-                                PlanJobRoutine();
+                                if (HttpContext.Current.Session["editingJobID"] != null)
+                                {
+                                    AddRequest();
+                                    PlanJobRoutine();
+                                }
+                                else
+                                {
+                                    PlanJobRoutine();
+                                }
+                                
 
                                 //Break
                                 break;
@@ -2757,7 +2766,7 @@ namespace Pages.WorkRequests
                         #endregion
 
                         //Forward User To Planned Job
-                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
                     }
                     else
                     {

@@ -374,7 +374,7 @@ namespace Pages.WorkRequests
             if (Selection.Contains("Jobid"))
             {
                 //Redirect To Edit Page With Job ID
-                Response.Redirect("~/Pages/WorkRequests/Requests.aspx?jobid=" + Selection.Get("Jobid"), true);
+                Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + Selection.Get("Jobid"), true);
             }
         }
 
@@ -454,7 +454,7 @@ namespace Pages.WorkRequests
         protected void ReqGrid_StartRowEditing(object sender, DevExpress.Web.Data.ASPxStartRowEditingEventArgs e)
         {
             //Redirect To Edit Page With Job ID
-            ASPxWebControl.RedirectOnCallback("~/Pages/WorkRequests/Requests.aspx?jobid=" + e.EditingKeyValue);
+            ASPxWebControl.RedirectOnCallback("~/Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + e.EditingKeyValue);
         }
 
         protected void UpdatePanel_Unload(object sender, EventArgs e)
@@ -671,7 +671,7 @@ namespace Pages.WorkRequests
                             #endregion
 
                             //Forward User To Planned Job
-                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
                         }
                         else
                         {
@@ -744,7 +744,7 @@ namespace Pages.WorkRequests
                             }
 
                             //Forward User To New Job
-                            Response.Redirect("~//Pages/WorkRequests/Requests.aspx?jobid=" + newCloneJobId, true);
+                            Response.Redirect("~//Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + newCloneJobId, true);
                         }
                     }
                 }
@@ -1642,7 +1642,7 @@ namespace Pages.WorkRequests
                                 ref newStandardJobId))
                             {
                                 //Forward User To Copied Work Order
-                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepId, true);
+                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepId, true);
                             }
                             else
                             {
@@ -2852,7 +2852,7 @@ namespace Pages.WorkRequests
                             }
 
                             //Forward User To Copied Work Order
-                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepId, true);
+                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepId, true);
                         }
                         else
                         {

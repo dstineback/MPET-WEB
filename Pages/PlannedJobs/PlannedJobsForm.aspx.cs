@@ -204,6 +204,7 @@ namespace Pages.PlannedJobs
 
                                     //Update Job
                                     AddRequest();
+                                    PlanJobRoutine();
                                 }
 
                                 //Break
@@ -1508,6 +1509,7 @@ namespace Pages.PlannedJobs
             Master.ShowNewButton = showButtons;
             Master.ShowEditButton = (showButtons && (HttpContext.Current.Session[""] != null));
             Master.ShowViewButton = false;
+            Master.ShowSaveButton = showButtons;
 
             Master.ShowPrintButton = showButtons;
             Master.ShowIssueButton = showButtons;
@@ -5150,44 +5152,44 @@ namespace Pages.PlannedJobs
 
             #region Cost Code
 
-        //if (ComboCostCode.Value != null)
-        //{
+        if (ComboCostCode.Value != null)
+        {
         #region Combo Value
-            //Check For Prior Value
-//            if (HttpContext.Current.Session["ComboCostCode"] != null)
-//            {
-//                //Check For Change
-//                if (HttpContext.Current.Session["ComboCostCodeText"].ToString() != ComboCostCode.Text)
-//                {
-//                    //Remove Old One
-//                    HttpContext.Current.Session.Remove("ComboCostCode");
+            //check for prior value
+           if (HttpContext.Current.Session["ComboCostCode"] != null)
+            {
+                //check for change
+                if (HttpContext.Current.Session["ComboCostCodeText"].ToString() != ComboCostCode.Text)
+                {
+                    //remove old one
+                    HttpContext.Current.Session.Remove("ComboCostCode");
 
-//                    //Add New Value
-//                    HttpContext.Current.Session.Add("ComboCostCode", ComboCostCode.Value.ToString());
-//                }
-//}
-//            else
-//            {
-//                //Add New Value
-//                HttpContext.Current.Session.Add("ComboCostCode", ComboCostCode.Value.ToString());
-//            }
+                    //add new value
+                    HttpContext.Current.Session.Add("ComboCostCode", ComboCostCode.Value.ToString());
+                }
+            }
+            else
+            {
+                //add new value
+                HttpContext.Current.Session.Add("ComboCostCode", ComboCostCode.Value.ToString());
+            }
 
         #endregion
        
         #region Combo Text
 
-        ////Check For Prior Value
-        //if (HttpContext.Current.Session["ComboCostCodeText"] != null)
-        //{
+        //Check For Prior Value
+        if (HttpContext.Current.Session["ComboCostCodeText"] != null)
+        {
         //    //Remove Old One
-        //    HttpContext.Current.Session.Remove("ComboCostCodeText");
-        //}
+            HttpContext.Current.Session.Remove("ComboCostCodeText");
+        }
 
-        ////Add New Value
-        //HttpContext.Current.Session.Add("ComboCostCodeText", ComboCostCode.Text.Trim());
+        //Add New Value
+        HttpContext.Current.Session.Add("ComboCostCodeText", ComboCostCode.Text.Trim());
 
         #endregion
-    //}
+        }
         #endregion
 
             //#region Fund Source
@@ -8089,7 +8091,7 @@ namespace Pages.PlannedJobs
 
                                             //Forward User To Copied Work Order
                                             Response.Redirect(
-                                                "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + newJobStep, true);
+                                                "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + newJobStep, true);
                                         }
                                         else
                                         {
@@ -8182,7 +8184,7 @@ namespace Pages.PlannedJobs
 
                                                 //Redirect Page To Reload Data
                                                 Response.Redirect(
-                                                    "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepKey, true);
+                                                    "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepKey, true);
                                             }
                                         }
                                     }
@@ -8612,14 +8614,219 @@ namespace Pages.PlannedJobs
         protected string GetUrl(GridViewDataItemTemplateContainer container)
         {
             var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
-            return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+            return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
+        }
+
+        protected void PlanJobRoutine()
+        {
+            //Plan Selected Jobs
+            try
+            {
+                //Get Logon Info
+                if (HttpContext.Current.Session["LogonInfo"] != null)
+                {
+                    //Get Logon Info From Session
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+                }
+
+                //Check For Job ID
+                if (Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString())>0)
+                {
+                    //Get ID
+                    var recordToPlan = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+
+                    //Validate Work Operation Selection
+                    //Approver Must Be Allowed To Approve For Specified Work Operation
+                    if (_oLogon.ValidateWorkOperations)
+                    {
+                        //Check For Work Op/Type ID
+                        if ((HttpContext.Current.Session["ComboWorkOp"] != null))
+                        {
+                            //Get ID
+                            var workOpId = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
+
+                            //Check Work Op Selection
+                            if ((workOpId.ToString(CultureInfo.InvariantCulture) != "") &&
+                                (workOpId > 0))
+                            {
+                                //Create Found Flag
+                                var foundIt = false;
+
+                                //Check User's Work Operations To See If Specified One Exists
+                                for (var i = 0; i < _oLogon.UsersWorkOperations.Rows.Count; i++)
+                                {
+                                    //Check Value
+                                    if (_oLogon.UsersWorkOperations.Rows[i][0].ToString() ==
+                                        workOpId.ToString(CultureInfo.InvariantCulture))
+                                    {
+                                        //Set Flag
+                                        foundIt = true;
+
+                                        //Break Loop
+                                        break;
+                                    }
+                                }
+
+                                //Check Flag
+                                if (!foundIt)
+                                {
+                                    //Throw Error
+                                    throw new SystemException(
+                                        @"Insufficient Permissions To Approve Request For Specified Work Operation.");
+                                }
+                            }
+                        }
+                    }
+
+                    //Create ID
+                    var plannerdJobStepId = -1;
+
+                    //Create Class
+                    var oJobStep = new WorkOrderJobStep(_connectionString, _useWeb);
+
+                    //Get Priority
+                    var priority = -1;
+                    if ((HttpContext.Current.Session["ComboPriority"] != null))
+                    {
+                        //Set Value
+                        priority = Convert.ToInt32((HttpContext.Current.Session["ComboPriority"].ToString()));
+                    }
+
+                    //ReasonCode
+                    var reasonCode = -1;
+                    if ((HttpContext.Current.Session["comboReason"] != null))
+                    {
+                        //Set Value
+                        reasonCode = Convert.ToInt32((HttpContext.Current.Session["comboReason"].ToString()));
+                    }
+
+                    //Mobile Equipment
+                    const int mobileEquip = -1;
+
+                    //Sub Assembly
+                    const int subAssemblyId = -1;
+
+                    //Title
+                    var jobTitle = "";
+                    if (HttpContext.Current.Session["txtWorkDescription"] != null)
+                    {
+                        //Set Value
+                        jobTitle = (HttpContext.Current.Session["txtWorkDescription"].ToString());
+                    }
+
+                    //Additional Details
+                    var jobAdditionalInfo = "";
+                    if (HttpContext.Current.Session["txtAddDetail"] != null)
+                    {
+                        //Set Value
+                        jobAdditionalInfo = (HttpContext.Current.Session["txtAddDetail"].ToString());
+                    }
+
+                    //Add Default Step
+                    if (oJobStep.InsertDefaultJobStep(recordToPlan,
+                        JobType.Corrective,
+                        jobTitle,
+                        jobAdditionalInfo,
+                        mobileEquip,
+                        subAssemblyId,
+                        priority,
+                        reasonCode,
+                        _oLogon.UserID,
+                        ref plannerdJobStepId))
+                    {
+                        #region Set Default Group, Supervisor, Labor & Shift
+
+                        //Get User's Default Group And Group's Supervisor
+                        try
+                        {
+
+
+                            var loaded = true;
+                            var groupId = -1;
+                            var supervisorId = -1;
+
+                            //Check Requestor Field
+                            var userId = ((HttpContext.Current.Session["ComboRequestor"] != null))
+                                ? Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()))
+                                : _oLogon.UserID;
+
+                            //Create Group Class
+                            using (
+                                var oGroup =
+                                    new MaintenanceGroup(_connectionString, _useWeb, _oLogon.UserID))
+                            {
+                                //Get Users Group
+                                using (var dt = oGroup.GetFilteredGroupList("B", "", "", -1, userId, ref loaded))
+                                {
+                                    //Check Flag
+                                    if (loaded)
+                                    {
+                                        //Set Group
+                                        if (dt.Rows.Count > 0)
+                                        {
+                                            //Get Group ID
+                                            groupId = Convert.ToInt32(dt.Rows[0][0].ToString());
+
+                                            //Get Supervisor
+                                            if (oGroup.LoadHeaderData(groupId))
+                                            {
+                                                //Get Supervisor ID
+                                                supervisorId = oGroup.SupervisorID;
+                                            }
+                                            else
+                                            {
+                                                //Throw Error
+                                                throw new SystemException(
+                                                    @"Error Loading Group/Supervisor Defaults");
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //Throw Error
+                                        throw new SystemException(
+                                            @"Error Loading Group/Supervisor Defaults");
+                                    }
+
+                                    //Update Defaults
+                                    if (
+                                        !oJobStep.UpdateUserDefaults(plannerdJobStepId, groupId, supervisorId,
+                                            _oLogon.LaborClassID, _oLogon.ShiftID, _oLogon.UserID))
+                                    {
+                                        //Throw Error
+                                        throw new SystemException(
+                                            @"Error Saving User Defaults - " + oJobStep.LastError);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //Throw Error
+                            throw new SystemException(
+                                @"Error Getting User's Default Group And Supervisor - " + ex.Message);
+                        }
+
+                        #endregion
+
+                        //Forward User To Planned Job
+                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                    }
+                    else
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Planning Job - " + oJobStep.LastError);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //Show Error
+                Master.ShowError(ex.Message);
+            }
         }
 
        
-
-        protected void Unnamed_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

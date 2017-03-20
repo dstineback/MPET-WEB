@@ -172,8 +172,15 @@ namespace Pages.WorkRequests
                         }
                         case "PlanJob":
                         {
-                            //Call Plan Event
-                            PlanJobRoutine();
+                                //Call Plan Event
+                                if (HttpContext.Current.Session["editingJobID"] != null)
+                                {
+                                    AddRequest();
+                                    PlanJobRoutine();
+                                } else
+                                {
+                                    PlanJobRoutine();
+                                }
 
                             //Break
                             break;
@@ -998,7 +1005,7 @@ namespace Pages.WorkRequests
             ResetSession();
 
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
         }
         
         public void DeleteGridViewAttachment()
@@ -4813,7 +4820,7 @@ namespace Pages.WorkRequests
                         #endregion
 
                         //Forward User To Planned Job
-                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
                     }
                     else
                     {
@@ -4892,7 +4899,7 @@ namespace Pages.WorkRequests
                         ResetSession();
 
                         //Forward User To New Job
-                        Response.Redirect("~/Pages/WorkRequests/Requests.aspx?jobid=" + newCloneJobId, true);
+                        Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + newCloneJobId, true);
                     }
                 }
             }

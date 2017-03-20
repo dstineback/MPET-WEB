@@ -289,10 +289,6 @@
              <dx:LayoutGroup Caption="Object/Asset" 
                 ColCount="4" SettingsItemCaptions-Location="Top">
                 <Items>
-                    <%--Object/Asset--%>
-                    <%--Description--%>
-                    <%--Location--%>              
-                    <%--Line--%>
                     <dx:LayoutItem Caption="Object/Asset">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -301,10 +297,10 @@
                                                                                                                     ValueField="n_objectid" 
                                                                                                                     OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" 
                                                                                                                     OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
-                                                                                                                    TextFormatString="{0} - {1} - {2} - {3} - {4}" 
-                                                                                                                    Width="600px" 
+                                                                                                                    TextFormatString="{0}" 
+                                                                                                                    Width="90%" 
                                                                                                                     DropDownStyle="DropDown" 
-                                                                                                                    Theme="Mulberry" 
+                                                                                                                    Theme="iOS" 
                                                                                                                     TextField="objectid" 
                                                                                                                     DropDownButton-Enabled="True" 
                                                                                                                     AutoPostBack="False" 
@@ -314,7 +310,7 @@
                                                                                         var selectedItem = s.GetSelectedItem();
                                                                                         if(objectHasValue!=null)
                                                                                         {
-                                                                                            txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
+                                                                                            txtObjectDescription.SetText(selectedItem.GetColumnText('description'));                                                                             
                                                                                             txtObjectArea.SetText(selectedItem.GetColumnText('areaid'));
                                                                                             txtObjectLocation.SetText(selectedItem.GetColumnText('locationid'));
                                                                                             txtObjectAssetNumber.SetText(selectedItem.GetColumnText('assetnumber'));
@@ -342,18 +338,16 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem> 
+                    </dx:LayoutItem>     <%--Object/Asset--%>
                     <dx:LayoutItem Caption="Location" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxTextBox ID="txtObjectLocation" ClientInstanceName="txtObjectLocation" Theme="iOS" ReadOnly="true" 
-                                    runat="server">
+                                    runat="server" Width="90%">
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
-
-<CaptionSettings Location="Top"></CaptionSettings>
-                    </dx:LayoutItem>               
+                    </dx:LayoutItem>     <%--Location--%>           
                     <dx:LayoutItem Name="fldFundGrp" Caption="Line" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
@@ -372,7 +366,7 @@
                                 </dx:LayoutItemNestedControlContainer>
                             </LayoutItemNestedControlCollection>
                             <CaptionSettings Location="Top"></CaptionSettings>                                                                                        
-                    </dx:LayoutItem> 
+                    </dx:LayoutItem> <%--Line--%>
                     <dx:LayoutItem Name="fldCostCode" Caption="Cost Code:" CaptionSettings-Location="Top">
                                                                                             <LayoutItemNestedControlCollection>
                                                                                                 <dx:LayoutItemNestedControlContainer runat="server">
@@ -392,8 +386,8 @@
                                                                                             </LayoutItemNestedControlCollection>
 
                                                                                             <CaptionSettings Location="Top"></CaptionSettings>
-                                                                                        </dx:LayoutItem>
-                                                                                <dx:LayoutItem Caption="Description" 
+                                                                                        </dx:LayoutItem> <%--Cost Code--%>
+                    <dx:LayoutItem Caption="Description" 
                                                                                     CaptionSettings-Location="Top" ColSpan="2">
                                                                                     <LayoutItemNestedControlCollection>
                                                                                         <dx:LayoutItemNestedControlContainer runat="server">
@@ -405,25 +399,24 @@
                                                                                             </dx:ASPxTextBox>
                                                                                         </dx:LayoutItemNestedControlContainer>
                                                                                     </LayoutItemNestedControlCollection>
-                                                                                </dx:LayoutItem> 
-                                                                                <dx:LayoutItem Caption="" HelpText="" 
-                                                                                    CaptionSettings-Location="Top" ColSpan="2">
-
-                                                                                    <CaptionSettings Location="Top"></CaptionSettings>
-                                                                                    <LayoutItemNestedControlCollection>
-                                                                                        <dx:LayoutItemNestedControlContainer runat="server">
-                                                                                            <dx:ASPxImage ID="objectImg" runat="server" 
-                                                                                                AlternateText="No Picture Associated" 
-                                                                                                ClientInstanceName="objectImg" ImageAlign="Left" 
-                                                                                                ImageUrl="~/Content/Images/noImage.png" 
-                                                                                                ShowLoadingImage="True" Theme="Mulberry" 
-                                                                                                Width="100px" Height="100px">
-                                                                                            </dx:ASPxImage>
-                                                                                        </dx:LayoutItemNestedControlContainer>
-                                                                                    </LayoutItemNestedControlCollection>
-                                                                                    <CaptionSettings Location="Top" />
-                                                                                </dx:LayoutItem>                        
-                                                                    </Items>
+                                                                                </dx:LayoutItem> <%--Description--%>
+                    <dx:LayoutItem Caption="" HelpText="" 
+                                CaptionSettings-Location="Top" ColSpan="2">
+                                <CaptionSettings Location="Top"></CaptionSettings>
+                                <LayoutItemNestedControlCollection>
+                                    <dx:LayoutItemNestedControlContainer runat="server">
+                                        <dx:ASPxImage ID="objectImg" runat="server" 
+                                            AlternateText="No Picture Associated" 
+                                            ClientInstanceName="objectImg" ImageAlign="Left" 
+                                            ImageUrl="~/Content/Images/noImage.png" 
+                                            ShowLoadingImage="True" Theme="Mulberry" 
+                                            Width="100px" Height="100px">
+                                        </dx:ASPxImage>
+                                    </dx:LayoutItemNestedControlContainer>
+                                </LayoutItemNestedControlCollection>
+                                <CaptionSettings Location="Top" />
+                    </dx:LayoutItem> <%--Object Image  --%>                    
+                </Items>
 
 <SettingsItemCaptions Location="Top"></SettingsItemCaptions>
             </dx:LayoutGroup>
@@ -1236,7 +1229,7 @@
                             </div> <%--CrewGrid DataSource--%>                    
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
-        </dx:LayoutItem>
+        </dx:LayoutItem> <%--Gridview for Crew--%>
 
         </Items>
     </dx:ASPxFormLayout>
