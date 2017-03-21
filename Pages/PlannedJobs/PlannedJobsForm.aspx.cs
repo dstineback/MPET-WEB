@@ -28,8 +28,10 @@ namespace Pages.PlannedJobs
         private AttachmentObject _oAttachments;
         private MpetUserDbClass _oMpetUser;
         private MaintObjectRunUnit _oRunUnit;
+        private JobType jobType = JobType.Corrective;
         public string AssignedGuid = "";
         public string AssignedJobID = "";
+        private bool requestOnlyJob = true;
         private bool _userCanDelete;
         private bool _userCanAdd;
         private bool _userCanEdit;
@@ -191,6 +193,12 @@ namespace Pages.PlannedJobs
                                 //Check For Job ID
                                 if (HttpContext.Current.Session["editingJobStepID"] != null)
                                 {
+                                    if (BreakDownCheckBox.Checked == true)
+                                    {
+                                        jobType = JobType.Breakdown;
+                                        HttpContext.Current.Session.Remove("BreakDownCheckBox");
+                                        HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked = true);
+                                    }
                                     //Save Session Data
                                     SaveSessionData();
 
@@ -199,12 +207,21 @@ namespace Pages.PlannedJobs
                                 }
                                 else
                                 {
-                                    //Save Session Data
-                                    SaveSessionData();
+                                    if(HttpContext.Current.Session["editingJobID"] != null)
+                                    {
+                                        //Save Session Data
+                                        SaveSessionData();
+                                    } else
+                                    {
+                                        //Save Session Data
+                                        SaveSessionData();
+                                   
 
-                                    //Update Job
-                                    AddRequest();
-                                    PlanJobRoutine();
+                                        //Update Job
+                                        AddRequest();
+                                        PlanJobRoutine();
+
+                                    }
                                 }
 
                                 //Break
@@ -639,6 +656,8 @@ namespace Pages.PlannedJobs
                                                 //    }
                                                 //}
 
+                                                HttpContext.Current.Session.Add("BreakDownCheckBox", _oJob.Ds.Tables[0].Rows[0]["TypeOfJob"]);
+
                                                 //Add Job String ID
                                                 HttpContext.Current.Session.Add("AssignedJobID",
                                                     _oJob.Ds.Tables[0].Rows[0]["Jobid"]);
@@ -990,7 +1009,7 @@ namespace Pages.PlannedJobs
                                                 //Set Tab Counts
 
                                                 //Refresh Crew
-                                                //CrewGrid.DataBind();
+                                                CrewGrid.DataBind();
 
                                                 //Refresh Attachments
                                                 //AttachmentGrid.DataBind();
@@ -1050,6 +1069,16 @@ namespace Pages.PlannedJobs
                 {
                     //Get Additional Info From Session
                     txtWorkDescription.Text = (HttpContext.Current.Session["txtWorkDescription"].ToString());
+                }
+
+                if (HttpContext.Current.Session["BreakDownCheckBox"] != null)
+                {
+                    BreakDownCheckBox.Value = (HttpContext.Current.Session["BreakDownCheckBox"]);
+                    var BreakDown = Convert.ToInt32(BreakDownCheckBox.Value); 
+                    if (BreakDown == 4)
+                    {
+                        BreakDownCheckBox.Checked = true;
+                    }
                 }
 
                 //Job ID
@@ -2284,134 +2313,134 @@ namespace Pages.PlannedJobs
 
                 for (var rowIndex = 0; rowIndex < layoutGroup.Items.Count; rowIndex++)
                 {
-                    //Determine Current Item
-                    switch (layoutGroup.Items[rowIndex].Name)
-                    {
-                        case "fldCostCode":
-                            {
-                                //Check Cost Code Flag
-                                if ((_oLogon.RenameCostCode != null) && (_oLogon.RenameCostCode))
-                                {
-                                    //Set Caption
-                                    layoutGroup.Items[rowIndex].Caption = _oLogon.RenameCostCodeTo;
+                    ////Determine Current Item
+                    //switch (layoutGroup.Items[rowIndex].Name)
+                    //{
+                    //    case "fldCostCode":
+                    //        {
+                    //            //Check Cost Code Flag
+                    //            if ((_oLogon.RenameCostCode != null) && (_oLogon.RenameCostCode))
+                    //            {
+                    //                //Set Caption
+                    //                layoutGroup.Items[rowIndex].Caption = _oLogon.RenameCostCodeTo;
 
-                                    //Update Combo Header
-                                    ComboCostCode.Columns[1].Caption = _oLogon.RenameCostCodeTo;
-                                }
+                    //                //Update Combo Header
+                    //                ComboCostCode.Columns[1].Caption = _oLogon.RenameCostCodeTo;
+                    //            }
 
-                                break;
-                            }
+                    //            break;
+                    //        }
 
-                        case "fldFundSrc":
-                            {
-                                //Check FUnd Source Flag
-                                //if ((_oLogon.RenameFundSource != null) && (_oLogon.RenameFundSource))
-                                //{
-                                //    //Set Caption
-                                //    layoutGroup.Items[rowIndex].Caption = _oLogon.RenameFundSourceTo;
+                    //    case "fldFundSrc":
+                    //        {
+                    //            //Check FUnd Source Flag
+                    //            //if ((_oLogon.RenameFundSource != null) && (_oLogon.RenameFundSource))
+                    //            //{
+                    //            //    //Set Caption
+                    //            //    layoutGroup.Items[rowIndex].Caption = _oLogon.RenameFundSourceTo;
 
-                                //    //Update Combo Header
-                                //    ComboFundSource.Columns[1].Caption = _oLogon.RenameFundSourceTo;
-                                //}
+                    //            //    //Update Combo Header
+                    //            //    ComboFundSource.Columns[1].Caption = _oLogon.RenameFundSourceTo;
+                    //            //}
 
-                                break;
-                            }
+                    //            break;
+                    //        }
 
-                        case "fldWorkOrder":
-                            {
-                                //Check Work Order Flag
-                                if ((_oLogon.RenameWorkOrder != null) && (_oLogon.RenameWorkOrder))
-                                {
-                                    //Set Caption
-                                    layoutGroup.Items[rowIndex].Caption = _oLogon.RenameWorkOrderTo;
+                    //    case "fldWorkOrder":
+                    //        {
+                    //            //Check Work Order Flag
+                    //            if ((_oLogon.RenameWorkOrder != null) && (_oLogon.RenameWorkOrder))
+                    //            {
+                    //                //Set Caption
+                    //                layoutGroup.Items[rowIndex].Caption = _oLogon.RenameWorkOrderTo;
 
-                                    //Update Combo Header
-                                    //ComboWorkOrder.Columns[1].Caption = _oLogon.RenameWorkOrderTo;
-                                }
+                    //                //Update Combo Header
+                    //                //ComboWorkOrder.Columns[1].Caption = _oLogon.RenameWorkOrderTo;
+                    //            }
 
-                                break;
-                            }
+                    //            break;
+                    //        }
 
-                        case "fldWorkOp":
-                            {
-                                //Check WOrk Op Flag
-                                if ((_oLogon.RenameWorkOp != null) && (_oLogon.RenameWorkOp))
-                                {
-                                    //Set Caption
-                                    layoutGroup.Items[rowIndex].Caption = _oLogon.RenameWorkOpTo;
+                    //    case "fldWorkOp":
+                    //        {
+                    //            //Check WOrk Op Flag
+                    //            if ((_oLogon.RenameWorkOp != null) && (_oLogon.RenameWorkOp))
+                    //            {
+                    //                //Set Caption
+                    //                layoutGroup.Items[rowIndex].Caption = _oLogon.RenameWorkOpTo;
 
-                                    //Update Combo Header
-                                    //ComboWorkOp.Columns[1].Caption = _oLogon.RenameWorkOpTo;
-                                }
+                    //                //Update Combo Header
+                    //                //ComboWorkOp.Columns[1].Caption = _oLogon.RenameWorkOpTo;
+                    //            }
 
-                                break;
-                            }
+                    //            break;
+                    //        }
 
-                        case "fldOrgCode":
-                            {
-                                //Check Org Code Flag
-                                if ((_oLogon.RenameOrgCode != null) && (_oLogon.RenameOrgCode))
-                                {
-                                    //Set Caption
-                                    layoutGroup.Items[rowIndex].Caption = _oLogon.RenameOrgCodeTo;
+                    //    case "fldOrgCode":
+                    //        {
+                    //            //Check Org Code Flag
+                    //            if ((_oLogon.RenameOrgCode != null) && (_oLogon.RenameOrgCode))
+                    //            {
+                    //                //Set Caption
+                    //                layoutGroup.Items[rowIndex].Caption = _oLogon.RenameOrgCodeTo;
 
-                                    //Update Combo Header
-                                    //ComboOrgCode.Columns[1].Caption = _oLogon.RenameOrgCodeTo;
-                                }
+                    //                //Update Combo Header
+                    //                //ComboOrgCode.Columns[1].Caption = _oLogon.RenameOrgCodeTo;
+                    //            }
 
-                                break;
-                            }
+                    //            break;
+                    //        }
 
-                        case "fldFundGrp":
-                            {
-                                //Check Fund Group Flag
-                                if ((_oLogon.RenameFundGroup != null) && (_oLogon.RenameFundGroup))
-                                {
-                                    //Set Caption
-                                    layoutGroup.Items[rowIndex].Caption = _oLogon.RenameFundGroupTo;
+                    //    case "fldFundGrp":
+                    //        {
+                    //            //Check Fund Group Flag
+                    //            if ((_oLogon.RenameFundGroup != null) && (_oLogon.RenameFundGroup))
+                    //            {
+                    //                //Set Caption
+                    //                layoutGroup.Items[rowIndex].Caption = _oLogon.RenameFundGroupTo;
 
-                                    //Update Combo Header
-                                    ComboFundGroup.Columns[1].Caption = _oLogon.RenameFundGroupTo;
-                                }
+                    //                //Update Combo Header
+                    //                ComboFundGroup.Columns[1].Caption = _oLogon.RenameFundGroupTo;
+                    //            }
 
-                                break;
-                            }
+                    //            break;
+                    //        }
 
-                        case "fldCtlSection":
-                            {
-                                //Check Ctl Section Flag
-                                if ((_oLogon.RenameControlSection != null) && (_oLogon.RenameControlSection))
-                                {
-                                    //Set Caption
-                                    layoutGroup.Items[rowIndex].Caption = _oLogon.RenameControlSectionTo;
+                    //    case "fldCtlSection":
+                    //        {
+                    //            //Check Ctl Section Flag
+                    //            if ((_oLogon.RenameControlSection != null) && (_oLogon.RenameControlSection))
+                    //            {
+                    //                //Set Caption
+                    //                layoutGroup.Items[rowIndex].Caption = _oLogon.RenameControlSectionTo;
 
-                                    //Update Combo Header
-                                    //ComboCtlSection.Columns[1].Caption = _oLogon.RenameControlSectionTo;
-                                }
+                    //                //Update Combo Header
+                    //                //ComboCtlSection.Columns[1].Caption = _oLogon.RenameControlSectionTo;
+                    //            }
 
-                                break;
-                            }
+                    //            break;
+                    //        }
 
-                        case "fldEquipNum":
-                            {
-                                //Check Equip Flag
-                                if ((_oLogon.RenameEquipNumber != null) && (_oLogon.RenameEquipNumber))
-                                {
-                                    //Set Caption
-                                    layoutGroup.Items[rowIndex].Caption = _oLogon.RenameEquipNumberTo;
+                    //    case "fldEquipNum":
+                    //        {
+                    //            //Check Equip Flag
+                    //            if ((_oLogon.RenameEquipNumber != null) && (_oLogon.RenameEquipNumber))
+                    //            {
+                    //                //Set Caption
+                    //                layoutGroup.Items[rowIndex].Caption = _oLogon.RenameEquipNumberTo;
 
-                                    //Update Combo Header
-                                    //ComboEquipNum.Columns[1].Caption = _oLogon.RenameEquipNumberTo;
-                                }
+                    //                //Update Combo Header
+                    //                //ComboEquipNum.Columns[1].Caption = _oLogon.RenameEquipNumberTo;
+                    //            }
 
-                                break;
-                            }
-                        default:
-                            {
-                                //Do Nothing
-                                break;
-                            }
-                    }
+                    //            break;
+                    //        }
+                    //    default:
+                    //        {
+                    //            //Do Nothing
+                    //            break;
+                    //        }
+                    //}
                 }
             }
         }
@@ -4507,6 +4536,18 @@ namespace Pages.PlannedJobs
                 jobIncidentLog = Convert.ToInt32((HttpContext.Current.Session["ComboIncidentLog"].ToString()));
             }
 
+            if (HttpContext.Current.Session["BreakDownCheckBox"] != null)
+            {   
+                if (BreakDownCheckBox.Checked == true)
+                {
+                    jobType = JobType.Breakdown;
+                }
+            }
+
+            if (HttpContext.Current.Session["editingJobStepID"] != null)
+            {
+                requestOnlyJob = false;
+            }
             #endregion
 
             //Clear Errors
@@ -4514,17 +4555,16 @@ namespace Pages.PlannedJobs
 
             try
             {
-                //Save Job Details
-                if (_oJob.Update(jobId,
+                bool updateSuccessful = _oJob.Update(jobId,
                     workDesc,
-                    JobType.Corrective,
+                    jobType,
                     JobAgainstType.MaintenanceObjects,
                     objectAgainstId,
                     actionPriority,
                     reasonCode,
                     notes,
                     routeTo,
-                    true,
+                    requestOnlyJob,
                     requestDate,
                     requestPriority,
                     requestor,
@@ -4552,7 +4592,9 @@ namespace Pages.PlannedJobs
                     additionalDamage,
                     percentOverage,
                     _oLogon.UserID,
-                    ref AssignedJobID))
+                    ref AssignedJobID);
+                //Save Job Details
+                if (updateSuccessful)
                 {
                     //Update Job Step
                     if (!_oJobStep.Update(jobStepId,
@@ -5046,9 +5088,14 @@ namespace Pages.PlannedJobs
                     return false;
                 }
 
+                if(BreakDownCheckBox.Checked == true)
+                {
+                    jobType = JobType.Breakdown;
+                }
+
                 //Add Job
                 if (_oJob.Add(true,
-                    JobType.Corrective,
+                    jobType,
                     JobAgainstType.MaintenanceObjects,
                     objectAgainstId,
                     workDesc,
@@ -5132,6 +5179,37 @@ namespace Pages.PlannedJobs
         /// </summary>
         protected void SaveSessionData()
         {
+                
+           BreakDownCheckBox.Value = HttpContext.Current.Session["BreakDownCheckBox"];
+           
+           if (HttpContext.Current.Session["BreakDownCheckBox"] != null)
+                HttpContext.Current.Session.Remove("BreakDownCheckBox");
+            {
+                if(BreakDownCheckBox.Checked == true)
+                {
+                    jobType = JobType.Breakdown;
+                    BreakDownCheckBox.Checked = true;
+                    
+                HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked);
+                } else
+                {
+
+                    var BreakDown = Convert.ToInt32(BreakDownCheckBox.Value);
+                    if(BreakDown == 4)
+                    {
+                        BreakDownCheckBox.Checked = true;
+                        BreakDownCheckBox.Value = BreakDownCheckBox.Checked;
+                    } else
+                    {
+                        BreakDownCheckBox.Checked = false;
+                        BreakDownCheckBox.Value = BreakDownCheckBox.UncheckedImage;
+                    }
+                    HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox);
+
+                }
+
+            }
+
             #region Request Description 
 
             //Check For Input

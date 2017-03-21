@@ -271,6 +271,17 @@
             crewGrid.dispatchEvent(dblClick);
         }
 
+        function CheckBoxChange(sender) {
+            var s = sender.GetChecked();
+            s.value = sender.GetValue();
+            if (s == true) {
+                s.setChecked(true);
+                s.value = 4;
+            } else {
+                s.setChecked(false);
+            }
+        }
+
       
 
     </script>
@@ -582,16 +593,16 @@
                     </dx:LayoutItem>     <%--Outcome Code--%>
                 </Items>
             </dx:LayoutGroup>
-      <%-- Breakdown --%>
             <dx:LayoutItem Caption="Breakdown">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
-                        <dx:ASPxTextBox ID="ASPxFormLayout1_E18" 
+                        <dx:ASPxCheckBox ID="BreakDownCheckBox" ClientInstanceName="BreakDownCheckBox" Theme="iOS" 
                             runat="server">
-                        </dx:ASPxTextBox>
+                        </dx:ASPxCheckBox>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
             </dx:LayoutItem>    <%--Breakdown--%>
+      <%-- Breakdown --%>
         
         <dx:LayoutItem>
             <LayoutItemNestedControlCollection>
@@ -607,7 +618,7 @@
                                                                 AutoPostBack="True" 
                                                                 EnableCallBacks="true" 
                                                                 Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="True" SettingsBehavior-AllowFocusedRow="False" 
-                                                                SettingsBehavior-AllowSelectByRowClick="true" DataSourceID="CrewDataSource" OnDataBound="CrewGridBound" OnRowUpdating="CrewGrid_RowUpdating" >
+                                                                SettingsBehavior-AllowSelectByRowClick="true" DataSourceID="CrewDataSource" OnDataBound="CrewGridBound" OnRowUpdating="CrewGrid_RowUpdating" Border-BorderStyle="Solid" Border-BorderColor="Gray" >
                                                                
                                                                  <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
                                                                         RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
