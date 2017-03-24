@@ -176,7 +176,7 @@
                     <dx:LayoutItemNestedControlContainer runat="server">
                         <dx:ASPxTextBox ID="txtWorkDescription" runat="server"
                             Height="100px" Width="100%" ClientInstanceName="txtWorkDescription"
-                            Theme="iOS">
+                            Theme="iOS" AutoPostBack="false" MaxLength="254" >
                             <ValidationSettings SetFocusOnError="true" Display="Dynamic"
                                 ErrorDisplayMode="Text">
                                 <RequiredField IsRequired="true" />
@@ -422,7 +422,7 @@
 
 <CaptionSettings Location="Top"></CaptionSettings>
                 </dx:LayoutItem>                
-            </Items>
+        </Items>
     </dx:ASPxFormLayout>
     <asp:SqlDataSource ID="AttachmentDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" 
         SelectCommand="SELECT [ID], [nJobID], [nJobstepID], [DocType], [Description], [LocationOrURL], [ShortName] 

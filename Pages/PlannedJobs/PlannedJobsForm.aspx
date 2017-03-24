@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="PlannedJobsForm.aspx.cs" MasterPageFile="~/SiteBase.master" Inherits="Pages.PlannedJobs.PlannedJobsForm" %>
+﻿ <%@ Page Language="C#" AutoEventWireup="true" CodeFile="PlannedJobsForm.aspx.cs" MasterPageFile="~/SiteBase.master" Inherits="Pages.PlannedJobs.PlannedJobsForm" %>
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Planned Jobs</asp:Content>
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
@@ -271,16 +271,7 @@
             crewGrid.dispatchEvent(dblClick);
         }
 
-        function CheckBoxChange(sender) {
-            var s = sender.GetChecked();
-            s.value = sender.GetValue();
-            if (s == true) {
-                s.setChecked(true);
-                s.value = 4;
-            } else {
-                s.setChecked(false);
-            }
-        }
+       
 
       
 
@@ -293,9 +284,19 @@
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxHiddenField ID="MultiGrid" ViewStateMode="Enabled"  ClientInstanceName="MultiGrid" runat="server"></dx:ASPxHiddenField>
     
-    <%-- Form Layout --%>
     <dx:ASPxFormLayout ID="objectFormLayout" runat="server" Width="98%" >
         <Items>
+    <%-- Form Layout --%>
+             <dx:LayoutItem Caption="Breakdown">
+                <LayoutItemNestedControlCollection>
+                    <dx:LayoutItemNestedControlContainer runat="server">
+                        <dx:ASPxCheckBox ID="BreakDownCheckBox" ClientInstanceName="BreakDownCheckBox" Theme="iOS" 
+                            runat="server">
+                        </dx:ASPxCheckBox>
+                    </dx:LayoutItemNestedControlContainer>
+                </LayoutItemNestedControlCollection>
+            </dx:LayoutItem>    <%--Breakdown--%>
+      <%-- Breakdown --%>
       <%-- Object/Asset --%>
              <dx:LayoutGroup Caption="Object/Asset" 
                 ColCount="4" SettingsItemCaptions-Location="Top">
@@ -358,6 +359,8 @@
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+
+<CaptionSettings Location="Top"></CaptionSettings>
                     </dx:LayoutItem>     <%--Location--%>           
                     <dx:LayoutItem Name="fldFundGrp" Caption="Line" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
@@ -410,6 +413,8 @@
                                                                                             </dx:ASPxTextBox>
                                                                                         </dx:LayoutItemNestedControlContainer>
                                                                                     </LayoutItemNestedControlCollection>
+
+<CaptionSettings Location="Top"></CaptionSettings>
                                                                                 </dx:LayoutItem> <%--Description--%>
                     <dx:LayoutItem Caption="" HelpText="" 
                                 CaptionSettings-Location="Top" ColSpan="2">
@@ -431,6 +436,20 @@
 
 <SettingsItemCaptions Location="Top"></SettingsItemCaptions>
             </dx:LayoutGroup>
+      <%-- Description of Work --%>
+            <dx:LayoutItem Name="DescLable" Caption="Description Of Work" CaptionSettings-Location="Top">
+                <LayoutItemNestedControlCollection>
+                    <dx:LayoutItemNestedControlContainer runat="server">
+                        <dx:ASPxTextBox ID="txtWorkDescription" Height="75px" Width="95%" ClientInstanceName="txtWorkDescription" Theme="iOS" runat="server">
+                            <ValidationSettings SetFocusOnError="True" Display="Dynamic" ErrorDisplayMode="Text">
+                                        <RequiredField IsRequired="True"/>
+                            </ValidationSettings>
+                        </dx:ASPxTextBox>
+                    </dx:LayoutItemNestedControlContainer>
+                </LayoutItemNestedControlCollection>
+
+                <CaptionSettings Location="Top"></CaptionSettings>
+            </dx:LayoutItem> <%--Description of Work--%>
       <%-- Requestor Group --%>
             <dx:LayoutGroup Caption="Requestor" ColCount="2">
                 <Items>
@@ -442,7 +461,7 @@
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
 
-<CaptionSettings Location="Top"></CaptionSettings>
+                    <CaptionSettings Location="Top"></CaptionSettings>
                     </dx:LayoutItem> <%--Request Date--%>
                     <dx:LayoutItem Caption="Requestor" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
@@ -504,18 +523,6 @@
                     </dx:LayoutItem> <%--Reason--%>
                 </Items>
             </dx:LayoutGroup>
-      <%-- Description of Work --%>
-            <dx:LayoutItem Name="DescLable" Caption="Description Of Work">
-                <LayoutItemNestedControlCollection>
-                    <dx:LayoutItemNestedControlContainer runat="server">
-                        <dx:ASPxTextBox ID="txtWorkDescription" Height="75px" Width="95%" ClientInstanceName="txtWorkDescription" Theme="iOS" runat="server">
-                            <ValidationSettings SetFocusOnError="True" Display="Dynamic" ErrorDisplayMode="Text">
-                                        <RequiredField IsRequired="True"/>
-                            </ValidationSettings>
-                        </dx:ASPxTextBox>
-                    </dx:LayoutItemNestedControlContainer>
-                </LayoutItemNestedControlCollection>
-            </dx:LayoutItem> <%--Description of Work--%>
       <%-- Scheduled Dates Group --%>
             <dx:LayoutGroup Caption="Scheduled Dates" 
                 ColCount="2">
@@ -593,18 +600,9 @@
                     </dx:LayoutItem>     <%--Outcome Code--%>
                 </Items>
             </dx:LayoutGroup>
-            <dx:LayoutItem Caption="Breakdown">
-                <LayoutItemNestedControlCollection>
-                    <dx:LayoutItemNestedControlContainer runat="server">
-                        <dx:ASPxCheckBox ID="BreakDownCheckBox" ClientInstanceName="BreakDownCheckBox" Theme="iOS" 
-                            runat="server">
-                        </dx:ASPxCheckBox>
-                    </dx:LayoutItemNestedControlContainer>
-                </LayoutItemNestedControlCollection>
-            </dx:LayoutItem>    <%--Breakdown--%>
-      <%-- Breakdown --%>
         
-        <dx:LayoutItem>
+        <dx:LayoutItem Name="CrewGridViewLayoutItem" 
+                Caption="">
             <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
                          <dx:ASPxGridView 
@@ -616,7 +614,7 @@
                                                                 KeyboardSupport="True" 
                                                                 ClientInstanceName="CrewGrid" 
                                                                 AutoPostBack="True" 
-                                                                EnableCallBacks="true" 
+                                                                EnableCallBacks="true"  
                                                                 Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="True" SettingsBehavior-AllowFocusedRow="False" 
                                                                 SettingsBehavior-AllowSelectByRowClick="true" DataSourceID="CrewDataSource" OnDataBound="CrewGridBound" OnRowUpdating="CrewGrid_RowUpdating" Border-BorderStyle="Solid" Border-BorderColor="Gray" >
                                                                
@@ -654,140 +652,91 @@
                                                                         
                                                                     }" />
                                                                 <Columns>
-                                                                    <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowEditButton="True" Visible="false" VisibleIndex="0" />
-                                                                    <dx:GridViewDataTextColumn FieldName="RecordID" ReadOnly="True" Visible="false" VisibleIndex="1">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewCommandColumn VisibleIndex="0" />
+                                                                    <dx:GridViewDataTextColumn FieldName="RecordID" 
+                                                                        ReadOnly="True" VisibleIndex="1">
+                                                                        <EditFormSettings Visible="False" />
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="UserID" ReadOnly="True" Visible="false" VisibleIndex="2">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="UserID" 
+                                                                        VisibleIndex="2">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_skillid" ReadOnly="True" Visible="false" VisibleIndex="3">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_skillid" 
+                                                                        ReadOnly="True" VisibleIndex="3">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_ShiftID" ReadOnly="True" Visible="false" VisibleIndex="4">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_ShiftID" 
+                                                                        VisibleIndex="4">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_PayCodeID" ReadOnly="True" Visible="false" VisibleIndex="5">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_PayCodeID" 
+                                                                        ReadOnly="True" VisibleIndex="5">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataComboBoxColumn FieldName="CrewMemberTextID" Caption="User ID" Width="100px" VisibleIndex="6">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                        <DataItemTemplate>
-                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("CrewMemberTextID") %>' Width="100%" Theme="Mulberry">
-                                                                                <ClientSideEvents Click="onHyperLinkClick" />
-                                                                            </dx:ASPxHyperLink>
-                                                                        </DataItemTemplate>
-                                                                        <PropertiesComboBox ClientInstanceName="gridComboCrewUser" TextField="Username" IncrementalFilteringMode="Contains" ValueField="UserID" DataSourceID="CrewIDGridLookupDataSource">
-                                                                                                            <Columns>
-                                                                                                                <dx:ListBoxColumn FieldName="UserID" Visible="False" />
-                                                                                                                <dx:ListBoxColumn FieldName="Username" Caption="Username" Width="75px" ToolTip="M-PET.NET User's Username"/>
-                                                                                                                <dx:ListBoxColumn FieldName="FullName" Caption="Full Name" Width="150px" ToolTip="M-PET.NET User's Full Name"/>
-                                                                                                            </Columns>
-                                                                        </PropertiesComboBox>
-                                                                    </dx:GridViewDataComboBoxColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="CrewMemberName" ReadOnly="True" Caption="Full Name" Width="150px" VisibleIndex="7">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                        <PropertiesTextEdit ClientInstanceName="CrewMemberName"></PropertiesTextEdit>
+<dx:GridViewDataTextColumn FieldName="CrewMemberTextID" ShowInCustomizationForm="True" VisibleIndex="6">
+</dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="CrewMemberName" 
+                                                                        ReadOnly="True" VisibleIndex="7">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="ShiftIDText" ReadOnly="True" Caption="Shift ID" Width="100px" VisibleIndex="15">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="ShiftIDText" 
+                                                                        VisibleIndex="8">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="ShiftIDDesc" ReadOnly="True" Visible="false">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="ShiftIDDesc" 
+                                                                        VisibleIndex="9">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataComboBoxColumn FieldName="SkillIDText" Caption="Skill ID" Width="100px" VisibleIndex="14">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                        <PropertiesComboBox ClientInstanceName="gridComboCrewSkill" TextField="skillid" IncrementalFilteringMode="Contains" ValueField="n_skillid" DataSourceID="CrewSkillGridLookupDataSource">
-                                                                                                            <Columns>
-                                                                                                                <dx:ListBoxColumn FieldName="n_skillid" Visible="False" />
-                                                                                                                <dx:ListBoxColumn FieldName="skillid" Caption="Skill ID" Width="75px" ToolTip="M-PET.NET User's Skill ID"/>
-                                                                                                                <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET User's Skill Description"/>
-                                                                                                            </Columns>
-                                                                        </PropertiesComboBox>
-                                                                    </dx:GridViewDataComboBoxColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="ShiftIDDesc" ReadOnly="True" Visible="false">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="SkillIDText" 
+                                                                        VisibleIndex="10">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="EstHrs" Caption="Est. Hrs." Width="100px" VisibleIndex="10">
-                                                                        <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
-                                                                        <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-                                                                        <PropertiesTextEdit DisplayFormatString="f2" />
+                                                                    <dx:GridViewDataTextColumn FieldName="SkillDesc" 
+                                                                        VisibleIndex="11">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="ActualHrs" Caption="Act. Hrs." Width="100px" VisibleIndex="11">
-                                                                        <CellStyle HorizontalAlign="Right" Wrap="False"></CellStyle>
-                                                                        <HeaderStyle HorizontalAlign="Right"></HeaderStyle>
-                                                                        <PropertiesTextEdit DisplayFormatString="f2" />
+<dx:GridViewDataTextColumn FieldName="ActualHrs" ShowInCustomizationForm="True" VisibleIndex="12">
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="EstHrs" ShowInCustomizationForm="True" VisibleIndex="13">
+</dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="PayRate" 
+                                                                        VisibleIndex="14">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="PayRate" ReadOnly="True" Visible="false">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataComboBoxColumn FieldName="PayCodeText" Caption="Paycode ID" Width="100px" VisibleIndex="13">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                        <PropertiesComboBox ClientInstanceName="gridComboCrewPaycode" TextField="paycodeid" IncrementalFilteringMode="Contains" ValueField="n_paycodeid" DataSourceID="CrewPaycodeGridLookupDataSource">
-                                                                                                            <Columns>
-                                                                                                                <dx:ListBoxColumn FieldName="n_paycodeid" Visible="False" />
-                                                                                                                <dx:ListBoxColumn FieldName="paycodeid" Caption="Paycode ID" Width="75px" ToolTip="M-PET.NET User's Paycode ID"/>
-                                                                                                                <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET User's Paycode Description"/>
-                                                                                                            </Columns>
-                                                                        </PropertiesComboBox>
-                                                                    </dx:GridViewDataComboBoxColumn>
-                                                                    <dx:GridViewDataDateColumn FieldName="WorkDate" Caption="Worked" VisibleIndex="9" SortOrder="Descending" Width="100px">
-                                                                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                                                                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+<dx:GridViewDataTextColumn FieldName="PayCodeText" ShowInCustomizationForm="True" VisibleIndex="15">
+</dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataDateColumn FieldName="WorkDate" 
+                                                                        VisibleIndex="16" ReadOnly="True">
                                                                     </dx:GridViewDataDateColumn>     
-                                                                    <dx:GridViewDataDateColumn FieldName="CertificationDate" Caption="Cert. Date" ReadOnly="True" VisibleIndex="16" Width="100px">
-                                                                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                                                                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                                                                    <dx:GridViewDataDateColumn FieldName="CertificationDate" 
+                                                                        ReadOnly="True" VisibleIndex="17">
                                                                     </dx:GridViewDataDateColumn>
-                                                                    <dx:GridViewDataDateColumn FieldName="CertificationDateExpires" Caption="Cert. Exp. Date" ReadOnly="True" VisibleIndex="17" Width="100px">
-                                                                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                                                                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                                                                    <dx:GridViewDataDateColumn FieldName="CertificationDateExpires" 
+                                                                        ReadOnly="True" VisibleIndex="18">
                                                                     </dx:GridViewDataDateColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_laborclassid" ReadOnly="True" Visible="false">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_laborclassid" 
+                                                                        ReadOnly="True" VisibleIndex="19">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="RateType" ReadOnly="True" Visible="false">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="RateType" 
+                                                                        VisibleIndex="20">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="DMRKEY" ReadOnly="True" Visible="false">
-                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    <dx:GridViewDataTextColumn FieldName="DMRKEY" 
+                                                                        VisibleIndex="21">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataComboBoxColumn FieldName="LaborClassID" Caption="Laborclass ID" Width="100px" VisibleIndex="8">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                        <PropertiesComboBox ClientInstanceName="gridComboCrewLabor" TextField="laborclassid" IncrementalFilteringMode="Contains" ValueField="n_laborclassid" DataSourceID="CrewLaborGridLookupDataSource">
-                                                                                                            <Columns>
-                                                                                                                <dx:ListBoxColumn FieldName="n_laborclassid" Visible="False" />
-                                                                                                                <dx:ListBoxColumn FieldName="laborclassid" Caption="Labor Class" Width="75px" ToolTip="M-PET.NET User's Labor Class ID"/>
-                                                                                                                <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET User's Labor Class Description"/>
-                                                                                                            </Columns>
-                                                                        </PropertiesComboBox>
-                                                                    </dx:GridViewDataComboBoxColumn>                                                            
-                                                                    <dx:GridViewDataComboBoxColumn FieldName="RateTypeStr" Caption="Rate" Width="100px" VisibleIndex="12">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                        <PropertiesComboBox ClientInstanceName="gridComboCrewRate" TextField="Rate" IncrementalFilteringMode="Contains" ValueField="RateType" DataSourceID="CrewRateGridLookupDataSource">
-                                                                                                            <Columns>
-                                                                                                                <dx:ListBoxColumn FieldName="RateType" Visible="False" />
-                                                                                                                <dx:ListBoxColumn FieldName="Rate" Caption="Rate ID" Width="75px" ToolTip="M-PET.NET User's Rate ID"/>
-                                                                                                                <dx:ListBoxColumn FieldName="Desc" Caption="Description" Width="150px" ToolTip="M-PET.NET User's Rate Description"/>
-                                                                                                            </Columns>
-                                                                        </PropertiesComboBox>
-                                                                    </dx:GridViewDataComboBoxColumn>                                                                                                                  
-                                                                    <dx:GridViewDataTextColumn FieldName="LinkedDMR" ReadOnly="True" Caption="Linked DMR" Width="100px" VisibleIndex="18">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>                                                                                                                                                                              
+                                                                    <dx:GridViewDataTextColumn FieldName="LaborClassID" 
+                                                                        ShowInCustomizationForm="True" VisibleIndex="22">
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="RateTypeStr" 
+                                                                        ReadOnly="True" VisibleIndex="23">
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="LinkedDMR" 
+                                                                        ReadOnly="True" VisibleIndex="24">
+                                                                    </dx:GridViewDataTextColumn>   
                                                                 </Columns>
+                                    
                                                                 <SettingsBehavior 
                                                                     EnableRowHotTrack="True" 
                                                                     AllowFocusedRow="True" 
                                                                     AllowClientEventsOnLoad="false" 
                                                                     ColumnResizeMode="NextColumn" />
+                                        
 
 <SettingsCommandButton>
 <ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
 
 <HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
 </SettingsCommandButton>
-
+                                                                
                                                                 <SettingsDataSecurity 
                                                                     AllowDelete="False" 
                                                                     AllowInsert="True" 
@@ -806,6 +755,7 @@
                                                                     <PageSizeItemSettings Visible="true" />
                                                                 </SettingsPager>
                                                                 <Settings ShowFooter="True" />
+                                                                
                                                                 <TotalSummary>
                                                                     <dx:ASPxSummaryItem FieldName="EstHrs" SummaryType="Sum" />
                                                                     <dx:ASPxSummaryItem FieldName="ActualHrs"  SummaryType="Sum" />
@@ -814,6 +764,17 @@
                                                                     <EditForm Width="500px" Modal="false" AllowResize="true" />
                                                                 </SettingsPopup>
                                                                 <Templates>
+                                                                    <FooterRow>
+                                                                    <dx:ASPxButton runat="server" 
+                                                                        ID="AddNewCrewButton" 
+                                                                        OnClick="AddNewCrewButton_click" Theme="iOS" 
+                                                                        Text="Add New Crew Member"></dx:ASPxButton>
+                                                                    <dx:ASPxButton runat="server" 
+                                                                        ID="DeleteCrewButton" 
+                                                                        OnClick="btnDeleteCrew_Click" Theme="iOS" 
+                                                                        Text="Delete Crew Member"></dx:ASPxButton>
+                                                                
+</FooterRow>
                                                                     <EditForm>
                                                                         <div style="padding: 4px 4px 3px 4px">
                                                                             <dx:ASPxFormLayout Width="98%" Theme="Mulberry" ID="CrewEditLayout" runat="server">
@@ -1102,6 +1063,15 @@
                                                                         </div>
                                                                     </EditForm>
                                                                 </Templates>
+                                                             
+                                                            <Border BorderColor="Gray" BorderStyle="Solid"></Border>
+                                                            <Templates>
+                                                                <FooterRow>
+                                                                    <dx:ASPxButton runat="server" ID="AddNewCrewButton" OnClick="AddNewCrewButton_click" Theme="iOS" Text="Add New Crew Member"></dx:ASPxButton>
+                                                                    <dx:ASPxButton runat="server" ID="DeleteCrewButton" OnClick="btnDeleteCrew_Click" Theme="iOS" Text="Delete Crew Member"></dx:ASPxButton>
+                                                                </FooterRow>
+
+                                                            </Templates>
                                                             </dx:ASPxGridView>                            
                             <div>
                             <asp:SqlDataSource ID="CrewPaycodeGridLookupDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="
@@ -1406,6 +1376,7 @@
                                                                             <div class="popup-buttons-centered">
                                                                                 <dx:ASPxButton ID="LogonButton" AutoPostBack="True" runat="server" CssClass="button" Text="Add" OnClick="btnAddCrew_Click" >
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
+                                                                                    
                                                                                 </dx:ASPxButton>
                                                                                 <dx:ASPxButton ID="OkButton" AutoPostBack="True" runat="server" Text="Cancel" CssClass="button">
                                                                                     <ClientSideEvents Click="HidePopup" />

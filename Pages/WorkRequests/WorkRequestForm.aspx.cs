@@ -91,6 +91,8 @@ namespace Pages.WorkRequests
 
                     //Setup For Editing -> Checks Later For Viewing Only 
                     SetupForEditing();
+                    AttachmentGrid.Visible = false;
+                    UploadControl.Visible = false;
                 }
                 else
                 {
@@ -106,6 +108,8 @@ namespace Pages.WorkRequests
             }
             else
             {
+                AttachmentGrid.Visible = false;
+                UploadControl.Visible = false;
                 //Get Manager
                 var scriptManager = ScriptManager.GetCurrent(Page);
 
@@ -1868,7 +1872,7 @@ namespace Pages.WorkRequests
         /// <summary>
         /// Resets Session Variables
         /// </summary>
-        protected void ResetSession()
+        public void ResetSession()
         {
             //Clear Session & Fields
             if (HttpContext.Current.Session["navObject"] != null)

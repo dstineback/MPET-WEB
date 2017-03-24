@@ -490,7 +490,7 @@ namespace Pages.PlannedJobs
         private void AddNewRow()
         {
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestsForm.aspx", true);
         }
 
         protected void ASPxGridView1_HtmlRowPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)

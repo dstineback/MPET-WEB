@@ -115,6 +115,8 @@ namespace Pages.PlannedJobs
             //Check For Post To Setup Form
             if (!IsPostBack)
             {
+                
+                
                 //Check For Session Variable To Distinguish Previous Edit
                 if (HttpContext.Current.Session["editingJobStepID"] != null)
                 {
@@ -126,15 +128,15 @@ namespace Pages.PlannedJobs
                 }
                 else
                 {
+                    
                     //Setup For Adding
                     SetupForAdding();
 
-                    //Check Tab
-                   
-                        ////Set Focus
-                        //txtWorkDescription.Focus();
-                        
+                    ResetSession();
 
+                    ////Set Focus
+                    txtWorkDescription.Focus();
+                    
 
                 }
 
@@ -383,7 +385,7 @@ namespace Pages.PlannedJobs
                 else
                 {
                     //Hide Popups
-                    //AddCrewPopup.ShowOnPageLoad = false;
+                    AddCrewPopup.ShowOnPageLoad = false;
                     //AddEquipPopup.ShowOnPageLoad = false;
                     //AddMemberPopup.ShowOnPageLoad = false;
                     //CrewLaborClassPopup.ShowOnPageLoad = false;
@@ -1071,15 +1073,23 @@ namespace Pages.PlannedJobs
                     txtWorkDescription.Text = (HttpContext.Current.Session["txtWorkDescription"].ToString());
                 }
 
-                if (HttpContext.Current.Session["BreakDownCheckBox"] != null)
-                {
-                    BreakDownCheckBox.Value = (HttpContext.Current.Session["BreakDownCheckBox"]);
-                    var BreakDown = Convert.ToInt32(BreakDownCheckBox.Value); 
-                    if (BreakDown == 4)
+               
+                if(BreakDownCheckBox.Checked == true)
                     {
-                        BreakDownCheckBox.Checked = true;
+                        BreakDownCheckBox.Value = (HttpContext.Current.Session["BreakDownCheckBox"]);
+                        var BreakDown = BreakDownCheckBox.Value;
+                        if(BreakDown != null )
+                        {
+                            int BreakDownInt = Convert.ToInt32(BreakDown.ToString());
+                        
+                            if (BreakDownInt == 4)
+                            {
+                                BreakDownCheckBox.Checked = true;
+                            }
+                        }
+
+                    
                     }
-                }
 
                 //Job ID
                 //if (HttpContext.Current.Session["editingJobStepNum"] != null)
@@ -1089,11 +1099,11 @@ namespace Pages.PlannedJobs
                 //}
 
                 //Step Number
-                //if (HttpContext.Current.Session["AssignedJobID"] != null)
-                //{
-                //    //Get Additional Info From Session
-                //    lblHeader.Text = (HttpContext.Current.Session["AssignedJobID"].ToString());
-                //}
+                if (HttpContext.Current.Session["AssignedJobID"] != null)
+                {
+                    //Get Additional Info From Session
+                    lblHeader.Text = (HttpContext.Current.Session["AssignedJobID"].ToString());
+                }
 
                 //Check For Previous Session Variables
                 //if ((HttpContext.Current.Session["ComboCostCode"] != null) &&
@@ -2299,20 +2309,20 @@ namespace Pages.PlannedJobs
         private void SetupUserDefinedFields()
         {
             //Get Logon Info
-            if (HttpContext.Current.Session["LogonInfo"] != null)
-            {
-                //Get Logon Info From Session
-                _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
-            }
+            //if (HttpContext.Current.Session["LogonInfo"] != null)
+            //{
+            //    //Get Logon Info From Session
+            //    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+            //}
 
-            //Check Group Count
-            if (objectFormLayout.Items.Count > 0)
-            {
+            ////Check Group Count
+            //if (objectFormLayout.Items.Count > 0)
+            //{
                 //Get Layout Group
-                var layoutGroup = ((LayoutGroup)objectFormLayout.Items[0]);
+                //var layoutGroup = ((LayoutGroup)objectFormLayout.Items[0]);
 
-                for (var rowIndex = 0; rowIndex < layoutGroup.Items.Count; rowIndex++)
-                {
+                //for (var rowIndex = 0; rowIndex < layoutGroup.Items.Count; rowIndex++)
+                //{
                     ////Determine Current Item
                     //switch (layoutGroup.Items[rowIndex].Name)
                     //{
@@ -2441,8 +2451,8 @@ namespace Pages.PlannedJobs
                     //            break;
                     //        }
                     //}
-                }
-            }
+                //}
+            //}
         }
 
         #region Combo Loading Events
@@ -3478,7 +3488,7 @@ namespace Pages.PlannedJobs
         /// <summary>
         /// Resets Session Variables
         /// </summary>
-        protected void ResetSession()
+        public void ResetSession()
         {
             //Clear Session & Fields
             if (HttpContext.Current.Session["navObject"] != null)
@@ -3963,6 +3973,8 @@ namespace Pages.PlannedJobs
             const int subAssemblyID = -1;
             const bool additionalDamage = false;
             const decimal percentOverage = 0;
+
+
 
             #region Get Logon Info
 
@@ -4536,6 +4548,10 @@ namespace Pages.PlannedJobs
                 jobIncidentLog = Convert.ToInt32((HttpContext.Current.Session["ComboIncidentLog"].ToString()));
             }
 
+            #endregion
+
+            #region Get JobType
+
             if (HttpContext.Current.Session["BreakDownCheckBox"] != null)
             {   
                 if (BreakDownCheckBox.Checked == true)
@@ -4544,11 +4560,11 @@ namespace Pages.PlannedJobs
                 }
             }
 
+            #endregion
             if (HttpContext.Current.Session["editingJobStepID"] != null)
             {
                 requestOnlyJob = false;
             }
-            #endregion
 
             //Clear Errors
             _oJob.ClearErrors();
@@ -5180,10 +5196,10 @@ namespace Pages.PlannedJobs
         protected void SaveSessionData()
         {
                 
-           BreakDownCheckBox.Value = HttpContext.Current.Session["BreakDownCheckBox"];
+           
            
            if (HttpContext.Current.Session["BreakDownCheckBox"] != null)
-                HttpContext.Current.Session.Remove("BreakDownCheckBox");
+              
             {
                 if(BreakDownCheckBox.Checked == true)
                 {
@@ -5193,19 +5209,8 @@ namespace Pages.PlannedJobs
                 HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked);
                 } else
                 {
-
-                    var BreakDown = Convert.ToInt32(BreakDownCheckBox.Value);
-                    if(BreakDown == 4)
-                    {
-                        BreakDownCheckBox.Checked = true;
-                        BreakDownCheckBox.Value = BreakDownCheckBox.Checked;
-                    } else
-                    {
-                        BreakDownCheckBox.Checked = false;
-                        BreakDownCheckBox.Value = BreakDownCheckBox.UncheckedImage;
-                    }
-                    HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox);
-
+                    BreakDownCheckBox.Checked = false;
+                    HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked);
                 }
 
             }
@@ -6375,6 +6380,16 @@ namespace Pages.PlannedJobs
             //}
         }
 
+        protected void btnDeleteCrew_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedCrew();
+        }
+       
+        protected void AddNewCrewButton_click(object sender, EventArgs e)
+        {
+            AddItems();
+        }
+        
         /// <summary>
         /// Adds Selected Crew For Job Step
         /// </summary>
@@ -6551,6 +6566,7 @@ namespace Pages.PlannedJobs
 
                             //Clear Selection
                             CrewLookupGrid.Selection.UnselectAll();
+                            AddCrewPopup.Visible = false;
                         }
                     }
                 }
@@ -8695,7 +8711,7 @@ namespace Pages.PlannedJobs
             return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
         }
 
-        protected void PlanJobRoutine()
+        protected void PlanJobRoutine() 
         {
             //Plan Selected Jobs
             try
