@@ -129,7 +129,7 @@ namespace Pages.PlannedJobs
                     SetupForAdding();
 
                     //Check Tab
-                    if (requestTab.ActiveTabIndex == 0)
+                    if (requestTab.ActiveTabIndex == 1)
                     {
                         //Set Focus
                         txtWorkDescription.Focus();
@@ -11920,8 +11920,13 @@ namespace Pages.PlannedJobs
                 _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
             }
 
-            #endregion
+            if(HttpContext.Current.Session[""] != null)
+            {
+                
+            }
 
+            #endregion
+            #region Job Step info
             #region Get Object
 
             var objectAgainstId = -1;
@@ -12248,6 +12253,7 @@ namespace Pages.PlannedJobs
 
             #region Get Job ID
 
+            var jobID = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
             var jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
 
             #endregion
@@ -12502,9 +12508,9 @@ namespace Pages.PlannedJobs
             }
 
             #endregion
+            #endregion
 
-
-            var x = subAssemblyID;
+            
             //Clear Errors
             _oJob.ClearErrors();
 
@@ -12512,8 +12518,10 @@ namespace Pages.PlannedJobs
             {
                 
                 {
-                    //Update Job Step
-                    if (_oJobStep.Update(jobStepId,
+                   
+
+                        //Update Job Step
+                    var stepResults = _oJobStep.Update(jobStepId,
                         jobStepNumber,
                         jobStepConcurNumber,
                         jobStepFollowStepNumber,
@@ -12542,7 +12550,7 @@ namespace Pages.PlannedJobs
                         reasonCode,
                         _oLogon.UserID,
                         EditingTimeBachId,
-                        EditingTiemBatchItemId))
+                        EditingTiemBatchItemId);
 
                         
                     {
@@ -12550,176 +12558,173 @@ namespace Pages.PlannedJobs
                         //throw new SystemException(
                         //    @"Error Updating Job Step -" + _oJobStep.LastError);
                     }
+                    var objectResults = _oJobStep.ChangeJobAgainst(jobID, objectAgainstId, JobAgainstType.MaintenanceObjects, _oLogon.UserID);
 
-                    //Save Route & Completion Information
-                    //if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
-                    //{
-                    //    //Throw Error
-                    //    throw new SystemException(
-                    //        @"Error Updating Route To And Completion Information -" + _oJobStep.LastError);
-                    //}
 
-                    ////Check Run Unit Table
-                    //if (_oRunUnit.Ds.Tables.Count > 0)
-                    //{
-                    //    //Check Row Count
-                    //    if (_oRunUnit.Ds.Tables[0].Rows.Count > 0)
-                    //    {
-                    //        //Loop Rows
-                    //        for (var i = 0; i < _oRunUnit.Ds.Tables[0].Rows.Count; i++)
-                    //        {
-                    //            //Determine Unit
-                    //            switch (i)
-                    //            {
-                    //                case 0:
-                    //                    {
-                    //                        //Check If Not Read Only
-                    //                        if (txtRunUnitOne.ReadOnly == false)
-                    //                        {
-                    //                            //Update Run Unit
-                    //                            if (!_oRunUnit.Update((int)_oRunUnit.Ds.Tables[0].Rows[i][0],
-                    //                                Convert.ToDecimal(
-                    //                                    txtRunUnitOne.Value.ToString()),
-                    //                                _oRunUnit.Ds.Tables[0].Rows[i][3].
-                    //                                    ToString(),
-                    //                                (int)_oRunUnit.Ds.Tables[0].Rows[i][4],
-                    //                                _oLogon.UserID))
-                    //                            {
-                    //                                //Throw Error
-                    //                                throw new SystemException(
-                    //                                    @"Error Updating Run Units -" + _oRunUnit.LastError);
-                    //                            }
-                    //                        }
-                    //                        break;
-                    //                    }
-                    //                case 1:
-                    //                    {
-                    //                        //Check If Not Read Only
-                    //                        if (txtRunUnitTwo.ReadOnly == false)
-                    //                        {
-                    //                            //Update Run Unit
-                    //                            if (!_oRunUnit.Update((int)_oRunUnit.Ds.Tables[0].Rows[i][0],
-                    //                                Convert.ToDecimal(
-                    //                                    txtRunUnitTwo.Value.ToString()),
-                    //                                _oRunUnit.Ds.Tables[0].Rows[i][3].
-                    //                                    ToString(),
-                    //                                (int)_oRunUnit.Ds.Tables[0].Rows[i][4],
-                    //                                _oLogon.UserID))
-                    //                            {
-                    //                                //Throw Error
-                    //                                throw new SystemException(
-                    //                                    @"Error Updating Run Units -" + _oRunUnit.LastError);
-                    //                            }
-                    //                        }
-                    //                        break;
-                    //                    }
-                    //                case 2:
-                    //                    {
-                    //                        //Check If Not Read Only
-                    //                        if (txtRunUnitThree.ReadOnly == false)
-                    //                        {
-                    //                            //Update Run Unit
-                    //                            if (!_oRunUnit.Update((int)_oRunUnit.Ds.Tables[0].Rows[i][0],
-                    //                                Convert.ToDecimal(
-                    //                                    txtRunUnitThree.Value.ToString()),
-                    //                                _oRunUnit.Ds.Tables[0].Rows[i][3].
-                    //                                    ToString(),
-                    //                                (int)_oRunUnit.Ds.Tables[0].Rows[i][4],
-                    //                                _oLogon.UserID))
-                    //                            {
-                    //                                //Throw Error
-                    //                                throw new SystemException(
-                    //                                    @"Error Updating Run Units -" + _oRunUnit.LastError);
-                    //                            }
-                    //                        }
-                    //                        break;
-                    //                    }
-                    //            }
-                    //        }
-
-                    //        //Update Completed Units
-                    //        _oJob.ClearErrors();
-
-                    //        //Create Temp Variables
-                    //        decimal tmpUnit1 = 0;
-                    //        decimal tmpUnit2 = 0;
-                    //        decimal tmpUnit3 = 0;
-
-                    //        //Check For Valid Input
-                    //        if ((HttpContext.Current.Session["txtRunUnitOne"] != null) && (HttpContext.Current.Session["txtRunUnitOne"].ToString() != ""))
-                    //        {
-                    //            //Get Unit 1
-                    //            tmpUnit1 = Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitOne"]);
-                    //        }
-
-                    //        //Check For Valid Input
-                    //        if ((HttpContext.Current.Session["txtRunUnitTwo"] != null) && (HttpContext.Current.Session["txtRunUnitTwo"].ToString() != ""))
-                    //        {
-                    //            //Get Unit 2
-                    //            tmpUnit2 = Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitTwo"]);
-                    //        }
-
-                    //        //Check For Valid Input
-                    //        if ((HttpContext.Current.Session["txtRunUnitThree"] != null) && (HttpContext.Current.Session["txtRunUnitThree"].ToString() != ""))
-                    //        {
-                    //            //Get Unit 3
-                    //            tmpUnit3 = Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitThree"]);
-                    //        }
-
-                    //        //Update Completed Units
-                    //        if (!_oJob.UpdateCompletedUnits(jobId, tmpUnit1, tmpUnit2, tmpUnit3))
-                    //        {
-                    //            //Throw Error
-                    //            throw new SystemException(
-                    //                @"Error Updating Completed Units -" + _oJob.LastError);
-                    //        }
-                    //    }
-                    //}
-
-                    ////Update Charge To
-                    //if (!_oJobStep.UpdateChargeTo(jobId, jobStepId, jobChargeTo, _oLogon.UserID))
-                    //{
-                    //    //Throw Error
-                    //    throw new SystemException(
-                    //        @"Error Updating Charge To -" + _oJobStep.LastError);
-                    //}
-
-                    ////Update Incident Log Link
-                    //if (!_oJobStep.UpdateIncidentLogLink(jobId, jobStepId, jobIncidentLog, _oLogon.UserID))
-                    //{
-                    //    //Throw Error
-                    //    throw new SystemException(
-                    //        @"Error Updating Incident Log Link -" + _oJobStep.LastError);
-                    //}
-
-                    ////Update Production Units
-                    //if (!_oJob.UpdateProductionUnits(jobId, jobEstimatedUnits, jobActualUnits, _oLogon.UserID))
-                    //{
-                    //    //Throw Error
-                    //    throw new SystemException(
-                    //        @"Error Updating Production Units -" + _oJob.LastError);
-                    //}
-
+                    var costResults = _oJob.UpdateJobCosting(
+                            jobID,
+                            costCodeId,
+                            fundSource,
+                            workOrder,
+                            workOp,
+                            orgCode,
+                            fundingGroup,
+                            equipNumber,
+                            controlSection,
+                            _oLogon.UserID);
                    
+                    //Save Route & Completion Information
+                    if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Updating Route To And Completion Information -" + _oJobStep.LastError);
+                    }
 
-                    ////Update Costing Information
-                    //if (
-                    //    !_oJob.UpdateJobCosting(
-                    //        Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
-                    //        costCodeId,
-                    //        fundSource,
-                    //        workOrder,
-                    //        workOp,
-                    //        orgCode,
-                    //        fundingGroup,
-                    //        equipNumber,
-                    //        controlSection,
-                    //        _oLogon.UserID))
-                    //{
-                    //    //Throw Error
-                    //    throw new SystemException(
-                    //        @"Error Updating Job Costing -" + _oJob.LastError);
-                    //}
+                    //Check Run Unit Table
+                    if (_oRunUnit.Ds.Tables.Count > 0)
+                    {
+                        //Check Row Count
+                        if (_oRunUnit.Ds.Tables[0].Rows.Count > 0)
+                        {
+                            //Loop Rows
+                            for (var i = 0; i < _oRunUnit.Ds.Tables[0].Rows.Count; i++)
+                            {
+                                //Determine Unit
+                                switch (i)
+                                {
+                                    case 0:
+                                        {
+                                            //Check If Not Read Only
+                                            if (txtRunUnitOne.ReadOnly == false)
+                                            {
+                                                //Update Run Unit
+                                                if (!_oRunUnit.Update((int)_oRunUnit.Ds.Tables[0].Rows[i][0],
+                                                    Convert.ToDecimal(
+                                                        txtRunUnitOne.Value.ToString()),
+                                                    _oRunUnit.Ds.Tables[0].Rows[i][3].
+                                                        ToString(),
+                                                    (int)_oRunUnit.Ds.Tables[0].Rows[i][4],
+                                                    _oLogon.UserID))
+                                                {
+                                                    //Throw Error
+                                                    throw new SystemException(
+                                                        @"Error Updating Run Units -" + _oRunUnit.LastError);
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    case 1:
+                                        {
+                                            //Check If Not Read Only
+                                            if (txtRunUnitTwo.ReadOnly == false)
+                                            {
+                                                //Update Run Unit
+                                                if (!_oRunUnit.Update((int)_oRunUnit.Ds.Tables[0].Rows[i][0],
+                                                    Convert.ToDecimal(
+                                                        txtRunUnitTwo.Value.ToString()),
+                                                    _oRunUnit.Ds.Tables[0].Rows[i][3].
+                                                        ToString(),
+                                                    (int)_oRunUnit.Ds.Tables[0].Rows[i][4],
+                                                    _oLogon.UserID))
+                                                {
+                                                    //Throw Error
+                                                    throw new SystemException(
+                                                        @"Error Updating Run Units -" + _oRunUnit.LastError);
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    case 2:
+                                        {
+                                            //Check If Not Read Only
+                                            if (txtRunUnitThree.ReadOnly == false)
+                                            {
+                                                //Update Run Unit
+                                                if (!_oRunUnit.Update((int)_oRunUnit.Ds.Tables[0].Rows[i][0],
+                                                    Convert.ToDecimal(
+                                                        txtRunUnitThree.Value.ToString()),
+                                                    _oRunUnit.Ds.Tables[0].Rows[i][3].
+                                                        ToString(),
+                                                    (int)_oRunUnit.Ds.Tables[0].Rows[i][4],
+                                                    _oLogon.UserID))
+                                                {
+                                                    //Throw Error
+                                                    throw new SystemException(
+                                                        @"Error Updating Run Units -" + _oRunUnit.LastError);
+                                                }
+                                            }
+                                            break;
+                                        }
+                                }
+                            }
+
+                            //Update Completed Units
+                            _oJob.ClearErrors();
+                            
+                            
+
+                            //Create Temp Variables
+                            decimal tmpUnit1 = 0;
+                            decimal tmpUnit2 = 0;
+                            decimal tmpUnit3 = 0;
+
+                            //Check For Valid Input
+                            if ((HttpContext.Current.Session["txtRunUnitOne"] != null) && (HttpContext.Current.Session["txtRunUnitOne"].ToString() != ""))
+                            {
+                                //Get Unit 1
+                                tmpUnit1 = Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitOne"]);
+                            }
+
+                            //Check For Valid Input
+                            if ((HttpContext.Current.Session["txtRunUnitTwo"] != null) && (HttpContext.Current.Session["txtRunUnitTwo"].ToString() != ""))
+                            {
+                                //Get Unit 2
+                                tmpUnit2 = Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitTwo"]);
+                            }
+
+                            //Check For Valid Input
+                            if ((HttpContext.Current.Session["txtRunUnitThree"] != null) && (HttpContext.Current.Session["txtRunUnitThree"].ToString() != ""))
+                            {
+                                //Get Unit 3
+                                tmpUnit3 = Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitThree"]);
+                            }
+
+                            //Update Completed Units
+                            if (!_oJob.UpdateCompletedUnits(jobId, tmpUnit1, tmpUnit2, tmpUnit3))
+                            {
+                                //Throw Error
+                                throw new SystemException(
+                                    @"Error Updating Completed Units -" + _oJob.LastError);
+                            }
+                        }
+                    }
+
+                    //Update Charge To
+                    if (!_oJobStep.UpdateChargeTo(jobId, jobStepId, jobChargeTo, _oLogon.UserID))
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Updating Charge To -" + _oJobStep.LastError);
+                    }
+
+                    //Update Incident Log Link
+                    if (!_oJobStep.UpdateIncidentLogLink(jobId, jobStepId, jobIncidentLog, _oLogon.UserID))
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Updating Incident Log Link -" + _oJobStep.LastError);
+                    }
+
+                    //Update Production Units
+                    if (!_oJob.UpdateProductionUnits(jobId, jobEstimatedUnits, jobActualUnits, _oLogon.UserID))
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Updating Production Units -" + _oJob.LastError);
+                    }
+
+
                     //Check For Value
                     if (HttpContext.Current.Session["AssignedJobID"] != null)
                     {
@@ -12737,19 +12742,19 @@ namespace Pages.PlannedJobs
                         //Setup For Editing
                         SetupForEditing();
 
-                        var jobStepKey = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-;
-                        Response.Redirect(
-                                                    "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobStepKey, true);
+//                        var jobStepKey = Convert.ToInt32(HttpContext.Current.Session[]);
+//;
+//                        Response.Redirect(
+//                                                    "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobStepKey, true);
                     }
 
                     //Success Return True
                     
                 }
 
-                //Throw Error
-                throw new SystemException(
-                    @"Error Updating Job -" + _oJob.LastError);
+                ////Throw Error
+                //throw new SystemException(
+                //    @"Error Updating Job -" + _oJob.LastError);
             }
             catch (Exception ex)
             {
