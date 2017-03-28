@@ -6,7 +6,7 @@
     <div id="quickLinkButton">
         <asp:LinkButton runat="server" class="mainButton" ID="myJobButton" href="Pages/PlannedJobs/myJobs.aspx">My Jobs</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="workRequestButton" href="Pages/WorkRequests/WorkRequestform.aspx">Make a work Request</asp:LinkButton>
-        <asp:LinkButton runat="server" class="mainButton" ID="PlanJobBtn" href="Pages/PlannedJobs/PlannedJobsForm.aspx" OnClick="PlanJobBtn_Click" >Planned Jobs</asp:LinkButton>
+        <asp:LinkButton runat="server" class="mainButton" ID="PlanJobBtn" href="Pages/PlannedJobs/PlannedJobs.aspx" OnClick="PlanJobBtn_Click" >Planned Jobs</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="WorkRequestListButton" href="Pages/WorkRequests/RequestsList.aspx">Job Request List</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="plannedJObsButton" href="Pages/PlannedJobs/PlannedJobsList.aspx">Planned Jobs list</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="jobHistoryButton" href="Pages/History/JobsHistoryList.aspx">Job History</asp:LinkButton>

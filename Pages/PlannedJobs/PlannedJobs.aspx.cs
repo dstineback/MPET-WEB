@@ -10,6 +10,7 @@ using System.Web.Configuration;
 using System.Web.UI;
 using DevExpress.Web;
 using MPETDSFactory;
+using Page = System.Web.UI.Page;
 
 namespace Pages.PlannedJobs
 {
@@ -187,23 +188,61 @@ namespace Pages.PlannedJobs
                         }
                         case "SaveButton":
                         {
-                            //Check For Job ID
-                            if (HttpContext.Current.Session["editingJobStepID"] != null)
+                                //GetCurrentValues(); 
+                                //Check For Job ID
+                                var eJSID = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
+                                var editJobID = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
+                                var nID = Convert.ToInt32(HttpContext.Current.Session["n_jobstepid"]);
+
+
+                                if (Convert.ToInt32(HttpContext.Current.Session["editingJobID"]) > 0 && eJSID > 0)
                             {
                                 //Save Session Data
                                 SaveSessionData();
+                                   
 
+                                //AddJobStep();
                                 //Update Job
-                                UpdateRequest();
+                                UpdateRoutine();
                             }
                             else
                             {
-                                //Save Session Data
-                                SaveSessionData();
+                                   
+                                    if ( editJobID == 0)
+                                    {
+                                        SaveSessionData();                                   
+                                        AddRequest();
+                                        PlanJobRoutine();
+                                        AddJobStep();
+                                        HttpContext.Current.Session.Add("editingJobStepID", _oJobStep.RecordID);
 
-                                //Update Job
-                                AddRequest();
-                            }
+                                        var editJobStepID = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
+                                        if( editJobStepID > 0)
+                                        {
+                                            
+                                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString()) , true);
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if(nID > 0)
+                                        {
+                                            SaveSessionData();
+                                        
+                                            UpdateRoutine();
+
+                                        } else
+                                        {
+                                            SaveSessionData();
+                                            AddJobStep();
+                                            HttpContext.Current.Session.Add("editingJobStepID", _oJobStep.RecordID);
+                                            UpdateRoutine();
+
+                                        }
+                                    }
+
+                                }
 
                             //Break
                             break;
@@ -1505,8 +1544,8 @@ namespace Pages.PlannedJobs
             Master.ShowNewButton = showButtons;
             Master.ShowEditButton = (showButtons && (HttpContext.Current.Session[""] != null));
             Master.ShowViewButton = false;
-           
-            Master.ShowPrintButton = showButtons;
+            Master.ShowSaveButton = showButtons;
+            Master.ShowPrintButton = false;
             Master.ShowIssueButton = showButtons;
             Master.ShowCopyJobButton = showButtons;
             Master.ShowAddCrewGroupButton = (!showButtons && (CrewGrid.Columns[0].Visible));
@@ -2098,7 +2137,7 @@ namespace Pages.PlannedJobs
             Master.ShowSaveButton = (_userCanAdd || _userCanEdit);
             Master.ShowNewButton = _userCanAdd;
             Master.ShowDeleteButton = _userCanDelete;
-            Master.ShowPrintButton = true;
+            Master.ShowPrintButton = false;
 
         }
 
@@ -2114,7 +2153,7 @@ namespace Pages.PlannedJobs
             Master.ShowEditButton = _userCanEdit;
             Master.ShowNewButton = _userCanAdd;
             Master.ShowDeleteButton = _userCanDelete;
-            Master.ShowPrintButton = true;
+            Master.ShowPrintButton = false;
             Master.ShowMultiSelectButton = _userCanEdit;
 
             //Enable Tabs
@@ -2129,6 +2168,7 @@ namespace Pages.PlannedJobs
             //Setup Buttons
             Master.ShowSaveButton = (_userCanAdd || _userCanEdit);
             Master.ShowNewButton = _userCanAdd;
+            Master.ShowDeleteButton = _userCanDelete;
 
             //Disable Tabs
             requestTab.Enabled = false;
@@ -6170,7 +6210,7 @@ namespace Pages.PlannedJobs
             }
 
             //Add New Value
-            HttpContext.Current.Session.Add("txtRunUnitOne", txtRunUnitOne.Value.ToString());
+            //HttpContext.Current.Session.Add("txtRunUnitOne", txtRunUnitOne.Value.ToString());
 
             #endregion
 
@@ -6184,7 +6224,7 @@ namespace Pages.PlannedJobs
             }
 
             //Add New Value
-            HttpContext.Current.Session.Add("txtRunUnitTwo", txtRunUnitTwo.Value.ToString());
+            //HttpContext.Current.Session.Add("txtRunUnitTwo", txtRunUnitTwo.Value.ToString());
 
             #endregion
 
@@ -6198,7 +6238,7 @@ namespace Pages.PlannedJobs
             }
 
             //Add New Value
-            HttpContext.Current.Session.Add("txtRunUnitThree", txtRunUnitThree.Value.ToString());
+            //HttpContext.Current.Session.Add("txtRunUnitThree", txtRunUnitThree.Value.ToString());
 
             #endregion
         }
@@ -10641,7 +10681,248 @@ namespace Pages.PlannedJobs
             }
         }
 
+        protected void PlanJobRoutine()
+        {
+            //Plan Selected Jobs
+            try
+            {
+                //Get Logon Info
+                if (HttpContext.Current.Session["LogonInfo"] != null)
+                {
+                    //Get Logon Info From Session
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+                }
 
+                //Check For Job ID
+                if (Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()) > 0)
+                {
+                    //Get ID
+                    var recordToPlan = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+
+                    //Validate Work Operation Selection
+                    //Approver Must Be Allowed To Approve For Specified Work Operation
+                    if (_oLogon.ValidateWorkOperations)
+                    {
+                        //Check For Work Op/Type ID
+                        if ((HttpContext.Current.Session["ComboWorkOp"] != null))
+                        {
+                            //Get ID
+                            var workOpId = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
+
+                            //Check Work Op Selection
+                            if ((workOpId.ToString(CultureInfo.InvariantCulture) != "") &&
+                                (workOpId > 0))
+                            {
+                                //Create Found Flag
+                                var foundIt = false;
+
+                                //Check User's Work Operations To See If Specified One Exists
+                                for (var i = 0; i < _oLogon.UsersWorkOperations.Rows.Count; i++)
+                                {
+                                    //Check Value
+                                    if (_oLogon.UsersWorkOperations.Rows[i][0].ToString() ==
+                                        workOpId.ToString(CultureInfo.InvariantCulture))
+                                    {
+                                        //Set Flag
+                                        foundIt = true;
+
+                                        //Break Loop
+                                        break;
+                                    }
+                                }
+
+                                //Check Flag
+                                if (!foundIt)
+                                {
+                                    //Throw Error
+                                    throw new SystemException(
+                                        @"Insufficient Permissions To Approve Request For Specified Work Operation.");
+                                }
+                            }
+                        }
+                    }
+
+                    //Create ID
+                    var plannerdJobStepId = -1;
+
+                    //Create Class
+                    var oJobStep = new WorkOrderJobStep(_connectionString, _useWeb);
+
+                    //Get Priority
+                    var priority = -1;
+                    if ((HttpContext.Current.Session["ComboPriority"] != null))
+                    {
+                        //Set Value
+                        priority = Convert.ToInt32((HttpContext.Current.Session["ComboPriority"].ToString()));
+                    }
+
+                    //ReasonCode
+                    var reasonCode = -1;
+                    if ((HttpContext.Current.Session["comboReason"] != null))
+                    {
+                        //Set Value
+                        reasonCode = Convert.ToInt32((HttpContext.Current.Session["comboReason"].ToString()));
+                    }
+
+                    //Mobile Equipment
+                    const int mobileEquip = -1;
+
+                    //Sub Assembly
+                    const int subAssemblyId = -1;
+
+                    //Title
+                    var jobTitle = "";
+                    if (HttpContext.Current.Session["txtWorkDescription"] != null)
+                    {
+                        //Set Value
+                        jobTitle = (HttpContext.Current.Session["txtWorkDescription"].ToString());
+                    }
+
+                    //Additional Details
+                    var jobAdditionalInfo = "";
+                    if (HttpContext.Current.Session["txtAddDetail"] != null)
+                    {
+                        //Set Value
+                        jobAdditionalInfo = (HttpContext.Current.Session["txtAddDetail"].ToString());
+                    }
+
+                    //Add Default Step
+                    if (oJobStep.InsertDefaultJobStep(recordToPlan,
+                        JobType.Corrective,
+                        jobTitle,
+                        jobAdditionalInfo,
+                        mobileEquip,
+                        subAssemblyId,
+                        priority,
+                        reasonCode,
+                        _oLogon.UserID,
+                        ref plannerdJobStepId))
+                    {
+                        #region Set Default Group, Supervisor, Labor & Shift
+
+                        //Get User's Default Group And Group's Supervisor
+                        try
+                        {
+
+
+                            var loaded = true;
+                            var groupId = -1;
+                            var supervisorId = -1;
+
+                            //Check Requestor Field
+                            var userId = ((HttpContext.Current.Session["ComboRequestor"] != null))
+                                ? Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()))
+                                : _oLogon.UserID;
+
+                            //Create Group Class
+                            using (
+                                var oGroup =
+                                    new MaintenanceGroup(_connectionString, _useWeb, _oLogon.UserID))
+                            {
+                                //Get Users Group
+                                using (var dt = oGroup.GetFilteredGroupList("B", "", "", -1, userId, ref loaded))
+                                {
+                                    //Check Flag
+                                    if (loaded)
+                                    {
+                                        //Set Group
+                                        if (dt.Rows.Count > 0)
+                                        {
+                                            //Get Group ID
+                                            groupId = Convert.ToInt32(dt.Rows[0][0].ToString());
+
+                                            //Get Supervisor
+                                            if (oGroup.LoadHeaderData(groupId))
+                                            {
+                                                //Get Supervisor ID
+                                                supervisorId = oGroup.SupervisorID;
+                                            }
+                                            else
+                                            {
+                                                //Throw Error
+                                                throw new SystemException(
+                                                    @"Error Loading Group/Supervisor Defaults");
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //Throw Error
+                                        throw new SystemException(
+                                            @"Error Loading Group/Supervisor Defaults");
+                                    }
+
+                                    //Update Defaults
+                                    if (
+                                        !oJobStep.UpdateUserDefaults(plannerdJobStepId, groupId, supervisorId,
+                                            _oLogon.LaborClassID, _oLogon.ShiftID, _oLogon.UserID))
+                                    {
+                                        //Throw Error
+                                        throw new SystemException(
+                                            @"Error Saving User Defaults - " + oJobStep.LastError);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //Throw Error
+                            throw new SystemException(
+                                @"Error Getting User's Default Group And Supervisor - " + ex.Message);
+                        }
+
+                        #endregion
+
+                        //Forward User To Planned Job
+                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                    }
+                    else
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Planning Job - " + oJobStep.LastError);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //Show Error
+                Master.ShowError(ex.Message);
+            }
+        }
+
+        protected void AddNewItemButton_Click(object sender, EventArgs e)
+        {
+            AddItems();
+            
+        }
+
+        protected void DeleteItems_Click(object sender, EventArgs e)
+        {
+            DeleteItems();
+            var jobStepKey = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobStepKey);
+        }
+
+        protected void DeleteAttachmentButton_Click(object sender, EventArgs e)
+        {
+            DeleteGridViewAttachment();
+        }
+
+        public void DeleteGridViewAttachment()
+        {
+            for (int i = 0; i < AttachmentGrid.VisibleRowCount; i++)
+            {
+                if (AttachmentGrid.GetRowLevel(i) == AttachmentGrid.GroupCount)
+                {
+                    object keyValue = AttachmentGrid.GetRowValues(i, new string[] { "ID" });
+                    var id = Convert.ToInt32(keyValue.ToString());
+                    if (keyValue != null)
+
+                        _oAttachments.Delete(id);
+                }
+            }
+        }
 
         protected string GetUrl(GridViewDataItemTemplateContainer container)
         {
@@ -10744,6 +11025,1740 @@ namespace Pages.PlannedJobs
         protected void Unnamed_Click(object sender, EventArgs e)
         {
 
+        }
+
+        public void GetCurrentValues()
+        {
+           
+                #region Get Logon Info
+
+                //Get Value
+                if (HttpContext.Current.Session["LogonInfo"] != null)
+                {
+                    //Get Logon Info From Session
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+                }
+
+                #endregion
+
+                #region Get Object
+
+                var objectAgainstId = -1;
+                if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+                {
+                    //Get Info From Session
+                    objectAgainstId = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
+                }
+
+                #endregion
+
+                #region Get GPS X
+
+                decimal gpsX = 0;
+                if (HttpContext.Current.Session["GPSX"] != null)
+                {
+                    //Get Info From Session
+                    gpsX = Convert.ToDecimal((HttpContext.Current.Session["GPSX"].ToString()));
+                }
+
+                #endregion
+
+                #region Get GPS Y
+
+                decimal gpsY = 0;
+                if (HttpContext.Current.Session["GPSY"] != null)
+                {
+                    //Get Info From Session
+                    gpsY = Convert.ToDecimal((HttpContext.Current.Session["GPSY"].ToString()));
+                }
+
+                #endregion
+
+                #region Get GPS Z
+
+                decimal gpsZ = 0;
+                if (HttpContext.Current.Session["GPSZ"] != null)
+                {
+                    //Get Info From Session
+                    gpsZ = Convert.ToDecimal((HttpContext.Current.Session["GPSZ"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Description
+
+                var workDesc = "";
+                if (HttpContext.Current.Session["txtWorkDescription"] != null)
+                {
+                    //Get Additional Info From Session
+                    workDesc = (HttpContext.Current.Session["txtWorkDescription"].ToString());
+                }
+
+                #endregion
+
+                #region Get Work Date
+
+                var requestDate = DateTime.Now;
+                if (HttpContext.Current.Session["TxtWorkRequestDate"] != null)
+                {
+                    //Get Info From Session
+                    requestDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkRequestDate"].ToString());
+                }
+
+                #endregion
+
+                #region Get Start Date
+
+                var startDate = DateTime.Now;
+                if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
+                {
+                    //Get Info From Session
+                    startDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkStartDate"].ToString());
+                }
+
+                #endregion
+
+                #region Get Comp Date
+
+                var compDate = DateTime.Now;
+                if (HttpContext.Current.Session["TxtWorkCompDate"] != null)
+                {
+                    //Get Info From Session
+                    compDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkCompDate"].ToString());
+                }
+
+                #endregion
+
+                #region Get Priority
+
+                var requestPriority = -1;
+                if ((HttpContext.Current.Session["ComboPriority"] != null))
+                {
+                    //Get Info From Session
+                    requestPriority = Convert.ToInt32((HttpContext.Current.Session["ComboPriority"].ToString()));
+                }
+
+                #endregion
+
+                #region Get State Route
+
+                var stateRouteId = -1;
+                if ((HttpContext.Current.Session["comboHwyRoute"] != null))
+                {
+                    //Get Info From Session
+                    stateRouteId = Convert.ToInt32((HttpContext.Current.Session["comboHwyRoute"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Milepost
+
+                decimal milepost = 0;
+                if (HttpContext.Current.Session["txtMilepost"] != null)
+                {
+                    //Get Info From Session
+                    milepost = Convert.ToDecimal(HttpContext.Current.Session["txtMilepost"].ToString());
+                }
+
+                #endregion
+
+                #region Get Milepost To
+
+                decimal milepostTo = 0;
+                if (HttpContext.Current.Session["txtMilepostTo"] != null)
+                {
+                    //Get Info From Session
+                    milepostTo = Convert.ToDecimal(HttpContext.Current.Session["txtMilepostTo"].ToString());
+                }
+
+                #endregion
+
+                #region Get Milepost Direction
+
+                var mpIncreasing = -1;
+                if ((HttpContext.Current.Session["comboMilePostDir"] != null))
+                {
+                    //Get Info From Session
+                    mpIncreasing = Convert.ToInt32((HttpContext.Current.Session["comboMilePostDir"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Work Op
+
+                var workOp = -1;
+                if ((HttpContext.Current.Session["ComboWorkOp"] != null))
+                {
+                    //Get Info From Session
+                    workOp = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Requestor
+
+                var requestor = -1;
+                if ((HttpContext.Current.Session["ComboRequestor"] != null))
+                {
+                    //Get Info From Session
+                    requestor = Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()));
+                }
+                else if (HttpContext.Current.Session["LogonInfo"] != null)
+                {
+                    //Get Logon Info
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
+                    //Set Requestor
+                    requestor = _oLogon.UserID;
+                }
+
+                #endregion
+
+                #region Get Job Reason
+
+                var reasonCode = -1;
+                if ((HttpContext.Current.Session["comboReason"] != null))
+                {
+                    //Get Info From Session
+                    reasonCode = Convert.ToInt32((HttpContext.Current.Session["comboReason"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Route To
+
+                var routeTo = -1;
+                if ((HttpContext.Current.Session["comboRouteTo"] != null))
+                {
+                    //Get Info From Session
+                    routeTo = Convert.ToInt32((HttpContext.Current.Session["comboRouteTo"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Cost Code
+
+                var costCodeId = -1;
+                if ((HttpContext.Current.Session["ComboCostCode"] != null))
+                {
+                    //Get Info From Session
+                    costCodeId = Convert.ToInt32((HttpContext.Current.Session["ComboCostCode"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Fund Source
+
+                var fundSource = -1;
+                if ((HttpContext.Current.Session["ComboFundSource"] != null))
+                {
+                    //Get Info From Session
+                    fundSource = Convert.ToInt32((HttpContext.Current.Session["ComboFundSource"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Work Order
+
+                var workOrder = -1;
+                if ((HttpContext.Current.Session["ComboWorkOrder"] != null))
+                {
+                    //Get Info From Session
+                    workOrder = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOrder"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Org Code
+
+                var orgCode = -1;
+                if ((HttpContext.Current.Session["ComboOrgCode"] != null))
+                {
+                    //Get Info From Session
+                    orgCode = Convert.ToInt32((HttpContext.Current.Session["ComboOrgCode"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Fund Group
+
+                var fundingGroup = -1;
+                if ((HttpContext.Current.Session["ComboFundGroup"] != null))
+                {
+                    //Get Info From Session
+                    fundingGroup = Convert.ToInt32((HttpContext.Current.Session["ComboFundGroup"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Equip Num
+
+                var equipNumber = -1;
+                if ((HttpContext.Current.Session["ComboEquipNum"] != null))
+                {
+                    //Get Info From Session
+                    equipNumber = Convert.ToInt32((HttpContext.Current.Session["ComboEquipNum"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Ctl Section
+
+                var controlSection = -1;
+                if ((HttpContext.Current.Session["ComboCtlSection"] != null))
+                {
+                    //Get Info From Session
+                    controlSection = Convert.ToInt32((HttpContext.Current.Session["ComboCtlSection"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Notes
+
+                var notes = "";
+                if (HttpContext.Current.Session["txtAddDetail"] != null)
+                {
+                    //Get Additional Info From Session
+                    notes = (HttpContext.Current.Session["txtAddDetail"].ToString());
+                }
+
+                #endregion
+
+                #region Get Post Notes
+
+                var postNotes = "";
+                if (HttpContext.Current.Session["txtPostNotes"] != null)
+                {
+                    //Get Post Notes From Session
+                    postNotes = (HttpContext.Current.Session["txtPostNotes"].ToString());
+                }
+
+                #endregion
+
+                #region Get Run Units
+
+                //Create Variables
+                decimal unitOne = 0;
+                decimal unitTwo = 0;
+                decimal unitThree = 0;
+
+                //Check For First Unit
+                if (HttpContext.Current.Session["txtRunUnitOne"] != null)
+                {
+                    //Get From Session
+                    unitOne = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitOne"].ToString()));
+                }
+
+                //Check For Second Unit
+                if (HttpContext.Current.Session["txtRunUnitTwo"] != null)
+                {
+                    //Get From Session
+                    unitTwo = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitTwo"].ToString()));
+                }
+
+                //Check For Third Unit
+                if (HttpContext.Current.Session["txtRunUnitThree"] != null)
+                {
+                    //Get From Session
+                    unitThree = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitThree"].ToString()));
+                }
+
+                #endregion
+
+                //#region Get Job ID
+
+                //var jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+
+                //#endregion
+
+                //#region Get Job Step ID
+
+                //var jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
+
+                //#endregion
+
+                //#region Get Step #
+
+                //var jobStepNumber = Convert.ToInt32(HttpContext.Current.Session["stepnumber"].ToString());
+
+                //#endregion
+
+                //#region Get Concur Step Number
+
+                //var jobStepConcurNumber = Convert.ToInt32(HttpContext.Current.Session["concurwithstep"].ToString());
+
+                //#endregion
+
+                //#region Get Follow Step Number
+
+                //var jobStepFollowStepNumber = Convert.ToInt32(HttpContext.Current.Session["followstep"].ToString());
+
+                //#endregion
+
+                #region Get Status
+
+                var jobStatus = -1;
+                if ((HttpContext.Current.Session["ComboStatus"] != null))
+                {
+                    //Get Info From Session
+                    jobStatus = Convert.ToInt32((HttpContext.Current.Session["ComboStatus"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Laborclass
+
+                var jobLaborClass = -1;
+                if ((HttpContext.Current.Session["ComboLaborClass"] != null))
+                {
+                    //Get Info From Session
+                    jobLaborClass = Convert.ToInt32((HttpContext.Current.Session["ComboLaborClass"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Group
+
+                var jobGroup = -1;
+                if ((HttpContext.Current.Session["ComboGroup"] != null))
+                {
+                    //Get Info From Session
+                    jobGroup = Convert.ToInt32((HttpContext.Current.Session["ComboGroup"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Outcome
+
+                var jobOutcome = -1;
+                if ((HttpContext.Current.Session["ComboOutcome"] != null))
+                {
+                    //Get Info From Session
+                    jobOutcome = Convert.ToInt32((HttpContext.Current.Session["ComboOutcome"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Shift
+
+                var jobShift = -1;
+                if ((HttpContext.Current.Session["ComboShift"] != null))
+                {
+                    //Get Info From Session
+                    jobShift = Convert.ToInt32((HttpContext.Current.Session["ComboShift"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Supervisor
+
+                var jobSupervisor = -1;
+                if ((HttpContext.Current.Session["ComboSupervisor"] != null))
+                {
+                    //Get Info From Session
+                    jobSupervisor = Convert.ToInt32((HttpContext.Current.Session["ComboSupervisor"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Actual Downtime
+
+                decimal jobActualDt = 0;
+                if ((HttpContext.Current.Session["txtActualDownTime"] != null))
+                {
+                    //Get Info From Session
+                    jobActualDt = Convert.ToDecimal((HttpContext.Current.Session["txtActualDownTime"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Actual Length
+
+                decimal jobActualLen = 0;
+                if ((HttpContext.Current.Session["txtActualJobLen"] != null))
+                {
+                    //Get Info From Session
+                    jobActualLen = Convert.ToDecimal((HttpContext.Current.Session["txtActualJobLen"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Estimated Downtime
+
+                decimal jobEstimatedDt = 0;
+                if ((HttpContext.Current.Session["txtEstimatedDownTime"] != null))
+                {
+                    //Get Info From Session
+                    jobEstimatedDt = Convert.ToDecimal((HttpContext.Current.Session["txtEstimatedDownTime"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Estimated Length
+
+                decimal jobEstimatedLen = 0;
+                if ((HttpContext.Current.Session["txtEstimatedJobLen"] != null))
+                {
+                    //Get Info From Session
+                    jobEstimatedLen = Convert.ToDecimal((HttpContext.Current.Session["txtEstimatedJobLen"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Remaining Downtime
+
+                decimal jobRemainingDt = 0;
+                if ((HttpContext.Current.Session["txtRemainingDownTime"] != null))
+                {
+                    //Get Info From Session
+                    jobRemainingDt = Convert.ToDecimal((HttpContext.Current.Session["txtRemainingDownTime"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Estimated Length
+
+                decimal jobRemainingLen = 0;
+                if ((HttpContext.Current.Session["txtRemainingJobLength"] != null))
+                {
+                    //Get Info From Session
+                    jobRemainingLen = Convert.ToDecimal((HttpContext.Current.Session["txtRemainingJobLength"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Estimated Units
+
+                decimal jobEstimatedUnits = 0;
+                if ((HttpContext.Current.Session["txtEstimagedUnits"] != null))
+                {
+                    //Get Info From Session
+                    jobEstimatedUnits = Convert.ToDecimal((HttpContext.Current.Session["txtEstimagedUnits"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Actual Units
+
+                decimal jobActualUnits = 0;
+                if ((HttpContext.Current.Session["txtActualUnits"] != null))
+                {
+                    //Get Info From Session
+                    jobActualUnits = Convert.ToDecimal((HttpContext.Current.Session["txtActualUnits"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Return Within
+
+                var jobReturnWithin = 0;
+                if ((HttpContext.Current.Session["txtReturnWithin"] != null))
+                {
+                    //Get Info From Session
+                    jobReturnWithin = Convert.ToInt32((HttpContext.Current.Session["txtReturnWithin"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Route To
+
+                var jobRouteTo = -1;
+                if ((HttpContext.Current.Session["ComboRouteTo"] != null))
+                {
+                    //Get Info From Session
+                    jobRouteTo = Convert.ToInt32((HttpContext.Current.Session["ComboRouteTo"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Completed By
+
+                var jobCompletedBy = -1;
+                if ((HttpContext.Current.Session["ComboCompletedBy"] != null))
+                {
+                    //Get Info From Session
+                    jobCompletedBy = Convert.ToInt32((HttpContext.Current.Session["ComboCompletedBy"].ToString()));
+                }
+
+                #endregion
+
+                #region Get Charge To
+
+                var jobChargeTo = "";
+                if ((HttpContext.Current.Session["txtChargeTo"] != null))
+                {
+                    //Get Info From Session
+                    jobChargeTo = (HttpContext.Current.Session["txtChargeTo"].ToString());
+                }
+
+                #endregion
+
+                #region Get Incident Log
+
+                var jobIncidentLog = -1;
+                if ((HttpContext.Current.Session["ComboIncidentLog"] != null))
+                {
+                    //Get Info From Session
+                    jobIncidentLog = Convert.ToInt32((HttpContext.Current.Session["ComboIncidentLog"].ToString()));
+                }
+
+                #endregion
+            
+            
+        }
+
+        public void AddJobStep()
+        {
+            #region Get Job ID
+
+            var jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+
+            #endregion
+
+            #region Get Start Date
+
+            var startDate = DateTime.Now;
+            if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
+            {
+                //Get Info From Session
+                startDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkStartDate"].ToString());
+            }
+
+            #endregion
+
+            #region Get Comp Date
+
+            var compDate = DateTime.Now;
+            if (HttpContext.Current.Session["TxtWorkCompDate"] != null)
+            {
+                //Get Info From Session
+                compDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkCompDate"].ToString());
+            }
+
+            #endregion
+
+            var workDesc = "";
+            if (HttpContext.Current.Session["txtWorkDescription"] != null)
+            {
+                //Get Additional Info From Session
+                workDesc = (HttpContext.Current.Session["txtWorkDescription"].ToString());
+            }
+
+            var priority = -1;
+
+            if ((HttpContext.Current.Session["ComboPriority"] != null))
+            {
+                //Get Info From Session
+                priority = Convert.ToInt32((HttpContext.Current.Session["ComboPriority"].ToString()));
+            }
+
+            var status = -1;
+            if ((HttpContext.Current.Session["ComboStatus"] != null))
+            {
+                //Get Info From Session
+                status = Convert.ToInt32((HttpContext.Current.Session["ComboStatus"].ToString()));
+            }
+
+            var reasonCodeId = -1;
+            if ((HttpContext.Current.Session["ComboReason"] != null))
+            {
+                //Get Info From Session
+                reasonCodeId = Convert.ToInt32((HttpContext.Current.Session["ComboReason"].ToString()));
+            }
+
+            
+            var fundSource = -1;
+            if ((HttpContext.Current.Session["ComboFundSource"] != null))
+            {
+                //Get Info From Session
+                fundSource = Convert.ToInt32((HttpContext.Current.Session["ComboFundSource"].ToString()));
+            }
+
+         
+           
+
+            var subAssemblyCodeId = -1;
+            
+
+            //TODO: Possibly added Element stuff here
+            int elementId = -1;
+
+            var completedById = -1;
+
+            #region Get Route To
+
+            var jobRouteTo = -1;
+            if ((HttpContext.Current.Session["ComboRouteTo"] != null))
+            {
+                //Get Info From Session
+                jobRouteTo = Convert.ToInt32((HttpContext.Current.Session["ComboRouteTo"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Notes
+
+            var notes = "";
+            if (HttpContext.Current.Session["txtAddDetail"] != null)
+            {
+                //Get Additional Info From Session
+                notes = (HttpContext.Current.Session["txtAddDetail"].ToString());
+            }
+
+            #endregion
+
+            #region Get Post Notes
+
+            var postNotes = "";
+            if (HttpContext.Current.Session["txtPostNotes"] != null)
+            {
+                //Get Post Notes From Session
+                postNotes = (HttpContext.Current.Session["txtPostNotes"].ToString());
+            }
+
+            #endregion
+
+            #region Get Laborclass
+
+            var jobLaborClass = -1;
+            if ((HttpContext.Current.Session["ComboLaborClass"] != null))
+            {
+                //Get Info From Session
+                jobLaborClass = Convert.ToInt32((HttpContext.Current.Session["ComboLaborClass"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Group
+
+            var jobGroup = -1;
+            if ((HttpContext.Current.Session["ComboGroup"] != null))
+            {
+                //Get Info From Session
+                jobGroup = Convert.ToInt32((HttpContext.Current.Session["ComboGroup"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Outcome
+
+            var jobOutcome = -1;
+            if ((HttpContext.Current.Session["ComboOutcome"] != null))
+            {
+                //Get Info From Session
+                jobOutcome = Convert.ToInt32((HttpContext.Current.Session["ComboOutcome"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Remaining Downtime
+
+            decimal jobRemainingDt = 0;
+            if ((HttpContext.Current.Session["txtRemainingDownTime"] != null))
+            {
+                //Get Info From Session
+                jobRemainingDt = Convert.ToDecimal((HttpContext.Current.Session["txtRemainingDownTime"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Estimated Length
+
+            decimal jobRemainingLen = 0;
+            if ((HttpContext.Current.Session["txtRemainingJobLength"] != null))
+            {
+                //Get Info From Session
+                jobRemainingLen = Convert.ToDecimal((HttpContext.Current.Session["txtRemainingJobLength"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Actual Downtime
+
+            decimal jobActualDt = 0;
+            if ((HttpContext.Current.Session["txtActualDownTime"] != null))
+            {
+                //Get Info From Session
+                jobActualDt = Convert.ToDecimal((HttpContext.Current.Session["txtActualDownTime"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Actual Length
+
+            decimal jobActualLen = 0;
+            if ((HttpContext.Current.Session["txtActualJobLen"] != null))
+            {
+                //Get Info From Session
+                jobActualLen = Convert.ToDecimal((HttpContext.Current.Session["txtActualJobLen"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Shift
+
+            var jobShift = -1;
+            if ((HttpContext.Current.Session["ComboShift"] != null))
+            {
+                //Get Info From Session
+                jobShift = Convert.ToInt32((HttpContext.Current.Session["ComboShift"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Supervisor
+
+            var jobSupervisor = -1;
+            if ((HttpContext.Current.Session["ComboSupervisor"] != null))
+            {
+                //Get Info From Session
+                jobSupervisor = Convert.ToInt32((HttpContext.Current.Session["ComboSupervisor"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Estimated Length
+
+            decimal jobEstimatedLen = 0;
+            if ((HttpContext.Current.Session["txtEstimatedJobLen"] != null))
+            {
+                //Get Info From Session
+                jobEstimatedLen = Convert.ToDecimal((HttpContext.Current.Session["txtEstimatedJobLen"].ToString()));
+            }
+
+            #endregion
+
+            decimal jobEstimatedDt = 0;
+            if ((HttpContext.Current.Session["txtEstimatedDownTime"] != null))
+            {
+                //Get Info From Session
+                jobEstimatedDt = Convert.ToDecimal((HttpContext.Current.Session["txtEstimatedDownTime"].ToString()));
+            }
+
+            var jobReturnWithin = 0;
+            if ((HttpContext.Current.Session["txtReturnWithin"] != null))
+            {
+                //Get Info From Session
+                jobReturnWithin = Convert.ToInt32((HttpContext.Current.Session["txtReturnWithin"].ToString()));
+            }
+
+            //                    int jobId,
+            //                    string jobTitle,
+            //                    int followsStep,
+            //                    int concurWithStep,
+            //                    int statusID,
+            //                    int laborClassID,
+            //                    string completionNotes,
+            //                    string notes,
+            //                    int servicingEquipment,
+            //                    int groupID,
+            //                    int outcomeCode,
+            //                    int shiftID,
+            //                    int supervisorID,
+            //                    decimal actualDowntime,
+            //                    decimal actualLength,
+            //                    decimal estDowntime,
+            //                    decimal estLength,
+            //                    decimal remaingDowntime,
+            //                    decimal remainingLength,
+            //                    DateTime startingDate,
+            //                    DateTime dateCompleted,
+            //                    int returnWithinDays,
+            //                    int fundSourceID,
+            //                    int subAssemblyCodeID,
+            //                    int elementID,
+            //                    int priorityID,
+            //                    int reasonCodeID,
+            //                    int createdBy)
+
+            var results = _oJobStep.Add(jobId,
+                                               workDesc,
+                                               0, 0,
+                                               status,
+                                               jobLaborClass,
+                                               postNotes,
+                                               notes,
+                                               -1,
+                                               jobGroup,
+                                               jobOutcome,
+                                               jobShift,
+                                               jobSupervisor,
+                                               jobActualDt,
+                                               jobActualLen,
+                                               jobEstimatedDt,
+                                               jobEstimatedLen,
+                                               jobRemainingDt,
+                                               jobRemainingLen,
+                                               startDate, compDate,
+                                               jobReturnWithin,
+                                               fundSource,
+                                               subAssemblyCodeId,
+                                               //elementId,
+                                               priority,
+                                               reasonCodeId,
+                                               _oLogon.UserID);
+
+            
+        }
+
+        protected void UpdateRoutine()
+        {
+            var jobAgainstArea = 0;
+            const bool requestOnly = true;
+            const int actionPriority = -1;
+            const int mobileEquip = -1;
+            const int subAssemblyID = -1;
+            const bool additionalDamage = false;
+            const decimal percentOverage = 0;
+
+            #region Get Logon Info
+
+            //Get Value
+            if (HttpContext.Current.Session["LogonInfo"] != null)
+            {
+                //Get Logon Info From Session
+                _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+            }
+
+            #endregion
+
+            #region Get Object
+
+            var objectAgainstId = -1;
+            if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+            {
+                //Get Info From Session
+                objectAgainstId = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
+            }
+
+            #endregion
+
+            #region Get GPS X
+
+            decimal gpsX = 0;
+            if (HttpContext.Current.Session["GPSX"] != null)
+            {
+                //Get Info From Session
+                gpsX = Convert.ToDecimal((HttpContext.Current.Session["GPSX"].ToString()));
+            }
+
+            #endregion
+
+            #region Get GPS Y
+
+            decimal gpsY = 0;
+            if (HttpContext.Current.Session["GPSY"] != null)
+            {
+                //Get Info From Session
+                gpsY = Convert.ToDecimal((HttpContext.Current.Session["GPSY"].ToString()));
+            }
+
+            #endregion
+
+            #region Get GPS Z
+
+            decimal gpsZ = 0;
+            if (HttpContext.Current.Session["GPSZ"] != null)
+            {
+                //Get Info From Session
+                gpsZ = Convert.ToDecimal((HttpContext.Current.Session["GPSZ"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Description
+
+            var workDesc = "";
+            if (HttpContext.Current.Session["txtWorkDescription"] != null)
+            {
+                //Get Additional Info From Session
+                workDesc = (HttpContext.Current.Session["txtWorkDescription"].ToString());
+            }
+
+            #endregion
+
+            #region Get Work Date
+
+            var requestDate = DateTime.Now;
+            if (HttpContext.Current.Session["TxtWorkRequestDate"] != null)
+            {
+                //Get Info From Session
+                requestDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkRequestDate"].ToString());
+            }
+
+            #endregion
+
+            #region Get Start Date
+
+            var startDate = DateTime.Now;
+            if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
+            {
+                //Get Info From Session
+                startDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkStartDate"].ToString());
+            }
+
+            #endregion
+
+            #region Get Comp Date
+
+            var compDate = DateTime.Now;
+            if (HttpContext.Current.Session["TxtWorkCompDate"] != null)
+            {
+                //Get Info From Session
+                compDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkCompDate"].ToString());
+            }
+
+            #endregion
+
+            #region Get Priority
+
+            var requestPriority = -1;
+            if ((HttpContext.Current.Session["ComboPriority"] != null))
+            {
+                //Get Info From Session
+                requestPriority = Convert.ToInt32((HttpContext.Current.Session["ComboPriority"].ToString()));
+            }
+
+            #endregion
+
+            #region Get State Route
+
+            var stateRouteId = -1;
+            if ((HttpContext.Current.Session["comboHwyRoute"] != null))
+            {
+                //Get Info From Session
+                stateRouteId = Convert.ToInt32((HttpContext.Current.Session["comboHwyRoute"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Milepost
+
+            decimal milepost = 0;
+            if (HttpContext.Current.Session["txtMilepost"] != null)
+            {
+                //Get Info From Session
+                milepost = Convert.ToDecimal(HttpContext.Current.Session["txtMilepost"].ToString());
+            }
+
+            #endregion
+
+            #region Get Milepost To
+
+            decimal milepostTo = 0;
+            if (HttpContext.Current.Session["txtMilepostTo"] != null)
+            {
+                //Get Info From Session
+                milepostTo = Convert.ToDecimal(HttpContext.Current.Session["txtMilepostTo"].ToString());
+            }
+
+            #endregion
+
+            #region Get Milepost Direction
+
+            var mpIncreasing = -1;
+            if ((HttpContext.Current.Session["comboMilePostDir"] != null))
+            {
+                //Get Info From Session
+                mpIncreasing = Convert.ToInt32((HttpContext.Current.Session["comboMilePostDir"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Work Op
+
+            var workOp = -1;
+            if ((HttpContext.Current.Session["ComboWorkOp"] != null))
+            {
+                //Get Info From Session
+                workOp = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Requestor
+
+            var requestor = -1;
+            if ((HttpContext.Current.Session["ComboRequestor"] != null))
+            {
+                //Get Info From Session
+                requestor = Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()));
+            }
+            else if (HttpContext.Current.Session["LogonInfo"] != null)
+            {
+                //Get Logon Info
+                _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
+                //Set Requestor
+                requestor = _oLogon.UserID;
+            }
+
+            #endregion
+
+            #region Get Job Reason
+
+            var reasonCode = -1;
+            if ((HttpContext.Current.Session["comboReason"] != null))
+            {
+                //Get Info From Session
+                reasonCode = Convert.ToInt32((HttpContext.Current.Session["comboReason"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Route To
+
+            var routeTo = -1;
+            if ((HttpContext.Current.Session["comboRouteTo"] != null))
+            {
+                //Get Info From Session
+                routeTo = Convert.ToInt32((HttpContext.Current.Session["comboRouteTo"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Cost Code
+
+            var costCodeId = -1;
+            if ((HttpContext.Current.Session["ComboCostCode"] != null))
+            {
+                //Get Info From Session
+                costCodeId = Convert.ToInt32((HttpContext.Current.Session["ComboCostCode"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Fund Source
+
+            var fundSource = -1;
+            if ((HttpContext.Current.Session["ComboFundSource"] != null))
+            {
+                //Get Info From Session
+                fundSource = Convert.ToInt32((HttpContext.Current.Session["ComboFundSource"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Work Order
+
+            var workOrder = -1;
+            if ((HttpContext.Current.Session["ComboWorkOrder"] != null))
+            {
+                //Get Info From Session
+                workOrder = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOrder"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Org Code
+
+            var orgCode = -1;
+            if ((HttpContext.Current.Session["ComboOrgCode"] != null))
+            {
+                //Get Info From Session
+                orgCode = Convert.ToInt32((HttpContext.Current.Session["ComboOrgCode"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Fund Group
+
+            var fundingGroup = -1;
+            if ((HttpContext.Current.Session["ComboFundGroup"] != null))
+            {
+                //Get Info From Session
+                fundingGroup = Convert.ToInt32((HttpContext.Current.Session["ComboFundGroup"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Equip Num
+
+            var equipNumber = -1;
+            if ((HttpContext.Current.Session["ComboEquipNum"] != null))
+            {
+                //Get Info From Session
+                equipNumber = Convert.ToInt32((HttpContext.Current.Session["ComboEquipNum"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Ctl Section
+
+            var controlSection = -1;
+            if ((HttpContext.Current.Session["ComboCtlSection"] != null))
+            {
+                //Get Info From Session
+                controlSection = Convert.ToInt32((HttpContext.Current.Session["ComboCtlSection"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Notes
+
+            var notes = "";
+            if (HttpContext.Current.Session["txtAddDetail"] != null)
+            {
+                //Get Additional Info From Session
+                notes = (HttpContext.Current.Session["txtAddDetail"].ToString());
+            }
+
+            #endregion
+
+            #region Get Post Notes
+
+            var postNotes = "";
+            if (HttpContext.Current.Session["txtPostNotes"] != null)
+            {
+                //Get Post Notes From Session
+                postNotes = (HttpContext.Current.Session["txtPostNotes"].ToString());
+            }
+
+            #endregion
+
+            #region Get Run Units
+
+            //Create Variables
+            decimal unitOne = 0;
+            decimal unitTwo = 0;
+            decimal unitThree = 0;
+
+            //Check For First Unit
+            if (HttpContext.Current.Session["txtRunUnitOne"] != null)
+            {
+                //Get From Session
+                unitOne = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitOne"].ToString()));
+            }
+
+            //Check For Second Unit
+            if (HttpContext.Current.Session["txtRunUnitTwo"] != null)
+            {
+                //Get From Session
+                unitTwo = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitTwo"].ToString()));
+            }
+
+            //Check For Third Unit
+            if (HttpContext.Current.Session["txtRunUnitThree"] != null)
+            {
+                //Get From Session
+                unitThree = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitThree"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Job ID
+
+            var jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+
+            #endregion
+
+            #region Get Job Step ID
+
+            var jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
+
+            #endregion
+
+            #region Get Step #
+            var jobStepNumber = 1;
+            if (HttpContext.Current.Session["stepnumber"] != null)
+            {
+             jobStepNumber = Convert.ToInt32(HttpContext.Current.Session["stepnumber"].ToString());
+
+            }
+
+
+            #endregion
+
+            #region Get Concur Step Number
+
+
+            var jobStepConcurNumber = 1;
+            if (HttpContext.Current.Session["concurwithstep"] != null)
+            {
+
+                jobStepConcurNumber = Convert.ToInt32(HttpContext.Current.Session["concurwithstep"].ToString());
+            }
+
+            #endregion
+
+            #region Get Follow Step Number
+            //Add Follow Step Number
+
+            var jobStepFollowStepNumber = 1;
+            if (HttpContext.Current.Session["followstep"] != null)
+            {
+
+                jobStepFollowStepNumber = Convert.ToInt32(HttpContext.Current.Session["followstep"].ToString());
+            }
+
+
+            #endregion
+
+            #region Get Status
+
+            var jobStatus = -1;
+            if ((HttpContext.Current.Session["ComboStatus"] != null))
+            {
+                //Get Info From Session
+                jobStatus = Convert.ToInt32((HttpContext.Current.Session["ComboStatus"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Laborclass
+
+            var jobLaborClass = -1;
+            if ((HttpContext.Current.Session["ComboLaborClass"] != null))
+            {
+                //Get Info From Session
+                jobLaborClass = Convert.ToInt32((HttpContext.Current.Session["ComboLaborClass"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Group
+
+            var jobGroup = -1;
+            if ((HttpContext.Current.Session["ComboGroup"] != null))
+            {
+                //Get Info From Session
+                jobGroup = Convert.ToInt32((HttpContext.Current.Session["ComboGroup"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Outcome
+
+            var jobOutcome = -1;
+            if ((HttpContext.Current.Session["ComboOutcome"] != null))
+            {
+                //Get Info From Session
+                jobOutcome = Convert.ToInt32((HttpContext.Current.Session["ComboOutcome"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Shift
+
+            var jobShift = -1;
+            if ((HttpContext.Current.Session["ComboShift"] != null))
+            {
+                //Get Info From Session
+                jobShift = Convert.ToInt32((HttpContext.Current.Session["ComboShift"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Supervisor
+
+            var jobSupervisor = -1;
+            if ((HttpContext.Current.Session["ComboSupervisor"] != null))
+            {
+                //Get Info From Session
+                jobSupervisor = Convert.ToInt32((HttpContext.Current.Session["ComboSupervisor"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Actual Downtime
+
+            decimal jobActualDt = 0;
+            if ((HttpContext.Current.Session["txtActualDownTime"] != null))
+            {
+                //Get Info From Session
+                jobActualDt = Convert.ToDecimal((HttpContext.Current.Session["txtActualDownTime"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Actual Length
+
+            decimal jobActualLen = 0;
+            if ((HttpContext.Current.Session["txtActualJobLen"] != null))
+            {
+                //Get Info From Session
+                jobActualLen = Convert.ToDecimal((HttpContext.Current.Session["txtActualJobLen"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Estimated Downtime
+
+            decimal jobEstimatedDt = 0;
+            if ((HttpContext.Current.Session["txtEstimatedDownTime"] != null))
+            {
+                //Get Info From Session
+                jobEstimatedDt = Convert.ToDecimal((HttpContext.Current.Session["txtEstimatedDownTime"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Estimated Length
+
+            decimal jobEstimatedLen = 0;
+            if ((HttpContext.Current.Session["txtEstimatedJobLen"] != null))
+            {
+                //Get Info From Session
+                jobEstimatedLen = Convert.ToDecimal((HttpContext.Current.Session["txtEstimatedJobLen"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Remaining Downtime
+
+            decimal jobRemainingDt = 0;
+            if ((HttpContext.Current.Session["txtRemainingDownTime"] != null))
+            {
+                //Get Info From Session
+                jobRemainingDt = Convert.ToDecimal((HttpContext.Current.Session["txtRemainingDownTime"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Estimated Length
+
+            decimal jobRemainingLen = 0;
+            if ((HttpContext.Current.Session["txtRemainingJobLength"] != null))
+            {
+                //Get Info From Session
+                jobRemainingLen = Convert.ToDecimal((HttpContext.Current.Session["txtRemainingJobLength"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Estimated Units
+
+            decimal jobEstimatedUnits = 0;
+            if ((HttpContext.Current.Session["txtEstimagedUnits"] != null))
+            {
+                //Get Info From Session
+                jobEstimatedUnits = Convert.ToDecimal((HttpContext.Current.Session["txtEstimagedUnits"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Actual Units
+
+            decimal jobActualUnits = 0;
+            if ((HttpContext.Current.Session["txtActualUnits"] != null))
+            {
+                //Get Info From Session
+                jobActualUnits = Convert.ToDecimal((HttpContext.Current.Session["txtActualUnits"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Return Within
+
+            var jobReturnWithin = 0;
+            if ((HttpContext.Current.Session["txtReturnWithin"] != null))
+            {
+                //Get Info From Session
+                jobReturnWithin = Convert.ToInt32((HttpContext.Current.Session["txtReturnWithin"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Route To
+
+            var jobRouteTo = -1;
+            if ((HttpContext.Current.Session["ComboRouteTo"] != null))
+            {
+                //Get Info From Session
+                jobRouteTo = Convert.ToInt32((HttpContext.Current.Session["ComboRouteTo"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Completed By
+
+            var jobCompletedBy = -1;
+            if ((HttpContext.Current.Session["ComboCompletedBy"] != null))
+            {
+                //Get Info From Session
+                jobCompletedBy = Convert.ToInt32((HttpContext.Current.Session["ComboCompletedBy"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Charge To
+
+            var jobChargeTo = "";
+            if ((HttpContext.Current.Session["txtChargeTo"] != null))
+            {
+                //Get Info From Session
+                jobChargeTo = (HttpContext.Current.Session["txtChargeTo"].ToString());
+            }
+
+            #endregion
+
+            #region Get Incident Log
+
+            var jobIncidentLog = -1;
+            if ((HttpContext.Current.Session["ComboIncidentLog"] != null))
+            {
+                //Get Info From Session
+                jobIncidentLog = Convert.ToInt32((HttpContext.Current.Session["ComboIncidentLog"].ToString()));
+            }
+
+            #endregion
+
+
+            var x = subAssemblyID;
+            //Clear Errors
+            _oJob.ClearErrors();
+
+            try
+            {
+                
+                {
+                    //Update Job Step
+                    if (_oJobStep.Update(jobStepId,
+                        jobStepNumber,
+                        jobStepConcurNumber,
+                        jobStepFollowStepNumber,
+                        workDesc,
+                        jobStatus,
+                        jobLaborClass,
+                        postNotes,
+                        notes,
+                        -1,
+                        jobGroup,
+                        jobOutcome,
+                        jobShift,
+                        jobSupervisor,
+                        jobActualDt,
+                        jobActualLen,
+                        jobEstimatedDt,
+                        jobEstimatedLen,
+                        jobRemainingDt,
+                        jobRemainingLen,
+                        startDate,
+                        compDate,
+                        jobReturnWithin,
+                        fundSource,
+                        -1,
+                        requestPriority,
+                        reasonCode,
+                        _oLogon.UserID,
+                        EditingTimeBachId,
+                        EditingTiemBatchItemId))
+
+                        
+                    {
+                        //Throw Error
+                        //throw new SystemException(
+                        //    @"Error Updating Job Step -" + _oJobStep.LastError);
+                    }
+
+                    //Save Route & Completion Information
+                    //if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
+                    //{
+                    //    //Throw Error
+                    //    throw new SystemException(
+                    //        @"Error Updating Route To And Completion Information -" + _oJobStep.LastError);
+                    //}
+
+                    ////Check Run Unit Table
+                    //if (_oRunUnit.Ds.Tables.Count > 0)
+                    //{
+                    //    //Check Row Count
+                    //    if (_oRunUnit.Ds.Tables[0].Rows.Count > 0)
+                    //    {
+                    //        //Loop Rows
+                    //        for (var i = 0; i < _oRunUnit.Ds.Tables[0].Rows.Count; i++)
+                    //        {
+                    //            //Determine Unit
+                    //            switch (i)
+                    //            {
+                    //                case 0:
+                    //                    {
+                    //                        //Check If Not Read Only
+                    //                        if (txtRunUnitOne.ReadOnly == false)
+                    //                        {
+                    //                            //Update Run Unit
+                    //                            if (!_oRunUnit.Update((int)_oRunUnit.Ds.Tables[0].Rows[i][0],
+                    //                                Convert.ToDecimal(
+                    //                                    txtRunUnitOne.Value.ToString()),
+                    //                                _oRunUnit.Ds.Tables[0].Rows[i][3].
+                    //                                    ToString(),
+                    //                                (int)_oRunUnit.Ds.Tables[0].Rows[i][4],
+                    //                                _oLogon.UserID))
+                    //                            {
+                    //                                //Throw Error
+                    //                                throw new SystemException(
+                    //                                    @"Error Updating Run Units -" + _oRunUnit.LastError);
+                    //                            }
+                    //                        }
+                    //                        break;
+                    //                    }
+                    //                case 1:
+                    //                    {
+                    //                        //Check If Not Read Only
+                    //                        if (txtRunUnitTwo.ReadOnly == false)
+                    //                        {
+                    //                            //Update Run Unit
+                    //                            if (!_oRunUnit.Update((int)_oRunUnit.Ds.Tables[0].Rows[i][0],
+                    //                                Convert.ToDecimal(
+                    //                                    txtRunUnitTwo.Value.ToString()),
+                    //                                _oRunUnit.Ds.Tables[0].Rows[i][3].
+                    //                                    ToString(),
+                    //                                (int)_oRunUnit.Ds.Tables[0].Rows[i][4],
+                    //                                _oLogon.UserID))
+                    //                            {
+                    //                                //Throw Error
+                    //                                throw new SystemException(
+                    //                                    @"Error Updating Run Units -" + _oRunUnit.LastError);
+                    //                            }
+                    //                        }
+                    //                        break;
+                    //                    }
+                    //                case 2:
+                    //                    {
+                    //                        //Check If Not Read Only
+                    //                        if (txtRunUnitThree.ReadOnly == false)
+                    //                        {
+                    //                            //Update Run Unit
+                    //                            if (!_oRunUnit.Update((int)_oRunUnit.Ds.Tables[0].Rows[i][0],
+                    //                                Convert.ToDecimal(
+                    //                                    txtRunUnitThree.Value.ToString()),
+                    //                                _oRunUnit.Ds.Tables[0].Rows[i][3].
+                    //                                    ToString(),
+                    //                                (int)_oRunUnit.Ds.Tables[0].Rows[i][4],
+                    //                                _oLogon.UserID))
+                    //                            {
+                    //                                //Throw Error
+                    //                                throw new SystemException(
+                    //                                    @"Error Updating Run Units -" + _oRunUnit.LastError);
+                    //                            }
+                    //                        }
+                    //                        break;
+                    //                    }
+                    //            }
+                    //        }
+
+                    //        //Update Completed Units
+                    //        _oJob.ClearErrors();
+
+                    //        //Create Temp Variables
+                    //        decimal tmpUnit1 = 0;
+                    //        decimal tmpUnit2 = 0;
+                    //        decimal tmpUnit3 = 0;
+
+                    //        //Check For Valid Input
+                    //        if ((HttpContext.Current.Session["txtRunUnitOne"] != null) && (HttpContext.Current.Session["txtRunUnitOne"].ToString() != ""))
+                    //        {
+                    //            //Get Unit 1
+                    //            tmpUnit1 = Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitOne"]);
+                    //        }
+
+                    //        //Check For Valid Input
+                    //        if ((HttpContext.Current.Session["txtRunUnitTwo"] != null) && (HttpContext.Current.Session["txtRunUnitTwo"].ToString() != ""))
+                    //        {
+                    //            //Get Unit 2
+                    //            tmpUnit2 = Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitTwo"]);
+                    //        }
+
+                    //        //Check For Valid Input
+                    //        if ((HttpContext.Current.Session["txtRunUnitThree"] != null) && (HttpContext.Current.Session["txtRunUnitThree"].ToString() != ""))
+                    //        {
+                    //            //Get Unit 3
+                    //            tmpUnit3 = Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitThree"]);
+                    //        }
+
+                    //        //Update Completed Units
+                    //        if (!_oJob.UpdateCompletedUnits(jobId, tmpUnit1, tmpUnit2, tmpUnit3))
+                    //        {
+                    //            //Throw Error
+                    //            throw new SystemException(
+                    //                @"Error Updating Completed Units -" + _oJob.LastError);
+                    //        }
+                    //    }
+                    //}
+
+                    ////Update Charge To
+                    //if (!_oJobStep.UpdateChargeTo(jobId, jobStepId, jobChargeTo, _oLogon.UserID))
+                    //{
+                    //    //Throw Error
+                    //    throw new SystemException(
+                    //        @"Error Updating Charge To -" + _oJobStep.LastError);
+                    //}
+
+                    ////Update Incident Log Link
+                    //if (!_oJobStep.UpdateIncidentLogLink(jobId, jobStepId, jobIncidentLog, _oLogon.UserID))
+                    //{
+                    //    //Throw Error
+                    //    throw new SystemException(
+                    //        @"Error Updating Incident Log Link -" + _oJobStep.LastError);
+                    //}
+
+                    ////Update Production Units
+                    //if (!_oJob.UpdateProductionUnits(jobId, jobEstimatedUnits, jobActualUnits, _oLogon.UserID))
+                    //{
+                    //    //Throw Error
+                    //    throw new SystemException(
+                    //        @"Error Updating Production Units -" + _oJob.LastError);
+                    //}
+
+                   
+
+                    ////Update Costing Information
+                    //if (
+                    //    !_oJob.UpdateJobCosting(
+                    //        Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
+                    //        costCodeId,
+                    //        fundSource,
+                    //        workOrder,
+                    //        workOp,
+                    //        orgCode,
+                    //        fundingGroup,
+                    //        equipNumber,
+                    //        controlSection,
+                    //        _oLogon.UserID))
+                    //{
+                    //    //Throw Error
+                    //    throw new SystemException(
+                    //        @"Error Updating Job Costing -" + _oJob.LastError);
+                    //}
+                    //Check For Value
+                    if (HttpContext.Current.Session["AssignedJobID"] != null)
+                    {
+                        //Get Additional Info From Session
+                        lblHeader.Text = (HttpContext.Current.Session["AssignedJobID"].ToString());
+
+                        //Check For Step
+                        if (HttpContext.Current.Session["editingJobStepNum"] != null)
+                        {
+                            //Set Text
+                            lblStep.Text = @"STEP #" +
+                                           (HttpContext.Current.Session["editingJobStepNum"]);
+                        }
+
+                        //Setup For Editing
+                        SetupForEditing();
+
+                        var jobStepKey = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
+;
+                        Response.Redirect(
+                                                    "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobStepKey, true);
+                    }
+
+                    //Success Return True
+                    
+                }
+
+                //Throw Error
+                throw new SystemException(
+                    @"Error Updating Job -" + _oJob.LastError);
+            }
+            catch (Exception ex)
+            {
+                //Show Error
+                Master.ShowError(ex.Message);
+
+                //Return False To Prevent Navigation
+                
+            }
         }
     }
 }

@@ -193,6 +193,10 @@
             window.CrewGroupPopup.Hide();
         }
 
+        function ShowCrewPopup() {
+            window.AddCrewPopup.Show();
+        }
+
         function AddEditOtherRow() {
             window.StartEdit();
         }
@@ -1067,7 +1071,9 @@
                                                             <Border BorderColor="Gray" BorderStyle="Solid"></Border>
                                                             <Templates>
                                                                 <FooterRow>
-                                                                    <dx:ASPxButton runat="server" ID="AddNewCrewButton" OnClick="AddNewCrewButton_click" Theme="iOS" Text="Add New Crew Member"></dx:ASPxButton>
+                                                                    <dx:ASPxButton runat="server" ID="AddNewCrewButton"  Theme="iOS" Text="Add New Crew Member">
+                                                                        <ClientSideEvents Click="ShowCrewPopup" />
+                                                                    </dx:ASPxButton>
                                                                     <dx:ASPxButton runat="server" ID="DeleteCrewButton" OnClick="btnDeleteCrew_Click" Theme="iOS" Text="Delete Crew Member"></dx:ASPxButton>
                                                                 </FooterRow>
 

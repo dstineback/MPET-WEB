@@ -93,6 +93,7 @@
             }
         }
 
+
         function showPosition(position) {
 
             var lat = position.coords.latitude;
@@ -199,9 +200,31 @@
             window.CrewGroupPopup.Hide();
         }
 
+        function ShowCrewPopup() {
+            window.AddCrewPopup.Show();
+        }
+
+        function ShowMemberPopup() {
+            window.AddMemberPopup.Show();
+        }
+
+        function ShowPartPopup() {
+            window.AddPartPopup.Show();
+        }
+
+        function ShowEquipPopup() {
+            window.AddEquipPopup.Show();
+        }
+
+        function ShowOtherPopup() {
+            window.OtherEditGroup.Show();
+        }
+
         function AddEditOtherRow() {
             window.StartEdit();
         }
+
+        
 
         function OtherGrid_BatchEditRowValidating(s, e) {
             var otherDescColumn = s.GetColumnByField("OtherDescr");
@@ -308,7 +331,7 @@
         </Items>
     </dx:ASPxFormLayout>  
         <%--This label is set below the Description box--%>
-    <dx:ASPxLabel ID="dbclciklable" Font-Size="Small" Theme="Mulberry" runat="server" Text="*Double Click to Edit" ></dx:ASPxLabel>
+    
     <dx:ASPxFormLayout ID="WorkReqDetailLayout" runat="server" Width="98%" Paddings="0,0" RequiredMarkDisplayMode="RequiredOnly" RequiredMark="" EnableViewState="True" >
         <Items>
             <dx:LayoutGroup Caption="" Width="98%" ColCount="2" SettingsItemCaptions-Location="Top" GroupBoxDecoration="None">
@@ -1586,11 +1609,11 @@
                                                                 runat="server" 
                                                                 Theme="Mulberry" 
                                                                 KeyFieldName="n_JobOtherID" 
-                                                                Width="98%" 
+                                                                Width="98%"  
                                                                 KeyboardSupport="True" 
                                                                 ClientInstanceName="MemberGrid" 
                                                                 AutoPostBack="True" 
-                                                                EnableCallBacks="true"
+                                                                EnableCallBacks="true" 
                                                                 Settings-HorizontalScrollBarMode="Auto" 
                                                                 SettingsPager-Mode="ShowPager" 
                                                                 SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
@@ -1651,7 +1674,7 @@
                                                                         <HeaderStyle HorizontalAlign="Center"></HeaderStyle>                                                                                                                                                                     
                                                                     </dx:GridViewDataDateColumn>
                                                                 </Columns>
-                                                                <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
+                                                                <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn"  />
                                                                 <SettingsDataSecurity AllowDelete="False" AllowInsert="True" AllowEdit="True"/>
                                                                 <SettingsEditing Mode="PopupEditForm" 
                                                                                  PopupEditFormHorizontalAlign="WindowCenter"
@@ -1659,7 +1682,7 @@
                                                                                  PopupEditFormWidth="800px" 
                                                                                  PopupEditFormModal="True" 
                                                                                  PopupEditFormShowHeader="False"></SettingsEditing>
-                                                                <Settings VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350"  />
+                                                                <Settings VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" ShowFooter="true"  />
                                                                 <SettingsPager PageSize="10">
                                                                     <PageSizeItemSettings Visible="true" />
                                                                 </SettingsPager>
@@ -1764,6 +1787,14 @@
                                                                             </dx:ASPxButton>     
                                                                         </div>
                                                                     </EditForm>
+                                                                </Templates>
+                                                                <Templates>
+                                                                    <FooterRow>
+                                                                        <dx:ASPxButton runat="server" ID="AddNewMemberButton" Theme="Mulberry" Text="Add New Member">
+                                                                            <ClientSideEvents Click="ShowMemberPopup" />
+                                                                        </dx:ASPxButton>
+                                                                        <dx:ASPxButton runat="server" ID="DeleteMemberButton" OnClick="DeleteItems_Click" Theme="Mulberry" Text="Delete Member"></dx:ASPxButton>
+                                                                    </FooterRow>
                                                                 </Templates>
                                                             </dx:ASPxGridView>                                                    
                                                             <asp:SqlDataSource ID="MemberDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="
@@ -2294,6 +2325,15 @@
                                                                         </div>
                                                                     </EditForm>
                                                                 </Templates>
+                                                                <Templates>
+                                                                    <FooterRow>
+                                                                        <dx:ASPxButton runat="server" ID="AddNewCrewButton" Theme="Mulberry" Text="Add New Crew Member">
+                                                                            <ClientSideEvents Click="ShowCrewPopup" />
+                                                                        </dx:ASPxButton>
+                                                                            
+                                                                        <dx:ASPxButton runat="server" ID="DeleteCrewButton" OnClick="DeleteItems_Click" Theme="Mulberry" Text="Delete Crew Member"></dx:ASPxButton>
+                                                                    </FooterRow>
+                                                                </Templates>
                                                             </dx:ASPxGridView>
                                                             <asp:SqlDataSource ID="CrewPaycodeGridLookupDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="
                                                                                                             SELECT  tblPC.n_paycodeid ,
@@ -2623,9 +2663,9 @@
                                                             <dx:GridViewDataTextColumn FieldName="n_jobpartid" ReadOnly="True" VisibleIndex="1">
                                                                 <EditFormSettings Visible="False"></EditFormSettings>
                                                             </dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_masterpartid" VisibleIndex="2"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_storeroomid" VisibleIndex="3"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="b_nonstocked" VisibleIndex="4"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_masterpartid" VisibleIndex="2" Visible="false"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_storeroomid" VisibleIndex="3" Visible="false"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="b_nonstocked" VisibleIndex="4" Visible="false"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="miscrefnum" VisibleIndex="5"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="nspartid" VisibleIndex="6"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="nspartcost" VisibleIndex="7"></dx:GridViewDataTextColumn>
@@ -2633,54 +2673,54 @@
                                                             <dx:GridViewDataTextColumn FieldName="NSPartDescr" VisibleIndex="9"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="qtyplanned" VisibleIndex="10"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="qtyused" VisibleIndex="11"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_MfgPartID" VisibleIndex="12"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_MfgPartID" VisibleIndex="12" Visible="false"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="DMRKey" VisibleIndex="13"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataDateColumn FieldName="WorkDate" ReadOnly="True" VisibleIndex="14"></dx:GridViewDataDateColumn>
                                                             <dx:GridViewDataTextColumn FieldName="storeroomid" VisibleIndex="15"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="cWorkDate" ReadOnly="True" VisibleIndex="16"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="time_batchid" VisibleIndex="17"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="xactionnum" ReadOnly="True" VisibleIndex="18"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_partatlocid" VisibleIndex="19"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_FundSrcCodeID" ReadOnly="True" VisibleIndex="20">
+                                                            <dx:GridViewDataTextColumn FieldName="n_partatlocid" VisibleIndex="19" Visible="false"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_FundSrcCodeID" ReadOnly="True" VisibleIndex="20" Visible="false">
                                                                 <EditFormSettings Visible="False"></EditFormSettings>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="FundSrcCodeID" VisibleIndex="21"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_WorkOrderCodeID" ReadOnly="True" VisibleIndex="22">
+                                                            <dx:GridViewDataTextColumn FieldName="n_WorkOrderCodeID" ReadOnly="True" VisibleIndex="22" Visible="false">
                                                                 <EditFormSettings Visible="False"></EditFormSettings>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" VisibleIndex="23"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_WorkOpID" ReadOnly="True" VisibleIndex="24">
+                                                            <dx:GridViewDataTextColumn FieldName="n_WorkOpID" ReadOnly="True" VisibleIndex="24" Visible="false">
                                                                 <EditFormSettings Visible="False"></EditFormSettings>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="WorkOpID" VisibleIndex="25"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_OrganizationCodeID" ReadOnly="True" VisibleIndex="26">
+                                                            <dx:GridViewDataTextColumn FieldName="n_OrganizationCodeID" ReadOnly="True" VisibleIndex="26" Visible="false">
                                                                 <EditFormSettings Visible="False"></EditFormSettings>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="OrganizationCodeID" VisibleIndex="27"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_FundingGroupCodeID" ReadOnly="True" VisibleIndex="28">
+                                                            <dx:GridViewDataTextColumn FieldName="n_FundingGroupCodeID" ReadOnly="True" VisibleIndex="28" Visible="false">
                                                                 <EditFormSettings Visible="False"></EditFormSettings>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" VisibleIndex="29"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_ObjectCodeID" ReadOnly="True" VisibleIndex="30">
+                                                            <dx:GridViewDataTextColumn FieldName="n_ObjectCodeID" ReadOnly="True" VisibleIndex="30" Visible="false">
                                                                 <EditFormSettings Visible="False"></EditFormSettings>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="ObjectCodeID" VisibleIndex="31"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_ControlSectionID" ReadOnly="True" VisibleIndex="32">
+                                                            <dx:GridViewDataTextColumn FieldName="n_ControlSectionID" ReadOnly="True" VisibleIndex="32" Visible="false">
                                                                 <EditFormSettings Visible="False"></EditFormSettings>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="ControlSectionID" VisibleIndex="33"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_EquipmentNumberID" ReadOnly="True" VisibleIndex="34">
+                                                            <dx:GridViewDataTextColumn FieldName="n_EquipmentNumberID" ReadOnly="True" VisibleIndex="34" Visible="false">
                                                                 <EditFormSettings Visible="False"></EditFormSettings>
                                                             </dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="EquipmentNumberID" VisibleIndex="35"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="Entered From" VisibleIndex="36"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_StoresIssueID" VisibleIndex="37"></dx:GridViewDataTextColumn>
-                                                            <dx:GridViewDataTextColumn FieldName="n_StoresIssueItemid" VisibleIndex="38"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_StoresIssueID" VisibleIndex="37" Visible="false"></dx:GridViewDataTextColumn>
+                                                            <dx:GridViewDataTextColumn FieldName="n_StoresIssueItemid" VisibleIndex="38" Visible="false"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="aisle" VisibleIndex="39"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="shelf" VisibleIndex="40"></dx:GridViewDataTextColumn>
                                                             <dx:GridViewDataTextColumn FieldName="bin" VisibleIndex="41"></dx:GridViewDataTextColumn>
 
-                                                            <dx:GridViewCommandColumn ShowNewButton="True" ShowEditButton="True" ShowDeleteButton="True" VisibleIndex="0"></dx:GridViewCommandColumn>
+                                                            <%--<dx:GridViewCommandColumn ShowNewButton="True" ShowEditButton="True" ShowDeleteButton="True" VisibleIndex="0"></dx:GridViewCommandColumn>--%>
                                                         </Columns>
                                                         <Settings 
                                                             VerticalScrollBarMode="Visible" 
@@ -2926,6 +2966,14 @@
                                                                         </div>
                                                                     </EditForm>
                                                                 </Templates>
+                                                        <Templates>
+                                                                <FooterRow>
+                                                                    <dx:ASPxButton runat="server" ID="AddNewPartButton" OnClick="AddNewItemButton_Click" Theme="Mulberry" Text="Add New Part">
+                                                        
+                                                                    </dx:ASPxButton>
+                                                                    <dx:ASPxButton runat="server" ID="DeletePartButton" OnClick="DeleteItems_Click" Theme="Mulberry" Text="Delete Part"></dx:ASPxButton>
+                                                                </FooterRow>
+                                                         </Templates>
                                                     </dx:ASPxGridView>      
                                                     <asp:SqlDataSource ID="PartDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="
                                                         DECLARE @NullDate DATETIME
@@ -3375,6 +3423,14 @@
                                                                         </div>
                                                                     </EditForm>
                                                                 </Templates>
+                                                                <Templates>
+                                                                <FooterRow>
+                                                                    <dx:ASPxButton runat="server" ID="AddNewEquipButton" OnClick="AddNewItemButton_Click" Theme="Mulberry" Text="Add New Equipment">
+                                                                        <ClientSideEvents Click="ShowEquipPopup" />
+                                                                    </dx:ASPxButton>
+                                                                    <dx:ASPxButton runat="server" ID="DeleteEquipButton" OnClick="DeleteItems_Click" Theme="Mulberry" Text="Delete Equipment"></dx:ASPxButton>
+                                                                </FooterRow>
+                                                                </Templates>
                                                             </dx:ASPxGridView>                                                    
                                                             <asp:SqlDataSource ID="EquipDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="
                                                         --Create Null Date
@@ -3676,6 +3732,14 @@
                                                                         </div>
                                                                     </EditForm>
                                                                 </Templates>
+                                                                <Templates>
+                                                                    <FooterRow>
+                                                                        <dx:ASPxButton runat="server" ID="AddNewOtherButton" OnClick="AddNewItemButton_Click" Theme="Mulberry" Text="Add New Other">
+                                                                            
+                                                                        </dx:ASPxButton>
+                                                                        <dx:ASPxButton runat="server" ID="DeleteOtherButton" OnClick="DeleteItems_Click" Theme="Mulberry" Text="Delete Other"></dx:ASPxButton>
+                                                                    </FooterRow>
+                                                                </Templates>
                                                             </dx:ASPxGridView>                                                    
                                                             <asp:SqlDataSource ID="OtherDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="
                                                          --Create Null Date Variable
@@ -3852,6 +3916,12 @@
                                                                                             <SettingsPager PageSize="10">
                                                                                                 <PageSizeItemSettings Visible="true" />
                                                                                             </SettingsPager>
+                                                                                            <Templates>
+                                                                                                <FooterRow>
+                                                                                                    
+                                                                                                    <dx:ASPxButton runat="server" ID="DeleteAttachmentButton" OnClick="DeleteAttachmentButton_Click" Theme="Mulberry" Text="Delete Crew Member"></dx:ASPxButton>
+                                                                                                </FooterRow>
+                                                                                            </Templates>
                                                                                         </dx:ASPxGridView>      
                                                                                         <asp:SqlDataSource ID="AttachmentDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="SELECT [ID], [nJobID], [nJobstepID], [DocType], [Description], [LocationOrURL], [ShortName] FROM [Attachments] WHERE (([nJobID] = @nJobID) AND ([nJobstepID] = @nJobstepID))">
                                                                                             <SelectParameters>
@@ -3875,7 +3945,7 @@
                                         </dx:TabPage> <%--Attachments--%>
                                     </TabPages> <%--Planned Job tabs--%>
                                 </dx:ASPxPageControl>
-                                <dx:ASPxPopupControl ID="AddCrewPopup" ClientInstanceName="AddCrewPopup" ShowCloseButton="false" ShowHeader="false" HeaderText=""
+                                <dx:ASPxPopupControl ID="AddCrewPopup" ClientInstanceName="AddCrewPopup" ShowCloseButton="true" ShowHeader="false" HeaderText=""
                                                      CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
                                                      CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" Width="600px">
                                     <ContentCollection>
@@ -4038,7 +4108,7 @@
                                                                                 <dx:ASPxButton ID="LogonButton" AutoPostBack="True" runat="server" CssClass="button" Text="Add" OnClick="btnAddCrew_Click" >
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>
-                                                                                <dx:ASPxButton ID="OkButton" AutoPostBack="True" runat="server" Text="Cancel" CssClass="button">
+                                                                                <dx:ASPxButton ID="OkButton" AutoPostBack="True" runat="server" Text="Close" CssClass="button">
                                                                                     <ClientSideEvents Click="HidePopup" />
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>
@@ -4058,7 +4128,7 @@
 
                                     </FooterTemplate>
                                 </dx:ASPxPopupControl>                                 
-                                <dx:ASPxPopupControl ID="AddEquipPopup" ClientInstanceName="AddEquipPopup" ShowCloseButton="false" ShowHeader="false" HeaderText=""
+                                <dx:ASPxPopupControl ID="AddEquipPopup" ClientInstanceName="AddEquipPopup" ShowCloseButton="true" ShowHeader="false" HeaderText=""
                                                      CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
                                                      CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" Width="600px">
                                     <ContentCollection>
@@ -4210,7 +4280,7 @@
                                                                                 <dx:ASPxButton ID="btnAddEquip" AutoPostBack="True" runat="server" CssClass="button" Text="Add" OnClick="btnAddEquip_Click" >
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>
-                                                                                <dx:ASPxButton ID="btnCancelEquipAdd" AutoPostBack="True" runat="server" Text="Cancel" CssClass="button">
+                                                                                <dx:ASPxButton ID="btnCancelEquipAdd" AutoPostBack="True" runat="server" Text="Close" CssClass="button">
                                                                                     <ClientSideEvents Click="HidePopup" />
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>
@@ -4230,7 +4300,7 @@
 
                                     </FooterTemplate>
                                 </dx:ASPxPopupControl>       
-                                <dx:ASPxPopupControl ID="AddMemberPopup" ClientInstanceName="AddMemberPopup" ShowCloseButton="false" ShowHeader="false" HeaderText=""
+                                <dx:ASPxPopupControl ID="AddMemberPopup" ClientInstanceName="AddMemberPopup" ShowCloseButton="true" ShowHeader="false" HeaderText=""
                                                      CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
                                                      CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" Width="600px">
                                     <ContentCollection>
@@ -4374,7 +4444,7 @@
                                                                                 <dx:ASPxButton ID="btnAddMember" AutoPostBack="True" runat="server" CssClass="button" Text="Add" OnClick="btnAddMember_Click" >
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>
-                                                                                <dx:ASPxButton ID="btnCancelMemberAdd" AutoPostBack="True" runat="server" Text="Cancel" CssClass="button">
+                                                                                <dx:ASPxButton ID="btnCancelMemberAdd" AutoPostBack="True" runat="server" Text="Close" CssClass="button">
                                                                                     <ClientSideEvents Click="HidePopup" />
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>
@@ -4394,7 +4464,7 @@
 
                                     </FooterTemplate>
                                 </dx:ASPxPopupControl>     
-                                <dx:ASPxPopupControl ID="AddPartPopup" ClientInstanceName="AddPartPopup" ShowCloseButton="false" ShowHeader="false" HeaderText=""
+                                <dx:ASPxPopupControl ID="AddPartPopup" ClientInstanceName="AddPartPopup" ShowCloseButton="true" ShowHeader="false" HeaderText=""
                                                      CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
                                                      CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" Width="600px" AllowDragging="true">
                                     <ContentCollection>
@@ -4653,7 +4723,7 @@
                                                                                 <dx:ASPxButton ID="btnAddPart" AutoPostBack="True" runat="server" CssClass="button" Text="Add" OnClick="btnAddPart_Click" >
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>
-                                                                                <dx:ASPxButton ID="btnCancelPartAdd" AutoPostBack="True" runat="server" Text="Cancel" CssClass="button">
+                                                                                <dx:ASPxButton ID="btnCancelPartAdd" AutoPostBack="True" runat="server" Text="Close" CssClass="button">
                                                                                     <ClientSideEvents Click="HidePopup" />
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>

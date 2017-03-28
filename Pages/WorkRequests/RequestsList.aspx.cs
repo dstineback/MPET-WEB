@@ -56,7 +56,7 @@ namespace Pages.WorkRequests
                     Master.ShowCopyJobButton = _userCanAdd;
                     Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd); 
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
-                    Master.ShowPrintButton = true;
+                    Master.ShowPrintButton = false;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = true;
                     Master.ShowMultiSelectButton = _userCanDelete;
@@ -194,7 +194,7 @@ namespace Pages.WorkRequests
             Master.ShowNewButton = !(ReqGrid.Columns[0].Visible);
             Master.ShowEditButton = !(ReqGrid.Columns[0].Visible);
             Master.ShowViewButton = !(ReqGrid.Columns[0].Visible);
-            Master.ShowPrintButton = !(ReqGrid.Columns[0].Visible);
+            Master.ShowPrintButton = false;/*!(ReqGrid.Columns[0].Visible)*/
             Master.ShowPlanButton = !(ReqGrid.Columns[0].Visible);
             Master.ShowCopyJobButton = !(ReqGrid.Columns[0].Visible);
             Master.ShowForcePmButton = !((ReqGrid.Columns[0].Visible) && _userCanEdit);
@@ -671,7 +671,7 @@ namespace Pages.WorkRequests
                             #endregion
 
                             //Forward User To Planned Job
-                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
                         }
                         else
                         {
@@ -1642,7 +1642,7 @@ namespace Pages.WorkRequests
                                 ref newStandardJobId))
                             {
                                 //Forward User To Copied Work Order
-                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepId, true);
+                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepId, true);
                             }
                             else
                             {
@@ -2852,7 +2852,7 @@ namespace Pages.WorkRequests
                             }
 
                             //Forward User To Copied Work Order
-                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepId, true);
+                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepId, true);
                         }
                         else
                         {

@@ -760,7 +760,7 @@ namespace Pages.WorkRequests
             Master.ShowSaveButton = false;
             Master.ShowNewButton = _userCanAdd;
             Master.ShowDeleteButton = false;
-            Master.ShowPrintButton = true;
+            Master.ShowPrintButton = false;
 
         }
 
@@ -775,7 +775,7 @@ namespace Pages.WorkRequests
             Master.ShowCopyJobButton = _userCanAdd;
             Master.ShowNewButton = _userCanAdd;
             Master.ShowDeleteButton = _userCanDelete;
-            Master.ShowPrintButton = true;
+            Master.ShowPrintButton = false;
 
             //Enable Tabs
             
@@ -2770,7 +2770,7 @@ namespace Pages.WorkRequests
                         #endregion
 
                         //Forward User To Planned Job
-                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
                     }
                     else
                     {
