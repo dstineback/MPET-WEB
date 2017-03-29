@@ -2769,6 +2769,8 @@ namespace Pages.WorkRequests
 
                         #endregion
 
+                        HttpContext.Current.Session.Add("editingJobStepID", plannerdJobStepId);
+
                         //Forward User To Planned Job
                         Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
                     }

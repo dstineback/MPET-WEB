@@ -825,7 +825,7 @@
                                                                                                                      ValueType="System.String" ValueField="n_costcodeid"
                                                                                                                      OnItemsRequestedByFilterCondition="ComboCostCode_OnItemsRequestedByFilterCondition_SQL"
                                                                                                                      OnItemRequestedByValue="ComboCostCode_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                                                                                     Width="450px" DropDownStyle="DropDown" Theme="Mulberry" TextField="CostCodeID" DropDownButton-Enabled="True" AutoPostBack="True" ClientInstanceName="ComboCostCode">
+                                                                                                                     Width="450px" DropDownStyle="DropDown" Theme="Mulberry" TextField="CostCodeID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboCostCode">
                                                                                                
                                                                                                         <Columns>
                                                                                                             <dx:ListBoxColumn FieldName="n_costcodeid" Visible="False" />
@@ -980,7 +980,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage> <%--Costing--%>
-                                                            <dx:TabPage Text="ESTIMATES" ToolTip="Allows Input Of Jobstep Estimate Costs">
+                                                            <dx:TabPage Text="ESTIMATES" ToolTip="Allows Input Of Jobstep Estimate Costs" Visible="false">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobEstContent" runat="server">
                                                                     <dx:ASPxFormLayout ID="PlannedJobEstLayout" ColCount="2" runat="server">
@@ -1101,7 +1101,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage> <%--Estimates--%>
-                                                            <dx:TabPage Text="ACTUALS" ToolTip="Allows Input Of Jobstep Actual Costs">
+                                                            <dx:TabPage Text="ACTUALS" ToolTip="Allows Input Of Jobstep Actual Costs" Visible="false">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobActContent" runat="server">
                                                                         <dx:ASPxFormLayout ID="PlannedJobActLayout" ColCount="2" runat="server">
@@ -1222,7 +1222,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage> <%--Actuals--%>
-                                                            <dx:TabPage Text="FACILITY" ToolTip="Allows Input Of Jobstep Facility Information">
+                                                            <dx:TabPage Text="FACILITY" ToolTip="Allows Input Of Jobstep Facility Information" Visible="false">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl5" runat="server">
                                                                         <dx:ASPxFormLayout ID="WorkReqFrmLayout" Width="98%" runat="server" Font-Size="Medium" >
@@ -1368,7 +1368,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage> <%--Facilty--%>
-                                                            <dx:TabPage Text="TRACKING" ToolTip="Allows Input Of Jobstep Tracking Information">
+                                                            <dx:TabPage Text="TRACKING" ToolTip="Allows Input Of Jobstep Tracking Information" Visible="false">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobTrackingCC" runat="server">
                                                                         <dx:ASPxFormLayout ID="PlannedJobTrackingLayout" runat="server">
@@ -1382,7 +1382,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage> <%--Tracking--%>
-                                                            <dx:TabPage Text="ASSIGNMENTS" ToolTip="Allows Input Of Jobstep Assignment Information">
+                                                            <dx:TabPage Text="ASSIGNMENTS" ToolTip="Allows Input Of Jobstep Assignment Information" Visible="false">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobAssignmentsCC" runat="server">
                                                                         <dx:ASPxFormLayout ID="PlannedJobAssignmentsLayout" runat="server">
@@ -1396,7 +1396,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage> <%--Assignments--%>
-                                                            <dx:TabPage Text="COMPLETION" ToolTip="Allows Input Of Jobstep Completion Information">
+                                                            <dx:TabPage Text="COMPLETION" ToolTip="Allows Input Of Jobstep Completion Information" Visible="false">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobCompCC" runat="server">
                                                                         <dx:ASPxFormLayout ID="PlannedJobCompLayout" ColCount="2" runat="server">
@@ -1540,7 +1540,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage> <%--Completion--%>
-                                                            <dx:TabPage Text="PROCEDURES" ToolTip="Allows Input Of Jobstep Notes">
+                                                            <dx:TabPage Text="PROCEDURES" ToolTip="Allows Input Of Jobstep Notes" Visible="false">
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl7" runat="server">
                                                                         <dx:ASPxFormLayout ID="AdditionalContentLayoutGroup" Theme="Mulberry" runat="server" Width="98%" Paddings="0,0">

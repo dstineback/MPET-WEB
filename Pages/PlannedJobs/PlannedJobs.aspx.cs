@@ -61,6 +61,12 @@ namespace Pages.PlannedJobs
                 //Add Use ID TO Session
                 HttpContext.Current.Session.Add("UserID", _oLogon.UserID);
 
+                var jobStepIdToLoad = Convert.ToInt32(Request.QueryString["n_jobstepid"]);
+                if (jobStepIdToLoad > 0)
+                {
+                    HttpContext.Current.Session.Add("editingJobStepID", jobStepIdToLoad);
+                }
+
                 //Load Form Permissions
                 if (FormSetup(_oLogon.UserID))
                 {
@@ -190,6 +196,11 @@ namespace Pages.PlannedJobs
                         {
                                 //GetCurrentValues(); 
                                 //Check For Job ID
+                                var jobStepIdToLoad = Convert.ToInt32(Request.QueryString["n_jobstepid"]);
+                                if(jobStepIdToLoad > 0)
+                                {
+                                    HttpContext.Current.Session.Add("editingJobStepID", jobStepIdToLoad);
+                                }
                                 var eJSID = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
                                 var editJobID = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
                                 var nID = Convert.ToInt32(HttpContext.Current.Session["n_jobstepid"]);
@@ -213,7 +224,7 @@ namespace Pages.PlannedJobs
                                         SaveSessionData();                                   
                                         AddRequest();
                                         PlanJobRoutine();
-                                        AddJobStep();
+                                        //AddJobStep();
                                         HttpContext.Current.Session.Add("editingJobStepID", _oJobStep.RecordID);
 
                                         var editJobStepID = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
@@ -226,7 +237,7 @@ namespace Pages.PlannedJobs
                                     }
                                     else
                                     {
-                                        if(nID > 0)
+                                        if(eJSID > 0)
                                         {
                                             SaveSessionData();
                                         
@@ -622,8 +633,10 @@ namespace Pages.PlannedJobs
                                                     ((int) _oJob.Ds.Tables[0].Rows[0]["n_Jobid"]));
 
                                                 //Add Editing Job Step ID
-                                                HttpContext.Current.Session.Add("editingJobStepID",
-                                                    ((int)_oJobStep.Ds.Tables[0].Rows[0]["n_jobstepid"]));
+                                                HttpContext.Current.Session.Add("editingJobStepID", jobStepIdToLoad);
+                                                    HttpContext.Current.Session.Add("editingJobStepID",
+                                                        ((int)_oJobStep.Ds.Tables[0].Rows[0]["n_jobstepid"]));
+                                           
 
                                                 //Add Job Step 
                                                 HttpContext.Current.Session.Add("editingJobStepNum",
@@ -681,8 +694,17 @@ namespace Pages.PlannedJobs
                                                     _oJob.Ds.Tables[0].Rows[0]["Jobid"]);
 
                                                 //Add Description
+
+                                                if(jobStepIdToLoad > 0)
+                                                {
+                                                    HttpContext.Current.Session.Add("txtWorkDescription",
+                                                    _oJobStep.Ds.Tables[0].Rows[0]["JobStepTitle"]);
+                                                } else
+                                                {
+
                                                 HttpContext.Current.Session.Add("txtWorkDescription",
                                                     _oJob.Ds.Tables[0].Rows[0]["Title"]);
+                                                }
 
                                                 //Add Request Date
                                                 HttpContext.Current.Session.Add("TxtWorkRequestDate",
@@ -705,6 +727,9 @@ namespace Pages.PlannedJobs
                                                     HttpContext.Current.Session.Add("TxtCompletionDate",
                                                         _oJobStep.Ds.Tables[0].Rows[0]["DateTimeCompleted"]);
                                                 }
+
+                                                HttpContext.Current.Session.Add("ComboOutcome", _oJobStep.Ds.Tables[0].Rows[0]["n_outcomecodeid"]);
+                                                HttpContext.Current.Session.Add("txtReturnWithin", _oJobStep.Ds.Tables[0].Rows[0]["return_within"]);
 
                                                 //Add Step Number
                                                 HttpContext.Current.Session.Add("stepnumber",
@@ -817,7 +842,7 @@ namespace Pages.PlannedJobs
                                                 HttpContext.Current.Session.Add("ComboWorkOp",
                                                     _oJobStep.Ds.Tables[0].Rows[0]["n_WorkOpID"]);
                                                 HttpContext.Current.Session.Add("ComboWorkOpText",
-                                                    _oJobStep.Ds.Tables[0].Rows[0]["WorkOpID"]);
+                                                    _oJob.Ds.Tables[0].Rows[0]["WorkOpID"]);
 
                                                 #endregion
 
@@ -918,75 +943,75 @@ namespace Pages.PlannedJobs
 
                                                 #endregion
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtFN"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtFN");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["txtFN"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("txtFN");
+                                                }
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtLN"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtLN");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["txtLN"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("txtLN");
+                                                }
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtEmail"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtEmail");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["txtEmail"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("txtEmail");
+                                                }
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtPhone"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtPhone");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["txtPhone"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("txtPhone");
+                                                }
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtExt"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtExt");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["txtExt"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("txtExt");
+                                                }
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtMail"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtMail");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["txtMail"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("txtMail");
+                                                }
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtBuilding"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtBuilding");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["txtBuilding"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("txtBuilding");
+                                                }
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtRoomNum"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtRoomNum");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["txtRoomNum"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("txtRoomNum");
+                                                }
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["ComboServiceOffice"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("ComboServiceOffice");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["ComboServiceOffice"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("ComboServiceOffice");
+                                                }
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["ComboServiceOfficeText"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("ComboServiceOfficeText");
-                                                //}
+                                                //Check For Prior Value
+                                                if (HttpContext.Current.Session["ComboServiceOfficeText"] != null)
+                                                {
+                                                    //Remove Old One
+                                                    HttpContext.Current.Session.Remove("ComboServiceOfficeText");
+                                                }
 
                                                 #region Setup Location
 
@@ -1063,7 +1088,7 @@ namespace Pages.PlannedJobs
             }
 
             //Setup User Defined Fields
-            SetupUserDefinedFields();
+            //SetupUserDefinedFields();
 
             if (!IsPostBack)
             {
@@ -1093,7 +1118,7 @@ namespace Pages.PlannedJobs
                 if (HttpContext.Current.Session["editingJobStepNum"] != null)
                 {
                     //Get Additional Info From Session
-                    lblStep.Text = @"STEP #" + (HttpContext.Current.Session["editingJobStepNum"]);
+                    lblStep.Text = @"STEP #" + (HttpContext.Current.Session["editingJobStepID"]);
                 }
 
                 //Step Number
@@ -1541,7 +1566,7 @@ namespace Pages.PlannedJobs
                                 || (OtherGrid.Columns[0].Visible));
 
             //Enable/Disable Buttons
-            Master.ShowNewButton = showButtons;
+            Master.ShowNewButton = false;
             Master.ShowEditButton = (showButtons && (HttpContext.Current.Session[""] != null));
             Master.ShowViewButton = false;
             Master.ShowSaveButton = showButtons;
@@ -2135,8 +2160,8 @@ namespace Pages.PlannedJobs
         {
             //Setup Buttons
             Master.ShowSaveButton = (_userCanAdd || _userCanEdit);
-            Master.ShowNewButton = _userCanAdd;
-            Master.ShowDeleteButton = _userCanDelete;
+            Master.ShowNewButton = false;
+            Master.ShowDeleteButton = false;
             Master.ShowPrintButton = false;
 
         }
@@ -2151,8 +2176,8 @@ namespace Pages.PlannedJobs
             Master.ShowCopyJobButton = _userCanAdd;
             Master.ShowIssueButton = _userCanEdit;
             Master.ShowEditButton = _userCanEdit;
-            Master.ShowNewButton = _userCanAdd;
-            Master.ShowDeleteButton = _userCanDelete;
+            Master.ShowNewButton = false;
+            Master.ShowDeleteButton = false;
             Master.ShowPrintButton = false;
             Master.ShowMultiSelectButton = _userCanEdit;
 
@@ -2167,8 +2192,8 @@ namespace Pages.PlannedJobs
         {
             //Setup Buttons
             Master.ShowSaveButton = (_userCanAdd || _userCanEdit);
-            Master.ShowNewButton = _userCanAdd;
-            Master.ShowDeleteButton = _userCanDelete;
+            Master.ShowNewButton = false;
+            Master.ShowDeleteButton = false;
 
             //Disable Tabs
             requestTab.Enabled = false;
@@ -6241,6 +6266,18 @@ namespace Pages.PlannedJobs
             //HttpContext.Current.Session.Add("txtRunUnitThree", txtRunUnitThree.Value.ToString());
 
             #endregion
+
+            #region Get Return Within
+
+            var jobReturnWithin = 0;
+            jobReturnWithin = Convert.ToInt32((HttpContext.Current.Session["txtReturnWithin"].ToString()));
+            if ((HttpContext.Current.Session["txtReturnWithin"] != null))
+            {
+                //Get Info From Session
+            }
+
+            #endregion
+
         }
 
         //protected void CrewGrid_DataBinding(object sender, EventArgs e)
@@ -6255,216 +6292,216 @@ namespace Pages.PlannedJobs
         //    PartGrid.DataSource = GetPartData(PartGrid.FilterExpression);
         //}
 
-//    protected DataTable GetPartData(string stringFilter)
-//    {
-//        //Create/SET SQL Source
-//        var sqlData = new SqlDataSource { ConnectionString = ConfigurationManager.ConnectionStrings["connection"].ToString() };
+        //    protected DataTable GetPartData(string stringFilter)
+        //    {
+        //        //Create/SET SQL Source
+        //        var sqlData = new SqlDataSource { ConnectionString = ConfigurationManager.ConnectionStrings["connection"].ToString() };
 
-//        //Get Job Step ID
-//        var jobStepId = -1;
-//        if ((HttpContext.Current.Session["editingJobStepID"] != null))
-//        {
-//            //Get Info From Session
-//            jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-//        }
+        //        //Get Job Step ID
+        //        var jobStepId = -1;
+        //        if ((HttpContext.Current.Session["editingJobStepID"] != null))
+        //        {
+        //            //Get Info From Session
+        //            jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
+        //        }
 
-//        //Get Job ID
-//        var jobId = -1;
-//        if ((HttpContext.Current.Session["editingJobID"] != null))
-//        {
-//            //Get Info From Session
-//            jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-//        }
+        //        //Get Job ID
+        //        var jobId = -1;
+        //        if ((HttpContext.Current.Session["editingJobID"] != null))
+        //        {
+        //            //Get Info From Session
+        //            jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
+        //        }
 
-//        //Set Command
-//        sqlData.SelectCommand =
-//            @"DECLARE @NullDate DATETIME
-//            SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
-//            declare @JobID INT
-//            declare @JobStepID INT
-//            --Return Data
-//            SELECT  tbl_JC.n_jobcrewid AS 'RecordID' ,
-//            tbl_JC.n_personid AS 'CrewMemberID' ,
-//            tbl_JC.n_skillid AS 'n_skillid' ,
-//            tbl_JC.n_ShiftID AS 'n_ShiftID' ,
-//            tbl_JC.n_PayCodeID AS 'n_PayCodeID' ,
-//            tbl_Users.Username AS 'CrewMemberTextID' ,
-//            tbl_Users.Name AS 'CrewMemberName' ,
-//            tbl_Shifts.ShiftID AS 'ShiftIDText' ,
-//            tbl_Shifts.Description AS 'ShiftIDDesc' ,
-//            tbl_Skills.skillid AS 'SkillIDText' ,
-//            tbl_Skills.description AS 'SkillDesc' ,
-//            tbl_JC.actuallen AS 'ActualHrs' ,
-//            tbl_JC.estlen AS 'EstHrs' ,
-//            tbl_JC.Payfactor AS 'PayRate' ,
-//            tbl_JC.PayfactorText AS 'PayCodeText' ,
-//            CASE tbl_JC.WorkDate
-//              WHEN @NullDate THEN NULL
-//              ELSE tbl_JC.WorkDate
-//            END AS 'WorkDate' ,
-//            CASE tbl_JC.CertificationDate
-//              WHEN @NullDate THEN NULL
-//              ELSE tbl_JC.CertificationDate
-//            END AS 'CertificationDate' ,
-//            CASE tbl_JC.CertificationDateExpires
-//              WHEN @NullDate THEN NULL
-//              ELSE tbl_JC.CertificationDateExpires
-//            END AS 'CertificationDateExpires' ,
-//            tbl_JC.n_laborclassid AS 'n_laborclassid' ,
-//            tbl_JC.RateType AS 'RateType' ,
-//            tbl_JC.DMRKEY AS 'DMRKEY' ,
-//            tbl_LaborClasses.laborclassid AS 'LaborClassID' ,
-//            CASE tbl_JC.RateType
-//              WHEN 0 THEN 'STANDARD'
-//              WHEN 1 THEN 'OVERTIME'
-//              WHEN 2 THEN 'OTHER'
-//            END AS 'RateTypeStr' ,
-//            ISNULL(tbl_TimeBatches.time_batchid, 'N/A') AS 'LinkedDMR'
-//            FROM    dbo.Jobcrews tbl_JC
-//                    INNER JOIN ( SELECT dbo.MPetUsers.UserID ,
-//                                        dbo.MPetUsers.Username ,
-//                                        LTRIM(RTRIM(FirstName + ' ' + LastName)) AS Name
-//                                 FROM   dbo.MPetUsers
-//                               ) tbl_Users ON tbl_JC.n_personid = tbl_Users.UserID
-//                    INNER JOIN ( SELECT dbo.skills.n_skillid ,
-//                                        dbo.skills.skillid ,
-//                                        dbo.skills.description
-//                                 FROM   dbo.skills
-//                               ) tbl_Skills ON tbl_JC.n_skillid = tbl_Skills.n_skillid
-//                    INNER JOIN ( SELECT dbo.Shifts.n_shiftid ,
-//                                        dbo.Shifts.ShiftID ,
-//                                        dbo.Shifts.Description
-//                                 FROM   dbo.Shifts
-//                               ) tbl_Shifts ON tbl_JC.n_ShiftID = tbl_Shifts.n_shiftid
-//                    INNER JOIN ( SELECT dbo.laborclasses.n_laborclassid ,
-//                                        dbo.laborclasses.laborclassid
-//                                 FROM   dbo.laborclasses
-//                               ) tbl_LaborClasses ON tbl_JC.n_laborclassid = tbl_LaborClasses.n_laborclassid
-//                    LEFT JOIN ( SELECT  dbo.time_batches.RecordID ,
-//                                        dbo.time_batches.time_batchid
-//                                FROM    dbo.time_batches
-//                              ) tbl_TimeBatches ON tbl_JC.DMRKey = tbl_TimeBatches.RecordID
-//            WHERE   tbl_JC.JobstepID = @JobStepID 
-//                    AND tbl_JC.JobID = @JobID
-//                    AND ( ( [Username] 
-//		            + ' ' + [Name] 
-//		            + ' ' + [skillid] 
-//		            + ' ' + [PayfactorText] 
-//		            + ' ' + [LaborClassID]) LIKE @filter )";
-
-
-//        //WHERE   cte_Jobs.[rn] BETWEEN @startIndex AND @endIndex
-//        sqlData.SelectParameters.Clear();
-//        sqlData.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", stringFilter));
-
-//        var dataTable = sqlData.Select(DataSourceSelectArguments.Empty) as DataView;
-//        return dataTable.Table;
-//    }
-
-//    protected DataTable GetCrewData(string stringFilter)
-//    {
-//        //Create/SET SQL Source
-//        var sqlData = new SqlDataSource { ConnectionString = ConfigurationManager.ConnectionStrings["connection"].ToString() };
-
-//        //Get Job Step ID
-//        var jobStepId = -1;
-//        if ((HttpContext.Current.Session["editingJobStepID"] != null))
-//        {
-//            //Get Info From Session
-//            jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-//        }
-
-//        //Get Job ID
-//        var jobId = -1;
-//        if ((HttpContext.Current.Session["editingJobID"] != null))
-//        {
-//            //Get Info From Session
-//            jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-//        }
-
-//        //Set Command
-//        sqlData.SelectCommand =
-//            @"DECLARE @NullDate DATETIME
-//            SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
-//
-//            --Return Data
-//            SELECT  tbl_JC.n_jobcrewid AS 'RecordID' ,
-//            tbl_JC.n_personid AS 'CrewMemberID' ,
-//            tbl_JC.n_skillid AS 'n_skillid' ,
-//            tbl_JC.n_ShiftID AS 'n_ShiftID' ,
-//            tbl_JC.n_PayCodeID AS 'n_PayCodeID' ,
-//            tbl_Users.Username AS 'CrewMemberTextID' ,
-//            tbl_Users.Name AS 'CrewMemberName' ,
-//            tbl_Shifts.ShiftID AS 'ShiftIDText' ,
-//            tbl_Shifts.Description AS 'ShiftIDDesc' ,
-//            tbl_Skills.skillid AS 'SkillIDText' ,
-//            tbl_Skills.description AS 'SkillDesc' ,
-//            tbl_JC.actuallen AS 'ActualHrs' ,
-//            tbl_JC.estlen AS 'EstHrs' ,
-//            tbl_JC.Payfactor AS 'PayRate' ,
-//            tbl_JC.PayfactorText AS 'PayCodeText' ,
-//            CASE tbl_JC.WorkDate
-//              WHEN @NullDate THEN NULL
-//              ELSE tbl_JC.WorkDate
-//            END AS 'WorkDate' ,
-//            CASE tbl_JC.CertificationDate
-//              WHEN @NullDate THEN NULL
-//              ELSE tbl_JC.CertificationDate
-//            END AS 'CertificationDate' ,
-//            CASE tbl_JC.CertificationDateExpires
-//              WHEN @NullDate THEN NULL
-//              ELSE tbl_JC.CertificationDateExpires
-//            END AS 'CertificationDateExpires' ,
-//            tbl_JC.n_laborclassid AS 'n_laborclassid' ,
-//            tbl_JC.RateType AS 'RateType' ,
-//            tbl_JC.DMRKEY AS 'DMRKEY' ,
-//            tbl_LaborClasses.laborclassid AS 'LaborClassID' ,
-//            CASE tbl_JC.RateType
-//              WHEN 0 THEN 'STANDARD'
-//              WHEN 1 THEN 'OVERTIME'
-//              WHEN 2 THEN 'OTHER'
-//            END AS 'RateTypeStr' ,
-//            ISNULL(tbl_TimeBatches.time_batchid, 'N/A') AS 'LinkedDMR'
-//            FROM    dbo.Jobcrews tbl_JC
-//                    INNER JOIN ( SELECT dbo.MPetUsers.UserID ,
-//                                        dbo.MPetUsers.Username ,
-//                                        LTRIM(RTRIM(FirstName + ' ' + LastName)) AS Name
-//                                 FROM   dbo.MPetUsers
-//                               ) tbl_Users ON tbl_JC.n_personid = tbl_Users.UserID
-//                    INNER JOIN ( SELECT dbo.skills.n_skillid ,
-//                                        dbo.skills.skillid ,
-//                                        dbo.skills.description
-//                                 FROM   dbo.skills
-//                               ) tbl_Skills ON tbl_JC.n_skillid = tbl_Skills.n_skillid
-//                    INNER JOIN ( SELECT dbo.Shifts.n_shiftid ,
-//                                        dbo.Shifts.ShiftID ,
-//                                        dbo.Shifts.Description
-//                                 FROM   dbo.Shifts
-//                               ) tbl_Shifts ON tbl_JC.n_ShiftID = tbl_Shifts.n_shiftid
-//                    INNER JOIN ( SELECT dbo.laborclasses.n_laborclassid ,
-//                                        dbo.laborclasses.laborclassid
-//                                 FROM   dbo.laborclasses
-//                               ) tbl_LaborClasses ON tbl_JC.n_laborclassid = tbl_LaborClasses.n_laborclassid
-//                    LEFT JOIN ( SELECT  dbo.time_batches.RecordID ,
-//                                        dbo.time_batches.time_batchid
-//                                FROM    dbo.time_batches
-//                              ) tbl_TimeBatches ON tbl_JC.DMRKey = tbl_TimeBatches.RecordID
-//            WHERE   tbl_JC.JobstepID = " + jobStepId + @"
-//                    AND tbl_JC.JobID = " + jobId + @"
-//                    AND ( ( [Username] 
-//		            + ' ' + [Name] 
-//		            + ' ' + [skillid] 
-//		            + ' ' + [PayfactorText] 
-//		            + ' ' + [LaborClassID]) LIKE @filter )";
+        //        //Set Command
+        //        sqlData.SelectCommand =
+        //            @"DECLARE @NullDate DATETIME
+        //            SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
+        //            declare @JobID INT
+        //            declare @JobStepID INT
+        //            --Return Data
+        //            SELECT  tbl_JC.n_jobcrewid AS 'RecordID' ,
+        //            tbl_JC.n_personid AS 'CrewMemberID' ,
+        //            tbl_JC.n_skillid AS 'n_skillid' ,
+        //            tbl_JC.n_ShiftID AS 'n_ShiftID' ,
+        //            tbl_JC.n_PayCodeID AS 'n_PayCodeID' ,
+        //            tbl_Users.Username AS 'CrewMemberTextID' ,
+        //            tbl_Users.Name AS 'CrewMemberName' ,
+        //            tbl_Shifts.ShiftID AS 'ShiftIDText' ,
+        //            tbl_Shifts.Description AS 'ShiftIDDesc' ,
+        //            tbl_Skills.skillid AS 'SkillIDText' ,
+        //            tbl_Skills.description AS 'SkillDesc' ,
+        //            tbl_JC.actuallen AS 'ActualHrs' ,
+        //            tbl_JC.estlen AS 'EstHrs' ,
+        //            tbl_JC.Payfactor AS 'PayRate' ,
+        //            tbl_JC.PayfactorText AS 'PayCodeText' ,
+        //            CASE tbl_JC.WorkDate
+        //              WHEN @NullDate THEN NULL
+        //              ELSE tbl_JC.WorkDate
+        //            END AS 'WorkDate' ,
+        //            CASE tbl_JC.CertificationDate
+        //              WHEN @NullDate THEN NULL
+        //              ELSE tbl_JC.CertificationDate
+        //            END AS 'CertificationDate' ,
+        //            CASE tbl_JC.CertificationDateExpires
+        //              WHEN @NullDate THEN NULL
+        //              ELSE tbl_JC.CertificationDateExpires
+        //            END AS 'CertificationDateExpires' ,
+        //            tbl_JC.n_laborclassid AS 'n_laborclassid' ,
+        //            tbl_JC.RateType AS 'RateType' ,
+        //            tbl_JC.DMRKEY AS 'DMRKEY' ,
+        //            tbl_LaborClasses.laborclassid AS 'LaborClassID' ,
+        //            CASE tbl_JC.RateType
+        //              WHEN 0 THEN 'STANDARD'
+        //              WHEN 1 THEN 'OVERTIME'
+        //              WHEN 2 THEN 'OTHER'
+        //            END AS 'RateTypeStr' ,
+        //            ISNULL(tbl_TimeBatches.time_batchid, 'N/A') AS 'LinkedDMR'
+        //            FROM    dbo.Jobcrews tbl_JC
+        //                    INNER JOIN ( SELECT dbo.MPetUsers.UserID ,
+        //                                        dbo.MPetUsers.Username ,
+        //                                        LTRIM(RTRIM(FirstName + ' ' + LastName)) AS Name
+        //                                 FROM   dbo.MPetUsers
+        //                               ) tbl_Users ON tbl_JC.n_personid = tbl_Users.UserID
+        //                    INNER JOIN ( SELECT dbo.skills.n_skillid ,
+        //                                        dbo.skills.skillid ,
+        //                                        dbo.skills.description
+        //                                 FROM   dbo.skills
+        //                               ) tbl_Skills ON tbl_JC.n_skillid = tbl_Skills.n_skillid
+        //                    INNER JOIN ( SELECT dbo.Shifts.n_shiftid ,
+        //                                        dbo.Shifts.ShiftID ,
+        //                                        dbo.Shifts.Description
+        //                                 FROM   dbo.Shifts
+        //                               ) tbl_Shifts ON tbl_JC.n_ShiftID = tbl_Shifts.n_shiftid
+        //                    INNER JOIN ( SELECT dbo.laborclasses.n_laborclassid ,
+        //                                        dbo.laborclasses.laborclassid
+        //                                 FROM   dbo.laborclasses
+        //                               ) tbl_LaborClasses ON tbl_JC.n_laborclassid = tbl_LaborClasses.n_laborclassid
+        //                    LEFT JOIN ( SELECT  dbo.time_batches.RecordID ,
+        //                                        dbo.time_batches.time_batchid
+        //                                FROM    dbo.time_batches
+        //                              ) tbl_TimeBatches ON tbl_JC.DMRKey = tbl_TimeBatches.RecordID
+        //            WHERE   tbl_JC.JobstepID = @JobStepID 
+        //                    AND tbl_JC.JobID = @JobID
+        //                    AND ( ( [Username] 
+        //		            + ' ' + [Name] 
+        //		            + ' ' + [skillid] 
+        //		            + ' ' + [PayfactorText] 
+        //		            + ' ' + [LaborClassID]) LIKE @filter )";
 
 
-//        //WHERE   cte_Jobs.[rn] BETWEEN @startIndex AND @endIndex
-//        sqlData.SelectParameters.Clear();
-//        sqlData.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", stringFilter));
+        //        //WHERE   cte_Jobs.[rn] BETWEEN @startIndex AND @endIndex
+        //        sqlData.SelectParameters.Clear();
+        //        sqlData.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", stringFilter));
 
-//        var dataTable = sqlData.Select(DataSourceSelectArguments.Empty) as DataView;
-//        return dataTable.Table;
-//    }
+        //        var dataTable = sqlData.Select(DataSourceSelectArguments.Empty) as DataView;
+        //        return dataTable.Table;
+        //    }
+
+        //    protected DataTable GetCrewData(string stringFilter)
+        //    {
+        //        //Create/SET SQL Source
+        //        var sqlData = new SqlDataSource { ConnectionString = ConfigurationManager.ConnectionStrings["connection"].ToString() };
+
+        //        //Get Job Step ID
+        //        var jobStepId = -1;
+        //        if ((HttpContext.Current.Session["editingJobStepID"] != null))
+        //        {
+        //            //Get Info From Session
+        //            jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
+        //        }
+
+        //        //Get Job ID
+        //        var jobId = -1;
+        //        if ((HttpContext.Current.Session["editingJobID"] != null))
+        //        {
+        //            //Get Info From Session
+        //            jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
+        //        }
+
+        //        //Set Command
+        //        sqlData.SelectCommand =
+        //            @"DECLARE @NullDate DATETIME
+        //            SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
+        //
+        //            --Return Data
+        //            SELECT  tbl_JC.n_jobcrewid AS 'RecordID' ,
+        //            tbl_JC.n_personid AS 'CrewMemberID' ,
+        //            tbl_JC.n_skillid AS 'n_skillid' ,
+        //            tbl_JC.n_ShiftID AS 'n_ShiftID' ,
+        //            tbl_JC.n_PayCodeID AS 'n_PayCodeID' ,
+        //            tbl_Users.Username AS 'CrewMemberTextID' ,
+        //            tbl_Users.Name AS 'CrewMemberName' ,
+        //            tbl_Shifts.ShiftID AS 'ShiftIDText' ,
+        //            tbl_Shifts.Description AS 'ShiftIDDesc' ,
+        //            tbl_Skills.skillid AS 'SkillIDText' ,
+        //            tbl_Skills.description AS 'SkillDesc' ,
+        //            tbl_JC.actuallen AS 'ActualHrs' ,
+        //            tbl_JC.estlen AS 'EstHrs' ,
+        //            tbl_JC.Payfactor AS 'PayRate' ,
+        //            tbl_JC.PayfactorText AS 'PayCodeText' ,
+        //            CASE tbl_JC.WorkDate
+        //              WHEN @NullDate THEN NULL
+        //              ELSE tbl_JC.WorkDate
+        //            END AS 'WorkDate' ,
+        //            CASE tbl_JC.CertificationDate
+        //              WHEN @NullDate THEN NULL
+        //              ELSE tbl_JC.CertificationDate
+        //            END AS 'CertificationDate' ,
+        //            CASE tbl_JC.CertificationDateExpires
+        //              WHEN @NullDate THEN NULL
+        //              ELSE tbl_JC.CertificationDateExpires
+        //            END AS 'CertificationDateExpires' ,
+        //            tbl_JC.n_laborclassid AS 'n_laborclassid' ,
+        //            tbl_JC.RateType AS 'RateType' ,
+        //            tbl_JC.DMRKEY AS 'DMRKEY' ,
+        //            tbl_LaborClasses.laborclassid AS 'LaborClassID' ,
+        //            CASE tbl_JC.RateType
+        //              WHEN 0 THEN 'STANDARD'
+        //              WHEN 1 THEN 'OVERTIME'
+        //              WHEN 2 THEN 'OTHER'
+        //            END AS 'RateTypeStr' ,
+        //            ISNULL(tbl_TimeBatches.time_batchid, 'N/A') AS 'LinkedDMR'
+        //            FROM    dbo.Jobcrews tbl_JC
+        //                    INNER JOIN ( SELECT dbo.MPetUsers.UserID ,
+        //                                        dbo.MPetUsers.Username ,
+        //                                        LTRIM(RTRIM(FirstName + ' ' + LastName)) AS Name
+        //                                 FROM   dbo.MPetUsers
+        //                               ) tbl_Users ON tbl_JC.n_personid = tbl_Users.UserID
+        //                    INNER JOIN ( SELECT dbo.skills.n_skillid ,
+        //                                        dbo.skills.skillid ,
+        //                                        dbo.skills.description
+        //                                 FROM   dbo.skills
+        //                               ) tbl_Skills ON tbl_JC.n_skillid = tbl_Skills.n_skillid
+        //                    INNER JOIN ( SELECT dbo.Shifts.n_shiftid ,
+        //                                        dbo.Shifts.ShiftID ,
+        //                                        dbo.Shifts.Description
+        //                                 FROM   dbo.Shifts
+        //                               ) tbl_Shifts ON tbl_JC.n_ShiftID = tbl_Shifts.n_shiftid
+        //                    INNER JOIN ( SELECT dbo.laborclasses.n_laborclassid ,
+        //                                        dbo.laborclasses.laborclassid
+        //                                 FROM   dbo.laborclasses
+        //                               ) tbl_LaborClasses ON tbl_JC.n_laborclassid = tbl_LaborClasses.n_laborclassid
+        //                    LEFT JOIN ( SELECT  dbo.time_batches.RecordID ,
+        //                                        dbo.time_batches.time_batchid
+        //                                FROM    dbo.time_batches
+        //                              ) tbl_TimeBatches ON tbl_JC.DMRKey = tbl_TimeBatches.RecordID
+        //            WHERE   tbl_JC.JobstepID = " + jobStepId + @"
+        //                    AND tbl_JC.JobID = " + jobId + @"
+        //                    AND ( ( [Username] 
+        //		            + ' ' + [Name] 
+        //		            + ' ' + [skillid] 
+        //		            + ' ' + [PayfactorText] 
+        //		            + ' ' + [LaborClassID]) LIKE @filter )";
+
+
+        //        //WHERE   cte_Jobs.[rn] BETWEEN @startIndex AND @endIndex
+        //        sqlData.SelectParameters.Clear();
+        //        sqlData.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", stringFilter));
+
+        //        var dataTable = sqlData.Select(DataSourceSelectArguments.Empty) as DataView;
+        //        return dataTable.Table;
+        //    }
 
         protected void fileManager_FileUploading(object sender, FileManagerFileUploadEventArgs e)
         {
@@ -12336,10 +12373,10 @@ namespace Pages.PlannedJobs
             #region Get Outcome
 
             var jobOutcome = -1;
+                jobOutcome = Convert.ToInt32((HttpContext.Current.Session["ComboOutcome"].ToString()));
             if ((HttpContext.Current.Session["ComboOutcome"] != null))
             {
                 //Get Info From Session
-                jobOutcome = Convert.ToInt32((HttpContext.Current.Session["ComboOutcome"].ToString()));
             }
 
             #endregion
@@ -12457,10 +12494,10 @@ namespace Pages.PlannedJobs
             #region Get Return Within
 
             var jobReturnWithin = 0;
+                jobReturnWithin = Convert.ToInt32((HttpContext.Current.Session["txtReturnWithin"].ToString()));
             if ((HttpContext.Current.Session["txtReturnWithin"] != null))
             {
                 //Get Info From Session
-                jobReturnWithin = Convert.ToInt32((HttpContext.Current.Session["txtReturnWithin"].ToString()));
             }
 
             #endregion
@@ -12572,6 +12609,18 @@ namespace Pages.PlannedJobs
                             equipNumber,
                             controlSection,
                             _oLogon.UserID);
+
+                   var jobStepCostResults =  _oJobStep.UpdateJobstepCosting(jobID, jobStepId,
+                            costCodeId,
+                            fundSource,
+                            workOrder,
+                            workOp,
+                            orgCode,
+                            fundingGroup,
+                            equipNumber,
+                            controlSection,
+                            _oLogon.UserID);
+                    
                    
                     //Save Route & Completion Information
                     if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
@@ -12736,16 +12785,16 @@ namespace Pages.PlannedJobs
                         {
                             //Set Text
                             lblStep.Text = @"STEP #" +
-                                           (HttpContext.Current.Session["editingJobStepNum"]);
+                                           (HttpContext.Current.Session["editingJobStepID"]);
                         }
 
                         //Setup For Editing
                         SetupForEditing();
 
-//                        var jobStepKey = Convert.ToInt32(HttpContext.Current.Session[]);
-//;
-//                        Response.Redirect(
-//                                                    "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobStepKey, true);
+                        var jobStepKey = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
+                        ;
+                        Response.Redirect(
+                                                    "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobStepId, true);
                     }
 
                     //Success Return True

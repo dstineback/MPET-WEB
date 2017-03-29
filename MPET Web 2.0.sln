@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MPET Web 2.0", "http://localhost:53866", "{BAA3CC76-20A4-4784-A4EE-8781B2FAB763}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -29,22 +29,15 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "MPET Web 2.0", "http://loca
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://fourwindsgroup.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccWebProject1 = true
-		SccProjectUniqueName1 = http://localhost:53866
-		SccLocalPath1 = .
-		SccProjectEnlistmentChoice1 = 2
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BAA3CC76-20A4-4784-A4EE-8781B2FAB763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BAA3CC76-20A4-4784-A4EE-8781B2FAB763}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAA3CC76-20A4-4784-A4EE-8781B2FAB763}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAA3CC76-20A4-4784-A4EE-8781B2FAB763}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
