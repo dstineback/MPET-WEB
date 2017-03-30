@@ -47,6 +47,7 @@ namespace Pages.PlannedJobs
                 {
                     //Setup Buttons
                     Master.ShowSaveButton = false;
+                    Master.ShowPostButton = _userCanEdit;
                     Master.ShowNewButton = _userCanAdd;
                     Master.ShowEditButton = _userCanEdit;
                     Master.ShowDeleteButton = _userCanDelete;
@@ -253,7 +254,7 @@ namespace Pages.PlannedJobs
             Master.ShowBatchSupervisorAddButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowBatchEquipmentButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowBatchPartButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
-            Master.ShowPostButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
+            Master.ShowPostButton = (_userCanEdit);
             Master.ShowForcePmButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowRoutineJobButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
 

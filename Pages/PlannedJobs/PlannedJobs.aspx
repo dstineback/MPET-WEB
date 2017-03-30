@@ -1396,7 +1396,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage> <%--Assignments--%>
-                                                            <dx:TabPage Text="COMPLETION" ToolTip="Allows Input Of Jobstep Completion Information" Visible="false">
+                                                            <dx:TabPage Text="COMPLETION" ToolTip="Allows Input Of Jobstep Completion Information" >
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="PlannedJobCompCC" runat="server">
                                                                         <dx:ASPxFormLayout ID="PlannedJobCompLayout" ColCount="2" runat="server">
@@ -1428,8 +1428,8 @@
                                                                                                                           Width="450px"
                                                                                                                           HorizontalAlign="Right"
                                                                                                                           AllowMouseWheel="False"
-                                                                                                                          SpinButtons-ClientVisible="False">
-<SpinButtons ClientVisible="False"></SpinButtons>
+                                                                                                                          SpinButtons-ClientVisible="true" ToolTip="Number of Days" HelpTextSettings-DisplayMode="Inline" HelpText="Number off Days">
+<SpinButtons ClientVisible="true"></SpinButtons>
 
                                                                                                             <ClearButton Visibility="True"></ClearButton>
                                                                                                         </dx:ASPxSpinEdit>                                                                                                    
@@ -1540,7 +1540,7 @@
                                                                     </dx:ContentControl>
                                                                 </ContentCollection>
                                                             </dx:TabPage> <%--Completion--%>
-                                                            <dx:TabPage Text="PROCEDURES" ToolTip="Allows Input Of Jobstep Notes" Visible="false">
+                                                            <dx:TabPage Text="PROCEDURES" ToolTip="Allows Input Of Jobstep Notes" >
                                                                 <ContentCollection>
                                                                     <dx:ContentControl ID="ContentControl7" runat="server">
                                                                         <dx:ASPxFormLayout ID="AdditionalContentLayoutGroup" Theme="Mulberry" runat="server" Width="98%" Paddings="0,0">
