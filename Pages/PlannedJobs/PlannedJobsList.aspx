@@ -1567,7 +1567,7 @@ WITH    cte_Jobsteps
         <FooterTemplate>
         </FooterTemplate>
     </dx:ASPxPopupControl>
-    <dx:ASPxPopupControl ID="BatchPostPopup" ClientInstanceName="BatchPostPopup" ShowCloseButton="false" HeaderText=""
+     <dx:ASPxPopupControl ID="BatchPostPopup" ClientInstanceName="BatchPostPopup" ShowCloseButton="false" HeaderText=""
         CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
         CssClass="popup" CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter">
         <ContentCollection>

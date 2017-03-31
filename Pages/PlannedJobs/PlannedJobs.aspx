@@ -4981,7 +4981,92 @@
         </ContentCollection>
         <FooterTemplate>
         </FooterTemplate>
-    </dx:ASPxPopupControl>    
+    </dx:ASPxPopupControl>
+     <dx:ASPxPopupControl ID="PostPopup" ClientInstanceName="PostPopup" ShowCloseButton="false" HeaderText=""
+        CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
+        CssClass="popup" CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter">
+        <ContentCollection>
+            <dx:PopupControlContentControl>
+                <div class="popup-text">
+                    <dx:ASPxFormLayout ID="flError" runat="server" Font-Size="Medium">
+                        <Items>
+                            <dx:LayoutGroup Caption="Post">
+                                <Items>
+                                    <dx:LayoutItem Caption="Completion Date:">
+                                        <LayoutItemNestedControlCollection>
+                                            <dx:LayoutItemNestedControlContainer>
+                                                <dx:ASPxDateEdit ID="jobPostDate"
+                                                    ClientInstanceName="jobPostDate"
+                                                    Theme="iOS"
+                                                    Width="300px"
+                                                    runat="server">
+                                                    <ValidationSettings SetFocusOnError="True" Display="Dynamic" ErrorDisplayMode="Text">
+                                                        <RequiredField IsRequired="True" />
+                                                    </ValidationSettings>
+                                                </dx:ASPxDateEdit>
+                                            </dx:LayoutItemNestedControlContainer>
+                                        </LayoutItemNestedControlCollection>
+                                    </dx:LayoutItem>
+                                    <dx:LayoutItem Caption="Outcome Code:" HorizontalAlign="Right">
+                                        <LayoutItemNestedControlCollection>
+                                            <dx:LayoutItemNestedControlContainer>
+                                                <dx:ASPxComboBox ID="ComboOutcomeCode"
+                                                    runat="server"
+                                                    EnableCallbackMode="true"
+                                                    CallbackPageSize="10"
+                                                    ValueType="System.String"
+                                                    ValueField="n_outcomecodeid"
+                                                    OnItemsRequestedByFilterCondition="ComboOutcomeCode_OnItemsRequestedByFilterCondition_SQL"
+                                                    OnItemRequestedByValue="ComboOutcomeCode_OnItemRequestedByValue_SQL"
+                                                    TextFormatString="{0} - {1}"
+                                                    Width="300px"
+                                                    DropDownStyle="DropDown"
+                                                    Theme="iOS"
+                                                    TextField="outcomecodeid"
+                                                    DropDownButton-Enabled="True"
+                                                    AutoPostBack="False"
+                                                    ClientInstanceName="ComboOutcomeCode">
+                                                    <ValidationSettings SetFocusOnError="True" Display="Dynamic" ErrorDisplayMode="Text">
+                                                        <RequiredField IsRequired="True" />
+                                                    </ValidationSettings>
+                                                    <Columns>
+                                                        <dx:ListBoxColumn FieldName="n_outcomecodeid" Visible="False" />
+                                                        <dx:ListBoxColumn FieldName="outcomecodeid" Caption="Outcome ID" Width="75px" ToolTip="M-PET.NET Outcome Code ID" />
+                                                        <dx:ListBoxColumn FieldName="description" Caption="Description" Width="150px" ToolTip="M-PET.NET Outcome Code Description" />
+                                                    </Columns>
+                                                </dx:ASPxComboBox>
+                                            </dx:LayoutItemNestedControlContainer>
+                                        </LayoutItemNestedControlCollection>
+                                        </dx:LayoutItem>
+                                        <dx:LayoutItem Name="PostDefaults" Caption="Post Defaults:" HorizontalAlign="Center" ShowCaption="False">
+                                            <LayoutItemNestedControlCollection >
+                                                <dx:LayoutItemNestedControlContainer>
+                                                <dx:ASPxCheckBox ID="chkPostDefaults" runat="server" Text="Post Defaults"
+                                                            ValueField="ID" TextField="Post Defaults" RepeatColumns="3" RepeatLayout="Table" RepeatDirection="Horizontal">
+                                                        </dx:ASPxCheckBox>
+                                                </dx:LayoutItemNestedControlContainer>
+                                            </LayoutItemNestedControlCollection>
+                                        </dx:LayoutItem>
+                                </Items>
+                            </dx:LayoutGroup>
+                        </Items>
+                    </dx:ASPxFormLayout>
+                </div>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+        <FooterTemplate>
+            <div class="popup-buttons-centered">
+                <dx:ASPxButton ID="ASPxButton1" AutoPostBack="True" runat="server" CssClass="button" Text="Post" OnClick="PostPlanJob">
+                    <HoverStyle CssClass="hover"></HoverStyle>
+                </dx:ASPxButton>
+                <dx:ASPxButton ID="ASPxButton2" AutoPostBack="True" runat="server" Text="Cancel" CssClass="button">
+                    <ClientSideEvents Click="HidePopup" />
+                    <HoverStyle CssClass="hover"></HoverStyle>
+                </dx:ASPxButton>
+            </div>
+        </FooterTemplate>
+    </dx:ASPxPopupControl>
+        
 
     <%--    
 
