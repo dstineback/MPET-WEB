@@ -1649,7 +1649,7 @@ namespace Pages.PlannedJobs
                 {
                     //Get Job Selections
                     var jobSelections =
-                        PlannedGrid.GetSelectedFieldValues(new[] {"n_jobid", "n_jobstepid"});
+                        PlannedGrid.GetSelectedFieldValues(new[] { "n_jobid", "n_jobstepid" });
 
                     //Process Multi Selection
                     foreach (object[] selected in jobSelections)
@@ -1754,6 +1754,105 @@ namespace Pages.PlannedJobs
                                 @"Error Loading Job & Job Step Keys For Batch Post");
                         }
                     }
+                }
+                else
+                {
+                    if (!(PlannedGrid.Columns[0].Visible)  && Selection.Contains("n_Jobid")  && Selection.Contains("n_jobstepid") && Selection.Contains("step"))
+                    {                       
+                                    //Get Values
+                                    var jobKey = Convert.ToInt32(Selection.Get("n_Jobid"));
+                                    var jobStepKey = Convert.ToInt32(Selection.Get("n_jobstepid"));
+                             
+                                    //Check Keys
+                                    if ((jobKey > 0) && (jobStepKey > 0))
+                                    {
+                                        //Get Post Date
+                                        if ((txtPostDate.Value != null) && (txtPostDate.Value.ToString() != "") && ComboOutcomeCode.Value != null)
+                                        {
+                                            //Check Outcome Code
+                                            
+                                                //Get Post Date
+                                                var postDate = Convert.ToDateTime(txtPostDate.Value.ToString());
+
+                                                //Get Outcome Code
+                                                var outcomeId = Convert.ToInt32(ComboOutcomeCode.Value.ToString());
+
+                                                //Clear Errors
+                                                _oJob.ClearErrors();
+
+                                                //Load Job Data
+                                                if (_oJob.LoadData(jobKey) && _oJob.Ds.Tables.Count > 0)
+                                                {
+                                                        //Check Table Row Count
+                                                        if (_oJob.Ds.Tables[0].Rows.Count == 1)
+                                                        {
+                                                            //Set History Flag
+                                                            var isHist = (_oJob.Ds.Tables[0].Rows[0][30].ToString().ToUpper() == "Y");
+
+                                                            //Check Flag
+                                                            if (isHist == false)
+                                                            {
+                                                                //Update Job Step Information
+                                                                if (_oJob.UpdateJobstepCompletionInfo(jobStepKey,
+                                                                    outcomeId,
+                                                                    postDate,
+                                                                    Convert.ToInt32(chkPostDefaults.Checked),
+                                                                    _oLogon.UserID))
+                                                                {
+                                                                    //Set Flag
+                                                                    var hasPostingPblm = false;
+
+                                                                    //Post To History
+                                                                    if (!_oJob.PostWorkOrderToHistory(jobKey,
+                                                                        true,
+                                                                        _oLogon.UserID,
+                                                                        ref hasPostingPblm))
+                                                                    {
+                                                                        //Check Flag
+                                                                        if (hasPostingPblm)
+                                                                        {
+                                                                            //Throw Error
+                                                                            throw new SystemException(
+                                                                                @"Error Posting Job - " + _oJob.LastError);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    //Throw Error
+                                                                    throw new SystemException(
+                                                                        @"Error Updating Job For Batch Post");
+                                                                }
+                                                            }
+                                                        }                                                    
+                                                }
+                                                else
+                                                {
+                                                    //Throw Error
+                                                    throw new SystemException(
+                                                        @"Error Posting Job - " + _oJob.LastError);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                //Throw Error
+                                                throw new SystemException(
+                                                    @"Valid Outcome Code Required For Batch Post");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //Throw Error
+                                            throw new SystemException(
+                                                @"Valid Completion Date Required For Batch Post");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //Throw Error
+                                        throw new SystemException(
+                                            @"Error Loading Job & Job Step Keys For Batch Post");
+                                    }                               
                 }
             }
             catch (Exception ex)
