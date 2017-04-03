@@ -2071,9 +2071,10 @@ namespace Pages.PlannedJobs
                 {
                     //Get Logon Info From Session
                     _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+                    var jobStepID = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
 
                     if (_oAttachments.Add(Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
-                        -1,
+                        jobStepID,
                         _oLogon.UserID,
                         url,
                         "JPG",
@@ -2155,13 +2156,21 @@ namespace Pages.PlannedJobs
 
         string GetImageUrl(string fileName)
         {
-            AzureFileSystemProvider provider = new AzureFileSystemProvider("");
-            provider.StorageAccountName = UploadControl.AzureSettings.StorageAccountName;
-            provider.AccessKey = UploadControl.AzureSettings.AccessKey;
-            provider.ContainerName = UploadControl.AzureSettings.ContainerName;
-            FileManagerFile file = new FileManagerFile(provider, fileName);
-            FileManagerFile[] files = new FileManagerFile[] { file };
-            return provider.GetDownloadUrl(files);
+                AzureFileSystemProvider provider = new AzureFileSystemProvider("");
+                
+            if (WebConfigurationManager.AppSettings["StorageAccount"] != null)
+            {
+                provider.StorageAccountName = UploadControl.AzureSettings.StorageAccountName;
+                provider.AccessKey = UploadControl.AzureSettings.AccessKey;
+                provider.ContainerName = UploadControl.AzureSettings.ContainerName;
+            } else
+            {
+                   
+            }
+                FileManagerFile file = new FileManagerFile(provider, fileName);
+                FileManagerFile[] files = new FileManagerFile[] { file };
+                return provider.GetDownloadUrl(files);
+
         }
 
         protected string GetUrl(GridViewDataItemTemplateContainer container)
@@ -12151,7 +12160,7 @@ namespace Pages.PlannedJobs
         #endregion
 
         #region Post Job
-        private void PostPlanJob(object sender, EventArgs e)
+        public void PostPlanJob(object sender, EventArgs e)
         {
 
             //Get Values

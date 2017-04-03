@@ -37,7 +37,7 @@
                 ClientInstanceName="PlannedGrid"
                 AutoPostBack="True"
                 Settings-HorizontalScrollBarMode="Auto" Settings-VerticalScrollBarMode="Visible" Settings-VerticalScrollBarStyle="Standard" SettingsBehavior-AllowSelectByRowClick="true"
-                SettingsPager-Mode="ShowPager"
+                SettingsPager-Mode="ShowPager" 
                 SettingsBehavior-ProcessFocusedRowChangedOnServer="False"
                 SettingsBehavior-AllowFocusedRow="False"
                 SelectionMode="Multiple"
@@ -59,6 +59,12 @@
                         PlannedGrid.GetRowValues(e.visibleIndex, 'Jobid;n_jobid;n_jobstepid;step', OnGetRowId);
                         
                     }" />
+                <Settings ShowGroupPanel="True" VerticalScrollBarStyle="Standard"
+                    VerticalScrollableHeight="500" ShowFilterBar="Visible"
+                    HorizontalScrollBarMode="Auto" VerticalScrollBarMode="Visible">
+                </Settings>
+               
+
                 <Columns>
                     <dx:GridViewCommandColumn FixedStyle="Left" ShowSelectCheckbox="True" Visible="false" VisibleIndex="0" />
                     <dx:GridViewDataTextColumn FieldName="n_jobstepid" ReadOnly="True" Visible="false" VisibleIndex="1">
@@ -67,7 +73,7 @@
                     <dx:GridViewDataTextColumn FieldName="n_jobid" ReadOnly="True" Visible="false" VisibleIndex="5">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn FieldName="T" Caption="Type" Width="60px" VisibleIndex="7">
+                    <dx:GridViewDataTextColumn FieldName="T" Caption="Type" Width="60px" VisibleIndex="16">
                         <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
                         <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
                     </dx:GridViewDataTextColumn>
@@ -80,10 +86,10 @@
                             </dxe:ASPxHyperLink>
                         </DataItemTemplate>
                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn FieldName="Object ID" Caption="Object ID" Width="120px" VisibleIndex="4">
+                    <dx:GridViewDataTextColumn FieldName="Object ID" Caption="Object ID" Width="160px" VisibleIndex="4">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn FieldName="step" Caption="Step #" Width="60px" VisibleIndex="6">
+                    <dx:GridViewDataTextColumn FieldName="step" Caption="Step #" Width="60px" VisibleIndex="10">
                         <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
                         <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
                     </dx:GridViewDataTextColumn>
@@ -97,7 +103,7 @@
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
                     <dx:GridViewDataTextColumn FieldName="Requested" Caption="Requested" Width="120px"
-                        Settings-AllowHeaderFilter="True" ReadOnly="True" VisibleIndex="10">
+                        Settings-AllowHeaderFilter="True" ReadOnly="True" VisibleIndex="6">
                         <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
                         <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
                         <PropertiesTextEdit DisplayFormatString="MM/dd/yyyy" />
@@ -109,7 +115,7 @@
                         <PropertiesDateEdit DisplayFormatString="MM/dd/yyyy">
                         </PropertiesDateEdit>
                     </dx:GridViewDataDateColumn>
-                    <dx:GridViewDataTextColumn FieldName="Labor Class" Caption="Labor Class" Width="100px" ReadOnly="True" VisibleIndex="12">
+                    <dx:GridViewDataTextColumn FieldName="Labor Class" Caption="Labor Class" Width="120px" ReadOnly="True" VisibleIndex="12" Settings-AllowHeaderFilter="True">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
                     <dx:GridViewDataTextColumn FieldName="I" Caption="Issued" Width="100px" ReadOnly="True" VisibleIndex="13">
@@ -123,12 +129,12 @@
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
                     <dx:GridViewDataTextColumn FieldName="Completion Date" Caption="Completed" Width="120px"
-                        Settings-AllowHeaderFilter="True" ReadOnly="True" VisibleIndex="16">
+                        Settings-AllowHeaderFilter="True" ReadOnly="True" VisibleIndex="7">
                         <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
                         <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
                         <PropertiesTextEdit DisplayFormatString="MM/dd/yyyy" />
                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn FieldName="WorkOpID" Caption="Work Op" Width="100px" ReadOnly="True" VisibleIndex="17">
+                    <dx:GridViewDataTextColumn FieldName="WorkOpID" Caption="Work Op" Width="120px" ReadOnly="True" VisibleIndex="17" Settings-AllowHeaderFilter="True" Settings-AllowGroup="true">                       
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
                     <dx:GridViewDataTextColumn FieldName="HighwayRouteID" Caption="Hwy. Route" Width="100px" ReadOnly="True" VisibleIndex="18">
@@ -341,9 +347,9 @@
                 <Settings 
                     ShowFilterBar="Visible"
                     VerticalScrollBarMode="Visible" 
-                    VerticalScrollBarStyle="Virtual" 
+                    VerticalScrollBarStyle="Standard" 
                     VerticalScrollableHeight="500" />
-                <SettingsPager PageSize="20">
+                <SettingsPager PageSize="500">
                     <PageSizeItemSettings Visible="true" />
                 </SettingsPager>
 

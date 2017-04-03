@@ -248,7 +248,7 @@ namespace Pages.PlannedJobs
             Master.ShowNewButton = !(PlannedGrid.Columns[0].Visible);
             Master.ShowEditButton = !(PlannedGrid.Columns[0].Visible);
             Master.ShowViewButton = !(PlannedGrid.Columns[0].Visible);
-            Master.ShowPrintButton = false;/*!(PlannedGrid.Columns[0].Visible);*/
+            Master.ShowPrintButton = !(PlannedGrid.Columns[0].Visible);
             Master.ShowCopyJobButton = !(PlannedGrid.Columns[0].Visible);
             Master.ShowBatchCrewAddButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowBatchSupervisorAddButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
