@@ -44,7 +44,7 @@ namespace Pages.History
                     Master.ShowDeleteButton = false;
                     Master.ShowViewButton = _userCanView;
                     Master.ShowCopyJobButton = _userCanAdd;
-                    Master.ShowPrintButton = true;
+                    Master.ShowPrintButton = false;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = false;
                     Master.ShowMultiSelectButton = false;
@@ -117,7 +117,7 @@ namespace Pages.History
 
             //Enable/Disable Buttons
             Master.ShowViewButton = !(HistoryCostGrid.Columns[0].Visible);
-            Master.ShowPrintButton = !(HistoryCostGrid.Columns[0].Visible);
+            Master.ShowPrintButton = false;/*!(HistoryCostGrid.Columns[0].Visible);*/
             Master.ShowCopyJobButton = !(HistoryCostGrid.Columns[0].Visible);
 
             //Clear Prior Selection If Edit Check Is No Longer Visible

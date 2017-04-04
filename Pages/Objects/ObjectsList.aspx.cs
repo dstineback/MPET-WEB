@@ -41,14 +41,14 @@ namespace Pages.Objects
                 {
                     //Setup Buttons
                     Master.ShowSaveButton = false;
-                    Master.ShowNewButton = _userCanAdd;
-                    Master.ShowEditButton = _userCanEdit;
-                    Master.ShowDeleteButton = _userCanDelete;
-                    Master.ShowViewButton = _userCanView;
-                    Master.ShowPrintButton = true;
+                    Master.ShowNewButton = false;/*_userCanAdd;*/
+                    Master.ShowEditButton = false;/*_userCanEdit;*/
+                    Master.ShowDeleteButton = false; /*_userCanDelete;*/
+                    Master.ShowViewButton = false;  /*_userCanView;*/
+                    Master.ShowPrintButton = false;
                     Master.ShowPdfButton = false;
-                    Master.ShowXlsButton = true;
-                    Master.ShowMultiSelectButton = _userCanDelete;
+                    Master.ShowXlsButton = false;
+                    Master.ShowMultiSelectButton = false; /*_userCanDelete;*/
                 }
             }
 
@@ -134,10 +134,10 @@ namespace Pages.Objects
             }
 
             //Enable/Disable Buttons
-            Master.ShowNewButton = !(ObjectGrid.Columns[0].Visible);
-            Master.ShowEditButton = !(ObjectGrid.Columns[0].Visible);
-            Master.ShowViewButton = !(ObjectGrid.Columns[0].Visible);
-            Master.ShowPrintButton = !(ObjectGrid.Columns[0].Visible);
+            //Master.ShowNewButton = !(ObjectGrid.Columns[0].Visible);
+            //Master.ShowEditButton = !(ObjectGrid.Columns[0].Visible);
+            //Master.ShowViewButton = !(ObjectGrid.Columns[0].Visible);
+            //Master.ShowPrintButton = !(ObjectGrid.Columns[0].Visible);
 
             //Clear Prior Selection If Edit Check Is No Longer Visible
             if (!(ObjectGrid.Columns[0].Visible))
