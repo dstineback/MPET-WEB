@@ -102,7 +102,7 @@
 		</handlers>
 	</system.webServer>
 	<devExpress>
-		<themes enableThemesAssembly="true" styleSheetTheme="" theme="MetropolisBlue" customThemeAssemblies=""/>
+		<themes enableThemesAssembly="true" styleSheetTheme="" theme="" customThemeAssemblies=""/>
 		<compression enableHtmlCompression="true" enableCallbackCompression="true" enableResourceCompression="true" enableResourceMerging="true"/>
 		<settings doctypeMode="Html5" rightToLeft="false" ieCompatibilityVersion="edge" embedRequiredClientLibraries="true" accessibilityCompliant="false" checkReferencesToExternalScripts="false"/>
 		<errors callbackErrorRedirectUrl=""/>

@@ -83,7 +83,6 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
     private XRLabel xrLabel50;
     private XRLine xrLine2;
     private XRLabel cServiceingEquipment;
-    private XRPictureBox xrPictureBox1;
     private XRLabel HistoryAuditTrail;
     private XRLine xrLine3;
     private XRLabel xrLabel1;
@@ -187,7 +186,6 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
             this.sqlDataSource1 = new DevExpress.DataAccess.Sql.SqlDataSource(this.components);
             this.pageFooterBand1 = new DevExpress.XtraReports.UI.PageFooterBand();
             this.xrLine3 = new DevExpress.XtraReports.UI.XRLine();
-            this.xrPictureBox1 = new DevExpress.XtraReports.UI.XRPictureBox();
             this.xrPageInfo1 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.xrPageInfo2 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.reportHeaderBand1 = new DevExpress.XtraReports.UI.ReportHeaderBand();
@@ -913,7 +911,6 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
             queryParameter1.Name = "@JobID";
             queryParameter1.Type = typeof(int);
             queryParameter1.ValueInfo = "0";
-        queryParameter1.Value = jobID;
             storedProcQuery1.Parameters.Add(queryParameter1);
             storedProcQuery1.StoredProcName = "GetSimpleJobStep";
             this.sqlDataSource1.Queries.AddRange(new DevExpress.DataAccess.Sql.SqlQuery[] {
@@ -924,7 +921,6 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
             // 
             this.pageFooterBand1.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
             this.xrLine3,
-            this.xrPictureBox1,
             this.xrPageInfo1,
             this.xrPageInfo2});
             this.pageFooterBand1.Dpi = 100F;
@@ -939,14 +935,6 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
             this.xrLine3.LocationFloat = new DevExpress.Utils.PointFloat(0F, 4.791641F);
             this.xrLine3.Name = "xrLine3";
             this.xrLine3.SizeF = new System.Drawing.SizeF(796.9999F, 5.208336F);
-            // 
-            // xrPictureBox1
-            // 
-            this.xrPictureBox1.Dpi = 100F;
-            this.xrPictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("xrPictureBox1.Image")));
-            this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(345.8333F, 9.999974F);
-            this.xrPictureBox1.Name = "xrPictureBox1";
-            this.xrPictureBox1.SizeF = new System.Drawing.SizeF(100F, 47.12505F);
             // 
             // xrPageInfo1
             // 
@@ -1080,7 +1068,6 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
             this.parameterJobID.Name = "parameterJobID";
             this.parameterJobID.Type = typeof(int);
             this.parameterJobID.ValueInfo = "0";
-        this.parameterJobID.Value = jobID;
             this.parameterJobID.Visible = false;
             // 
             // JobReport

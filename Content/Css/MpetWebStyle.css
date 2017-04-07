@@ -288,9 +288,9 @@ div.mainMenu {
 	background: #DA5859;
 }
 .menu a {
-	color: white;
-	text-decoration: none;
-
+    color: white;
+    text-decoration: none;
+}
 .menu a:visited {
 	color: white;
 	text-decoration: none;
@@ -461,10 +461,7 @@ div.mainMenu {
     padding: 10px;
 }
 
-#reportBack {
-    
-    padding: 20px;
-}
+
 
 
 
