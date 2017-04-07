@@ -56,7 +56,7 @@ namespace Pages.WorkRequests
                     Master.ShowCopyJobButton = _userCanAdd;
                     Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd); 
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
-                    Master.ShowPrintButton = false;
+                    Master.ShowPrintButton = true;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = true;
                     Master.ShowMultiSelectButton = _userCanDelete;
@@ -194,7 +194,7 @@ namespace Pages.WorkRequests
             Master.ShowNewButton = !(ReqGrid.Columns[0].Visible);
             Master.ShowEditButton = !(ReqGrid.Columns[0].Visible);
             Master.ShowViewButton = !(ReqGrid.Columns[0].Visible);
-            Master.ShowPrintButton = false;/*!(ReqGrid.Columns[0].Visible)*/
+            Master.ShowPrintButton = !(ReqGrid.Columns[0].Visible);
             Master.ShowPlanButton = !(ReqGrid.Columns[0].Visible);
             Master.ShowCopyJobButton = !(ReqGrid.Columns[0].Visible);
             Master.ShowForcePmButton = !((ReqGrid.Columns[0].Visible) && _userCanEdit);

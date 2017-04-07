@@ -760,7 +760,7 @@ namespace Pages.WorkRequests
             Master.ShowSaveButton = false;
             Master.ShowNewButton = _userCanAdd;
             Master.ShowDeleteButton = false;
-            Master.ShowPrintButton = false;
+            Master.ShowPrintButton = true;
 
         }
 
@@ -775,7 +775,7 @@ namespace Pages.WorkRequests
             Master.ShowCopyJobButton = _userCanAdd;
             Master.ShowNewButton = _userCanAdd;
             Master.ShowDeleteButton = _userCanDelete;
-            Master.ShowPrintButton = false;
+            Master.ShowPrintButton = true;
 
             //Enable Tabs
             

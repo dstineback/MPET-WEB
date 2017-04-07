@@ -57,7 +57,7 @@ namespace Pages.PlannedJobs
                     Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd);
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
                     Master.ShowMultiSelectButton = _userCanDelete;
-                    Master.ShowPrintButton = false;
+                    Master.ShowPrintButton = true;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = true;
                     
@@ -248,7 +248,7 @@ namespace Pages.PlannedJobs
             Master.ShowNewButton = !(PlannedGrid.Columns[0].Visible);
             Master.ShowEditButton = !(PlannedGrid.Columns[0].Visible);
             Master.ShowViewButton = !(PlannedGrid.Columns[0].Visible);
-            Master.ShowPrintButton = false;/*!(PlannedGrid.Columns[0].Visible);*/
+            Master.ShowPrintButton = !(PlannedGrid.Columns[0].Visible);
             Master.ShowCopyJobButton = !(PlannedGrid.Columns[0].Visible);
             Master.ShowBatchCrewAddButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowBatchSupervisorAddButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
@@ -481,10 +481,14 @@ namespace Pages.PlannedJobs
                 }
 
                 //Add Report To Display
-                HttpContext.Current.Session.Add("ReportToDisplay", "mltstpwo.rpt");
+                HttpContext.Current.Session.Add("ReportToDisplay","mltstpwo.rpt");
+
+                
 
                 //Redirect To Report Page
-                Response.Redirect("~/Reports/ViewReport.aspx", true);
+                Response.Redirect("~/Reports/ReportViewer.aspx", true);
+
+                
             }
         }
 

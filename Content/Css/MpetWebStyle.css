@@ -290,7 +290,7 @@ div.mainMenu {
 .menu a {
 	color: white;
 	text-decoration: none;
-}
+
 .menu a:visited {
 	color: white;
 	text-decoration: none;
@@ -459,6 +459,11 @@ div.mainMenu {
     border-radius: 5px;
     margin: 10px;
     padding: 10px;
+}
+
+#reportBack {
+    
+    padding: 20px;
 }
 
 
