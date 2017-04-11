@@ -10424,7 +10424,7 @@ namespace Pages.PlannedJobs
             #region Get Return Within
 
 
-            var jobReturnWithin = Convert.ToInt32((HttpContext.Current.Session["txtReturnWithin"].ToString()));
+            //var jobReturnWithin = Convert.ToInt32((HttpContext.Current.Session["txtReturnWithin"].ToString()));
             if ((HttpContext.Current.Session["txtReturnWithin"] != null))
             {
                 HttpContext.Current.Session.Add("txtReturnWithin", txtReturnWithin.Value.ToString());

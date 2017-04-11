@@ -393,6 +393,9 @@ namespace Pages.WorkRequests
                 //Add Session Report Parm ID
                 HttpContext.Current.Session.Add("ReportParm", Selection.Get("n_Jobid"));
 
+                 var param = Convert.ToInt32(HttpContext.Current.Session["ReportParm"]);
+                
+
                 //Check For Previous Report Name
                 if (HttpContext.Current.Session["ReportToDisplay"] != null)
                 {
@@ -404,7 +407,7 @@ namespace Pages.WorkRequests
                 HttpContext.Current.Session.Add("ReportToDisplay", "simplewo.rpt");
 
                 //Redirect To Report Page
-                Response.Redirect("~/Reports/ViewReport.aspx", true);
+                Response.Redirect("~/Reports/ReportViewer.aspx", true);
             }
         }
 

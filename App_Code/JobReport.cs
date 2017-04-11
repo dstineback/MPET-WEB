@@ -27,7 +27,7 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
     private XRControlStyle PageInfo;
     private XRControlStyle DataField;
     private LogonObject _oLogon;
-    private int jobID = 0;
+    private int jobID = -1;
     
     
     private DevExpress.XtraReports.Parameters.Parameter parameterJobID;
@@ -88,6 +88,9 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
     private XRLabel xrLabel1;
     private XRLabel JobstepTitle;
     private XRLabel DetailedDescriptionLable;
+    private TopMarginBand topMarginBand1;
+    private DetailBand detailBand1;
+    private BottomMarginBand bottomMarginBand1;
     private XRLabel TaskIDLable;
     
     public JobReport()
@@ -125,7 +128,6 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
     private void InitializeComponent()
     {
             string resourceFileName = "JobReport.resx";
-            System.Resources.ResourceManager resources = global::Resources.JobReport.ResourceManager;
             this.components = new System.ComponentModel.Container();
             DevExpress.DataAccess.Sql.StoredProcQuery storedProcQuery1 = new DevExpress.DataAccess.Sql.StoredProcQuery();
             DevExpress.DataAccess.Sql.QueryParameter queryParameter1 = new DevExpress.DataAccess.Sql.QueryParameter();
@@ -915,7 +917,6 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
             storedProcQuery1.StoredProcName = "GetSimpleJobStep";
             this.sqlDataSource1.Queries.AddRange(new DevExpress.DataAccess.Sql.SqlQuery[] {
             storedProcQuery1});
-            this.sqlDataSource1.ResultSchemaSerializable = resources.GetString("sqlDataSource1.ResultSchemaSerializable");
             // 
             // pageFooterBand1
             // 

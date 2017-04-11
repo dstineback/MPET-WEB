@@ -460,6 +460,11 @@ div.mainMenu {
     margin: 10px;
     padding: 10px;
 }
+.ReportLink {
+    padding: 5px;
+    font-size: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
 
 
 
