@@ -3,11 +3,17 @@
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Objects/Assets</asp:Content>
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">  
     <h1>OBJECT/ASSETS</h1> 
+    
     <script type="text/javascript">
 
         function OnGetRowId(idValue) {
             Selection.Set('objectid', idValue[0].toString());
             Selection.Set('n_objectid', idValue[1].toString());
+        }
+
+        function scrollPreview() {
+            var previewDocBody = clientInstanceName.ObjectGrid().body;
+            previewDocBody.scrollBottom = previewDocBody.scrollHeight;
         }
     </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
@@ -20,15 +26,16 @@
                 Theme="Mulberry"
                 KeyFieldName="objectid"
                 Width="98%"
-                KeyboardSupport="True"
+                KeyboardSupport="True" 
                 ClientInstanceName="ObjectGrid"
                 AutoPostBack="True"
                 Settings-HorizontalScrollBarMode="Auto"
                 SettingsPager-Mode="ShowPager"
-                SettingsBehavior-ProcessFocusedRowChangedOnServer="True"
+                SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
                 SettingsBehavior-AllowFocusedRow="True"
                 SelectionMode="Multiple"
-                DataSourceID="ObjectGridDataSource">
+                DataSourceID="ObjectGridDataSource" 
+                style="margin-bottom: 20px">
                 <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused"
                     RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow">
                     <Header CssClass="gridViewHeader"></Header>
@@ -37,6 +44,7 @@
                     <FocusedRow CssClass="gridViewRowFocused"></FocusedRow>
                     <FilterRow CssClass="gridViewFilterRow"></FilterRow>
                 </Styles>
+                
                 <ClientSideEvents RowClick="function(s, e) {
                         ObjectGrid.GetRowValues(e.visibleIndex, 'objectid;n_objectid', OnGetRowId);
                     }" />
@@ -192,10 +200,16 @@
                     <dx:GridViewDataTextColumn FieldName="VendorID" Caption="Vendor" Width="100px" ReadOnly="True" VisibleIndex="44">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Latitude" Caption="Latitude" Width="150px" ReadOnly="true" VisibleIndex="45" Settings-AllowSort="True" Settings-AllowGroup="True">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Longitude" Caption="Longitude" Width="150px" ReadOnly="true" VisibleIndex="46" Settings-AllowSort="True" Settings-AllowGroup="True" >
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
                 </Columns>
                 <SettingsSearchPanel Visible="true" />
                 <SettingsBehavior
-                    EnableRowHotTrack="True"
+                    EnableRowHotTrack="True" AllowGroup="true"
                     AllowFocusedRow="True"
                     AllowClientEventsOnLoad="false"
                     ColumnResizeMode="NextColumn" />
@@ -204,10 +218,10 @@
                     AllowInsert="False" />
                 <SettingsPopup HeaderFilter-Width="360" HeaderFilter-Height="360"></SettingsPopup>
                 <Settings
-                    ShowFilterBar="Visible"
+                    ShowFilterBar="Visible" ShowGroupPanel="true" 
                     VerticalScrollBarMode="Visible"
                     VerticalScrollBarStyle="Virtual"
-                    VerticalScrollableHeight="500" />
+                    VerticalScrollableHeight="450" />
                 <SettingsPager PageSize="20">
                     <PageSizeItemSettings Visible="true" />
                 </SettingsPager>
@@ -310,6 +324,8 @@
                             tbl_MaintObj.PurchaseVendorID ,
                             tbl_Vendor.vendorid ,
                             tbl_MaintObj.n_MilePostDirection ,
+                            tbl_MaintObj.GPS_X,
+							tbl_MaintObj.GPS_Y,
                             tbl_MaintObj.b_oeefocus 
                    FROM     dbo.MaintenanceObjects tbl_MaintObj
                             INNER JOIN ( SELECT tblLocations.n_locationid ,
@@ -490,7 +506,9 @@
                 cte_MaintenanceObjects.FundingGroupCodeID AS 'FundingGroupCodeID' ,
                 cte_MaintenanceObjects.ControlSectionID AS 'ControlSectionID' ,
                 cte_MaintenanceObjects.EquipmentNumberID AS 'EquipmentNumberID' ,
-                cte_MaintenanceObjects.VendorID 'VendorID' 
+                cte_MaintenanceObjects.VendorID 'VendorID',
+                cte_MaintenanceObjects.GPS_X AS 'Latitude',
+				cte_MaintenanceObjects.GPS_Y AS 'Longitude'  
         FROM    cte_MaintenanceObjects">
                                                         <SelectParameters>
                                                             <asp:SessionParameter DefaultValue="-1" Name="UserID" SessionField="UserID" />

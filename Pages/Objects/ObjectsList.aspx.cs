@@ -57,6 +57,10 @@ namespace Pages.Objects
             {
                 //Bind Grid
                 ObjectGrid.DataBind();
+                ObjectGrid.Focus();
+                MaintainScrollPositionOnPostBack = true;
+                
+                
             }
             else
             {

@@ -102,6 +102,7 @@ a {
 	height: 60px;
 	background: #343547;
     
+    
 }
 .menu {
 	line-height: 60px;
@@ -111,12 +112,16 @@ a {
 	background: #343547;
 }
 .footer > .contentBox {
-	padding: 5px 50px;
+	padding: 1px 1px;
+    height: 100%;
 }
 .footer > .contentBox > .trialInfo {
 	font-family: 'Helvetica Neue','Segoe UI',Helvetica,Verdana,san-serif !important;
 	float: left;
-	padding-top: 13px;
+	padding-top: 1px;
+    height: 90%;
+    
+    
 }
 .footer > .contentBox > .trialInfo > h2 {
 	color: #da5859;
@@ -124,6 +129,10 @@ a {
 	font-size: 18px;
 	margin: 0;
 	padding: 0;
+}
+#Footer{
+    height: 100%;
+    
 }
 .footer > .contentBox > .trialInfo > p,
 .footer > .contentBox > .trialInfo > p > a {
@@ -144,10 +153,14 @@ a {
 	position:fixed;
 	width: 100%;
 	bottom: 0;
-	height: 90px;
+	height: 50px !important;
+}
+.footerHolder .footer .contentBox #Footer {
+    height: 25px !important;
 }
 .contentHolder {
-	padding-bottom: 90px; /* should equal the height property of the .footerHolder class*/
+	padding-bottom: 10px; /* should equal the height property of the .footerHolder class*/
+    height: 50px;
 }
 /* Progress Bars */
 .dbProgress {
@@ -172,12 +185,16 @@ a {
 }
 .gridViewFilterRow {
 	border-right-style: none;
-	padding-top: 6px;
-	padding-bottom: 6px;
+	padding-top: 1px;
+	padding-bottom: 1px;
 }
-.gridViewRow,
+.gridViewRow {
+    height: 12px;
+    font-size: 10px;
+    
+}
 .gridViewRowFocused {
-	height: 34px;
+	height: 15px;
 }
 .gridViewRowFocused {
 	background-color: #DA5859;
@@ -195,7 +212,7 @@ a {
 	margin-top: -20px;
 }
 .pivotGridPercentsFieldCell > div {
-	height: 20px;
+	height: 15px;
 }
 .pivotGridPercentsFieldCell .dataCell {
 	background-color: #F394A4;

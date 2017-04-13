@@ -127,6 +127,7 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             this.sqlDataSource1 = new DevExpress.DataAccess.Sql.SqlDataSource(this.components);
             this.param = new DevExpress.XtraReports.Parameters.Parameter();
             this.Detail = new DevExpress.XtraReports.UI.DetailBand();
+            this.xrLine3 = new DevExpress.XtraReports.UI.XRLine();
             this.ObjectDescLable = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel1 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLine2 = new DevExpress.XtraReports.UI.XRLine();
@@ -184,7 +185,6 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             this.PageInfo = new DevExpress.XtraReports.UI.XRControlStyle();
             this.DataField = new DevExpress.XtraReports.UI.XRControlStyle();
             this.jobid = new DevExpress.XtraReports.Parameters.Parameter();
-            this.xrLine3 = new DevExpress.XtraReports.UI.XRLine();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             // 
             // sqlDataSource1
@@ -195,21 +195,18 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             queryParameter1.Name = "@RequestJobID";
             queryParameter1.Type = typeof(int);
             queryParameter1.ValueInfo = "0";
-        queryParameter1.Value = reportParm;
             storedProcQuery1.Parameters.Add(queryParameter1);
             storedProcQuery1.StoredProcName = "GetSimpleJob";
             customSqlQuery1.Name = "Requestor";
             queryParameter2.Name = "@jobID";
             queryParameter2.Type = typeof(int);
             queryParameter2.ValueInfo = "0";
-        queryParameter2.Value = reportParm;
             customSqlQuery1.Parameters.Add(queryParameter2);
             customSqlQuery1.Sql = resources.GetString("customSqlQuery1.Sql");
             customSqlQuery2.Name = "Object";
             queryParameter3.Name = "@jobID";
             queryParameter3.Type = typeof(int);
             queryParameter3.ValueInfo = "0";
-        queryParameter3.Value = reportParm;
             customSqlQuery2.Parameters.Add(queryParameter3);
             customSqlQuery2.Sql = "SELECT \r\n\t[description]\r\n     \r\n     from .dbo.MaintenanceObjects as M inner join" +
     " dbo.Jobs AS J \r\n  \r\n  on M.n_objectid = J.n_MaintObjectID\r\n  where J.n_Jobid = " +
@@ -278,6 +275,13 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             this.Detail.Name = "Detail";
             this.Detail.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.Detail.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
+            // 
+            // xrLine3
+            // 
+            this.xrLine3.Dpi = 100F;
+            this.xrLine3.LocationFloat = new DevExpress.Utils.PointFloat(0F, 523.9583F);
+            this.xrLine3.Name = "xrLine3";
+            this.xrLine3.SizeF = new System.Drawing.SizeF(745.75F, 4.166565F);
             // 
             // ObjectDescLable
             // 
@@ -353,6 +357,7 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             this.xrLabel39.Name = "xrLabel39";
             this.xrLabel39.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.xrLabel39.SizeF = new System.Drawing.SizeF(122.4167F, 23F);
+            this.xrLabel39.StyleName = "FieldCaption";
             this.xrLabel39.Text = "Work Order Code";
             // 
             // WorkOrderCodeID
@@ -662,12 +667,12 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             // GPS_X
             // 
             this.GPS_X.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "GetSimpleJob.GPS_X", "{0:#.00000000}")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "GetSimpleJob.GPS_X", "{0:#.00}")});
             this.GPS_X.Dpi = 100F;
             this.GPS_X.LocationFloat = new DevExpress.Utils.PointFloat(122.4167F, 269F);
             this.GPS_X.Name = "GPS_X";
+            this.GPS_X.NullValueText = "  0.00";
             this.GPS_X.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.GPS_X.ProcessNullValues = DevExpress.XtraReports.UI.ValueSuppressType.Suppress;
             this.GPS_X.SizeF = new System.Drawing.SizeF(238.75F, 20F);
             this.GPS_X.StyleName = "DataField";
             this.GPS_X.Text = "GPS_X";
@@ -675,12 +680,12 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             // GPS_Y
             // 
             this.GPS_Y.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "GetSimpleJob.GPS_Y", "{0:#.00000000}")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "GetSimpleJob.GPS_Y", "{0:#.00}")});
             this.GPS_Y.Dpi = 100F;
             this.GPS_Y.LocationFloat = new DevExpress.Utils.PointFloat(122.4167F, 295F);
             this.GPS_Y.Name = "GPS_Y";
+            this.GPS_Y.NullValueText = "No data";
             this.GPS_Y.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.GPS_Y.ProcessNullValues = DevExpress.XtraReports.UI.ValueSuppressType.Suppress;
             this.GPS_Y.SizeF = new System.Drawing.SizeF(238.75F, 20F);
             this.GPS_Y.StyleName = "DataField";
             this.GPS_Y.Text = "GPS_Y";
@@ -733,7 +738,7 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             // TopMargin
             // 
             this.TopMargin.Dpi = 100F;
-            this.TopMargin.HeightF = 22.91667F;
+            this.TopMargin.HeightF = 23F;
             this.TopMargin.Name = "TopMargin";
             this.TopMargin.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.TopMargin.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
@@ -749,7 +754,7 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             // JobidLable
             // 
             this.JobidLable.Dpi = 100F;
-            this.JobidLable.LocationFloat = new DevExpress.Utils.PointFloat(191.1251F, 70.79169F);
+            this.JobidLable.LocationFloat = new DevExpress.Utils.PointFloat(241.1251F, 70.79169F);
             this.JobidLable.Name = "JobidLable";
             this.JobidLable.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.JobidLable.SizeF = new System.Drawing.SizeF(159.875F, 20F);
@@ -762,10 +767,10 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             new DevExpress.XtraReports.UI.XRBinding("Text", null, "GetSimpleJob.cTypeOfJob")});
             this.cTypeOfJob.Dpi = 100F;
             this.cTypeOfJob.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cTypeOfJob.LocationFloat = new DevExpress.Utils.PointFloat(244.8334F, 39F);
+            this.cTypeOfJob.LocationFloat = new DevExpress.Utils.PointFloat(299.9584F, 39F);
             this.cTypeOfJob.Name = "cTypeOfJob";
             this.cTypeOfJob.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.cTypeOfJob.SizeF = new System.Drawing.SizeF(238.75F, 19.99998F);
+            this.cTypeOfJob.SizeF = new System.Drawing.SizeF(202.8749F, 19.99998F);
             this.cTypeOfJob.StyleName = "DataField";
             this.cTypeOfJob.StylePriority.UseFont = false;
             this.cTypeOfJob.Text = "cTypeOfJob";
@@ -776,7 +781,7 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             new DevExpress.XtraReports.UI.XRBinding("Text", null, "GetSimpleJob.Jobid")});
             this.jobidsrc.Dpi = 100F;
             this.jobidsrc.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.jobidsrc.LocationFloat = new DevExpress.Utils.PointFloat(351.0001F, 70.79169F);
+            this.jobidsrc.LocationFloat = new DevExpress.Utils.PointFloat(401.0001F, 70.79169F);
             this.jobidsrc.Name = "jobidsrc";
             this.jobidsrc.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.jobidsrc.SizeF = new System.Drawing.SizeF(193.4999F, 20F);
@@ -828,10 +833,10 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             // xrLabel33
             // 
             this.xrLabel33.Dpi = 100F;
-            this.xrLabel33.LocationFloat = new DevExpress.Utils.PointFloat(5.999979F, 6.00001F);
+            this.xrLabel33.LocationFloat = new DevExpress.Utils.PointFloat(1.999982F, 6.00001F);
             this.xrLabel33.Name = "xrLabel33";
             this.xrLabel33.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.xrLabel33.SizeF = new System.Drawing.SizeF(740.0003F, 33F);
+            this.xrLabel33.SizeF = new System.Drawing.SizeF(748F, 33F);
             this.xrLabel33.StyleName = "Title";
             this.xrLabel33.StylePriority.UseTextAlignment = false;
             this.xrLabel33.Text = "Maintenance Work Request";
@@ -885,13 +890,6 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             this.jobid.ValueInfo = "0";
             this.jobid.Visible = false;
             // 
-            // xrLine3
-            // 
-            this.xrLine3.Dpi = 100F;
-            this.xrLine3.LocationFloat = new DevExpress.Utils.PointFloat(0F, 523.9583F);
-            this.xrLine3.Name = "xrLine3";
-            this.xrLine3.SizeF = new System.Drawing.SizeF(745.75F, 4.166565F);
-            // 
             // workRequestReport
             // 
             this.Bands.AddRange(new DevExpress.XtraReports.UI.Band[] {
@@ -904,7 +902,7 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             this.sqlDataSource1});
             this.DataMember = "Requestor";
             this.DataSource = this.sqlDataSource1;
-            this.Margins = new System.Drawing.Printing.Margins(48, 56, 23, 100);
+            this.Margins = new System.Drawing.Printing.Margins(48, 52, 23, 100);
             this.Parameters.AddRange(new DevExpress.XtraReports.Parameters.Parameter[] {
             this.jobid});
             this.StyleSheet.AddRange(new DevExpress.XtraReports.UI.XRControlStyle[] {
