@@ -9,6 +9,8 @@
         function OnGetRowId(idValue) {
             Selection.Set('objectid', idValue[0].toString());
             Selection.Set('n_objectid', idValue[1].toString());
+            Selection.Set('Longitude', idValue[2].toString());
+            Selection.Set('Latitude', idValue[3].toString());
         }
 
         function scrollPreview() {
@@ -31,7 +33,7 @@
                 AutoPostBack="True"
                 Settings-HorizontalScrollBarMode="Auto"
                 SettingsPager-Mode="ShowPager"
-                SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
+                SettingsBehavior-ProcessFocusedRowChangedOnServer="True"
                 SettingsBehavior-AllowFocusedRow="True"
                 SelectionMode="Multiple"
                 DataSourceID="ObjectGridDataSource" 
@@ -46,7 +48,7 @@
                 </Styles>
                 
                 <ClientSideEvents RowClick="function(s, e) {
-                        ObjectGrid.GetRowValues(e.visibleIndex, 'objectid;n_objectid', OnGetRowId);
+                        ObjectGrid.GetRowValues(e.visibleIndex, 'objectid;n_objectid;Longitude;Latitude', OnGetRowId);
                     }" />
                 <Columns>
                     <dx:GridViewCommandColumn FixedStyle="Left" ShowSelectCheckbox="True" Visible="false" VisibleIndex="0" />
@@ -211,7 +213,7 @@
                 <SettingsBehavior
                     EnableRowHotTrack="True" AllowGroup="true"
                     AllowFocusedRow="True"
-                    AllowClientEventsOnLoad="false"
+                    AllowClientEventsOnLoad="false" AllowSelectByRowClick="true" AllowSelectSingleRowOnly="false"
                     ColumnResizeMode="NextColumn" />
                 <SettingsDataSecurity
                     AllowDelete="False"

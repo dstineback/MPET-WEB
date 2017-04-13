@@ -24,6 +24,7 @@ namespace Pages.Objects
         private const int AssignedFormId = 40;
         private string _connectionString = "";
         private bool _useWeb;
+        private object _MapSelected;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -45,10 +46,10 @@ namespace Pages.Objects
                     Master.ShowEditButton = false;/*_userCanEdit;*/
                     Master.ShowDeleteButton = false; /*_userCanDelete;*/
                     Master.ShowViewButton = false;  /*_userCanView;*/
-                    Master.ShowPrintButton = false;
+                    Master.ShowPrintButton = true;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = false;
-                    Master.ShowMultiSelectButton = false; /*_userCanDelete;*/
+                    Master.ShowMultiSelectButton = true; /*_userCanDelete;*/
                 }
             }
 
@@ -105,8 +106,9 @@ namespace Pages.Objects
                         }
                         case "PrintButton":
                         {
+                                MapItem(_MapSelected);
                             //Call Print Routine
-                            PrintSelectedRow();
+                            //PrintSelectedRow();
                             break;
                         }
                         case "ExportPDF":
@@ -356,6 +358,55 @@ namespace Pages.Objects
                 //Redirect To Report Page
                 Response.Redirect("~/Reports/ViewReport.aspx", true);
             }
+        }
+
+        private void MapItem(object MapSelected)
+        {
+            var sel = Selection.Count;
+            MapSelected = ObjectGrid.GetSelectedFieldValues("n_objectid", "Latitude", "Longitude");
+            if(HttpContext.Current.Session["MapSelected"] != null)
+            {
+                HttpContext.Current.Session.Remove("MapSelected");
+            }
+            HttpContext.Current.Session.Add("MapSelected", MapSelected);
+            //Check For Row Value In Hidden Field (Set Via JS)
+            if (Selection.Contains("n_objectid"))
+            {
+                //Check For Previous Session Report Parm ID
+                if (HttpContext.Current.Session["mapObject"] != null)
+                {
+                    //Remove Value
+                    HttpContext.Current.Session.Remove("mapObject");
+                }
+
+                //Add Session Report Parm ID
+                HttpContext.Current.Session.Add("mapObject", Selection.Get("n_objectid"));
+
+                //Check For Previous Session Report Parm ID
+                if (HttpContext.Current.Session["Latitude"] != null)
+                {
+                    //Remove Value
+                    HttpContext.Current.Session.Remove("Latitude");
+                }
+
+                //Add Session Report Parm ID
+                HttpContext.Current.Session.Add("Latitude", Selection.Get("Latitude"));
+
+                //Check For Previous Session Report Parm ID
+                if (HttpContext.Current.Session["Longitude"] != null)
+                {
+                    //Remove Value
+                    HttpContext.Current.Session.Remove("Longitude");
+                }
+
+                //Add Session Report Parm ID
+                HttpContext.Current.Session.Add("Longitude", Selection.Get("Longitude"));
+
+                
+
+            }
+                //Redirect To Report Page
+                Response.Redirect("~/Pages/Map/MapForm.aspx", true);
         }
 
         /// <summary>
