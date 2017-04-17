@@ -106,7 +106,7 @@ namespace Pages.Objects
                         }
                         case "PrintButton":
                         {
-                                MapItem(_MapSelected);
+                                MapItem();
                             //Call Print Routine
                             //PrintSelectedRow();
                             break;
@@ -360,14 +360,17 @@ namespace Pages.Objects
             }
         }
 
-        private void MapItem(object MapSelected)
+        private void MapItem()
         {
             var sel = Selection.Count;
-            MapSelected = ObjectGrid.GetSelectedFieldValues("n_objectid", "Latitude", "Longitude");
+            var MapSelected = ObjectGrid.GetSelectedFieldValues("n_objectid", "Latitude", "Longitude", "description");
+            
             if(HttpContext.Current.Session["MapSelected"] != null)
             {
                 HttpContext.Current.Session.Remove("MapSelected");
+
             }
+
             HttpContext.Current.Session.Add("MapSelected", MapSelected);
             //Check For Row Value In Hidden Field (Set Via JS)
             if (Selection.Contains("n_objectid"))
@@ -377,10 +380,10 @@ namespace Pages.Objects
                 {
                     //Remove Value
                     HttpContext.Current.Session.Remove("mapObject");
-                }
-
                 //Add Session Report Parm ID
+                }
                 HttpContext.Current.Session.Add("mapObject", Selection.Get("n_objectid"));
+
 
                 //Check For Previous Session Report Parm ID
                 if (HttpContext.Current.Session["Latitude"] != null)
@@ -388,9 +391,9 @@ namespace Pages.Objects
                     //Remove Value
                     HttpContext.Current.Session.Remove("Latitude");
                 }
-
                 //Add Session Report Parm ID
                 HttpContext.Current.Session.Add("Latitude", Selection.Get("Latitude"));
+
 
                 //Check For Previous Session Report Parm ID
                 if (HttpContext.Current.Session["Longitude"] != null)
@@ -398,9 +401,15 @@ namespace Pages.Objects
                     //Remove Value
                     HttpContext.Current.Session.Remove("Longitude");
                 }
-
                 //Add Session Report Parm ID
                 HttpContext.Current.Session.Add("Longitude", Selection.Get("Longitude"));
+
+                if(HttpContext.Current.Session["description"] != null)
+                {
+                    HttpContext.Current.Session.Remove("description");
+                }
+
+                HttpContext.Current.Session.Add("description", Selection.Get("description"));
 
                 
 
