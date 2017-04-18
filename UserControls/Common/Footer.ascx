@@ -122,4 +122,8 @@
         <HoverStyle CssClass="hover"></HoverStyle>
             <Image Url="~/Content/Images/layers-26.png"></Image> 
     </dx:ASPxButton>
+    <dx:ASPxButton ID="MapDisplay" UseSubmitBehavior="false" AutoPostBack="true" runat="server" CssClass="button" ToolTip="Map selected Items with GPS values">
+        <HoverStyle CssClass="hover"></HoverStyle>
+            <Image Url="../../Content/Images/map-icon-small.png"></Image>
+    </dx:ASPxButton>
 </div>

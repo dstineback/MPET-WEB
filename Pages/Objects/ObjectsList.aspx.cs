@@ -46,10 +46,11 @@ namespace Pages.Objects
                     Master.ShowEditButton = false;/*_userCanEdit;*/
                     Master.ShowDeleteButton = false; /*_userCanDelete;*/
                     Master.ShowViewButton = false;  /*_userCanView;*/
-                    Master.ShowPrintButton = true;
+                    Master.ShowPrintButton = false;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = false;
                     Master.ShowMultiSelectButton = true; /*_userCanDelete;*/
+                    Master.ShowMapDisplayButton = true;
                 }
             }
 
@@ -106,10 +107,10 @@ namespace Pages.Objects
                         }
                         case "PrintButton":
                         {
-                                MapItem();
-                            //Call Print Routine
-                            //PrintSelectedRow();
-                            break;
+
+                                //Call Print Routine
+                                PrintSelectedRow();
+                                break;
                         }
                         case "ExportPDF":
                         {
@@ -129,6 +130,12 @@ namespace Pages.Objects
                             EnableMultiSelect(!(ObjectGrid.Columns[0].Visible));
                             break;
                         }
+                        case "MapDisplay":
+                        {
+                                MapItem();
+                                break;
+                        }
+                      
 
                         default:
                         {
@@ -365,15 +372,16 @@ namespace Pages.Objects
             var sel = Selection.Count;
             var MapSelected = ObjectGrid.GetSelectedFieldValues("n_objectid", "Latitude", "Longitude", "description");
             
-            if(HttpContext.Current.Session["MapSelected"] != null)
+            if(MapSelected.Count > 0)
             {
-                HttpContext.Current.Session.Remove("MapSelected");
-
+                if(HttpContext.Current.Session["MapSelected"] != null)
+                {
+                    HttpContext.Current.Session.Remove("MapSelected");
+                }
+                HttpContext.Current.Session.Add("MapSelected", MapSelected);
             }
-
-            HttpContext.Current.Session.Add("MapSelected", MapSelected);
             //Check For Row Value In Hidden Field (Set Via JS)
-            if (Selection.Contains("n_objectid"))
+            if (Selection.Contains("n_objectid") && MapSelected.Count < 1)
             {
                 //Check For Previous Session Report Parm ID
                 if (HttpContext.Current.Session["mapObject"] != null)
@@ -409,10 +417,7 @@ namespace Pages.Objects
                     HttpContext.Current.Session.Remove("description");
                 }
 
-                HttpContext.Current.Session.Add("description", Selection.Get("description"));
-
-                
-
+                HttpContext.Current.Session.Add("description", Selection.Get("description"));   
             }
                 //Redirect To Report Page
                 Response.Redirect("~/Pages/Map/MapForm.aspx", true);

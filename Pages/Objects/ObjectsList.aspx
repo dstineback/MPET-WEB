@@ -31,7 +31,7 @@
                 Width="98%"
                 KeyboardSupport="True" 
                 ClientInstanceName="ObjectGrid"
-                AutoPostBack="True"
+                AutoPostBack="False"
                 Settings-HorizontalScrollBarMode="Auto"
                 SettingsPager-Mode="ShowPager"
                 SettingsBehavior-ProcessFocusedRowChangedOnServer="True"
@@ -220,11 +220,12 @@
                     AllowDelete="False"
                     AllowInsert="False" />
                 <SettingsPopup HeaderFilter-Width="360" HeaderFilter-Height="360"></SettingsPopup>
-                <Settings
-                    ShowFilterBar="Visible" ShowGroupPanel="true" 
+                <Settings 
+                    ShowFilterBar="Visible" ShowGroupPanel="true" ShowFilterRow="true" ShowFilterRowMenu="true"
                     VerticalScrollBarMode="Visible"
-                    VerticalScrollBarStyle="Virtual"
+                    VerticalScrollBarStyle="Standard"
                     VerticalScrollableHeight="450" />
+                <SettingsFilterControl ViewMode="Visual" ShowAllDataSourceColumns="true"></SettingsFilterControl>
                 <SettingsPager PageSize="20">
                     <PageSizeItemSettings Visible="true" />
                 </SettingsPager>

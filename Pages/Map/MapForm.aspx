@@ -37,14 +37,17 @@
 
 </head>
 <script type="text/javascript">
+</script>
+<script type="text/javascript">
+    window.onload = function () {
     var markers = [
         <asp:Repeater ID="rptMarkers" runat="server">
             <ItemTemplate>
                 {
                 "title": '<%# Eval("mapObject") %>',
                 "lat": '<%# Eval("Latitude") %>',
-                "lng": '<%# Eval("Longitude") %>'
-                <%--"description": '<%# Eval("Description") %>'--%>
+                "lng": '<%# Eval("Longitude") %>',
+                "description": '<%# Eval("description") %>'
                 }
             </ItemTemplate>
         <SeparatorTemplate>
@@ -53,9 +56,6 @@
         </asp:Repeater>
     ];
     console.log(markers);
-</script>
-<script type="text/javascript">
-    window.onload = function () {
         var mapOptions = {
             center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
             zoom: 14,
@@ -63,14 +63,16 @@
         };
         var infoWindow = new google.maps.InfoWindow();
         var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        var markersArray = [];
         for (i = 0; i < markers.length; i++) {
             var data = markers[i]
             var myLatlng = new google.maps.LatLng(data.lat, data.lng);
             var marker = new google.maps.Marker({
                 position: myLatlng,
                 map: map,
-                title: data.title
+                title: data.description               
             });
+            
             
             (function (marker, data) {
                 google.maps.event.addListener(marker, "click", function (e) {
@@ -78,8 +80,15 @@
                     infoWindow.open(map, marker);
                 });
             })(marker, data);
+            markersArray.push(marker);
+            console.log(markersArray);
             
         }
+            var cluster = new MarkerClusterer(map, markersArray, 
+                {imagePath: '../../Content/v3-utility-library-master/markerclusterer/images/m',
+                gridSize: 5,
+                maxZoom: 15});
+            console.log(cluster);
     }
 </script>
   
@@ -90,22 +99,7 @@
         <dx:ASPxHyperLink runat="server" Text="Back" NavigateUrl="../Objects/ObjectsList.aspx"></dx:ASPxHyperLink>
     </div>
     <div runat="server" id="map"></div>  
-  <%--  <script>
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
-        });
-
-        var marker = new google.maps.Marker({
-            position: { lat: -34.398, lng: 150.64 },
-            map: map
-        });
-      }
-    </script>--%>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARk0BJK-cnQ27jHObwdI4xtqsNY9n7z9E"
-    async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARk0BJK-cnQ27jHObwdI4xtqsNY9n7z9E" async defer></script>
+    <script  src="../../Content/v3-utility-library-master/markerclusterer/src/markerclusterer.js"></script>
 </body>
 </html>

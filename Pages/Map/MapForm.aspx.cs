@@ -41,17 +41,15 @@ public partial class Pages_Map_MapForm : Page
             description = HttpContext.Current.Session["description"].ToString();
             
         }
-
-        
-        GetData();
-        
        
+        GetData();     
     }
 
     protected void GetData()
     {
-
-        if (MapSelected != null)
+        var count = MapSelected as List<object>;
+        
+        if (MapSelected != null && count.Count > 0)
         {
             var mS = MapSelected as List<object>;
 
@@ -66,7 +64,7 @@ public partial class Pages_Map_MapForm : Page
                 mapObject = Convert.ToInt32(row[0].ToString());
                 Latitude = Convert.ToDecimal(row[1].ToString());
                 Longitude = Convert.ToDecimal(row[2].ToString());
-                description = row[0].ToString();
+                description = row[3].ToString();
 
                 dt.Rows.Add(mapObject, Latitude, Longitude, description);
             }
@@ -89,7 +87,7 @@ public partial class Pages_Map_MapForm : Page
             rptMarkers.DataBind();
         } else
         {
-            mapObject = Convert.ToInt16(Session["n_objectid"].ToString());
+            mapObject = Convert.ToInt16(Session["mapObject"].ToString());
             Latitude = Convert.ToDecimal(Session["Latitude"].ToString());
             Longitude = Convert.ToDecimal(Session["Longitude"].ToString());
             description = Session["description"].ToString();

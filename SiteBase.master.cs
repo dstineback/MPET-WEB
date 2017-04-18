@@ -5,7 +5,7 @@ using System.Web.UI;
 using DevExpress.Web;
 
 public partial class SiteMasterBase : MasterPage {
-    
+
     private LogonObject _oLogon;
     public string CssVersion { get; set; }
 
@@ -52,6 +52,7 @@ public partial class SiteMasterBase : MasterPage {
     private bool _showNonStockAddButton;
     private bool _showPrevStepButton;
     private bool _showNextStepButton;
+    private bool _showMapDisplayButton;
 
     //Create Show Button Events
     public bool ShowSaveButton { get { return _showSaveButton; } set { _showSaveButton = value; } }
@@ -72,6 +73,7 @@ public partial class SiteMasterBase : MasterPage {
     public bool ShowAddCrewLaborButton { get { return _showAddCrewLaborButton; } set { _showAddCrewLaborButton = value; } }
     public bool ShowAddCrewGroupButton { get { return _showAddCrewGroupButton; } set { _showAddCrewGroupButton = value; } }
     public bool ShowMultiSelectButton { get { return _showMultiSelectButton; } set { _showMultiSelectButton = value; } }
+    public bool ShowMapDisplayButton { get { return _showMapDisplayButton; }  set { _showMapDisplayButton = value; } }
     public bool ShowEmailButton { get { return _showEmailButton; } set { _showEmailButton = value; } }
     public bool ShowPlanButton { get { return _showPlanButton; } set { _showPlanButton = value; } }
     public bool ShowCopyJobButton { get { return _showCopyJobButton; } set { _showCopyJobButton = value; } }
@@ -109,6 +111,7 @@ public partial class SiteMasterBase : MasterPage {
     private bool _enableAddCrewLaborButton = true;
     private bool _enableAddCrewGroupButton = true;
     private bool _enableMultiSelectButton = true;
+    private bool _enableMapDisplayButton = true;
     private bool _enablePlanButton = true;
     private bool _enableCopyJobButton = true;
     private bool _enableRoutineJobButton = true;
@@ -140,6 +143,7 @@ public partial class SiteMasterBase : MasterPage {
     public bool EnableAddCrewLaborButton { get { return _enableAddCrewLaborButton; } set { _enableAddCrewLaborButton = value; } }
     public bool EnableAddCrewGroupButton { get { return _enableAddCrewGroupButton; } set { _enableAddCrewGroupButton = value; } }
     public bool EnableMultiSelectButton { get { return _enableMultiSelectButton; } set { _enableMultiSelectButton = value; } }
+    public bool EnableMapDisplayButton { get { return _enableMapDisplayButton; } set { _enableMapDisplayButton = value; } }
     public bool EnablePlanButton { get { return _enablePlanButton; } set { _enablePlanButton = value; } }
     public bool EnableCopyJobButton { get { return _enableCopyJobButton; } set { _enableCopyJobButton = value; } }
     public bool EnableRoutineJobButton { get { return _enableRoutineJobButton; } set { _enableRoutineJobButton = value; } }
@@ -328,6 +332,10 @@ public partial class SiteMasterBase : MasterPage {
         var emailButton = ((ASPxButton)Footer.FindControl("EmailButton"));
         emailButton.Visible = _showEmailButton;
         emailButton.Enabled = _showEmailButton;
+
+        var mapDisplayButton = ((ASPxButton)Footer.FindControl("MapDisplay"));
+        mapDisplayButton.Visible = _showMapDisplayButton;
+        mapDisplayButton.Enabled = _showMapDisplayButton;
     }
 
     /// <summary>
