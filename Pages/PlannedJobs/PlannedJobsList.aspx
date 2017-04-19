@@ -8,9 +8,13 @@
 
             function OnGetRowId(idValue) {
                 Selection.Set('Jobid', idValue[0].toString());
-                Selection.Set('n_Jobid', idValue[1].toString());
+                Selection.Set('n_jobid', idValue[1].toString());
                 Selection.Set('n_jobstepid', idValue[2].toString());
                 Selection.Set('step', idValue[3].toString());
+                Selection.Set('Step Title', idValue[4].toString());
+                Selection.Set('Object ID', idValue[5].toString());
+                Selection.Set('Latitude', idValue[6].toString());
+                Selection.Set('Latitude', idValue[7].toString());
             }
 
             function HidePopup() {
@@ -56,7 +60,7 @@
                     <FilterRow CssClass="gridViewFilterRow"></FilterRow>
                 </Styles>
                 <ClientSideEvents RowClick="function(s, e) {
-                        PlannedGrid.GetRowValues(e.visibleIndex, 'Jobid;n_jobid;n_jobstepid;step', OnGetRowId);
+                        PlannedGrid.GetRowValues(e.visibleIndex, 'Jobid;n_jobid;n_jobstepid;step;Step Title;Object ID;Latitude;Longitude', OnGetRowId);
                         
                     }" />
 

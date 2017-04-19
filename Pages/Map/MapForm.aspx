@@ -95,8 +95,10 @@
 <body runat="server" >
     <div runat="server" id="backButton">
         
-        <a href="../Objects/ObjectsList.aspx">Back</a>
-        <dx:ASPxHyperLink runat="server" Text="Back" NavigateUrl="../Objects/ObjectsList.aspx"></dx:ASPxHyperLink>
+        
+        <dx:ASPxHyperLink runat="server" ID="ObjectBack" Text="Back to Objects List" NavigateUrl="../Objects/ObjectsList.aspx"></dx:ASPxHyperLink>
+        <dx:ASPxHyperLink runat="server" ID="PlannedJobsBack" Text="Back to Planned Jobs List" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"></dx:ASPxHyperLink>
+        <dx:ASPxHyperLink runat="server" ID="RequestJobsBack" Text="Back to Request List" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx"></dx:ASPxHyperLink>
     </div>
     <div runat="server" id="map"></div>  
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARk0BJK-cnQ27jHObwdI4xtqsNY9n7z9E" async defer></script>

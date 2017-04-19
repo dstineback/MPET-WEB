@@ -15,6 +15,9 @@
             Selection.Set('Title', idValue[6].toString());
             Selection.Set('Notes', idValue[7].toString());
             Selection.Set('n_requestor', idValue[8].toString());
+            Selection.Set('Object ID', idValue[9].toString());
+            Selection.Set('Latitude', idValue[10].toString());
+            Selection.Set('Longitude', idValue[11].toString());
         }
 
         function HidePopup() {
@@ -51,7 +54,7 @@
                     <FilterRow CssClass="gridViewFilterRow"></FilterRow>
                 </Styles>
                 <ClientSideEvents RowClick="function(s, e) {
-                        ReqGrid.GetRowValues(e.visibleIndex, 'Jobid;n_Jobid;n_worktypeid;n_priorityid;n_jobreasonid;SubAssemblyID;Title;Notes;n_requestor', OnGetRowId);
+                        ReqGrid.GetRowValues(e.visibleIndex, 'Jobid;n_Jobid;n_worktypeid;n_priorityid;n_jobreasonid;SubAssemblyID;Title;Notes;n_requestor;Object ID;Latitude;Longitude', OnGetRowId);
                     }" />
                 <Columns>
                     <dx:GridViewCommandColumn FixedStyle="Left" ShowSelectCheckbox="True" Visible="false" VisibleIndex="0" />
@@ -136,6 +139,18 @@
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
                     <dx:GridViewDataTextColumn FieldName="n_requestor" ReadOnly="True" Visible="false" VisibleIndex="30">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Latitude" Caption="Latitude" ReadOnly="true" Visible="true" VisibleIndex="31">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Longitude" Caption="Longitude" ReadOnly="true" Visible="true" VisibleIndex="32">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Object_Latitude" Caption="Object Latitude" ReadOnly="true" Visible="true" VisibleIndex="33">
+                        <CellStyle Wrap="False"></CellStyle>
+                    </dx:GridViewDataTextColumn>
+                    <dx:GridViewDataTextColumn FieldName="Object_Latitude" Caption="Object Latitude" ReadOnly="true" Visible="true" VisibleIndex="34">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
                 </Columns>
@@ -272,11 +287,15 @@
                                                           ELSE tbl_Jobs.LastModified
                                                         END AS modifiedon,
                             							ROW_NUMBER() OVER ( ORDER BY tbl_Jobs.[n_Jobid] ) AS [rn],
-                                                        tbl_Jobs.Notes
+                                                        tbl_Jobs.Notes,
+                                                        tbl_MaintObj.X,
+														tbl_MaintObj.Y
                                                FROM     [dbo].[Jobs] tbl_Jobs
                                                         INNER JOIN ( SELECT tbl_MO.n_objectid ,
                                                                             tbl_MO.objectid ,
                                                                             tbl_MO.description ,
+                                                                            tbl_MO.GPS_X AS X,
+																			tbl_MO.GPS_Y AS Y,
                                                                             tbl_Area.areaid
                                                                      FROM   dbo.MaintenanceObjects tbl_MO
                                                                             INNER JOIN ( SELECT tblArea.n_areaid ,
@@ -429,7 +448,11 @@
                                         cte_Jobs.n_jobreasonid,
                                         cte_Jobs.SubAssemblyID,
                                         cte_Jobs.Notes,
-                                        cte_Jobs.n_requestor
+                                        cte_Jobs.n_requestor,
+                                        cte_Jobs.GPS_X AS [Latitude],
+										cte_Jobs.GPS_Y AS [Longitude],
+										cte_Jobs.X AS [Object_Latitude],
+										cte_Jobs.Y AS [Object_Longitude]
                                 FROM    cte_Jobs">
                                                         <SelectParameters>
                                                             <asp:SessionParameter DefaultValue="-1" Name="UserID" SessionField="UserID" />

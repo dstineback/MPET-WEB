@@ -97,7 +97,7 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
     {
         if(HttpContext.Current.Session["ReportParm"] != null)
         {
-            jobID = Convert.ToInt32(HttpContext.Current.Session["ReportParm"]);
+            jobID = Convert.ToInt32(HttpContext.Current.Session["ReportParm"].ToString());
         }
 
             InitializeComponent();
@@ -913,6 +913,7 @@ public class JobReport : DevExpress.XtraReports.UI.XtraReport
             queryParameter1.Name = "@JobID";
             queryParameter1.Type = typeof(int);
             queryParameter1.ValueInfo = "0";
+        queryParameter1.Value = jobID;
             storedProcQuery1.Parameters.Add(queryParameter1);
             storedProcQuery1.StoredProcName = "GetSimpleJobStep";
             this.sqlDataSource1.Queries.AddRange(new DevExpress.DataAccess.Sql.SqlQuery[] {

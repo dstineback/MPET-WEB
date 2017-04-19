@@ -57,9 +57,10 @@ namespace Pages.PlannedJobs
                     Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd);
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
                     Master.ShowMultiSelectButton = _userCanDelete;
-                    Master.ShowPrintButton = true;
+                    Master.ShowPrintButton = _userCanView;
+                    Master.ShowMapDisplayButton = _userCanView;
                     Master.ShowPdfButton = false;
-                    Master.ShowXlsButton = true;
+                    Master.ShowXlsButton = false;
                     
                 }
             }
@@ -111,16 +112,23 @@ namespace Pages.PlannedJobs
                             PrintSelectedRow();
                             break;
                         }
-                        case "ExportPDF":
+                        case "MapDisplay":
                         {
-                            //Call Export PDF Option
-                            ExportPdf();
-                            break;
+                                //Call Map Display
+                                MapItem();
+                                //break
+                                break;
                         }
                         case "ExportXLS":
                         {
                             //Call Export XLS Option
                             ExportXls();
+                            break;
+                        }
+                        case "ExportPDF":
+                        {
+                            //Call Export PDF Option
+                            ExportPdf();
                             break;
                         }
                         case "MultiSelect":
@@ -145,6 +153,7 @@ namespace Pages.PlannedJobs
                             //break
                             break;
                         }
+                        
                         case"BatchCrewAdd":
                         {
                             //Bind Grid
@@ -255,6 +264,7 @@ namespace Pages.PlannedJobs
             Master.ShowBatchEquipmentButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowBatchPartButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowPostButton = (_userCanEdit);
+            Master.ShowMapDisplayButton = _userCanView;
             Master.ShowForcePmButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowRoutineJobButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
 
@@ -461,7 +471,7 @@ namespace Pages.PlannedJobs
         private void PrintSelectedRow()
         {
             //Check For Row Value In Hidden Field (Set Via JS)
-            if (Selection.Contains("n_Jobid"))
+            if (Selection.Contains("n_jobstepid"))
             {
                 //Check For Previous Session Report Parm ID
                 if (HttpContext.Current.Session["ReportParm"] != null)
@@ -471,7 +481,7 @@ namespace Pages.PlannedJobs
                 }
 
                 //Add Session Report Parm ID
-                HttpContext.Current.Session.Add("ReportParm", Selection.Get("n_Jobid"));
+                HttpContext.Current.Session.Add("ReportParm", Selection.Get("n_jobstepid"));
 
                 //Check For Previous Report Name
                 if (HttpContext.Current.Session["ReportToDisplay"] != null)
@@ -633,6 +643,90 @@ namespace Pages.PlannedJobs
                 //Show Error
                 Master.ShowError(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Maps selected items on a Map display
+        /// </summary>
+        protected void MapItem()
+        {
+            var sel = Selection.Count;
+            var MapSelected = PlannedGrid.GetSelectedFieldValues("Jobid","n_jobid","n_jobstepid","step", "Step Title","Object ID", "Latitude", "Longitude");
+
+            if (MapSelected.Count > 0)
+            {
+                if (HttpContext.Current.Session["MapSelected"] != null)
+                {
+                    HttpContext.Current.Session.Remove("MapSelected");
+                }
+                HttpContext.Current.Session.Add("MapSelected", MapSelected);
+            }
+            //Check For Row Value In Hidden Field (Set Via JS)
+            if (Selection.Contains("n_jobstepid") && MapSelected.Count < 1)
+            {
+                //Check For Previous Session Report Parm ID
+                if (HttpContext.Current.Session["mapObject"] != null)
+                {
+                    //Remove Value
+                    HttpContext.Current.Session.Remove("mapObject");
+                    //Add Session Report Parm ID
+                }
+                HttpContext.Current.Session.Add("mapObject", Selection.Get("n_jobstepid"));
+
+
+                //Check For Previous Session Report Parm ID
+                if (HttpContext.Current.Session["Latitude"] != null)
+                {
+                    //Remove Value
+                    HttpContext.Current.Session.Remove("Latitude");
+                }
+                //Add Session Report Parm ID
+                HttpContext.Current.Session.Add("Latitude", Selection.Get("Latitude"));
+
+
+                //Check For Previous Session Report Parm ID
+                if (HttpContext.Current.Session["Longitude"] != null)
+                {
+                    //Remove Value
+                    HttpContext.Current.Session.Remove("Longitude");
+                }
+                //Add Session Report Parm ID
+                HttpContext.Current.Session.Add("Longitude", Selection.Get("Longitude"));
+
+                if (HttpContext.Current.Session["description"] != null)
+                {
+                    HttpContext.Current.Session.Remove("description");
+                }
+
+                HttpContext.Current.Session.Add("description", Selection.Get("Step Title"));
+
+                if(HttpContext.Current.Session["jobid"] != null)
+                {
+                    HttpContext.Current.Session.Remove("jobid");
+                }
+                HttpContext.Current.Session.Add("jobid", Selection.Get("Jobid"));
+
+                if(HttpContext.Current.Session["n_jobid"] != null)
+                {
+                    HttpContext.Current.Session.Remove("n_jobid");
+                }
+                HttpContext.Current.Session.Add("n_jobstepid", Selection.Get("n_jobid"));
+
+                if (HttpContext.Current.Session["step"] != null)
+                {
+                    HttpContext.Current.Session.Remove("step");
+                }
+                HttpContext.Current.Session.Add("step", Selection.Get("step"));
+
+                if (HttpContext.Current.Session["objectid"] != null)
+                {
+                    HttpContext.Current.Session.Remove("objectid");
+                }
+                HttpContext.Current.Session.Add("objectid", Selection.Get("Object ID"));
+
+            }
+            //Redirect To Report Page
+            Response.Redirect("~/Pages/Map/MapForm.aspx", true);
         }
 
         /// <summary>

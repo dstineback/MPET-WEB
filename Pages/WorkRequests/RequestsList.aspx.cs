@@ -57,6 +57,7 @@ namespace Pages.WorkRequests
                     Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd); 
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
                     Master.ShowPrintButton = true;
+                    Master.ShowMapDisplayButton = _userCanView;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = true;
                     Master.ShowMultiSelectButton = _userCanDelete;
@@ -119,6 +120,12 @@ namespace Pages.WorkRequests
                             PrintSelectedRow();
                             break;
                         }
+                        case "MapDisplay":
+                            {
+                                //Map Request Items
+                                MapRequestItem();
+                                break;
+                            }
                         case "ExportPDF":
                         {
                             //Call Export PDF Option
@@ -411,6 +418,47 @@ namespace Pages.WorkRequests
             }
         }
 
+        private void MapRequestItem()
+        {
+            //Check For Row Value In Hidden Field (Set Via JS)
+            if (Selection.Contains("n_Jobid"))
+            {
+                //Check For Previous Session Report Parm ID
+                if (HttpContext.Current.Session["mapObject"] != null)
+                {
+                    //Remove Value
+                    HttpContext.Current.Session.Remove("mapObject");
+                }
+
+                //Add Session Report Parm ID
+                HttpContext.Current.Session.Add("mapObject", Selection.Get("n_Jobid"));
+                
+                if(Session["n_objectid"] != null)
+                {
+                    Session.Remove("n_objectid");
+                }
+                Session.Add("objectid", Selection.Get("Object ID"));
+
+                if(Session["Latitude"] != null)
+                {
+                    Session.Remove("Latitude");
+                }
+                Session.Add("Latitude", Selection.Get("Latitude"));
+                if(Session["Longitude"] != null)
+                {
+                    Session.Remove("Longitude");
+                }
+                Session.Add("Longitude", Selection.Get("Longitude"));
+                if(Session["description"] != null)
+                {
+                    Session.Remove("description");
+                }
+                Session.Add("description", Selection.Get("Title"));
+
+                //Redirect To Report Page
+                Response.Redirect("~/Pages/Map/MapForm.aspx", true);
+            }
+        }
         /// <summary>
         /// Export Grid To PDF
         /// </summary>

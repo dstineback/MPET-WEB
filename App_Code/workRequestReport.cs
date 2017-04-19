@@ -195,18 +195,21 @@ public class workRequestReport : DevExpress.XtraReports.UI.XtraReport
             queryParameter1.Name = "@RequestJobID";
             queryParameter1.Type = typeof(int);
             queryParameter1.ValueInfo = "0";
+        queryParameter1.Value = reportParm;
             storedProcQuery1.Parameters.Add(queryParameter1);
             storedProcQuery1.StoredProcName = "GetSimpleJob";
             customSqlQuery1.Name = "Requestor";
             queryParameter2.Name = "@jobID";
             queryParameter2.Type = typeof(int);
             queryParameter2.ValueInfo = "0";
+        queryParameter2.Value = reportParm;
             customSqlQuery1.Parameters.Add(queryParameter2);
             customSqlQuery1.Sql = resources.GetString("customSqlQuery1.Sql");
             customSqlQuery2.Name = "Object";
             queryParameter3.Name = "@jobID";
             queryParameter3.Type = typeof(int);
             queryParameter3.ValueInfo = "0";
+        queryParameter3.Value = reportParm;
             customSqlQuery2.Parameters.Add(queryParameter3);
             customSqlQuery2.Sql = "SELECT \r\n\t[description]\r\n     \r\n     from .dbo.MaintenanceObjects as M inner join" +
     " dbo.Jobs AS J \r\n  \r\n  on M.n_objectid = J.n_MaintObjectID\r\n  where J.n_Jobid = " +
