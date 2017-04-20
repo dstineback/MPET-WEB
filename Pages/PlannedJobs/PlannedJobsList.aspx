@@ -14,7 +14,7 @@
                 Selection.Set('Step Title', idValue[4].toString());
                 Selection.Set('Object ID', idValue[5].toString());
                 Selection.Set('Latitude', idValue[6].toString());
-                Selection.Set('Latitude', idValue[7].toString());
+                Selection.Set('Longitude', idValue[7].toString());
             }
 
             function HidePopup() {

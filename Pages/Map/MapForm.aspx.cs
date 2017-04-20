@@ -36,6 +36,7 @@ public partial class Pages_Map_MapForm : Page
         }      
         if(HttpContext.Current.Session["Latitude"] != null && HttpContext.Current.Session["Longitude"] != null)
         {
+
             Latitude = Convert.ToDecimal(HttpContext.Current.Session["Latitude"].ToString());
             Longitude = Convert.ToDecimal(HttpContext.Current.Session["Longitude"].ToString());
             mapObject = Convert.ToInt32(HttpContext.Current.Session["mapObject"].ToString());
@@ -320,5 +321,10 @@ public partial class Pages_Map_MapForm : Page
     {
        
         Response.Redirect("~/Pages/Objects/ObjectsList.aspx");
+    }
+    protected string GetUrl()
+    {
+        var values = Session["mapObject"].ToString();
+        return "/../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
     }
 }

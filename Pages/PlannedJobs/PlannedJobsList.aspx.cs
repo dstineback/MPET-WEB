@@ -662,7 +662,7 @@ namespace Pages.PlannedJobs
                 HttpContext.Current.Session.Add("MapSelected", MapSelected);
             }
             //Check For Row Value In Hidden Field (Set Via JS)
-            if (Selection.Contains("n_jobstepid") && MapSelected.Count < 1)
+            if (Selection.Contains("n_jobstepid") )
             {
                 //Check For Previous Session Report Parm ID
                 if (HttpContext.Current.Session["mapObject"] != null)
