@@ -424,14 +424,14 @@ namespace Pages.WorkRequests
             if (Selection.Contains("n_Jobid"))
             {
                 //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["mapObject"] != null)
+                if (HttpContext.Current.Session["n_Jobid"] != null)
                 {
                     //Remove Value
-                    HttpContext.Current.Session.Remove("mapObject");
+                    HttpContext.Current.Session.Remove("n_Jobid");
                 }
 
                 //Add Session Report Parm ID
-                HttpContext.Current.Session.Add("mapObject", Selection.Get("n_Jobid"));
+                HttpContext.Current.Session.Add("n_Jobid", Selection.Get("n_Jobid"));
                 
                 if(Session["n_objectid"] != null)
                 {

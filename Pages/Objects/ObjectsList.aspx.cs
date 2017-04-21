@@ -370,7 +370,7 @@ namespace Pages.Objects
         private void MapItem()
         {
             var sel = Selection.Count;
-            var MapSelected = ObjectGrid.GetSelectedFieldValues("n_objectid", "Latitude", "Longitude", "description");
+            var MapSelected = ObjectGrid.GetSelectedFieldValues("objectid","n_objectid", "Latitude", "Longitude", "description");
             
             if(MapSelected.Count > 0)
             {
@@ -384,13 +384,19 @@ namespace Pages.Objects
             if (Selection.Contains("n_objectid") && MapSelected.Count < 1)
             {
                 //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["mapObject"] != null)
+                if (HttpContext.Current.Session["n_objectid"] != null)
                 {
                     //Remove Value
-                    HttpContext.Current.Session.Remove("mapObject");
+                    HttpContext.Current.Session.Remove("n_objectid");
                 //Add Session Report Parm ID
                 }
-                HttpContext.Current.Session.Add("mapObject", Selection.Get("n_objectid"));
+                HttpContext.Current.Session.Add("n_objectid", Selection.Get("n_objectid"));
+
+                if(HttpContext.Current.Session["objectid"] != null)
+                {
+                    HttpContext.Current.Session.Remove("objectid");
+                }
+                HttpContext.Current.Session.Add("objectid", Selection.Get("objectid"));
 
 
                 //Check For Previous Session Report Parm ID

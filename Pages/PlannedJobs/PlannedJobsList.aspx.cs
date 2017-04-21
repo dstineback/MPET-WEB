@@ -665,13 +665,13 @@ namespace Pages.PlannedJobs
             if (Selection.Contains("n_jobstepid") )
             {
                 //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["mapObject"] != null)
+                if (HttpContext.Current.Session["jobstepid"] != null)
                 {
                     //Remove Value
-                    HttpContext.Current.Session.Remove("mapObject");
+                    HttpContext.Current.Session.Remove("jobstepid");
                     //Add Session Report Parm ID
                 }
-                HttpContext.Current.Session.Add("mapObject", Selection.Get("n_jobstepid"));
+                HttpContext.Current.Session.Add("jobstepid", Selection.Get("n_jobstepid"));
 
 
                 //Check For Previous Session Report Parm ID

@@ -37,16 +37,55 @@
      }
 </script>
 
+
 <script type="text/javascript">
     window.onload = function () {
         var markers = [
-            <asp:Repeater ID="rptMarkers" runat="server">
+            <asp:Repeater ID="rptJobMarkers" runat="server">
                 <ItemTemplate>
                     {
-                        "title": '<%# Eval("mapObject") %>',
+                        
+                        "jobid": '<%# Eval("jobID")%>',
+                        "njobid": '<%# Eval("njobid")%>',
+
+                       <%-- "title": '<%# Eval("mapObject") %>',--%>
                         "lat": '<%# Eval("Latitude") %>',
                         "lng": '<%# Eval("Longitude") %>',
-                        "description": '<%# Eval("description") %>'
+                        "description": '<%# Eval("description") %>',
+                    }
+                </ItemTemplate>
+                <SeparatorTemplate>
+                    ,
+                </SeparatorTemplate>
+                </asp:Repeater>
+            <asp:Repeater ID="rptJobStepMarkers" runat="server">
+                <ItemTemplate>
+                    {                       
+                        "jobid": '<%# Eval("jobID")%>',
+                        "njobid": '<%# Eval("njobid")%>', 
+                        "jobstepid": '<%# Eval("jobstepid")%>',                           
+                       <%-- "title": '<%# Eval("mapObject") %>',--%>
+                        "lat": '<%# Eval("Latitude") %>',
+                        "lng": '<%# Eval("Longitude") %>',
+                        "description": '<%# Eval("description") %>',
+                    }
+                </ItemTemplate>
+                <SeparatorTemplate>
+                    ,
+                </SeparatorTemplate>
+                </asp:Repeater>
+            <asp:Repeater ID="rptObjectMarkers" runat="server">
+                <ItemTemplate>
+                    {
+                        
+                        
+                        "nobjectid": '<%# Eval("nobjectid")%>',
+                        "objectid": '<%# Eval("objectid")%>',
+                       
+                       <%-- "title": '<%# Eval("mapObject") %>',--%>
+                        "lat": '<%# Eval("Latitude") %>',
+                        "lng": '<%# Eval("Longitude") %>',
+                        "description": '<%# Eval("description") %>',
                     }
                 </ItemTemplate>
                 <SeparatorTemplate>
@@ -90,8 +129,11 @@
         var mInfoWindow = new google.maps.InfoWindow();
         var markersArray = [];
         for (i = 0; i < markers.length; i++) {
-            var data = markers[i]
-            var url = "/../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + data.title;
+            var data = markers[i];
+            var object = data.objectid;
+            var jobid = String(data.jobid);
+            var jobstepid = String(data.jobstepid);
+            console.log("data values", [object, jobid, jobstepid]);
             var myLatlng = new google.maps.LatLng(data.lat, data.lng);
             var marker = new google.maps.Marker({
                 position: myLatlng,
@@ -100,14 +142,26 @@
             });          
             (function (marker, data) {
                 google.maps.event.addListener(marker, "click", function (e) {
-                    mInfoWindow.setContent('<div>' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a Work Request' + '</a>' + '<br>' + '<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a Planned Job' + '</a>' + '<br>' + '<a id="link" href="/../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=' + data.title +'">' + data.title + '</a>' + '</div>')
-                    mInfoWindow.open(map, marker)                   
+
+                    if(data.njobid != null && data.njobid > 0 ){
+                        mInfoWindow.setContent('<div>' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a Work Request' + '</a>' + '<br>' + '<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a Planned Job' + '</a>' + '<br>' + '<a id="link" href="/../../Pages/WorkRequests/WorkRequestForm.aspx?n_jobid=' + data.njobid +'">' + data.jobID + '</a>' + '</div>')
+                        mInfoWindow.open(map, marker);
+                        return;
+                    } else { };
+                    if(data.objectid != null && jobstepid === "undefined" && jobid === "undefined"){
+                        mInfoWindow.setContent('<div>' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a Work Request' + '</a>' + '<br>' + '<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a Planned Job' + '</a>' + '<br>' + '<a runat="server" href="javascript:void(0);" Onclick="GoToWorkRequest">' + data.description + '</a>' + '</div>')
+                        mInfoWindow.open(map, marker);
+                        return;
+                    }else{};
+                    if(data.jobstepid > 0 && data.jobstepid != null){
+                        mInfoWindow.setContent('<div>' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a Work Request' + '</a>' + '<br>' + '<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a Planned Job' + '</a>' + '<br>' + '<a id="link" href="/../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=' + data.jobstepid +'">' + data.description + '</a>' + '</div>')
+                        mInfoWindow.open(map, marker);
+                        return
+                    }else{};
                 });
             })(marker, data);  
-            document.getElementById("link").innerHTML = url;
-            document.getElementById("link").setAttribute("href",url);
             markersArray.push(marker);
-        }
+        }        
 
         var markerCluster = new MarkerClusterer(map, markersArray, 
             {imagePath: '../../Content/v3-utility-library-master/markerclusterer/images/m',
