@@ -372,14 +372,18 @@ namespace Pages.Objects
             var sel = Selection.Count;
             var MapSelected = ObjectGrid.GetSelectedFieldValues("objectid","n_objectid", "Latitude", "Longitude", "description");
             
-            if(MapSelected.Count > 0)
-            {
+           
                 if(HttpContext.Current.Session["MapSelected"] != null)
                 {
                     HttpContext.Current.Session.Remove("MapSelected");
                 }
+
+                if(MapSelected.Count > 0)
+            {
+
                 HttpContext.Current.Session.Add("MapSelected", MapSelected);
             }
+            
             //Check For Row Value In Hidden Field (Set Via JS)
             if (Selection.Contains("n_objectid") && MapSelected.Count < 1)
             {
@@ -423,7 +427,7 @@ namespace Pages.Objects
                     HttpContext.Current.Session.Remove("description");
                 }
 
-                HttpContext.Current.Session.Add("description", Selection.Get("description"));   
+                HttpContext.Current.Session.Add("objectDescription", Selection.Get("description"));   
             }
                 //Redirect To Report Page
                 Response.Redirect("~/Pages/Map/MapForm.aspx", true);

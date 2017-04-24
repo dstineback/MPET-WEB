@@ -651,7 +651,7 @@ namespace Pages.PlannedJobs
         protected void MapItem()
         {
             var sel = Selection.Count;
-            var MapSelected = PlannedGrid.GetSelectedFieldValues("Jobid","n_jobid","n_jobstepid","step", "Step Title","Object ID", "Latitude", "Longitude");
+            var MapSelected = PlannedGrid.GetSelectedFieldValues("Jobid","n_jobid","n_jobstepid","Step Title","step","Object ID", "Latitude", "Longitude");
 
             if (MapSelected.Count > 0)
             {
@@ -710,7 +710,7 @@ namespace Pages.PlannedJobs
                 {
                     HttpContext.Current.Session.Remove("n_jobid");
                 }
-                HttpContext.Current.Session.Add("n_jobstepid", Selection.Get("n_jobid"));
+                HttpContext.Current.Session.Add("njobid", Selection.Get("n_jobid"));
 
                 if (HttpContext.Current.Session["step"] != null)
                 {

@@ -420,6 +420,18 @@ namespace Pages.WorkRequests
 
         private void MapRequestItem()
         {
+            var sel = Selection.Count;
+            var MapSelected = ReqGrid.GetSelectedFieldValues("Jobid", "n_Jobid", "Object ID", "Title", "Latitude", "Longitude");
+
+            
+            
+                if (HttpContext.Current.Session["MapSelected"] != null)
+                {
+                    HttpContext.Current.Session.Remove("MapSelected");
+                }
+                HttpContext.Current.Session.Add("MapSelected", MapSelected);
+            
+
             //Check For Row Value In Hidden Field (Set Via JS)
             if (Selection.Contains("n_Jobid"))
             {
@@ -455,9 +467,9 @@ namespace Pages.WorkRequests
                 }
                 Session.Add("description", Selection.Get("Title"));
 
+            }
                 //Redirect To Report Page
                 Response.Redirect("~/Pages/Map/MapForm.aspx", true);
-            }
         }
         /// <summary>
         /// Export Grid To PDF

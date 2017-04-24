@@ -22,6 +22,7 @@ public partial class Pages_Map_MapForm : Page
     decimal Longitude;
     int mapObject;
     string description;
+    string objectDescription;
     string jobID;
     string step;
     int njobid;
@@ -33,18 +34,26 @@ public partial class Pages_Map_MapForm : Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        HtmlAnchor anchor = new HtmlAnchor();
-        anchor.ServerClick += new EventHandler(GoToWorkRequest);
+        
 
         if (HttpContext.Current.Session["MapSelected"] != null)
         {
            MapSelected = HttpContext.Current.Session["MapSelected"];          
         }      
-        if(HttpContext.Current.Session["Latitude"] != null && HttpContext.Current.Session["Longitude"] != null && HttpContext.Current.Session["description"] != null)
+        if(HttpContext.Current.Session["Latitude"] != null && HttpContext.Current.Session["Longitude"] != null)
         {
             Latitude = Convert.ToDecimal(HttpContext.Current.Session["Latitude"].ToString());
             Longitude = Convert.ToDecimal(HttpContext.Current.Session["Longitude"].ToString());
+        }
+        if(context.Session["objectDescription"] != null)
+        {
+            objectDescription = HttpContext.Current.Session["objectDescription"].ToString();
+        }
+
+        if (context.Session["description"] != null)
+        {
             description = HttpContext.Current.Session["description"].ToString();
+
         }
 
         if (context.Session["jobid"] != null)
@@ -113,11 +122,11 @@ public partial class Pages_Map_MapForm : Page
             var mS = MapSelected as List<object>;
 
             dt = new DataTable();
+            dt.Columns.Add("objectid");
             dt.Columns.Add("nobjectid");
             dt.Columns.Add("Latitude");
             dt.Columns.Add("Longitude");
-            dt.Columns.Add("description");
-            dt.Columns.Add("objectid");
+            dt.Columns.Add("objectDescription");
 
             foreach (object[] row in mS)
             {
@@ -125,9 +134,9 @@ public partial class Pages_Map_MapForm : Page
                 nobjectid = Convert.ToInt32(row[1].ToString());
                 Latitude = Convert.ToDecimal(row[2].ToString());
                 Longitude = Convert.ToDecimal(row[3].ToString());
-                description = row[4].ToString();
+                objectDescription = row[4].ToString();
 
-                dt.Rows.Add(mapObject, Latitude, Longitude, description, objectID);
+                dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription);
             }
 
             DataSet ds = new DataSet();
@@ -136,11 +145,11 @@ public partial class Pages_Map_MapForm : Page
             List<string> objList = new List<string>();
             foreach (DataRow row in ds.Tables[0].Rows)
             {
+                objList.Add(Convert.ToString(row["objectid"]).ToString());
                 objList.Add(Convert.ToInt32(row["nobjectid"]).ToString());
                 objList.Add(Convert.ToDecimal(row["Latitude"]).ToString());
                 objList.Add(Convert.ToDecimal(row["Longitude"]).ToString());
-                objList.Add(Convert.ToString(row["description"]));
-                objList.Add(Convert.ToString(row["objectid"]).ToString());
+                objList.Add(Convert.ToString(row["objectDescription"]));
             }
 
             mapPoints = objList.ToArray();
@@ -151,17 +160,17 @@ public partial class Pages_Map_MapForm : Page
             nobjectid = Convert.ToInt32(Session["n_objectid"].ToString());
             Latitude = Convert.ToDecimal(Session["Latitude"].ToString());
             Longitude = Convert.ToDecimal(Session["Longitude"].ToString());
-            description = Session["description"].ToString();
+            objectDescription = Session["objectDescription"].ToString();
             objectID = Session["objectid"].ToString();
 
             DataTable dt = new DataTable();
+            dt.Columns.Add("objectid"); 
             dt.Columns.Add("nobjectid");
             dt.Columns.Add("Latitude");
             dt.Columns.Add("Longitude");
-            dt.Columns.Add("description");
-            dt.Columns.Add("objectid").ToString();
+            dt.Columns.Add("objectDescription");
 
-            dt.Rows.Add(nobjectid, Latitude, Longitude, description, objectID);
+            dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription);
 
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
@@ -169,11 +178,11 @@ public partial class Pages_Map_MapForm : Page
             List<string> objList = new List<string>();
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
+                objList.Add(dr["objectid"].ToString());
+                objList.Add(Convert.ToInt32(dr["nobjectid"]).ToString());
                 objList.Add(Convert.ToDecimal(dr["Longitude"]).ToString());
                 objList.Add(Convert.ToDecimal(dr["Latitude"]).ToString());
-                objList.Add(Convert.ToInt32(dr["nobjectid"]).ToString());
-                objList.Add(dr["description"].ToString());
-                objList.Add(dr["objectid"].ToString());
+                objList.Add(dr["objectDescription"].ToString());
             }
             mapPoints = objList.ToArray();
             rptObjectMarkers.DataSource = dt;
@@ -193,10 +202,10 @@ public partial class Pages_Map_MapForm : Page
 
             dt = new DataTable();
             dt.Columns.Add("jobID");
-            dt.Columns.Add("n_Jobid");
+            dt.Columns.Add("njobid");
             dt.Columns.Add("jobstepid");         
-            dt.Columns.Add("step");
             dt.Columns.Add("description");
+            dt.Columns.Add("step");
             dt.Columns.Add("ObjectID");
             dt.Columns.Add("Latitude");
             dt.Columns.Add("Longitude");
@@ -207,8 +216,8 @@ public partial class Pages_Map_MapForm : Page
                 jobID = row[0].ToString();
                 njobid = Convert.ToInt32(row[1].ToString());
                 jobstepid = Convert.ToInt32(row[2].ToString());
-                step = row[3].ToString();
-                description = row[4].ToString();
+                description = row[3].ToString();
+                step = row[4].ToString();
                 objectID = row[5].ToString();
                 Latitude = Convert.ToDecimal(row[6].ToString());
                 Longitude = Convert.ToDecimal(row[7].ToString());
@@ -286,21 +295,23 @@ public partial class Pages_Map_MapForm : Page
             var mS = MapSelected as List<object>;
 
             dt = new DataTable();
-            dt.Columns.Add("njobid");
             dt.Columns.Add("jobID");
+            dt.Columns.Add("njobid");
+            dt.Columns.Add("description");
+            dt.Columns.Add("objectID");
             dt.Columns.Add("Latitude");
             dt.Columns.Add("Longitude");
-            dt.Columns.Add("description");
 
             foreach (object[] row in mS)
             {
-                njobid = Convert.ToInt32(row[0].ToString());
-                jobID = row[1].ToString();
-                Latitude = Convert.ToDecimal(row[2].ToString());
-                Longitude = Convert.ToDecimal(row[3].ToString());
-                description = row[4].ToString();
+                jobID = row[0].ToString();
+                njobid = Convert.ToInt32(row[1].ToString());
+                description = row[2].ToString();
+                objectID = row[3].ToString();
+                Latitude = Convert.ToDecimal(row[4].ToString());
+                Longitude = Convert.ToDecimal(row[5].ToString());
 
-                dt.Rows.Add(njobid, jobID, Latitude, Longitude, description);
+                dt.Rows.Add(jobID, njobid, description, objectID, Latitude, Longitude);
             }
 
             DataSet ds = new DataSet();
@@ -309,11 +320,12 @@ public partial class Pages_Map_MapForm : Page
             List<string> objList = new List<string>();
             foreach (DataRow row in ds.Tables[0].Rows)
             {
-                objList.Add(Convert.ToInt32(row["njobid"]).ToString());
                 objList.Add(Convert.ToString(row["jobID"]));
+                objList.Add(Convert.ToInt32(row["njobid"]).ToString());
+                objList.Add(Convert.ToString(row["description"]));
+                objList.Add(Convert.ToString(row["objectID"]));
                 objList.Add(Convert.ToDecimal(row["Latitude"]).ToString());
                 objList.Add(Convert.ToDecimal(row["Longitude"]).ToString());
-                objList.Add(Convert.ToString(row["description"]));
             }
 
             mapPoints = objList.ToArray();
@@ -327,6 +339,7 @@ public partial class Pages_Map_MapForm : Page
             Latitude = Convert.ToDecimal(Session["Latitude"].ToString());
             Longitude = Convert.ToDecimal(Session["Longitude"].ToString());
             description = Session["description"].ToString();
+            objectID = Session["objectID"].ToString();
 
             DataTable dt = new DataTable();
             dt.Columns.Add("njobid");
@@ -334,8 +347,9 @@ public partial class Pages_Map_MapForm : Page
             dt.Columns.Add("Latitude");
             dt.Columns.Add("Longitude");
             dt.Columns.Add("description");
+            dt.Columns.Add("objectID");
 
-            dt.Rows.Add(njobid, jobID, Latitude, Longitude, description);
+            dt.Rows.Add(njobid, jobID, Latitude, Longitude, description, objectID);
 
             DataSet ds = new DataSet();
             ds.Tables.Add(dt);
@@ -354,18 +368,5 @@ public partial class Pages_Map_MapForm : Page
             rptJobMarkers.DataBind();
         }
     }
-    private void backBtn_Click()
-    {
-       
-        Response.Redirect("~/Pages/Objects/ObjectsList.aspx");
-    }
-    public void GoToWorkRequest(object sender, System.EventArgs e)
-    {
-        Response.Redirect("www.google.com");
-    }
-    protected string GetUrl()
-    {
-        var values = Session["mapObject"].ToString();
-        return "/../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
-    }
+   
 }

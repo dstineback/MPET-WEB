@@ -342,6 +342,7 @@ namespace Pages.WorkRequests
                             if (HttpContext.Current.Session["nobjectid"] != null)
                             {
                                 ObjectIDCombo.Value = Convert.ToInt32(HttpContext.Current.Session["nobjectid"]);
+                                txtObjectDescription.Text = HttpContext.Current.Session["objectDescription"].ToString();
                             }
                             #endregion
 
@@ -564,6 +565,17 @@ namespace Pages.WorkRequests
                 {
                     //Get Info From Session
                     ObjectIDCombo.Value = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
+                }
+
+                //This would be code coming from the map session
+                if(HttpContext.Current.Session["nobjectid"] != null)
+                {
+                    var txtObject = HttpContext.Current.Session["objectDescription"].ToString();
+                    ObjectIDCombo.Value = Convert.ToInt32(HttpContext.Current.Session["nobjectId"]).ToString();
+
+                    HttpContext.Current.Session.Add("txtObjectDescription", txtObject);
+                    txtObjectDescription.Value = txtObject;
+
                 }
 
                 //Check For Previous Session Variables
@@ -1019,19 +1031,20 @@ namespace Pages.WorkRequests
         } 
         protected void ASPxComboBox_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
         {
-            //Get Requestor
-            var requestor = -1;
-            if ((HttpContext.Current.Session["LogonInfo"] != null))
-            {
-                //Get Info From Session
-                _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
-                
-                requestor = _oLogon.UserID;
-            }
+            
+                //Get Requestor
+                var requestor = -1;
+                if ((HttpContext.Current.Session["LogonInfo"] != null))
+                {
+                    //Get Info From Session
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
 
-            var comboBox = (ASPxComboBox)source;
-            ObjectDataSource.SelectCommand =
-                @"DECLARE @areaFilteringOn VARCHAR(1)
+                    requestor = _oLogon.UserID;
+                }
+
+                var comboBox = (ASPxComboBox)source;
+                ObjectDataSource.SelectCommand =
+                    @"DECLARE @areaFilteringOn VARCHAR(1)
                 --Setup Area Filering Variable
                 IF ( ( SELECT   COUNT(dbo.UsersAreaFilter.RecordID)
                        FROM     dbo.UsersAreaFilter WITH ( NOLOCK )
@@ -1113,31 +1126,33 @@ namespace Pages.WorkRequests
                         ) AS st
 		                WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
 
-            ObjectDataSource.SelectParameters.Clear();
-            ObjectDataSource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
-            ObjectDataSource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString(CultureInfo.InvariantCulture));
-            ObjectDataSource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString(CultureInfo.InvariantCulture));
-            comboBox.DataSource = ObjectDataSource;
-            comboBox.DataBind();
+                ObjectDataSource.SelectParameters.Clear();
+                ObjectDataSource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
+                ObjectDataSource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString(CultureInfo.InvariantCulture));
+                ObjectDataSource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString(CultureInfo.InvariantCulture));
+                comboBox.DataSource = ObjectDataSource;
+                comboBox.DataBind();
+            
         }
 
         protected void ASPxComboBox_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
         {
-            //Get Requestor
-            var requestor = -1;
-            if ((HttpContext.Current.Session["LogonInfo"] != null))
-            {
-                //Get Info From Session
-                _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
-                requestor = _oLogon.UserID;
-            }
+
+                //Get Requestor
+                var requestor = -1;
+                if ((HttpContext.Current.Session["LogonInfo"] != null))
+                {
+                    //Get Info From Session
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+                    requestor = _oLogon.UserID;
+                }
 
 
-            long value;
-            if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
-                return;
-            var comboBox = (ASPxComboBox)source;
-            ObjectDataSource.SelectCommand = @"SELECT    tblmo.[n_objectid] ,
+                long value;
+                if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
+                    return;
+                var comboBox = (ASPxComboBox)source;
+                ObjectDataSource.SelectCommand = @"SELECT    tblmo.[n_objectid] ,
                                                             tblmo.[objectid] ,
                                                             tblmo.[description] ,
                                                             tblarea.[areaid] ,
@@ -1180,11 +1195,18 @@ namespace Pages.WorkRequests
                                                 ) tblFirstPhoto                                                   
                                         WHERE (tblmo.n_objectid = @ID) ORDER BY objectid";
 
-            ObjectDataSource.SelectParameters.Clear();
-            ObjectDataSource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
-            comboBox.DataSource = ObjectDataSource;
-            txtObjectDescription.Text = comboBox.TextField[1].ToString();
-            comboBox.DataBind();
+                ObjectDataSource.SelectParameters.Clear();
+                ObjectDataSource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
+                comboBox.DataSource = ObjectDataSource;
+                if (HttpContext.Current.Session["nobjectid"] != null)
+                {
+                txtObjectDescription.Text = HttpContext.Current.Session["objectDescription"].ToString();
+                }else
+                {
+                    txtObjectDescription.Text = comboBox.TextField[1].ToString();
+
+                }
+                comboBox.DataBind();
         }
 
         protected void ComboRequestor_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)

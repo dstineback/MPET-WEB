@@ -41,7 +41,7 @@
                 AutoPostBack="True" 
                 Settings-HorizontalScrollBarMode="Auto" 
                 SettingsPager-Mode="ShowPager" 
-                SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
+                SettingsBehavior-ProcessFocusedRowChangedOnServer="false" 
                 SettingsBehavior-AllowFocusedRow="True"
                 SelectionMode="Multiple"
                 DataSourceID="RequestDataSource">
@@ -167,7 +167,7 @@
                 <Settings 
                     ShowFilterBar="Visible"
                     VerticalScrollBarMode="Visible" 
-                    VerticalScrollBarStyle="Virtual" 
+                    VerticalScrollBarStyle="Standard" 
                     VerticalScrollableHeight="500" />
                 <SettingsPager PageSize="20">
                     <PageSizeItemSettings Visible="true" />
