@@ -339,11 +339,7 @@ namespace Pages.WorkRequests
                             HttpContext.Current.Session.Add("txtObjectAssetNumber",
                                 _oJob.Ds.Tables[0].Rows[0]["ObjectAsset"]);
 
-                            if (HttpContext.Current.Session["nobjectid"] != null)
-                            {
-                                ObjectIDCombo.Value = Convert.ToInt32(HttpContext.Current.Session["nobjectid"]);
-                                txtObjectDescription.Text = HttpContext.Current.Session["objectDescription"].ToString();
-                            }
+                           
                             #endregion
 
                             #region Seetup Requestor
@@ -2363,7 +2359,7 @@ namespace Pages.WorkRequests
 
                 //Add New Value
                 HttpContext.Current.Session.Add("ObjectIDComboText", ObjectIDCombo.Text.Trim());
-
+            
                 #endregion
 
                 #region Description

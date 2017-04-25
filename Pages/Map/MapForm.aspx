@@ -6,6 +6,7 @@
     <title></title>
     <meta name="viewport" content="initial-scale=1.0" />
     <meta charset="utf-8" />
+    <%-- Style for Map --%>
     <style>
         #map {
             height: 90%;
@@ -14,11 +15,8 @@
             height: 100%;
         }
     </style>
-
-    <!-- Reference to the Bing Maps SDK -->
-
-
 </head>
+<%-- Script finds current location of the computer/Device. Not currently in use but here for future development --%>
 <script type='text/javascript'>
         var lat;
         var long;
@@ -37,18 +35,15 @@
      }
 </script>
 
-
+<%-- Code for Google maps functions. This code takes in data from the code behinde and loops through markers to provide display --%>
 <script type="text/javascript">
     window.onload = function () {
         var markers = [
             <asp:Repeater ID="rptJobMarkers" runat="server">
                 <ItemTemplate>
-                    {
-                        
+                    {                       
                         "jobid": '<%# Eval("jobID")%>',
-                        "njobid": '<%# Eval("njobid")%>',
-
-                      
+                        "njobid": '<%# Eval("njobid")%>',                     
                         "lat": '<%# Eval("Latitude") %>',
                         "lng": '<%# Eval("Longitude") %>',
                         "description": '<%# Eval("description") %>',
@@ -63,8 +58,7 @@
             {                       
                 "jobid": '<%# Eval("jobID")%>',
                 "njobid": '<%# Eval("njobid")%>', 
-                "jobstepid": '<%# Eval("jobstepid")%>',                           
-                      
+                "jobstepid": '<%# Eval("jobstepid")%>',                                                
                 "lat": '<%# Eval("Latitude") %>',
                 "lng": '<%# Eval("Longitude") %>',
                 "description": '<%# Eval("description") %>',
@@ -76,13 +70,9 @@
         </asp:Repeater>
     <asp:Repeater ID="rptObjectMarkers" runat="server">
         <ItemTemplate>
-            {
-                        
-                        
+            {          
                 "nobjectid": '<%# Eval("nobjectid")%>',
-                "objectid": '<%# Eval("objectid")%>',
-                       
-                      
+                "objectid": '<%# Eval("objectid")%>',               
                 "lat": '<%# Eval("Latitude") %>',
                 "lng": '<%# Eval("Longitude") %>',
                 "objectDescription": '<%# Eval("objectDescription") %>',
@@ -93,7 +83,6 @@
         </SeparatorTemplate>
         </asp:Repeater>
     ];
-        console.log("markers", markers);
 
         var mapOptions = {
             center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
@@ -102,8 +91,6 @@
         };
 
         var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-        
-        
 
         var mInfoWindow = new google.maps.InfoWindow();
         var markersArray = [];
@@ -116,7 +103,6 @@
             var objectDescription = String(data.objectDescription);
             var njobid = String(data.njobid);
             
-            console.log("data values", [object, jobid, jobstepid, description]);
             var myLatlng = new google.maps.LatLng(data.lat, data.lng);
             var marker = new google.maps.Marker({
                 position: myLatlng,
@@ -126,9 +112,7 @@
                 object: data.objectid,
                 step: data.jobstepid,
                 njobid: data.njobid,
-                objectDescription: data.objectDescription
-
-                
+                objectDescription: data.objectDescription              
             });          
             (function (marker, data) {
                 google.maps.event.addListener(marker, "click", function (e) {
@@ -158,14 +142,9 @@
                 zoomOnClick: false,
                 maxZoom: 15});
 
-        
-
         google.maps.event.addListener(markerCluster, 'clusterclick', function(cluster) {   
-            var markers = cluster.getMarkers(); 
-            console.log("cluster markers", markers);
-            
+            var markers = cluster.getMarkers();            
             var content = '';
-
             for (var i = 0; i < markers.length; i++){
                 var marker = markers[i];
                     content += ('<H3>Items in Cluster</h3>')
@@ -192,20 +171,9 @@
             infowindow.close();
             infowindow.setContent(content);
             infowindow.open(map); 
-            console.log("content", content);
-            console.log("infowindow data", [markers.description, markers.jobid]);
-            console.log("infoWindow Markers", markers);
-
-            infowindow.addListener(infowindow, 'click', function(){
-                infowindow.open(map);
-            })
-
         });
     }
 </script>
- 
-
-
   
 <body runat="server" >
     <div runat="server" id="backButton">

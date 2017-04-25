@@ -653,80 +653,84 @@ namespace Pages.PlannedJobs
             var sel = Selection.Count;
             var MapSelected = PlannedGrid.GetSelectedFieldValues("Jobid","n_jobid","n_jobstepid","Step Title","step","Object ID", "Latitude", "Longitude");
 
-            if (MapSelected.Count > 0)
-            {
-                if (HttpContext.Current.Session["MapSelected"] != null)
+        if(sel > 0 || MapSelected.Count > 0) { 
+
+                if (MapSelected.Count > 0)
                 {
-                    HttpContext.Current.Session.Remove("MapSelected");
+                    if (HttpContext.Current.Session["MapSelected"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("MapSelected");
+                    }
+                    HttpContext.Current.Session.Add("MapSelected", MapSelected);
                 }
-                HttpContext.Current.Session.Add("MapSelected", MapSelected);
-            }
-            //Check For Row Value In Hidden Field (Set Via JS)
-            if (Selection.Contains("n_jobstepid") )
-            {
-                //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["jobstepid"] != null)
+                //Check For Row Value In Hidden Field (Set Via JS)
+                if (Selection.Contains("n_jobstepid") )
                 {
-                    //Remove Value
-                    HttpContext.Current.Session.Remove("jobstepid");
+                    //Check For Previous Session Report Parm ID
+                    if (HttpContext.Current.Session["jobstepid"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("jobstepid");
+                        //Add Session Report Parm ID
+                    }
+                    HttpContext.Current.Session.Add("jobstepid", Selection.Get("n_jobstepid"));
+
+
+                    //Check For Previous Session Report Parm ID
+                    if (HttpContext.Current.Session["Latitude"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("Latitude");
+                    }
                     //Add Session Report Parm ID
+                    HttpContext.Current.Session.Add("Latitude", Selection.Get("Latitude"));
+
+
+                    //Check For Previous Session Report Parm ID
+                    if (HttpContext.Current.Session["Longitude"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("Longitude");
+                    }
+                    //Add Session Report Parm ID
+                    HttpContext.Current.Session.Add("Longitude", Selection.Get("Longitude"));
+
+                    if (HttpContext.Current.Session["description"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("description");
+                    }
+
+                    HttpContext.Current.Session.Add("description", Selection.Get("Step Title"));
+
+                    if(HttpContext.Current.Session["jobid"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("jobid");
+                    }
+                    HttpContext.Current.Session.Add("jobid", Selection.Get("Jobid"));
+
+                    if(HttpContext.Current.Session["n_jobid"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("n_jobid");
+                    }
+                    HttpContext.Current.Session.Add("njobid", Selection.Get("n_jobid"));
+
+                    if (HttpContext.Current.Session["step"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("step");
+                    }
+                    HttpContext.Current.Session.Add("step", Selection.Get("step"));
+
+                    if (HttpContext.Current.Session["objectid"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("objectid");
+                    }
+                    HttpContext.Current.Session.Add("objectid", Selection.Get("Object ID"));
+
                 }
-                HttpContext.Current.Session.Add("jobstepid", Selection.Get("n_jobstepid"));
-
-
-                //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["Latitude"] != null)
-                {
-                    //Remove Value
-                    HttpContext.Current.Session.Remove("Latitude");
-                }
-                //Add Session Report Parm ID
-                HttpContext.Current.Session.Add("Latitude", Selection.Get("Latitude"));
-
-
-                //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["Longitude"] != null)
-                {
-                    //Remove Value
-                    HttpContext.Current.Session.Remove("Longitude");
-                }
-                //Add Session Report Parm ID
-                HttpContext.Current.Session.Add("Longitude", Selection.Get("Longitude"));
-
-                if (HttpContext.Current.Session["description"] != null)
-                {
-                    HttpContext.Current.Session.Remove("description");
-                }
-
-                HttpContext.Current.Session.Add("description", Selection.Get("Step Title"));
-
-                if(HttpContext.Current.Session["jobid"] != null)
-                {
-                    HttpContext.Current.Session.Remove("jobid");
-                }
-                HttpContext.Current.Session.Add("jobid", Selection.Get("Jobid"));
-
-                if(HttpContext.Current.Session["n_jobid"] != null)
-                {
-                    HttpContext.Current.Session.Remove("n_jobid");
-                }
-                HttpContext.Current.Session.Add("njobid", Selection.Get("n_jobid"));
-
-                if (HttpContext.Current.Session["step"] != null)
-                {
-                    HttpContext.Current.Session.Remove("step");
-                }
-                HttpContext.Current.Session.Add("step", Selection.Get("step"));
-
-                if (HttpContext.Current.Session["objectid"] != null)
-                {
-                    HttpContext.Current.Session.Remove("objectid");
-                }
-                HttpContext.Current.Session.Add("objectid", Selection.Get("Object ID"));
-
+                //Redirect To Report Page
+                Response.Redirect("~/Pages/Map/MapForm.aspx", true);
             }
-            //Redirect To Report Page
-            Response.Redirect("~/Pages/Map/MapForm.aspx", true);
+            else { HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, No rows were selected.');</script>"); };
         }
 
         /// <summary>

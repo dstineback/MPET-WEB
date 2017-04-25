@@ -423,53 +423,58 @@ namespace Pages.WorkRequests
             var sel = Selection.Count;
             var MapSelected = ReqGrid.GetSelectedFieldValues("Jobid", "n_Jobid", "Object ID", "Title", "Latitude", "Longitude");
 
-            
+            if(sel > 0 || MapSelected != null) {  
             
                 if (HttpContext.Current.Session["MapSelected"] != null)
                 {
                     HttpContext.Current.Session.Remove("MapSelected");
                 }
-                HttpContext.Current.Session.Add("MapSelected", MapSelected);
+                if (MapSelected.Count > 0)
+                {
+                    HttpContext.Current.Session.Add("MapSelected", MapSelected);
+                }
             
 
-            //Check For Row Value In Hidden Field (Set Via JS)
-            if (Selection.Contains("n_Jobid"))
-            {
-                //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["n_Jobid"] != null)
+                //Check For Row Value In Hidden Field (Set Via JS)
+                if (Selection.Contains("n_Jobid"))
                 {
-                    //Remove Value
-                    HttpContext.Current.Session.Remove("n_Jobid");
-                }
+                    //Check For Previous Session Report Parm ID
+                    if (HttpContext.Current.Session["n_Jobid"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("n_Jobid");
+                    }
 
-                //Add Session Report Parm ID
-                HttpContext.Current.Session.Add("n_Jobid", Selection.Get("n_Jobid"));
+                    //Add Session Report Parm ID
+                    HttpContext.Current.Session.Add("n_Jobid", Selection.Get("n_Jobid"));
                 
-                if(Session["n_objectid"] != null)
-                {
-                    Session.Remove("n_objectid");
-                }
-                Session.Add("objectid", Selection.Get("Object ID"));
+                    if(Session["n_objectid"] != null)
+                    {
+                        Session.Remove("n_objectid");
+                    }
+                    Session.Add("objectid", Selection.Get("Object ID"));
 
-                if(Session["Latitude"] != null)
-                {
-                    Session.Remove("Latitude");
-                }
-                Session.Add("Latitude", Selection.Get("Latitude"));
-                if(Session["Longitude"] != null)
-                {
-                    Session.Remove("Longitude");
-                }
-                Session.Add("Longitude", Selection.Get("Longitude"));
-                if(Session["description"] != null)
-                {
-                    Session.Remove("description");
-                }
-                Session.Add("description", Selection.Get("Title"));
+                    if(Session["Latitude"] != null)
+                    {
+                        Session.Remove("Latitude");
+                    }
+                    Session.Add("Latitude", Selection.Get("Latitude"));
+                    if(Session["Longitude"] != null)
+                    {
+                        Session.Remove("Longitude");
+                    }
+                    Session.Add("Longitude", Selection.Get("Longitude"));
+                    if(Session["description"] != null)
+                    {
+                        Session.Remove("description");
+                    }
+                    Session.Add("description", Selection.Get("Title"));
 
+                }
+                    //Redirect To Report Page
+                    Response.Redirect("~/Pages/Map/MapForm.aspx", true);
             }
-                //Redirect To Report Page
-                Response.Redirect("~/Pages/Map/MapForm.aspx", true);
+            else { System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, No rows were selected.');</script>"); }
         }
         /// <summary>
         /// Export Grid To PDF

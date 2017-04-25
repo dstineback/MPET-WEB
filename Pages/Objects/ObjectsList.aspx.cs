@@ -371,66 +371,74 @@ namespace Pages.Objects
         {
             var sel = Selection.Count;
             var MapSelected = ObjectGrid.GetSelectedFieldValues("objectid","n_objectid", "Latitude", "Longitude", "description");
-            
-           
+
+            if (sel > 0 || MapSelected.Count > 0) { 
                 if(HttpContext.Current.Session["MapSelected"] != null)
                 {
+                    //Remove Value
                     HttpContext.Current.Session.Remove("MapSelected");
                 }
 
                 if(MapSelected.Count > 0)
-            {
+                {
 
-                HttpContext.Current.Session.Add("MapSelected", MapSelected);
-            }
+                    HttpContext.Current.Session.Add("MapSelected", MapSelected);
+                }
             
-            //Check For Row Value In Hidden Field (Set Via JS)
-            if (Selection.Contains("n_objectid") && MapSelected.Count < 1)
-            {
-                //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["n_objectid"] != null)
+                //Check For Row Value In Hidden Field (Set Via JS)
+                if (Selection.Contains("n_objectid") && MapSelected.Count < 1)
                 {
-                    //Remove Value
-                    HttpContext.Current.Session.Remove("n_objectid");
-                //Add Session Report Parm ID
+                    //Check For Previous Session n_objectid
+                    if (HttpContext.Current.Session["n_objectid"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("n_objectid");
+                    }
+                    //Add Session N_objectid
+                    HttpContext.Current.Session.Add("n_objectid", Selection.Get("n_objectid"));
+
+                    //Check for previous session object ID
+                    if(HttpContext.Current.Session["objectid"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("objectid");
+                    }
+                    //Add session object ID
+                    HttpContext.Current.Session.Add("objectid", Selection.Get("objectid"));
+
+
+                    //Check For Previous Session Latitude
+                    if (HttpContext.Current.Session["Latitude"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("Latitude");
+                    }
+                    //Add Session Latitude
+                    HttpContext.Current.Session.Add("Latitude", Selection.Get("Latitude"));
+
+
+                    //Check For Previous Session Longitude
+                    if (HttpContext.Current.Session["Longitude"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("Longitude");
+                    }
+                    //Add Session Longitude
+                    HttpContext.Current.Session.Add("Longitude", Selection.Get("Longitude"));
+
+                    //Check for previous session object description
+                    if(HttpContext.Current.Session["description"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("description");
+                    }
+                    //Add session object description
+                    HttpContext.Current.Session.Add("objectDescription", Selection.Get("description"));   
                 }
-                HttpContext.Current.Session.Add("n_objectid", Selection.Get("n_objectid"));
-
-                if(HttpContext.Current.Session["objectid"] != null)
-                {
-                    HttpContext.Current.Session.Remove("objectid");
-                }
-                HttpContext.Current.Session.Add("objectid", Selection.Get("objectid"));
-
-
-                //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["Latitude"] != null)
-                {
-                    //Remove Value
-                    HttpContext.Current.Session.Remove("Latitude");
-                }
-                //Add Session Report Parm ID
-                HttpContext.Current.Session.Add("Latitude", Selection.Get("Latitude"));
-
-
-                //Check For Previous Session Report Parm ID
-                if (HttpContext.Current.Session["Longitude"] != null)
-                {
-                    //Remove Value
-                    HttpContext.Current.Session.Remove("Longitude");
-                }
-                //Add Session Report Parm ID
-                HttpContext.Current.Session.Add("Longitude", Selection.Get("Longitude"));
-
-                if(HttpContext.Current.Session["description"] != null)
-                {
-                    HttpContext.Current.Session.Remove("description");
-                }
-
-                HttpContext.Current.Session.Add("objectDescription", Selection.Get("description"));   
+                    //Redirect To Report Page
+                    Response.Redirect("~/Pages/Map/MapForm.aspx", true);
             }
-                //Redirect To Report Page
-                Response.Redirect("~/Pages/Map/MapForm.aspx", true);
+            else { HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, No rows were selected.');</script>"); };
         }
 
         /// <summary>

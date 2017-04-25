@@ -29,6 +29,61 @@
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
 
+                    <%--Object Combo Box--%>
+                    <dx:LayoutItem Caption="Object/Asset:" CaptionSettings-Location="Top">
+                        <LayoutItemNestedControlCollection>
+                            <dx:LayoutItemNestedControlContainer runat="server">
+                                <dx:ASPxComboBox ID="ObjectIDCombo" TextFormatString="{0}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                    <ClientSideEvents ValueChanged="function(s, e) { 
+                                        var objectHasValue = ObjectIDCombo.GetValue();
+                                                                                                var selectedItem = s.GetSelectedItem();
+                                                                                                if(objectHasValue!=null)
+                                                                                                {
+                                                                                                    txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
+                                                                                                    ObjectIDComboText.SetText(selectedItem.GetColumnText('objectid'));
+                                                                                                    txtObjectArea.SetText(selectedItem.GetColumnText('areaid'));
+                                                                                                    txtObjectLocation.SetText(selectedItem.GetColumnText('locationid'));
+                                                                                                    txtObjectAssetNumber.SetText(selectedItem.GetColumnText('assetnumber'));
+                                                                                                    objectImg.SetImageUrl(selectedItem.GetColumnText('LocationOrURL'));
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                    txtObjectDescription.SetText('');
+                                                                                                    txtObjectArea.SetText('');
+                                                                                                    txtObjectLocation.SetText('');
+                                                                                                    txtObjectAssetNumber.SetText('');
+                                                                                                }
+                                            }"  />
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="n_objectid" Visible="False" />
+                                        <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
+                                        <dx:ListBoxColumn FieldName="description" Caption="Description" Width="250px" ToolTip="M-PET.NET Maintenance Object Description"/>
+                                        <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
+                                        <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
+                                        <dx:ListBoxColumn FieldName="assetnumber" Caption="Asset #" Width="50px" ToolTip="M-PET.NET Maintenance Object Asset Number"/>
+                                        <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
+                                        <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
+                                        <dx:ListBoxColumn FieldName="OrganizationCodeID" Caption="Org. Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Org. Code ID" />
+                                        <dx:ListBoxColumn FieldName="FundingGroupCodeID" Caption="Fund. Group Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Funding Group Code ID" />
+                                    </Columns>
+                                </dx:ASPxComboBox>
+                            </dx:LayoutItemNestedControlContainer>
+                        </LayoutItemNestedControlCollection>
+
+<CaptionSettings Location="Top"></CaptionSettings>
+                    </dx:LayoutItem>
+                    <%--Object Description--%>
+                    <dx:LayoutItem Caption="Object Description" CaptionSettings-Location="Top">
+                        <LayoutItemNestedControlCollection>
+                            <dx:LayoutItemNestedControlContainer runat="server">
+                                <dx:ASPxTextBox ID="txtObjectDescription" runat="server" ClientInstanceName="txtObjectDescription" Width="90%" Height="100px" ReadOnly="false"  Theme="iOS">
+                                </dx:ASPxTextBox>
+                            </dx:LayoutItemNestedControlContainer>
+                        </LayoutItemNestedControlCollection>
+
+<CaptionSettings Location="Top"></CaptionSettings>
+                    </dx:LayoutItem>
+
                     <dx:LayoutItem Caption="Request Date:" CaptionSettings-Location="Top" ColSpan="1">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
@@ -274,6 +329,7 @@
             </dx:LayoutGroup>
         </Items>
     </dx:ASPxFormLayout>
+    <asp:SqlDataSource ID="ObjectDataSource" runat="server" />
     <asp:SqlDataSource ID="HwyRouteSqlDatasource" runat="server" />
     <asp:SqlDataSource ID="MilePostDirSqlDatasource" runat="server" />
 </asp:Content>

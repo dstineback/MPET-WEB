@@ -202,6 +202,7 @@ namespace Pages.FacilityRequests
                 //Check For Post To Setup Form
                 if (!IsPostBack)
                 {
+                    ResetSession();
                     //Setup For Adding
                     SetupForAdding();
                 }
@@ -649,6 +650,27 @@ namespace Pages.FacilityRequests
                     }
 
                     //Check For Previous Session Variables
+                    if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+                    {
+                        //Get Info From Session
+                        ObjectIDCombo.Value = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
+                    }
+
+                    //Check For Previous Session Variables
+                    if (HttpContext.Current.Session["ObjectIDComboText"] != null)
+                    {
+                        //Get Info From Session
+                        ObjectIDCombo.Text = (HttpContext.Current.Session["ObjectIDComboText"].ToString());
+                    }
+
+                    //Check For Previous Session Variables
+                    if (HttpContext.Current.Session["txtObjectDescription"] != null)
+                    {
+                        //Get Info From Session
+                        txtObjectDescription.Text = (HttpContext.Current.Session["txtObjectDescription"].ToString());
+                    }
+
+                    //Check For Previous Session Variables
                     if ((HttpContext.Current.Session["comboServiceOffice"] != null) &&
                         (HttpContext.Current.Session["comboServiceOfficeText"] != null))
                     {
@@ -761,6 +783,7 @@ namespace Pages.FacilityRequests
                 _oJobRequestInfo = new JobRequestInfo(_connectionString, _useWeb);
 
                 //Set Datasources
+                ObjectDataSource.ConnectionString = _connectionString;
                 HwyRouteSqlDatasource.ConnectionString = _connectionString;
                 MilePostDirSqlDatasource.ConnectionString = _connectionString;
             }
@@ -800,6 +823,7 @@ namespace Pages.FacilityRequests
         /// </summary>
         private void SetupForAdding()
         {
+            ResetSession();
             //Enable Form Options For Adding
             try
             {
@@ -838,6 +862,187 @@ namespace Pages.FacilityRequests
         #endregion
 
         #region Combo Loading Events
+
+        protected void ASPxComboBox_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
+        {
+
+            //Get Requestor
+            var requestor = -1;
+            if ((HttpContext.Current.Session["LogonInfo"] != null))
+            {
+                //Get Info From Session
+                _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
+                requestor = _oLogon.UserID;
+            }
+
+            var comboBox = (ASPxComboBox)source;
+            ObjectDataSource.SelectCommand =
+                @"DECLARE @areaFilteringOn VARCHAR(1)
+                --Setup Area Filering Variable
+                IF ( ( SELECT   COUNT(dbo.UsersAreaFilter.RecordID)
+                       FROM     dbo.UsersAreaFilter WITH ( NOLOCK )
+                       WHERE    UsersAreaFilter.UserID = " + requestor + @"
+                                AND UsersAreaFilter.FilterActive = 'Y'
+                     ) <> 0 )
+                    BEGIN
+                        SET @areaFilteringOn = 'Y'
+                    END
+                ELSE
+                    BEGIN
+                        SET @areaFilteringOn = 'N'
+                    END
+
+                SELECT  [n_objectid] ,
+                        [objectid] ,
+                        [description] ,
+                        [areaid] ,
+                        [locationid] ,
+                        [assetnumber] ,
+                        CASE ISNULL(RecordID, -1)
+                          WHEN -1 THEN 'N'
+                          ELSE 'Y'
+                        END AS [Following] ,
+                        ISNULL(LocationOrURL, '') AS LocationOrURL ,
+                        OrganizationCodeID ,
+                        FundingGroupCodeID
+                FROM    ( SELECT    tblmo.[n_objectid] ,
+                                    tblmo.[objectid] ,
+                                    tblmo.[description] ,
+                                    tblarea.[areaid] ,
+                                    tbllocation.[locationid] ,
+                                    tblmo.[assetnumber] ,
+                                    ROW_NUMBER() OVER ( ORDER BY tblmo.[n_objectid] ) AS [rn] ,
+                                    tbl_IsFlaggedRecord.RecordID ,
+                                    tblFirstPhoto.LocationOrURL ,
+                                    tbl_OrgCode.OrganizationCodeID ,
+                                    tbl_FGC.FundingGroupCodeID
+                          FROM      dbo.MaintenanceObjects AS tblmo
+                                    INNER JOIN ( SELECT tbl_Area.n_areaid ,
+                                                        tbl_Area.areaid
+                                                 FROM   dbo.Areas tbl_Area
+                                                 WHERE  ( ( @areaFilteringOn = 'Y'
+                                                            AND EXISTS ( SELECT recordMatches.AreaFilterID
+                                                                         FROM   dbo.UsersAreaFilter AS recordMatches
+                                                                         WHERE  tbl_Area.n_areaid = recordMatches.AreaFilterID
+                                                                                AND recordMatches.UserID = " + requestor + @"
+                                                                                AND recordMatches.FilterActive = 'Y' )
+                                                          )
+                                                          OR ( @areaFilteringOn = 'N' )
+                                                        )
+                                               ) tblarea ON tblmo.n_areaid = tblarea.n_areaid
+                                    INNER JOIN ( SELECT n_locationid ,
+                                                        locationid
+                                                 FROM   dbo.locations
+                                               ) tbllocation ON tblmo.n_locationid = tbllocation.n_locationid
+                                    INNER JOIN ( SELECT dbo.OrganizationCodes.n_OrganizationCodeID ,
+                                                        dbo.OrganizationCodes.OrganizationCodeID
+                                                 FROM   dbo.OrganizationCodes
+                                               ) tbl_OrgCode ON tbl_OrgCode.n_OrganizationCodeID = tblmo.n_OrganizationCodeID
+                                    INNER JOIN ( SELECT dbo.FundingGroupCodes.n_FundingGroupCodeID ,
+                                                        dbo.FundingGroupCodes.FundingGroupCodeID
+                                                 FROM   dbo.FundingGroupCodes
+                                               ) tbl_FGC ON tbl_FGC.n_FundingGroupCodeID = tblmo.n_FundingGroupCodeID
+                                    LEFT JOIN ( SELECT  dbo.UsersFlaggedRecords.RecordID ,
+                                                        dbo.UsersFlaggedRecords.n_objectid
+                                                FROM    dbo.UsersFlaggedRecords
+                                                WHERE   dbo.UsersFlaggedRecords.UserID = " + requestor + @"
+                                                        AND dbo.UsersFlaggedRecords.n_objectid > 0
+                                              ) tbl_IsFlaggedRecord ON tblmo.n_objectid = tbl_IsFlaggedRecord.n_objectid
+							                  OUTER apply ( SELECT TOP 1  tblAttach.LocationOrURL ,
+                                                        tblAttach.n_MaintObjectID
+                                                FROM    dbo.Attachments tblAttach
+								                WHERE tblAttach.n_MaintObjectID = tblmo.n_objectid 
+                                              ) tblFirstPhoto 
+                          WHERE     ( ( [objectid] + ' ' + [description] + ' ' + [areaid] + ' ' + [locationid] + ' ' + [assetnumber] + ' ' + [OrganizationCodeID] + ' ' + [FundingGroupCodeID] ) LIKE @filter )
+                                    AND tblmo.b_active = 'Y'
+                                    AND tblmo.n_objectid > 0
+                        ) AS st
+		                WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
+
+            ObjectDataSource.SelectParameters.Clear();
+            ObjectDataSource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
+            ObjectDataSource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString(CultureInfo.InvariantCulture));
+            ObjectDataSource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString(CultureInfo.InvariantCulture));
+            comboBox.DataSource = ObjectDataSource;
+            comboBox.DataBind();
+
+        }
+
+        protected void ASPxComboBox_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
+        {
+
+            //Get Requestor
+            var requestor = -1;
+            if ((HttpContext.Current.Session["LogonInfo"] != null))
+            {
+                //Get Info From Session
+                _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+                requestor = _oLogon.UserID;
+            }
+
+
+            long value;
+            if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
+                return;
+            var comboBox = (ASPxComboBox)source;
+            ObjectDataSource.SelectCommand = @"SELECT    tblmo.[n_objectid] ,
+                                                            tblmo.[objectid] ,
+                                                            tblmo.[description] ,
+                                                            tblarea.[areaid] ,
+					                                        tbllocation.[locationid] ,
+					                                        tblmo.[assetnumber] ,
+                                                            ROW_NUMBER() OVER ( ORDER BY tblmo.[n_objectid] ) AS [rn],
+                                                            CASE ISNULL(RecordID, -1)
+                                                                                      WHEN -1 THEN 'N'
+                                                                                      ELSE 'Y'
+                                                                                    END AS [Following],
+                                                            isnull(LocationOrURL, '') AS LocationOrURL,
+								                            tbl_OrgCode.OrganizationCodeID,
+								                            tbl_FGC.FundingGroupCodeID
+                                                  FROM      dbo.MaintenanceObjects AS tblmo
+			                                        JOIN ( SELECT   n_areaid ,
+							                                        areaid
+				                                           FROM     dbo.Areas
+				                                         ) tblarea ON tblmo.n_areaid = tblarea.n_areaid
+			                                        JOIN ( SELECT   n_locationid ,
+							                                        locationid
+				                                           FROM     dbo.locations
+				                                         ) tbllocation ON tblmo.n_locationid = tbllocation.n_locationid
+									                INNER JOIN (SELECT dbo.OrganizationCodes.n_OrganizationCodeID,
+													                   dbo.OrganizationCodes.OrganizationCodeID
+												                FROM dbo.OrganizationCodes) tbl_OrgCode ON tbl_OrgCode.n_OrganizationCodeID = tblmo.n_OrganizationCodeID
+									                INNER JOIN (SELECT dbo.FundingGroupCodes.n_FundingGroupCodeID,
+													                   dbo.FundingGroupCodes.FundingGroupCodeID
+													                   FROM dbo.FundingGroupCodes) tbl_FGC ON tbl_FGC.n_FundingGroupCodeID = tblmo.n_FundingGroupCodeID
+                                                    LEFT JOIN ( SELECT  dbo.UsersFlaggedRecords.RecordID ,
+                                                            dbo.UsersFlaggedRecords.n_objectid
+                                                    FROM    dbo.UsersFlaggedRecords
+                                                    WHERE   dbo.UsersFlaggedRecords.UserID = " + requestor + @"
+                                                            AND dbo.UsersFlaggedRecords.n_objectid > 0
+                                                  ) tbl_IsFlaggedRecord ON tblmo.n_objectid = tbl_IsFlaggedRecord.n_objectid
+                                                OUTER APPLY ( SELECT TOP 1
+                                                            tblAttach.LocationOrURL ,
+                                                            tblAttach.n_MaintObjectID
+                                                  FROM      dbo.Attachments tblAttach
+                                                  WHERE     tblAttach.n_MaintObjectID = tblmo.n_objectid
+                                                ) tblFirstPhoto                                                   
+                                        WHERE (tblmo.n_objectid = @ID) ORDER BY objectid";
+
+            ObjectDataSource.SelectParameters.Clear();
+            ObjectDataSource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
+            comboBox.DataSource = ObjectDataSource;
+            if (HttpContext.Current.Session["nobjectid"] != null)
+            {
+                txtObjectDescription.Text = HttpContext.Current.Session["objectDescription"].ToString();
+            }
+            else
+            {
+                txtObjectDescription.Text = comboBox.TextField[1].ToString();
+
+            }
+            comboBox.DataBind();
+        }
 
         /// <summary>
         /// Get Highway Routes By Filter
@@ -1072,7 +1277,12 @@ namespace Pages.FacilityRequests
                 _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
             }
 
-            const int objectAgainstId = -2;
+            var objectAgainstId = -1;
+            if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+            {
+                //Get Info From Session
+                objectAgainstId = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
+            }
 
             //Get GPS X
             decimal gpsX = 0;
@@ -1374,7 +1584,12 @@ namespace Pages.FacilityRequests
             }
 
             //Get Object ID
-            const int objectAgainstId = -2;
+            var objectAgainstId = -1;
+            if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+            {
+                //Get Info From Session
+                objectAgainstId = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
+            }
 
             //Get Description
             var workDesc = "";
@@ -1710,7 +1925,7 @@ namespace Pages.FacilityRequests
                 ResetSession();
 
                 //Redirect To Edit Page With Job ID
-                Response.Redirect("~/Pages/ServiceRequests/ServiceRequests.aspx", true);
+                Response.Redirect("~/Pages/FacilityRequests/FacilityRequests.aspx", true);
             }
             catch (Exception ex)
             {
@@ -2082,6 +2297,14 @@ namespace Pages.FacilityRequests
                     //Remove Old One
                     HttpContext.Current.Session.Remove("txtRoomNum");
                 }
+                if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+                {
+                    HttpContext.Current.Session.Remove("ObjectIDCombo");
+                }
+                if(HttpContext.Current.Session["txtObjectDescription"] != null)
+                {
+                    HttpContext.Current.Session.Remove("txtObjectDescription");
+                }
             }
             catch (Exception ex)
             {
@@ -2116,10 +2339,70 @@ namespace Pages.FacilityRequests
 
                 #endregion
 
-                #region Additional Details
+                #region Object Info
 
                 //Check For Input
-                if (txtAdditionalInfo.Text.Length > 0)
+                if (ObjectIDCombo.Value != null)
+                {
+                    //See If Selection Changed
+
+                    #region Combo Value
+
+                    //Check For Prior Value
+                    if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+                    {
+                        //See If Value Changed
+                        if (HttpContext.Current.Session["ObjectIDComboText"].ToString() != ObjectIDCombo.Text)
+                        {
+                            //Remove Old One
+                            HttpContext.Current.Session.Remove("ObjectIDCombo");
+
+                            //Add New Value
+                            HttpContext.Current.Session.Add("ObjectIDCombo", ObjectIDCombo.Value.ToString());
+                        }
+                    }
+                    else
+                    {
+                        //Add New Value
+                        HttpContext.Current.Session.Add("ObjectIDCombo", ObjectIDCombo.Value.ToString());
+                    }
+
+                    #endregion
+
+                    #region Combo Text
+
+                    //Check For Prior Value
+                    if (HttpContext.Current.Session["ObjectIDComboText"] != null)
+                    {
+                        //Remove Old One
+                        HttpContext.Current.Session.Remove("ObjectIDComboText");
+                    }
+
+                    //Add New Value
+                    HttpContext.Current.Session.Add("ObjectIDComboText", ObjectIDCombo.Text.Trim());
+
+                    #endregion
+
+                    #region Description
+
+                    //Check For Prior Value
+                    if (HttpContext.Current.Session["txtObjectDescription"] != null)
+                    {
+                        //Remove Old One
+                        HttpContext.Current.Session.Remove("txtObjectDescription");
+                    }
+
+                    //Add New Value
+                    HttpContext.Current.Session.Add("txtObjectDescription", txtObjectDescription.Text.Trim());
+
+                    #endregion
+                }
+                    #endregion
+
+                    #region Additional Details
+
+                    //Check For Input
+                    if (txtAdditionalInfo.Text.Length > 0)
                 {
                     //Check For Prior Value
                     if (HttpContext.Current.Session["txtAddDetailForEmail"] != null)
