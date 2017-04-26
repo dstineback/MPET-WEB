@@ -7,6 +7,7 @@
     >
     <dx:ASPxLabel ID="lblHeader" Font-Size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel>
     <dx:ASPxHiddenField ID="Navigation" ViewStateMode="Enabled" ClientInstanceName="Navigation" runat="server"></dx:ASPxHiddenField>
+    <asp:LinkButton ID="submitButton" runat="server" Text="Submit" OnClick="submitButton_Click"></asp:LinkButton>
     <dx:ASPxFormLayout ID="WorkRequestDescLayout" runat="server" Width="600px" Paddings="0,0" RequiredMarkDisplayMode="RequiredOnly" RequiredMark="" EnableViewState="True">
         <Items>
             <dx:LayoutGroup Caption="Requested Action" Width="600px" ColCount="3" SettingsItemCaptions-Location="Top" GroupBoxDecoration="HeadingLine">
@@ -216,12 +217,12 @@
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
                                 <dx:ASPxTextBox ID="txtPhone" 
-                                                Width="200"
+                                                Width="100%"
                                                 ClientInstanceName="txtPhone"
                                                 runat="server" 
                                                 Theme="Mulberry"
-                                                HorizontalAlign="Right">
-                                    <MaskSettings ShowHints="False" Mask="+1 (999) 000-0000" IncludeLiterals="None" />
+                                                HorizontalAlign="Left">
+                                    <MaskSettings ShowHints="False" Mask="(999) 000-0000" IncludeLiterals="None" />
                                     <ValidationSettings Display="Dynamic"></ValidationSettings>
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
@@ -329,6 +330,7 @@
             </dx:LayoutGroup>
         </Items>
     </dx:ASPxFormLayout>
+    <asp:SqlDataSource ID="EmailDataSource" runat="server" />
     <asp:SqlDataSource ID="ObjectDataSource" runat="server" />
     <asp:SqlDataSource ID="HwyRouteSqlDatasource" runat="server" />
     <asp:SqlDataSource ID="MilePostDirSqlDatasource" runat="server" />
