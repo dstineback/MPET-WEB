@@ -220,11 +220,15 @@ namespace Pages.FacilityRequests
                         returnValue = cmd.ExecuteScalar();
                         connection.Close();
 
-                        userEmail = returnValue.ToString(); 
-                        if(userEmail != null)
+                        if(returnValue != null)
                         {
-                           HttpContext.Current.Session.Add("userEmail", userEmail);
-                        }                    
+
+                            userEmail = returnValue.ToString(); 
+                            if(userEmail != null)
+                            {
+                               HttpContext.Current.Session.Add("userEmail", userEmail);
+                            }                    
+                        }
                     }    
                 }
 
@@ -837,7 +841,7 @@ namespace Pages.FacilityRequests
                 _oJobRequestInfo = new JobRequestInfo(_connectionString, _useWeb);
 
                 //Set Datasources
-                EmailDataSource.ConnectionString = _connectionString;
+               
                 ObjectDataSource.ConnectionString = _connectionString;
                 HwyRouteSqlDatasource.ConnectionString = _connectionString;
                 MilePostDirSqlDatasource.ConnectionString = _connectionString;
