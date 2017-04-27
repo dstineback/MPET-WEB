@@ -179,6 +179,30 @@ a {
 	background-color: #DB5859;
 }
 
+/* Map Info*/
+.mapbutton {
+    color: white;
+    text-decoration: none;
+	border-style: none;
+    background-color: #da5859;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 10px;
+}
+#backButton {
+    margin: 10px;
+}
+#mapInfoWindow {
+    background-color: azure;
+}
+#windowHeading {
+    margin-top: -10px;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+
+
 /* GridView */
 .gridView {
 	outline: none;

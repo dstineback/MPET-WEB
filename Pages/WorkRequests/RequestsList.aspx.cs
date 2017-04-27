@@ -469,6 +469,11 @@ namespace Pages.WorkRequests
                         Session.Remove("description");
                     }
                     Session.Add("description", Selection.Get("Title"));
+                    if(Session["Jobid"] != null)
+                    {
+                        Session.Remove("Jobid");
+                    }
+                    Session.Add("jobID", Selection.Get("Jobid"));
 
                 }
                     //Redirect To Report Page

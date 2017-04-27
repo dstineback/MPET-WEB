@@ -339,7 +339,6 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top"></CaptionSettings>
                     </dx:LayoutItem>
-
                     <dx:LayoutItem Caption="Any Additional Information (Addresses/Names):"
                         CaptionSettings-Location="Top" ColSpan="3" HelpText="Please Don&#39;t Forget To Click The Submit Button Below To Submit This Facility Request">
                         <LayoutItemNestedControlCollection>
@@ -347,11 +346,6 @@
                                 <dx:ASPxMemo runat="server" MaxLength="8000" Height="100px"
                                     Native="True" Width="100%" ClientInstanceName="txtAdditionalInfo"
                                     Theme="iOS" ID="txtAdditionalInfo"></dx:ASPxMemo>
-
-
-
-
-
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
 
