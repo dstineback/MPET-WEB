@@ -63,6 +63,10 @@ public partial class Pages_Map_MapForm : Page
             {
                 jobID = (HttpContext.Current.Session["jobid"].ToString());
             }
+            if (context.Session["jobID"] != null)
+            {
+                jobID = (HttpContext.Current.Session["jobID"].ToString());
+            }
             if (context.Session["n_Jobid"] != null)
             {
                 njobid = Convert.ToInt32(HttpContext.Current.Session["n_Jobid"].ToString());
@@ -348,8 +352,8 @@ public partial class Pages_Map_MapForm : Page
                 }
                 else
                 {
+                    jobID = Convert.ToString(Session["jobID"].ToString());
                     njobid = Convert.ToInt32(Session["n_jobid"].ToString());
-                    jobID = Session["jobID"].ToString();
                     Latitude = Convert.ToDecimal(Session["Latitude"].ToString());
                     Longitude = Convert.ToDecimal(Session["Longitude"].ToString());
                     description = Session["description"].ToString();
@@ -382,5 +386,10 @@ public partial class Pages_Map_MapForm : Page
                     rptJobMarkers.DataBind();
                 }
             } catch { System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, check to make sure items have the correct Coordinates.');</script>"); };
+    }
+
+    protected void HomeBnt_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/main.aspx");
     }
 }
