@@ -322,7 +322,6 @@
                                         <RequiredField IsRequired="True"/>
                                     </ValidationSettings>
                                 </dx:ASPxMemo>
-
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
@@ -4982,7 +4981,7 @@
         <FooterTemplate>
         </FooterTemplate>
     </dx:ASPxPopupControl>
-     <dx:ASPxPopupControl ID="PostPopup" ClientInstanceName="PostPopup" ShowCloseButton="false" HeaderText=""
+    <dx:ASPxPopupControl ID="PostPopup" ClientInstanceName="PostPopup" ShowCloseButton="false" HeaderText=""
         CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
         CssClass="popup" CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter">
         <ContentCollection>
