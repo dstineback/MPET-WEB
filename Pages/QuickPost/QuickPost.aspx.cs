@@ -1880,7 +1880,7 @@ namespace Pages.QuickPost
         /// </summary>
         protected void SaveSessionData()
         {
-            #region Request Description 
+            #region Job Description 
 
             //Check For Input
             if (txtWorkDescription.Text.Length > 0)
@@ -1898,42 +1898,358 @@ namespace Pages.QuickPost
 
             #endregion
 
-            #region Additional Details
+            #region Object Info
 
             //Check For Input
-            if (txtAdditionalInfo.Text.Length > 0)
+            if (ObjectIDCombo.Value != null)
             {
+                //See If Selection Changed
+
+                #region Combo Value
+
                 //Check For Prior Value
-                if (HttpContext.Current.Session["txtAddDetail"] != null)
+                if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+                {
+                    //See If Value Changed
+                    if (HttpContext.Current.Session["ObjectIDComboText"].ToString() != ObjectIDCombo.Text)
+                    {
+                        //Remove Old One
+                        HttpContext.Current.Session.Remove("ObjectIDCombo");
+
+                    }
+                        //Add New Value
+                        HttpContext.Current.Session.Add("ObjectIDCombo", ObjectIDCombo.Value.ToString());
+                }
+                else
+                {
+                    //Add New Value
+                    HttpContext.Current.Session.Add("ObjectIDCombo", ObjectIDCombo.Value.ToString());
+                }
+
+                #endregion
+
+                #region Combo Text
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["ObjectIDComboText"] != null)
                 {
                     //Remove Old One
-                    HttpContext.Current.Session.Remove("txtAddDetail");
+                    HttpContext.Current.Session.Remove("ObjectIDComboText");
                 }
 
                 //Add New Value
-                HttpContext.Current.Session.Add("txtAddDetail", txtAdditionalInfo.Text.Trim());
+                HttpContext.Current.Session.Add("ObjectIDComboText", ObjectIDCombo.Text.Trim());
+
+                #endregion
+
+                #region Description
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["txtObjectDescription"] != null)
+                {
+                    //Remove Old One
+                    HttpContext.Current.Session.Remove("txtObjectDescription");
+                }
+
+                //Add New Value
+                HttpContext.Current.Session.Add("txtObjectDescription", txtObjectDescription.Text.Trim());
+
+                #endregion
+
+                #region Area
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["txtObjectArea"] != null)
+                {
+                    //Remove Old One
+                    HttpContext.Current.Session.Remove("txtObjectArea");
+                }
+
+                //Add New Value
+                HttpContext.Current.Session.Add("txtObjectArea", txtObjectArea.Text.Trim());
+
+                #endregion
+
+                #region Location
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["txtObjectLocation"] != null)
+                {
+                    //Remove Old One
+                    HttpContext.Current.Session.Remove("txtObjectLocation");
+                }
+
+                //Add New Value
+                HttpContext.Current.Session.Add("txtObjectLocation", txtObjectLocation.Text.Trim());
+
+                #endregion
+
+                #region Asset
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["txtObjectAssetNumber"] != null)
+                {
+                    //Remove Old One
+                    HttpContext.Current.Session.Remove("txtObjectAssetNumber");
+                }
+
+                //Add New Value
+                HttpContext.Current.Session.Add("txtObjectAssetNumber", txtObjectAssetNumber.Text.Trim());
+
+                #endregion
             }
 
             #endregion
 
-            #region Post Notes
-
-            //Check For Input
-            if (txtPostNotes.Text.Length > 0)
+            #region Completed By
+            if (HttpContext.Current.Session["ComboCompletedBy"] != null)
             {
+                HttpContext.Current.Session.Add("ComboCompletedBy", ComboCompletedBy.Value);
+            }
+            #endregion
+
+            #region Start and Completion Dates
+            if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
+            {
+                //Set Value
+                HttpContext.Current.Session.Add("TxtWorkStartDate", TxtWorkStartDate.Value.ToString());
+
+            }
+
+            //Add Comp Date
+            if (HttpContext.Current.Session["TxtWorkCompDate"] != null)
+            {
+
+                //Set Value
+                HttpContext.Current.Session.Add("TxtWorkCompDate", TxtWorkCompDate.Value.ToString());
+
+            }
+            #endregion
+            #region Reason
+
+            if (comboReason.Value != null)
+            {
+                #region Combo Value
+
                 //Check For Prior Value
-                if (HttpContext.Current.Session["txtPostNotes"] != null)
+                if (HttpContext.Current.Session["comboReason"] != null)
+                {
+                    //See If Value Changed
+                    if (HttpContext.Current.Session["comboReasonText"].ToString() != comboReason.Text)
+                    {
+                        //Remove Old One
+                        HttpContext.Current.Session.Remove("comboReason");
+
+                        //Add New Value
+                        HttpContext.Current.Session.Add("comboReason", comboReason.Value.ToString());
+                    }
+                }
+                else
+                {
+                    //Add New Value
+                    HttpContext.Current.Session.Add("comboReason", comboReason.Value.ToString());
+                }
+
+                #endregion
+
+                #region Combo Text
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["comboReasonText"] != null)
                 {
                     //Remove Old One
-                    HttpContext.Current.Session.Remove("txtPostNotes");
+                    HttpContext.Current.Session.Remove("comboReasonText");
                 }
 
                 //Add New Value
-                HttpContext.Current.Session.Add("txtPostNotes", txtPostNotes.Text.Trim());
+                HttpContext.Current.Session.Add("comboReasonText", comboReason.Text.Trim());
+
+                #endregion
+            }
+
+            #endregion
+            #region Priority
+
+            if (ComboPriority.Value != null)
+            {
+                #region Combo Value
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["ComboPriority"] != null)
+                {
+                    //See If Value Changed
+                    if (HttpContext.Current.Session["ComboPriorityText"].ToString() != ComboPriority.Text)
+                    {
+                        //Remove Old One
+                        HttpContext.Current.Session.Remove("ComboPriority");
+
+                        //Add New Value
+                        HttpContext.Current.Session.Add("ComboPriority", ComboPriority.Value.ToString());
+                    }
+                }
+                else
+                {
+                    //Add New Value
+                    HttpContext.Current.Session.Add("ComboPriority", ComboPriority.Value.ToString());
+                }
+
+                #endregion
+
+                #region Combo Text
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["ComboPriorityText"] != null)
+                {
+                    //Remove Old One
+                    HttpContext.Current.Session.Remove("ComboPriorityText");
+                }
+
+                //Add New Value
+                HttpContext.Current.Session.Add("ComboPriorityText", ComboPriority.Text.Trim());
+
+                #endregion
+            }
+
+            #endregion
+            #region OutCome
+            if(ComboOutcomeCode.Value != null)
+            {
+                if (HttpContext.Current.Session["ComboOutcome"] != null)
+                {
+                    Session.Remove("ComboOutCome");
+                    HttpContext.Current.Session.Add("ComboOutcome", ComboOutcomeCode.Value);
+                }
+
+            } else
+            {
+                HttpContext.Current.Session.Add("ComboOutcome", ComboOutcomeCode.Value);
+            }
+            #endregion
+            ///TODO Add Elements combo
+            ///
+
+            #region Hwy Route
+
+            if (comboHwyRoute.Value != null)
+            {
+                #region Combo Value
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["comboHwyRoute"] != null)
+                {
+                    if (HttpContext.Current.Session["comboHwyRouteText"].ToString() != comboHwyRoute.Text)
+                    {
+                        //Remove Old One
+                        HttpContext.Current.Session.Remove("comboHwyRoute");
+
+                        //Add New Value
+                        HttpContext.Current.Session.Add("comboHwyRoute", comboHwyRoute.Value.ToString());
+                    }
+                }
+                else
+                {
+                    //Add New Value
+                    HttpContext.Current.Session.Add("comboHwyRoute", comboHwyRoute.Value.ToString());
+                }
+
+                #endregion
+
+                #region Combo Text
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["comboHwyRouteText"] != null)
+                {
+                    //Remove Old One
+                    HttpContext.Current.Session.Remove("comboHwyRouteText");
+                }
+
+                //Add New Value
+                HttpContext.Current.Session.Add("comboHwyRouteText", comboHwyRoute.Text.Trim());
+
+                #endregion
             }
 
             #endregion
 
+            #region Milepost
+
+            //Check For Prior Value
+            //if (HttpContext.Current.Session["txtMilepost"] != null)
+            //{
+            //    //Remove Old One
+            //    HttpContext.Current.Session.Remove("txtMilepost");
+            //}
+
+            ////Add New Value
+            //HttpContext.Current.Session.Add("txtMilepost", txtMilepost.Value.ToString());
+
+            #endregion
+
+            #region Milepost To
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtMilepostTo"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtMilepostTo");
+            }
+
+            //Check Value
+            if (txtMilepost.Value != null)
+            {
+                //Add New Value
+                HttpContext.Current.Session.Add("txtMilepostTo", txtMilepostTo.Value.ToString());
+
+            }
+
+            #endregion
+
+            #region Milepost Direction
+
+            if (comboMilePostDir.Value != null)
+            {
+                #region Combo Value
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["comboMilePostDir"] != null)
+                {
+                    if (HttpContext.Current.Session["comboMilePostDirText"].ToString() != comboMilePostDir.Text)
+                    {
+                        //Remove Old One
+                        HttpContext.Current.Session.Remove("comboMilePostDir");
+
+                        //Add New Value
+                        HttpContext.Current.Session.Add("comboMilePostDir", comboMilePostDir.Value.ToString());
+                    }
+                }
+                else
+                {
+                    //Add New Value
+                    HttpContext.Current.Session.Add("comboMilePostDir", comboMilePostDir.Value.ToString());
+                }
+
+                #endregion
+
+                #region Combo Text
+
+                //Check For Prior Value
+                if (HttpContext.Current.Session["comboMilePostDirText"] != null)
+                {
+                    //Remove Old One
+                    HttpContext.Current.Session.Remove("comboMilePostDirText");
+                }
+
+                //Add New Value
+                HttpContext.Current.Session.Add("comboMilePostDirText", comboMilePostDir.Text.Trim());
+
+                #endregion
+            }
+
+            #endregion
+
+           ///TODO Add Sub ASSEMBLY Combo
+           
+           ///TODO add UPDATE OBJECT MAYBE
 
             #region Cost Code
 
@@ -2272,318 +2588,43 @@ namespace Pages.QuickPost
             }
 
             #endregion
-      
-
-            #region Object Info
+            
+            #region Post Notes
 
             //Check For Input
-            if (ObjectIDCombo.Value != null)
+            if (txtPostNotes.Text.Length > 0)
             {
-                //See If Selection Changed
-
-                #region Combo Value
-
                 //Check For Prior Value
-                if (HttpContext.Current.Session["ObjectIDCombo"] != null)
-                {
-                    //See If Value Changed
-                    if (HttpContext.Current.Session["ObjectIDComboText"].ToString() != ObjectIDCombo.Text)
-                    {
-                        //Remove Old One
-                        HttpContext.Current.Session.Remove("ObjectIDCombo");
-
-                    }
-                        //Add New Value
-                        HttpContext.Current.Session.Add("ObjectIDCombo", ObjectIDCombo.Value.ToString());
-                }
-                else
-                {
-                    //Add New Value
-                    HttpContext.Current.Session.Add("ObjectIDCombo", ObjectIDCombo.Value.ToString());
-                }
-
-                #endregion
-
-                #region Combo Text
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["ObjectIDComboText"] != null)
+                if (HttpContext.Current.Session["txtPostNotes"] != null)
                 {
                     //Remove Old One
-                    HttpContext.Current.Session.Remove("ObjectIDComboText");
+                    HttpContext.Current.Session.Remove("txtPostNotes");
                 }
 
                 //Add New Value
-                HttpContext.Current.Session.Add("ObjectIDComboText", ObjectIDCombo.Text.Trim());
-
-                #endregion
-
-                #region Description
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["txtObjectDescription"] != null)
-                {
-                    //Remove Old One
-                    HttpContext.Current.Session.Remove("txtObjectDescription");
-                }
-
-                //Add New Value
-                HttpContext.Current.Session.Add("txtObjectDescription", txtObjectDescription.Text.Trim());
-
-                #endregion
-
-                #region Area
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["txtObjectArea"] != null)
-                {
-                    //Remove Old One
-                    HttpContext.Current.Session.Remove("txtObjectArea");
-                }
-
-                //Add New Value
-                HttpContext.Current.Session.Add("txtObjectArea", txtObjectArea.Text.Trim());
-
-                #endregion
-
-                #region Location
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["txtObjectLocation"] != null)
-                {
-                    //Remove Old One
-                    HttpContext.Current.Session.Remove("txtObjectLocation");
-                }
-
-                //Add New Value
-                HttpContext.Current.Session.Add("txtObjectLocation", txtObjectLocation.Text.Trim());
-
-                #endregion
-
-                #region Asset
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["txtObjectAssetNumber"] != null)
-                {
-                    //Remove Old One
-                    HttpContext.Current.Session.Remove("txtObjectAssetNumber");
-                }
-
-                //Add New Value
-                HttpContext.Current.Session.Add("txtObjectAssetNumber", txtObjectAssetNumber.Text.Trim());
-
-                #endregion
-            }
-
-            #endregion
-            
-            #region Priority
-
-            if (ComboPriority.Value != null)
-            {
-                #region Combo Value
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["ComboPriority"] != null)
-                {
-                    //See If Value Changed
-                    if (HttpContext.Current.Session["ComboPriorityText"].ToString() != ComboPriority.Text)
-                    {
-                        //Remove Old One
-                        HttpContext.Current.Session.Remove("ComboPriority");
-
-                        //Add New Value
-                        HttpContext.Current.Session.Add("ComboPriority", ComboPriority.Value.ToString());
-                    }
-                }
-                else
-                {
-                    //Add New Value
-                    HttpContext.Current.Session.Add("ComboPriority", ComboPriority.Value.ToString());
-                }
-
-                #endregion
-
-                #region Combo Text
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["ComboPriorityText"] != null)
-                {
-                    //Remove Old One
-                    HttpContext.Current.Session.Remove("ComboPriorityText");
-                }
-
-                //Add New Value
-                HttpContext.Current.Session.Add("ComboPriorityText", ComboPriority.Text.Trim());
-
-                #endregion
+                HttpContext.Current.Session.Add("txtPostNotes", txtPostNotes.Text.Trim());
             }
 
             #endregion
 
-            #region Reason
+            #region Additional Details
 
-            if (comboReason.Value != null)
+            //Check For Input
+            if (txtAdditionalInfo.Text.Length > 0)
             {
-                #region Combo Value
-
                 //Check For Prior Value
-                if (HttpContext.Current.Session["comboReason"] != null)
-                {
-                    //See If Value Changed
-                    if (HttpContext.Current.Session["comboReasonText"].ToString() != comboReason.Text)
-                    {
-                        //Remove Old One
-                        HttpContext.Current.Session.Remove("comboReason");
-
-                        //Add New Value
-                        HttpContext.Current.Session.Add("comboReason", comboReason.Value.ToString());
-                    }
-                }
-                else
-                {
-                    //Add New Value
-                    HttpContext.Current.Session.Add("comboReason", comboReason.Value.ToString());
-                }
-
-                #endregion
-
-                #region Combo Text
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["comboReasonText"] != null)
+                if (HttpContext.Current.Session["txtAddDetail"] != null)
                 {
                     //Remove Old One
-                    HttpContext.Current.Session.Remove("comboReasonText");
+                    HttpContext.Current.Session.Remove("txtAddDetail");
                 }
 
                 //Add New Value
-                HttpContext.Current.Session.Add("comboReasonText", comboReason.Text.Trim());
-
-                #endregion
+                HttpContext.Current.Session.Add("txtAddDetail", txtAdditionalInfo.Text.Trim());
             }
 
             #endregion
-          
-            #region Hwy Route
-
-            if (comboHwyRoute.Value != null)
-            {
-                #region Combo Value
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["comboHwyRoute"] != null)
-                {
-                    if (HttpContext.Current.Session["comboHwyRouteText"].ToString() != comboHwyRoute.Text)
-                    {
-                        //Remove Old One
-                        HttpContext.Current.Session.Remove("comboHwyRoute");
-
-                        //Add New Value
-                        HttpContext.Current.Session.Add("comboHwyRoute", comboHwyRoute.Value.ToString());
-                    }
-                }
-                else
-                {
-                    //Add New Value
-                    HttpContext.Current.Session.Add("comboHwyRoute", comboHwyRoute.Value.ToString());
-                }
-
-                #endregion
-
-                #region Combo Text
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["comboHwyRouteText"] != null)
-                {
-                    //Remove Old One
-                    HttpContext.Current.Session.Remove("comboHwyRouteText");
-                }
-
-                //Add New Value
-                HttpContext.Current.Session.Add("comboHwyRouteText", comboHwyRoute.Text.Trim());
-
-                #endregion
-            }
-
-            #endregion
-
-            #region Milepost
-
-            //Check For Prior Value
-            //if (HttpContext.Current.Session["txtMilepost"] != null)
-            //{
-            //    //Remove Old One
-            //    HttpContext.Current.Session.Remove("txtMilepost");
-            //}
-
-            ////Add New Value
-            //HttpContext.Current.Session.Add("txtMilepost", txtMilepost.Value.ToString());
-
-            #endregion
-
-            #region Milepost To
-
-            //Check For Prior Value
-            if (HttpContext.Current.Session["txtMilepostTo"] != null)
-            {
-                //Remove Old One
-                HttpContext.Current.Session.Remove("txtMilepostTo");
-            }
-
-            //Check Value
-            if (txtMilepost.Value != null)
-            {
-                //Add New Value
-                HttpContext.Current.Session.Add("txtMilepostTo", txtMilepostTo.Value.ToString());
-
-            }
-
-            #endregion
-
-            #region Milepost Direction
-
-            if (comboMilePostDir.Value != null)
-            {
-                #region Combo Value
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["comboMilePostDir"] != null)
-                {
-                    if (HttpContext.Current.Session["comboMilePostDirText"].ToString() != comboMilePostDir.Text)
-                    {
-                        //Remove Old One
-                        HttpContext.Current.Session.Remove("comboMilePostDir");
-
-                        //Add New Value
-                        HttpContext.Current.Session.Add("comboMilePostDir", comboMilePostDir.Value.ToString());
-                    }
-                }
-                else
-                {
-                    //Add New Value
-                    HttpContext.Current.Session.Add("comboMilePostDir", comboMilePostDir.Value.ToString());
-                }
-
-                #endregion
-
-                #region Combo Text
-
-                //Check For Prior Value
-                if (HttpContext.Current.Session["comboMilePostDirText"] != null)
-                {
-                    //Remove Old One
-                    HttpContext.Current.Session.Remove("comboMilePostDirText");
-                }
-
-                //Add New Value
-                HttpContext.Current.Session.Add("comboMilePostDirText", comboMilePostDir.Text.Trim());
-
-                #endregion
-            }
-
-            #endregion
-
+         
             #region Run Unit One
 
             //Check For Prior Value
@@ -2625,39 +2666,6 @@ namespace Pages.QuickPost
             //HttpContext.Current.Session.Add("txtRunUnitThree", txtRunUnitThree.Value.ToString());
 
             #endregion
-
-          
-
-            if (HttpContext.Current.Session["ComboOutcome"] != null)
-            {
-                HttpContext.Current.Session.Add("ComboOutcome", ComboOutcomeCode.Value);
-            }
-
-            #region Start and Completion Dates
-            if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
-            {
-                //Set Value
-                HttpContext.Current.Session.Add("TxtWorkStartDate", TxtWorkStartDate.Value.ToString());
-
-            }
-
-            //Add Comp Date
-            if (HttpContext.Current.Session["TxtWorkCompDate"] != null)
-            {
-
-                //Set Value
-                HttpContext.Current.Session.Add("TxtWorkCompDate", TxtWorkCompDate.Value.ToString());
-
-            }
-            #endregion
-
-            #region Completed By
-            if (HttpContext.Current.Session["ComboCompletedBy"] != null)
-            {
-                HttpContext.Current.Session.Add("ComboCompletedBy", ComboCompletedBy.Value);
-            }
-            #endregion
-
             
         }
         #endregion
@@ -2665,6 +2673,394 @@ namespace Pages.QuickPost
         #region Post Job
         public void PostPlanJob()
         {
+            #region Setting Vars to use in Stored Procedures from Session
+            var jobAgainstArea = 0;
+            const bool requestOnly = true;
+            const int actionPriority = -1;
+            const int mobileEquip = -1;
+            
+            const bool additionalDamage = false;
+            const decimal percentOverage = 0;
+
+            #region Get Logon Info
+
+            //Get Value
+            if (HttpContext.Current.Session["LogonInfo"] != null)
+            {
+                //Get Logon Info From Session
+                _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+            }
+
+            if (HttpContext.Current.Session[""] != null)
+            {
+
+            }
+
+            #endregion
+            #region Job Step info
+            #region Get Description
+
+            var workDesc = "";
+            if (HttpContext.Current.Session["txtWorkDescription"] != null)
+            {
+                //Get Additional Info From Session
+                workDesc = (HttpContext.Current.Session["txtWorkDescription"].ToString());
+            }
+
+            #endregion
+
+            #region Get Object
+
+            var objectAgainstId = -1;
+            if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+            {
+                //Get Info From Session
+                objectAgainstId = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
+            }
+
+            #endregion
+   
+            #region Completed By
+            var completedBy = "";
+            if (HttpContext.Current.Session["ComboCompletedBy"] != null)
+            {
+                completedBy = HttpContext.Current.Session["ComboCompletedBy"].ToString();
+            }
+            #endregion
+
+            #region Get Actual Job Length
+            decimal jobActualLen = 0;
+            if (Session[""] != null)
+            {
+                jobActualLen = Convert.ToDecimal(Session["txtJobLength"].ToString());
+            }
+            #endregion
+
+            #region Get Start Date
+
+            var startDate = DateTime.Now;
+            if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
+            {
+                //Get Info From Session
+                startDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkStartDate"].ToString());
+            }
+
+            #endregion
+
+            #region Get Comp Date
+
+            var compDate = DateTime.Now;
+            if (HttpContext.Current.Session["TxtWorkCompDate"] != null)
+            {
+                //Get Info From Session
+                compDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkCompDate"].ToString());
+            }
+
+            #endregion
+
+            #region Get Job Reason
+
+            var reasonCode = -1;
+            if ((HttpContext.Current.Session["comboReason"] != null))
+            {
+                //Get Info From Session
+                reasonCode = Convert.ToInt32((HttpContext.Current.Session["comboReason"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Outcome
+
+            var jobOutcome = -1;
+            if ((HttpContext.Current.Session["ComboOutcome"] != null))
+            {
+                //var x = Convert.ToInt32(ComboOutcome.Value.ToString());
+                //var y = ComboOutcome.Text.ToString();
+
+                //jobOutcome = x;
+                //Get Info From Session
+            }
+
+            #endregion
+
+            #region Get Priority
+
+            var requestPriority = -1;
+            if ((HttpContext.Current.Session["ComboPriority"] != null))
+            {
+                //Get Info From Session
+                requestPriority = Convert.ToInt32((HttpContext.Current.Session["ComboPriority"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Element
+            var elementID = -1;
+            if (Session["comboElementID"] != null)
+            {
+                elementID = Convert.ToInt32(Session["comboElementID"].ToString());
+            }
+            #endregion
+
+            #region Get State Route
+
+            var stateRouteId = -1;
+            if ((HttpContext.Current.Session["comboHwyRoute"] != null))
+            {
+                //Get Info From Session
+                stateRouteId = Convert.ToInt32((HttpContext.Current.Session["comboHwyRoute"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Milepost
+
+            decimal milepost = 0;
+            if (HttpContext.Current.Session["txtMilepost"] != null)
+            {
+                //Get Info From Session
+                milepost = Convert.ToDecimal(HttpContext.Current.Session["txtMilepost"].ToString());
+            }
+
+            #endregion
+
+            #region Get Milepost To
+
+            decimal milepostTo = 0;
+            if (HttpContext.Current.Session["txtMilepostTo"] != null)
+            {
+                //Get Info From Session
+                milepostTo = Convert.ToDecimal(HttpContext.Current.Session["txtMilepostTo"].ToString());
+            }
+
+            #endregion
+
+            #region Get Milepost Direction
+
+            var mpIncreasing = -1;
+            if ((HttpContext.Current.Session["comboMilePostDir"] != null))
+            {
+                //Get Info From Session
+                mpIncreasing = Convert.ToInt32((HttpContext.Current.Session["comboMilePostDir"].ToString()));
+            }
+
+            #endregion
+
+            #region Sub Assembly
+            var subAssemblyID = -1;
+            if(Session["comboSubAssembly"] != null)
+            {
+                subAssemblyID = Convert.ToInt32(Session["comboSubAssembly"].ToString());
+            }
+            #endregion
+
+            ///TODO Update Object
+            #region Update Object
+
+            #endregion
+
+            #region BreakDown
+            var breakdown = false;
+            if (breakdownBox.Checked == true)
+            {
+                breakdown = true;
+            }
+            #endregion
+
+            #region Post Deafaults
+            var postDefaults = false;
+            if(chkPostDefaults.Checked == true)
+            {
+                postDefaults = true;
+            }
+            #endregion
+
+            #region Get Cost Code
+
+            var costCodeId = -1;
+            if ((HttpContext.Current.Session["ComboCostCode"] != null))
+            {
+                //Get Info From Session
+                costCodeId = Convert.ToInt32((HttpContext.Current.Session["ComboCostCode"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Fund Source
+
+            var fundSource = -1;
+            if ((HttpContext.Current.Session["ComboFundSource"] != null))
+            {
+                //Get Info From Session
+                fundSource = Convert.ToInt32((HttpContext.Current.Session["ComboFundSource"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Work Order
+
+            var workOrder = -1;
+            if ((HttpContext.Current.Session["ComboWorkOrder"] != null))
+            {
+                //Get Info From Session
+                workOrder = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOrder"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Work Op
+
+            var workOp = -1;
+            if ((HttpContext.Current.Session["ComboWorkOp"] != null))
+            {
+                //Get Info From Session
+                workOp = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Org Code
+
+            var orgCode = -1;
+            if ((HttpContext.Current.Session["ComboOrgCode"] != null))
+            {
+                //Get Info From Session
+                orgCode = Convert.ToInt32((HttpContext.Current.Session["ComboOrgCode"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Fund Group
+
+            var fundingGroup = -1;
+            if ((HttpContext.Current.Session["ComboFundGroup"] != null))
+            {
+                //Get Info From Session
+                fundingGroup = Convert.ToInt32((HttpContext.Current.Session["ComboFundGroup"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Equip Num
+
+            var equipNumber = -1;
+            if ((HttpContext.Current.Session["ComboEquipNum"] != null))
+            {
+                //Get Info From Session
+                equipNumber = Convert.ToInt32((HttpContext.Current.Session["ComboEquipNum"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Ctl Section
+
+            var controlSection = -1;
+            if ((HttpContext.Current.Session["ComboCtlSection"] != null))
+            {
+                //Get Info From Session
+                controlSection = Convert.ToInt32((HttpContext.Current.Session["ComboCtlSection"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Notes
+
+            var notes = "";
+            if (HttpContext.Current.Session["txtAddDetail"] != null)
+            {
+                //Get Additional Info From Session
+                notes = (HttpContext.Current.Session["txtAddDetail"].ToString());
+            }
+
+            #endregion
+
+            #region Get Post Notes
+
+            var postNotes = "";
+            if (HttpContext.Current.Session["txtPostNotes"] != null)
+            {
+                //Get Post Notes From Session
+                postNotes = (HttpContext.Current.Session["txtPostNotes"].ToString());
+            }
+
+            #endregion
+
+            #region Get Run Units
+
+            //Create Variables
+            decimal unitOne = 0;
+            decimal unitTwo = 0;
+            decimal unitThree = 0;
+
+            //Check For First Unit
+            if (HttpContext.Current.Session["txtRunUnitOne"] != null)
+            {
+                //Get From Session
+                unitOne = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitOne"].ToString()));
+            }
+
+            //Check For Second Unit
+            if (HttpContext.Current.Session["txtRunUnitTwo"] != null)
+            {
+                //Get From Session
+                unitTwo = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitTwo"].ToString()));
+            }
+
+            //Check For Third Unit
+            if (HttpContext.Current.Session["txtRunUnitThree"] != null)
+            {
+                //Get From Session
+                unitThree = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitThree"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Job ID
+
+            var jobID = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+            var jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+
+            #endregion
+
+            #region Get Job Step ID
+
+            var jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
+
+            #endregion
+
+            #region Get Step #
+            var jobStepNumber = 1;
+            if (HttpContext.Current.Session["stepnumber"] != null)
+            {
+                jobStepNumber = Convert.ToInt32(HttpContext.Current.Session["stepnumber"].ToString());
+
+            }
+
+
+            #endregion
+            var routeTo = -1;
+            var requestor = _oLogon.UserID;
+            var gpsX = 0;
+            var gpsY = 0;
+            var gpsZ = 0;
+            var jobStepConcurNumber = -1;
+            var jobStepFollowStepNumber = -1;
+            var jobStatus = -1;
+            var jobLaborClass = -1;
+            var jobGroup = -1;
+            jobOutcome = 0;
+            var jobShift = -1;
+            var jobSupervisor = -1;
+            var jobActualDt = 0;
+            var jobEstimatedDt = 0;
+            var jobEstimatedLen = 0;
+            var jobRemainingDt = 0;
+            var jobRemainingLen = 0;
+            var jobReturnWithin = 0;
+            var jobRouteTo = -1;
+            var jobCompletedBy = requestor;
+
+            #endregion
             try
             {
                 //Save Job Details
@@ -2678,7 +3074,7 @@ namespace Pages.QuickPost
                     notes,
                     routeTo,
                     true,
-                    requestDate,
+                    startDate,
                     requestPriority,
                     requestor,
                     0,
@@ -2896,7 +3292,7 @@ namespace Pages.QuickPost
         #endregion
         #endregion
         #endregion
-
+        #endregion
         private void AddNew()
         {
             ResetSession();

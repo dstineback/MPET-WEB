@@ -355,7 +355,7 @@
                     </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup> <%--Object Group--%>
-            <dx:LayoutGroup Caption="Job Details" ColCount="2"
+            <dx:LayoutGroup Caption="Job Details" ColCount="3"
                 Name="Job Details">
                 <Items>
                     <dx:LayoutItem Caption="Completed By" Name="CompletedBy">
@@ -363,17 +363,17 @@
                             <dx:LayoutItemNestedControlContainer runat="server">
                                <dx:ASPxComboBox ID="ComboCompletedBy" 
                                     runat="server" EnableCallbackMode="true" CallbackPageSize="10"
-                                                    ValueType="System.String" ValueField="UserID"
-                                                    OnItemsRequestedByFilterCondition="ComboCompletedBy_OnItemsRequestedByFilterCondition_SQL"
-                                                    
-                                    OnItemRequestedByValue="ComboCompletedBy_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                    Width="53%" 
+                                    ValueType="System.String" ValueField="UserID"
+                                    OnItemsRequestedByFilterCondition="ComboCompletedBy_OnItemsRequestedByFilterCondition_SQL" 
+                                    OnItemRequestedByValue="ComboCompletedBy_OnItemRequestedByValue_SQL"    
+                                    TextFormatString="{0} - {1}" 
+                                    Width="100%" 
                                     DropDownStyle="DropDown" Theme="iOS" 
                                     TextField="username" 
                                     DropDownButton-Enabled="True" 
                                     AutoPostBack="False" 
                                     ClientInstanceName="ComboCompletedBy">
-                                                                                               
+                                                           
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="UserID" Visible="False" />
                                         <dx:ListBoxColumn FieldName="username" Caption="User ID" Width="75px" ToolTip="M-PET.NET User ID"/>
@@ -388,7 +388,9 @@
                     <dx:LayoutItem Caption="Job Length" Name="JobLength">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxTextBox runat="server" ID="_E43" Width="100%" Theme="iOS"></dx:ASPxTextBox>
+                                <dx:ASPxTextBox runat="server" ID="txtJobLength" Width="100%" Theme="iOS" HelpText="Only Numbers accepted">
+                                    <MaskSettings Mask="<0..999g>.<00..99>" IncludeLiterals="DecimalSymbol"/>
+                                </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
 
@@ -404,24 +406,6 @@
                                                     Width="100%" 
                                                     runat="server">
                                 </dx:ASPxDateEdit>  
-                            </dx:LayoutItemNestedControlContainer>
-                        </LayoutItemNestedControlCollection>
-
-                        <CaptionSettings Location="Top"></CaptionSettings>
-                    </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Completed Date" Name="completedDate" Width="100%">
-                        <LayoutItemNestedControlCollection>
-                            <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxDateEdit ID="TxtWorkCompDate" 
-                                                    ClientInstanceName="TxtWorkCompDate"
-                                                    DisplayFormatString="D" ValidationSettings-RequiredField-IsRequired="true"
-                                                    Theme="iOS"
-                                                    Width="100%" 
-                                                    runat="server">
-<ValidationSettings>
-<RequiredField IsRequired="True"></RequiredField>
-</ValidationSettings>
-                                </dx:ASPxDateEdit>   
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
 
@@ -474,7 +458,25 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Priority" Name="Priority" Width="100%">
+                    <dx:LayoutItem Caption="Completed Date" Name="completedDate">
+                        <LayoutItemNestedControlCollection>
+                            <dx:LayoutItemNestedControlContainer runat="server">
+                                <dx:ASPxDateEdit ID="TxtWorkCompDate" 
+                                                    ClientInstanceName="TxtWorkCompDate"
+                                                    DisplayFormatString="D" ValidationSettings-RequiredField-IsRequired="true"
+                                                    Theme="iOS"
+                                                    Width="100%" 
+                                                    runat="server">
+                                    <ValidationSettings>
+                                    <RequiredField IsRequired="True"></RequiredField>
+                                    </ValidationSettings>
+                                </dx:ASPxDateEdit>   
+                            </dx:LayoutItemNestedControlContainer>
+                        </LayoutItemNestedControlCollection>
+
+                        <CaptionSettings Location="Top"></CaptionSettings>
+                    </dx:LayoutItem>
+                    <dx:LayoutItem Caption="Priority" Name="Priority">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxComboBox ID="ComboPriority" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
@@ -496,7 +498,7 @@
                     <dx:LayoutItem Caption="Element ID" Name="ElementID">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox runat="server" ID="_E15" Width="100%" Theme="iOS"></dx:ASPxComboBox>
+                                <dx:ASPxComboBox runat="server" ID="comboElementID" Width="100%" Theme="iOS"></dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
@@ -570,18 +572,23 @@
                     <dx:LayoutItem Caption="Sub Assy" Name="SubAssy">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox runat="server" ID="_E20" Width="100%" Theme="iOS"
+                                <dx:ASPxComboBox runat="server" ID="comboSubAssembly" Width="100%" Theme="iOS"
                                     
                                     ></dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
+                </Items>
+            </dx:LayoutGroup> <%--Job Details--%>
+            <dx:LayoutGroup Caption="" ColCount="3">
+                <Items>
+
                     <dx:LayoutItem Caption="Breakdown" Name="Breakdown">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxCheckBox runat="server" CheckState="Unchecked"
-                                    ID="_E25" Theme="iOS"></dx:ASPxCheckBox>
+                                    ID="breakdownBox" Theme="iOS" Width="100%"></dx:ASPxCheckBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
@@ -590,7 +597,7 @@
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxCheckBoxList ID="chkUpdateObjects" runat="server" 
-                                                 ValueField="ID" TextField="Name" Theme="iOS" RepeatColumns="3" RepeatLayout="Table" RepeatDirection="Horizontal">
+                                                 ValueField="ID" TextField="Name" Theme="iOS" RepeatColumns="3" Width="100%" RepeatLayout="Table" RepeatDirection="Horizontal">                                   
                                 </dx:ASPxCheckBoxList>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
@@ -601,14 +608,14 @@
                                             <LayoutItemNestedControlCollection >
                                                 <dx:LayoutItemNestedControlContainer>
                                                 <dx:ASPxCheckBox ID="chkPostDefaults" runat="server" Text="Post Defaults"
-                                                            ValueField="ID" Theme="iOS" TextField="Post Defaults" RepeatColumns="3" RepeatLayout="Table" RepeatDirection="Horizontal">
+                                                            ValueField="ID" Theme="iOS" TextField="Post Defaults" Width="100%" RepeatColumns="3" RepeatLayout="Table" RepeatDirection="Horizontal">
                                                         </dx:ASPxCheckBox>
                                                 </dx:LayoutItemNestedControlContainer>
                                             </LayoutItemNestedControlCollection>
                                             <CaptionSettings Location="Top" />
                                         </dx:LayoutItem>
                 </Items>
-            </dx:LayoutGroup> <%--Job Details--%>
+            </dx:LayoutGroup>
             <dx:LayoutGroup Caption="Cost Information" ColCount="2"
                 Name="costInformation">
                 <Items>
