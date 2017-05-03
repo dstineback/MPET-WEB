@@ -4,6 +4,7 @@
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Quick Post</asp:Content>
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
 
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/> 
     <script type="text/javascript">
         ASPx.TouchUIHelper.isNativeScrollingAllowed = false;
     </script>
@@ -80,13 +81,168 @@
             }
         }
 </script>
+    <script>
+        //function ActiveTabChanged() {
 
-    <dx:ASPxFormLayout runat="server" ColCount="3">
+        //    var index = window.requestTab.GetActiveTabIndex();
+
+        //    if (index == 2) {
+        //        var x = window.GPSX.GetValue();
+        //        var y = window.GPSY.GetValue();
+        //        var latlng;
+        //        var myOptions;
+        //        if ((x != null) && (y != null)) {
+        //            latlng = new window.google.maps.LatLng(x, y);
+        //            myOptions = {
+        //                zoom: 15,
+        //                center: latlng,
+        //                mapTypeId: window.google.maps.MapTypeId.TERRAIN
+        //            };
+        //            var map = new window.google.maps.Map(document.getElementById("map"), myOptions);
+        //            var marker = new window.google.maps.Marker({ position: latlng, map: map, title: "Current Location" });
+        //        } else {
+        //            latlng = new window.google.maps.LatLng(32.8470987, -117.2727893);
+        //            myOptions = {
+        //                zoom: 15,
+        //                center: latlng,
+        //                mapTypeId: window.google.maps.MapTypeId.TERRAIN
+        //            };
+        //            var map = new window.google.maps.Map(document.getElementById("map"), myOptions);
+
+        //        }
+        //    }
+        //}
+
+
+        function OnGetCrewRowId(idValue) {
+            Selection.Set('RecordID', idValue[0].toString());
+            Selection.Set('DMRKEY', idValue[1].toString());
+        }
+
+        function OnGetMemberRowId(idValue) {
+            Selection.Set('n_JobOtherID', idValue.toString());
+        }
+
+        function OnGetPartRowId(idValue) {
+            Selection.Set('n_jobpartid', idValue[0].toString());
+            Selection.Set('DMRKEY', idValue[1].toString());
+            Selection.Set('n_masterpartid', idValue[2].toString());
+        }
+
+        function OnGetOtherRowId(idValue) {
+            Selection.Set('n_JobOtherID', idValue.toString());
+        }
+
+        function OnGetEquipRowId(idValue) {
+            Selection.Set('n_JobEquipmentID', idValue[0].toString());
+            Selection.Set('DMRKEY', idValue[1].toString());
+        }
+
+        function OnRibbonChange(s, e) {
+            var tab = e.tab.index;
+            window.TabPageControl.SetActiveTabIndex(tab);
+        }
+
+        function HidePopup() {
+            window.AddCrewPopup.Hide();
+            window.AddEquipPopup.Hide();
+            window.AddMemberPopup.Hide();
+            window.AddPartPopup.Hide();
+            window.CrewLaborClassPopup.Hide();
+            window.CrewGroupPopup.Hide();
+        }
+
+        function ShowCrewPopup() {
+            window.AddCrewPopup.Show();
+        }
+
+        function ShowMemberPopup() {
+            window.AddMemberPopup.Show();
+        }
+
+        function ShowPartPopup() {
+            window.AddPartPopup.Show();
+        }
+
+        function ShowEquipPopup() {
+            window.AddEquipPopup.Show();
+        }
+
+        function AddEditOtherRow() {
+            window.StartEdit();
+        }
+
+
+
+
+        function OnPartUpateClick() {
+            window.PartGrid.UpdateEdit();
+        }
+
+        function OnPartCancelClick() {
+            window.PartGrid.CancelEdit();
+        }
+        function OnPartDeleteClick() {
+            window.PartGrid.DeletEdit();
+        }
+
+        function OnEquipUpateClick() {
+            window.EquipGrid.UpdateEdit();
+        }
+
+        function OnEquipCancelClick() {
+            window.EquipGrid.CancelEdit();
+        }
+
+        function OnMemberUpateClick() {
+            window.MemberGrid.UpdateEdit();
+        }
+
+        function OnMemberCancelClick() {
+            window.MemberGrid.CancelEdit();
+        }
+
+        function OnCrewUpateClick() {
+            window.CrewGrid.UpdateEdit();
+        }
+
+        function OnCrewCancelClick() {
+            window.CrewGrid.CancelEdit();
+        }
+
+        function onHyperLinkClick(sender) {
+            //console.log('sender', sender);
+            //window._xyz = sender.GetMainElement();
+            var s = sender.GetMainElement();
+
+            var crewGrid = s.parentNode.parentNode;
+            var click = new MouseEvent('dblclick', {
+                'view': window,
+                'bubbles': true,
+                'cancelable': true
+            });
+            var dblClick = new MouseEvent('click', {
+                'view': window,
+                'bubbles': true,
+                'cancelable': true
+            });
+            crewGrid.dispatchEvent(click);
+            crewGrid.dispatchEvent(dblClick);
+        }
+    </script>
+
+    <asp:ScriptManager ID="ScriptManger1" runat="server" EnablePartialRendering="true"></asp:ScriptManager>
+    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="iOS" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="iOS" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="iOS" runat="server" Text="Step: "></dx:ASPxLabel> <br />
+    <dx:ASPxHyperLink ID="myJobsBackLink" runat="server" Font-Size="16" Theme="iOS" Text="MY JOBS" NavigateUrl="~/Pages/PlannedJobs/myJobs.aspx" />
+    <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField>
+    <dx:ASPxHiddenField ID="MultiGrid" ViewStateMode="Enabled"  ClientInstanceName="MultiGrid" runat="server"></dx:ASPxHiddenField>
+    <dx:ASPxFormLayout runat="server" ColCount="3" 
+         Width="95%">
         <Items>
             <dx:LayoutItem Caption="Job Description" ColSpan="3">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
-                        <dx:ASPxTextBox runat="server" Theme="iOS" ID="txtWorkDescription" ClientInstanceName="txtDescription" Width="95%" MaxLength="254">
+                        <dx:ASPxTextBox runat="server" Theme="iOS" ID="txtWorkDescription" ClientInstanceName="txtDescription" Width="95%" MaxLength="254" Height="50px">
                             <ValidationSettings SetFocusOnError="true" Display="Dynamic" ErrorDisplayMode="Text">
                                 <RequiredField IsRequired="true" />
                             </ValidationSettings>
@@ -103,53 +259,53 @@
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxComboBox 
-                                            ID="ObjectIDCombo" 
-                                            runat="server" 
-                                            EnableCallbackMode="true" 
-                                            CallbackPageSize="10" 
-                                            ValueType="System.String" 
-                                            ValueField="n_objectid" 
-                                            OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" 
-                                            OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
-                                            TextFormatString="{0} - {1} - {2} - {3} - {4}" 
-                                            Width="600px" 
-                                            DropDownStyle="DropDown" 
-                                            Theme="iOS" 
-                                            TextField="objectid" 
-                                            DropDownButton-Enabled="True" 
-                                            AutoPostBack="False" 
-                                            ClientInstanceName="ObjectIDCombo">
-                                            <ClientSideEvents ValueChanged="function(s, e) {
-                            var objectHasValue = ObjectIDCombo.GetValue();
-                            var selectedItem = s.GetSelectedItem();
-                            if(objectHasValue!=null)
-                            {
-                                txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
-                                txtObjectArea.SetText(selectedItem.GetColumnText('areaid'));
-                                txtObjectLocation.SetText(selectedItem.GetColumnText('locationid'));
-                                txtObjectAssetNumber.SetText(selectedItem.GetColumnText('assetnumber'));
-                                objectImg.SetImageUrl(selectedItem.GetColumnText('LocationOrURL'));
-                            }
-                            else
-                            {
-                                txtObjectDescription.SetText('');
-                                txtObjectArea.SetText('');
-                                txtObjectLocation.SetText('');
-                                txtObjectAssetNumber.SetText('');
-                            }
+                                                                ID="ObjectIDCombo" 
+                                                                runat="server" 
+                                                                EnableCallbackMode="true" 
+                                                                CallbackPageSize="10" 
+                                                                ValueType="System.String" 
+                                                                ValueField="n_objectid" 
+                                                                OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" 
+                                                                OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
+                                                                TextFormatString="{0} - {1} - {2} - {3} - {4}" 
+                                                                Width="600px" 
+                                                                DropDownStyle="DropDown" 
+                                                                Theme="Mulberry" 
+                                                                TextField="objectid" 
+                                                                DropDownButton-Enabled="True" 
+                                                                AutoPostBack="False" 
+                                                                ClientInstanceName="ObjectIDCombo">
+                                                                <ClientSideEvents ValueChanged="function(s, e) {
+                                                var objectHasValue = ObjectIDCombo.GetValue();
+                                                var selectedItem = s.GetSelectedItem();
+                                                if(objectHasValue!=null)
+                                                {
+                                                    txtObjectArea.SetText(selectedItem.GetColumnText('areaid'));
+                                                    txtObjectLocation.SetText(selectedItem.GetColumnText('locationid'));
+                                                    txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
+                                                    txtObjectAssetNumber.SetText(selectedItem.GetColumnText('assetnumber'));
+                                                    objectImg.SetImageUrl(selectedItem.GetColumnText('LocationOrURL'));
+                                                }
+                                                else
+                                                {
+                                                    txtObjectDescription.SetText('');
+                                                    txtObjectArea.SetText('');
+                                                    txtObjectLocation.SetText('');
+                                                    txtObjectAssetNumber.SetText('');
+                                                }
 
-    }" />
-                                            <Columns>
-                                                <dx:ListBoxColumn FieldName="n_objectid" Visible="False" />
-                                                <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
-                                                <dx:ListBoxColumn FieldName="description" Caption="Description" Width="250px" ToolTip="M-PET.NET Maintenance Object Description"/>
-                                                <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
-                                                <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
-                                                <dx:ListBoxColumn FieldName="assetnumber" Caption="Asset #" Width="50px" ToolTip="M-PET.NET Maintenance Object Asset Number"/>
-                                                <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
-                                                <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
-                                            </Columns>
-                                        </dx:ASPxComboBox> 
+                                            }" />
+                                        <Columns>
+                                            <dx:ListBoxColumn FieldName="n_objectid" Visible="False" />
+                                            <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
+                                            <dx:ListBoxColumn FieldName="description" Caption="Description" Width="250px" ToolTip="M-PET.NET Maintenance Object Description"/>
+                                            <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
+                                            <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
+                                            <dx:ListBoxColumn FieldName="assetnumber" Caption="Asset #" Width="50px" ToolTip="M-PET.NET Maintenance Object Asset Number"/>
+                                            <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
+                                            <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
+                                        </Columns>
+                                    </dx:ASPxComboBox>  
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
 
@@ -159,7 +315,7 @@
                         ColSpan="3">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxTextBox runat="server" ID="txtObjectDescription" ClientInstanceName="txtObjectDecritption" Height="100px" Width="100%" MaxLength="254" ReadOnly="true" Theme="iOS"></dx:ASPxTextBox>
+                                <dx:ASPxTextBox runat="server" ID="txtObjectDescription" ClientInstanceName="txtObjectDescription" Height="100px" Width="100%" MaxLength="254" ReadOnly="true" Theme="iOS"></dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
 
@@ -245,11 +401,14 @@
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxDateEdit ID="TxtWorkCompDate" 
-                                                    ClientInstanceName="TxtWorkStartDate"
-                                                    DisplayFormatString="D"
+                                                    ClientInstanceName="TxtWorkCompDate"
+                                                    DisplayFormatString="D" ValidationSettings-RequiredField-IsRequired="true"
                                                     Theme="iOS"
                                                     Width="100%" 
                                                     runat="server">
+<ValidationSettings>
+<RequiredField IsRequired="True"></RequiredField>
+</ValidationSettings>
                                 </dx:ASPxDateEdit>   
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
@@ -301,6 +460,7 @@
                                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Priority" Name="Priority">
                         <LayoutItemNestedControlCollection>
@@ -319,6 +479,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Element ID" Name="ElementID">
                         <LayoutItemNestedControlCollection>
@@ -326,6 +487,7 @@
                                 <dx:ASPxComboBox runat="server" ID="_E15"></dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Highway Route:" Name="HighwayRoute">
                         <LayoutItemNestedControlCollection>
@@ -344,6 +506,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Direction" Name="direction">
                         <LayoutItemNestedControlCollection>
@@ -362,6 +525,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Mile Post From" Name="MilePostFrom">
                         <LayoutItemNestedControlCollection>
@@ -375,6 +539,7 @@
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Mile Post To" Name="Mile Post to">
                         <LayoutItemNestedControlCollection>
@@ -388,6 +553,7 @@
                                 </dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Sub Assy" Name="SubAssy">
                         <LayoutItemNestedControlCollection>
@@ -395,6 +561,7 @@
                                 <dx:ASPxComboBox runat="server" ID="_E20"></dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Breakdown" Name="Breakdown">
                         <LayoutItemNestedControlCollection>
@@ -403,6 +570,7 @@
                                     ID="_E25"></dx:ASPxCheckBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Update Object:" Name="updateObject">
                         <LayoutItemNestedControlCollection>
@@ -412,6 +580,7 @@
                                 </dx:ASPxCheckBoxList>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Completion Date:">
                                         <LayoutItemNestedControlCollection>
@@ -427,6 +596,7 @@
                                                 </dx:ASPxDateEdit>
                                             </dx:LayoutItemNestedControlContainer>
                                         </LayoutItemNestedControlCollection>
+                                        <CaptionSettings Location="Top" />
                                     </dx:LayoutItem>
                     <dx:LayoutItem Name="PostDefaults" Caption="Post Defaults:" HorizontalAlign="Center" ShowCaption="False">
                                             <LayoutItemNestedControlCollection >
@@ -436,6 +606,7 @@
                                                         </dx:ASPxCheckBox>
                                                 </dx:LayoutItemNestedControlContainer>
                                             </LayoutItemNestedControlCollection>
+                                            <CaptionSettings Location="Top" />
                                         </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup> <%--Job Details--%>
@@ -459,6 +630,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Fund Source" Name="FundSource">
                         <LayoutItemNestedControlCollection>
@@ -477,6 +649,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Work Order Code" Name="workOrderCode">
                         <LayoutItemNestedControlCollection>
@@ -495,6 +668,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Work Operation" Name="workOpertation">
                         <LayoutItemNestedControlCollection>
@@ -513,6 +687,7 @@
                                     </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Organization Code" Name="orgCode">
                         <LayoutItemNestedControlCollection>
@@ -531,6 +706,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Funding Group" Name="FundGroup">
                         <LayoutItemNestedControlCollection>
@@ -549,6 +725,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Control Section" Name="controlSection">
                         <LayoutItemNestedControlCollection>
@@ -567,6 +744,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Equipment Number" Name="EquipmentNumber">
                         <LayoutItemNestedControlCollection>
@@ -585,6 +763,7 @@
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup> <%--Cost Information--%>
@@ -597,6 +776,7 @@
                         </dx:ASPxMemo>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
+                <CaptionSettings Location="Top" />
             </dx:LayoutItem> <%--Post Notes--%>
             <dx:LayoutItem Caption="Additional Information" ColSpan="3"
                 Name="AddInfo" RowSpan="2">
@@ -608,6 +788,7 @@
                     </dx:ASPxMemo>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
+                <CaptionSettings Location="Top" />
             </dx:LayoutItem> <%--Additional Infomation--%>
             <dx:LayoutItem Caption="Attachments" Name="Attachments">
                 <LayoutItemNestedControlCollection>
@@ -651,6 +832,7 @@
                         </div>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
+                <CaptionSettings Location="Top" />
             </dx:LayoutItem> <%--Attachments--%>
             <dx:LayoutItem Caption="" ShowCaption="False" ColSpan="2" CaptionSettings-Location="Top">
                                                                         <LayoutItemNestedControlCollection >
@@ -666,7 +848,6 @@
                                                                                             KeyboardSupport="True" 
                                                                                             ClientInstanceName="AttachmentGrid" 
                                                                                             AutoPostBack="true" 
-                                                                                            OnDataBound="AttachmentGridBound"
                                                                                             Settings-HorizontalScrollBarMode="Auto" 
                                                                                             SettingsPager-Mode="ShowPager" 
                                                                                             SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
@@ -697,7 +878,7 @@
                                                                                                 <dx:GridViewDataTextColumn FieldName="ShortName" Caption="Name" Width="200px" VisibleIndex="3">
                                                                                                     <CellStyle Wrap="False"></CellStyle>
                                                                                                      <DataItemTemplate>
-                                                                                                        <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("ShortName") %>' Width="100%" Theme="Mulberry">
+                                                                                                        <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("ShortName") %>' Width="100%" Theme="iOS">
                                                                                                             <ClientSideEvents Click="onHyperLinkClick" />
                                                                                                         </dx:ASPxHyperLink>
                                                                                                      </DataItemTemplate>
@@ -722,7 +903,7 @@
                                                                                             <Templates>
                                                                                                 <FooterRow>
                                                                                                     
-                                                                                                    <dx:ASPxButton runat="server" ID="DeleteAttachmentButton" OnClick="DeleteAttachmentButton_Click" Theme="Mulberry" Text="Delete Crew Member"></dx:ASPxButton>
+                                                                                                    <dx:ASPxButton runat="server" ID="DeleteAttachmentButton" OnClick="DeleteAttachmentButton_Click" Theme="iOS" Text="Delete Crew Member"></dx:ASPxButton>
                                                                                                 </FooterRow>
                                                                                             </Templates>
                                                                                         </dx:ASPxGridView>      
@@ -746,7 +927,7 @@
                     <dx:LayoutItem>
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxPageControl runat="server">
+                                <dx:ASPxPageControl runat="server" ID="TabPageControl" Theme="iOS" ClientInstanceName="TabPageControl" ActiveTabIndex="0" EnableHierarchyRecreation="true" TabPosition="Right"  >
                                     <TabPages>
                                         <dx:TabPage Text="MEMBERS" ToolTip="Allows Input Of Jobstep Members">
                                             <ContentCollection>
@@ -756,7 +937,7 @@
                                                             <dx:ASPxGridView 
                                                                 ID="MemberGrid" 
                                                                 runat="server" 
-                                                                Theme="Mulberry" 
+                                                                Theme="iOS" 
                                                                 KeyFieldName="n_JobOtherID" 
                                                                 Width="98%"  
                                                                 KeyboardSupport="True" 
@@ -806,7 +987,7 @@
                                                                         <CellStyle Wrap="False"></CellStyle>
                                                                        <DataItemTemplate>
                                                                             <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="javascript:void(0)"
-                                                                                Text='<%# Eval("ObjectID") %>' Width="100%" Theme="Mulberry"> 
+                                                                                Text='<%# Eval("ObjectID") %>' Width="100%" Theme="iOS"> 
                                                                                 <ClientSideEvents Click="onHyperLinkClick" />
                                                                             </dx:ASPxHyperLink>
                                                                         </DataItemTemplate>
@@ -841,7 +1022,7 @@
                                                                 <Templates>
                                                                     <EditForm>
                                                                         <div style="padding: 4px 4px 3px 4px">
-                                                                            <dx:ASPxFormLayout Width="98%" Theme="Mulberry" ID="MemberEditLayout" runat="server">
+                                                                            <dx:ASPxFormLayout Width="98%" Theme="iOS" ID="MemberEditLayout" runat="server">
                                                                                 <Items>
                                                                                     <dx:LayoutGroup Name="MemberEditGroup" Caption="Item Edit"  ColCount="3">
                                                                                         <Items>
@@ -852,7 +1033,7 @@
                                                                                                                            Width="98%" 
                                                                                                                            MaxLength="254"
                                                                                                                            ClientInstanceName="txtMemberID"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "ObjectID" 
                                                                                                                            ValueField = "ObjectID"
@@ -868,7 +1049,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxCheckbox ID="txtMemberCompletedEdit" 
                                                                                                                          ClientInstanceName="txtMemberCompletedEdit"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          runat="server" 
                                                                                                                          Checked='<%# Convert.ToBoolean(Eval("b_Completed")) %>'>
                                                                                                         </dx:ASPxCheckbox>
@@ -880,7 +1061,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxDateEdit ID="txtMemberDateUsedEdit" 
                                                                                                                          ClientInstanceName="txtMemberDateUsedEdit"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          runat="server" 
                                                                                                                          TextField = "WorkDate" 
                                                                                                                          ValueField = "WorkDate"
@@ -902,7 +1083,7 @@
                                                                                                                            Width="98%" 
                                                                                                                            MaxLength="254"
                                                                                                                            ClientInstanceName="txtMemberDesc"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "ObjectDescription" 
                                                                                                                            ValueField = "ObjectDescription"
@@ -939,10 +1120,11 @@
                                                                 </Templates>
                                                                 <Templates>
                                                                     <FooterRow>
-                                                                        <dx:ASPxButton runat="server" ID="AddNewMemberButton" Theme="Mulberry" Text="Add New Member">
+                                                                        <asp:LinkButton runat="server" ID="AddNewMemBnt" OnClick="AddNewMemBnt_Click" Text="test button"></asp:LinkButton>
+                                                                        <dx:ASPxButton runat="server" ID="AddNewMemberButton" Theme="iOS" Text="Add New Member">
                                                                             <ClientSideEvents Click="ShowMemberPopup" />
                                                                         </dx:ASPxButton>
-                                                                        <dx:ASPxButton runat="server" ID="DeleteMemberButton" OnClick="DeleteItems_Click" Theme="Mulberry" Text="Delete Member"></dx:ASPxButton>
+                                                                        <dx:ASPxButton runat="server" ID="DeleteMemberButton" OnClick="DeleteItems_Click" Theme="iOS" Text="Delete Member"></dx:ASPxButton>
                                                                     </FooterRow>
                                                                 </Templates>
                                                             </dx:ASPxGridView>                                                    
@@ -989,7 +1171,7 @@
                                                             <dx:ASPxGridView 
                                                                 ID="CrewGrid" 
                                                                 runat="server" 
-                                                                Theme="Mulberry" 
+                                                                Theme="iOS" 
                                                                 KeyFieldName="RecordID" 
                                                                 Width="98%" 
                                                                 KeyboardSupport="True" 
@@ -1052,7 +1234,7 @@
                                                                     <dx:GridViewDataComboBoxColumn FieldName="CrewMemberTextID" Caption="User ID" Width="100px" VisibleIndex="6">
                                                                         <CellStyle Wrap="False"></CellStyle>
                                                                         <DataItemTemplate>
-                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("CrewMemberTextID") %>' Width="100%" Theme="Mulberry">
+                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("CrewMemberTextID") %>' Width="100%" Theme="iOS">
                                                                                 <ClientSideEvents Click="onHyperLinkClick" />
                                                                             </dx:ASPxHyperLink>
                                                                         </DataItemTemplate>
@@ -1188,7 +1370,7 @@
                                                                 <Templates>
                                                                     <EditForm>
                                                                         <div style="padding: 4px 4px 3px 4px">
-                                                                            <dx:ASPxFormLayout Width="98%" Theme="Mulberry" ID="CrewEditLayout" runat="server">
+                                                                            <dx:ASPxFormLayout Width="98%" Theme="iOS" ID="CrewEditLayout" runat="server">
                                                                                 <Items>
                                                                                     <dx:LayoutGroup Name="CrewEditGroup" Caption="Item Edit"  ColCount="4">
                                                                                         <Items>
@@ -1200,7 +1382,7 @@
                                                                                                                          ValueField="UserID" 
                                                                                                                          Value='<%# Bind("UserID") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="Username" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -1246,7 +1428,7 @@
                                                                                                                          ValueField="n_laborclassid" 
                                                                                                                          Value='<%# Bind("n_laborclassid") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="laborclassid" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -1276,7 +1458,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit  ID="txtCrewEstHrsEdit" 
                                                                                                                           ClientInstanceName="txtCrewEstHrsEdit"
-                                                                                                                          Theme="Mulberry"
+                                                                                                                          Theme="iOS"
                                                                                                                           runat="server" 
                                                                                                                           TextField = "EstHrs" 
                                                                                                                           ValueField = "EstHrs"
@@ -1296,7 +1478,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit ID="txtCrewActHrsEdit" 
                                                                                                                          ClientInstanceName="txtCrewActHrsEdit"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          runat="server" 
                                                                                                                          TextField = "ActualHrs" 
                                                                                                                          ValueField = "ActualHrs"
@@ -1317,7 +1499,7 @@
                                                                                                                            Width="98%" 
                                                                                                                            MaxLength="254"
                                                                                                                            ClientInstanceName="txtCrewNameEdit"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "CrewMemberName" 
                                                                                                                            ValueField = "CrewMemberName"
@@ -1336,7 +1518,7 @@
                                                                                                                          ValueField="RateType" 
                                                                                                                          Value='<%# Bind("RateType") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="Rate" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -1373,7 +1555,7 @@
                                                                                                                          ValueField="n_skillid" 
                                                                                                                          Value='<%# Bind("n_skillid") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="skillid" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -1406,7 +1588,7 @@
                                                                                                                          ValueField="n_paycodeid" 
                                                                                                                          Value='<%# Bind("n_paycodeid") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="paycodeid" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -1436,7 +1618,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxDateEdit ID="txtCrewDateWorkedEdit" 
                                                                                                                          ClientInstanceName="txtCrewDateWorkedEdit"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          runat="server" 
                                                                                                                          TextField = "WorkDate" 
                                                                                                                          ValueField = "WorkDate"
@@ -1476,11 +1658,11 @@
                                                                 </Templates>
                                                                 <Templates>
                                                                     <FooterRow>
-                                                                        <dx:ASPxButton runat="server" ID="AddNewCrewButton" Theme="Mulberry" Text="Add New Crew Member">
+                                                                        <dx:ASPxButton runat="server" ID="AddNewCrewButton" Theme="iOS" Text="Add New Crew Member">
                                                                             <ClientSideEvents Click="ShowCrewPopup" />
                                                                         </dx:ASPxButton>
                                                                             
-                                                                        <dx:ASPxButton runat="server" ID="DeleteCrewButton" OnClick="DeleteItems_Click" Theme="Mulberry" Text="Delete Crew Member"></dx:ASPxButton>
+                                                                        <dx:ASPxButton runat="server" ID="DeleteCrewButton" OnClick="DeleteItems_Click" Theme="iOS" Text="Delete Crew Member"></dx:ASPxButton>
                                                                     </FooterRow>
                                                                 </Templates>
                                                             </dx:ASPxGridView>
@@ -1628,7 +1810,7 @@
                                                     <dx:ASPxGridView
                                                         ID="PartGrid"
                                                         runat="server"
-                                                        Theme="Mulberry"
+                                                        Theme="iOS"
                                                         Width="98%"
                                                         KeyboardSupport="True"
                                                         ClientInstanceName="PartGrid"
@@ -1672,7 +1854,7 @@
                                                             <dx:GridViewDataTextColumn FieldName="b_nonstocked" ReadOnly="True" Caption="N/S" ToolTip="Nonstocked Yes/No?" Width="50px" VisibleIndex="1">
                                                                 <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
                                                                 <DataItemTemplate>
-                                                                    <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("b_nonstocked") %>' Width="100%" Theme="Mulberry">
+                                                                    <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("b_nonstocked") %>' Width="100%" Theme="iOS">
                                                                         <ClientSideEvents Click="onHyperLinkClick" />
                                                                     </dx:ASPxHyperLink>
                                                                 </DataItemTemplate>
@@ -1796,6 +1978,84 @@
                                                             <dx:GridViewDataTextColumn FieldName="bin" ReadOnly="True" Caption="Bin" ToolTip="M-PET.NET Jobstep Part Bin Location" Width="100px" VisibleIndex="22">
                                                                 <CellStyle Wrap="False"></CellStyle>
                                                             </dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_jobpartid" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="1">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_masterpartid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="2"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_storeroomid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="3"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="b_nonstocked" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="4"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="miscrefnum" ShowInCustomizationForm="True" VisibleIndex="5"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="nspartid" ShowInCustomizationForm="True" VisibleIndex="6"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="nspartcost" ShowInCustomizationForm="True" VisibleIndex="7"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="NSMfgPartID" ShowInCustomizationForm="True" VisibleIndex="8"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="NSPartDescr" ShowInCustomizationForm="True" VisibleIndex="9"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="qtyplanned" ShowInCustomizationForm="True" VisibleIndex="10"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="qtyused" ShowInCustomizationForm="True" VisibleIndex="11"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_MfgPartID" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="12"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="DMRKey" ShowInCustomizationForm="True" VisibleIndex="13"></dx:GridViewDataTextColumn>
+<dx:GridViewDataDateColumn FieldName="WorkDate" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="14"></dx:GridViewDataDateColumn>
+<dx:GridViewDataTextColumn FieldName="storeroomid" ShowInCustomizationForm="True" VisibleIndex="15"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="cWorkDate" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="16"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="time_batchid" ShowInCustomizationForm="True" VisibleIndex="17"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="xactionnum" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="18"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_partatlocid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="19"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_FundSrcCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="20">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="FundSrcCodeID" ShowInCustomizationForm="True" VisibleIndex="21"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_WorkOrderCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="22">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" ShowInCustomizationForm="True" VisibleIndex="23"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_WorkOpID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="24">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="WorkOpID" ShowInCustomizationForm="True" VisibleIndex="25"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_OrganizationCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="26">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="OrganizationCodeID" ShowInCustomizationForm="True" VisibleIndex="27"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_FundingGroupCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="28">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" ShowInCustomizationForm="True" VisibleIndex="29"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_ObjectCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="30">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="ObjectCodeID" ShowInCustomizationForm="True" VisibleIndex="31"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_ControlSectionID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="32">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="ControlSectionID" ShowInCustomizationForm="True" VisibleIndex="33"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_EquipmentNumberID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="34">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="EquipmentNumberID" ShowInCustomizationForm="True" VisibleIndex="35"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="Entered From" ShowInCustomizationForm="True" VisibleIndex="36"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_StoresIssueID" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="37"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_StoresIssueItemid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="38"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="aisle" ShowInCustomizationForm="True" VisibleIndex="39"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="shelf" ShowInCustomizationForm="True" VisibleIndex="40"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="bin" ShowInCustomizationForm="True" VisibleIndex="41"></dx:GridViewDataTextColumn>
                                                         </Columns>
                                                         <SettingsBehavior
                                                             EnableRowHotTrack="True"
@@ -1894,9 +2154,21 @@
                                                                     <EditForm Width="600px" Modal="true" />
                                                                 </SettingsPopup>
                                                                 <Templates>
+                                                                    <FooterRow>
+                                                                    <dx:ASPxButton runat="server" 
+                                                                        ID="AddNewPartButton" 
+                                                                        OnClick="AddNewItemButton_Click" Theme="iOS" 
+                                                                        Text="Add New Part">
+                                                        
+                                                                    </dx:ASPxButton>
+                                                                    <dx:ASPxButton runat="server" 
+                                                                        ID="DeletePartButton" OnClick="DeleteItems_Click" 
+                                                                        Theme="iOS" Text="Delete Part"></dx:ASPxButton>
+                                                                
+</FooterRow>
                                                                     <EditForm>
                                                                         <div style="padding: 4px 4px 3px 4px; width: 600px">
-                                                                            <dx:ASPxFormLayout Width="100%" Theme="Mulberry" ID="PartEditLayout" runat="server">
+                                                                            <dx:ASPxFormLayout Width="100%" Theme="iOS" ID="PartEditLayout" runat="server">
                                                                                 <Items>
                                                                                     <dx:LayoutGroup Name="PartEditGroup" Caption="Item Edit"  ColCount="2">
                                                                                         <Items>
@@ -1907,7 +2179,7 @@
                                                                                                                            Width="100%" 
                                                                                                                            MaxLength="50"
                                                                                                                            ClientInstanceName="txtPartIDEdit"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "nspartid" 
                                                                                                                            ValueField = "nspartid"
@@ -1924,7 +2196,7 @@
                                                                                                                            Width="100%" 
                                                                                                                            MaxLength="254"
                                                                                                                            ClientInstanceName="txtPartDescriptionEdit"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "NSPartDescr" 
                                                                                                                            ValueField = "NSPartDescr"
@@ -1942,7 +2214,7 @@
                                                                                                                            Width="100%" 
                                                                                                                            MaxLength="254"
                                                                                                                            ClientInstanceName="txtPartMiscRefEdit"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "miscrefnum" 
                                                                                                                            ValueField = "miscrefnum"
@@ -1960,7 +2232,7 @@
                                                                                                                            Width="100%" 
                                                                                                                            MaxLength="50"
                                                                                                                            ClientInstanceName="txtPartMfgPartId"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "NSMfgPartID" 
                                                                                                                            ValueField = "NSMfgPartID"
@@ -1976,7 +2248,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit  ID="txtPartEstQty" 
                                                                                                                           ClientInstanceName="txtPartEstQty"
-                                                                                                                          Theme="Mulberry"
+                                                                                                                          Theme="iOS"
                                                                                                                           runat="server" 
                                                                                                                           TextField = "qtyplanned" 
                                                                                                                           ValueField = "qtyplanned"
@@ -2002,7 +2274,7 @@
                                                                                                                          ValueType="System.Int32" 
                                                                                                                          ValueField="n_partatlocid" 
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="Storeroom" 
                                                                                                                          Value='<%# Bind("n_partatlocid") %>'
                                                                                                                          DisplayFormatString="{0}"
@@ -2031,7 +2303,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit ID="txtPartActQty" 
                                                                                                                          ClientInstanceName="txtPartActQty"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          runat="server" 
                                                                                                                          TextField = "qtyused" 
                                                                                                                          ValueField = "qtyused"
@@ -2052,7 +2324,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxDateEdit ID="txtPartDateUsedEdit" 
                                                                                                                          ClientInstanceName="txtPartDateUsedEdit"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          Width="100%"        
                                                                                                                          runat="server" 
                                                                                                                          TextField = "WorkDate" 
@@ -2073,7 +2345,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit  ID="txtPartRateEdit" 
                                                                                                                           ClientInstanceName="txtPartRateEdit"
-                                                                                                                          Theme="Mulberry"
+                                                                                                                          Theme="iOS"
                                                                                                                           runat="server" 
                                                                                                                           TextField = "nspartcost" 
                                                                                                                           ValueField = "nspartcost"
@@ -2117,10 +2389,10 @@
                                                                 </Templates>
                                                         <Templates>
                                                                 <FooterRow>
-                                                                    <dx:ASPxButton runat="server" ID="AddNewPartButton" OnClick="AddNewItemButton_Click" Theme="Mulberry" Text="Add New Part">
+                                                                    <dx:ASPxButton runat="server" ID="AddNewPartButton" OnClick="AddNewItemButton_Click" Theme="iOS" Text="Add New Part">
                                                         
                                                                     </dx:ASPxButton>
-                                                                    <dx:ASPxButton runat="server" ID="DeletePartButton" OnClick="DeleteItems_Click" Theme="Mulberry" Text="Delete Part"></dx:ASPxButton>
+                                                                    <dx:ASPxButton runat="server" ID="DeletePartButton" OnClick="DeleteItems_Click" Theme="iOS" Text="Delete Part"></dx:ASPxButton>
                                                                 </FooterRow>
                                                          </Templates>
                                                     </dx:ASPxGridView>      
@@ -2252,7 +2524,7 @@
                                                             <dx:ASPxGridView 
                                                                 ID="EquipGrid" 
                                                                 runat="server" 
-                                                                Theme="Mulberry" 
+                                                                Theme="iOS" 
                                                                 KeyFieldName="n_JobEquipmentID" 
                                                                 Width="98%" 
                                                                 KeyboardSupport="True" 
@@ -2302,7 +2574,7 @@
                                                                     <dx:GridViewDataTextColumn FieldName="JobEquipID" ReadOnly="True" Caption="Equip. ID" ToolTip="Jobstep Equipment ID" SortOrder="Ascending" Width="200px" VisibleIndex="5">
                                                                         <CellStyle Wrap="False"></CellStyle>
                                                                             <DataItemTemplate>
-                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("JobEquipID") %>' Width="100%" Theme="Mulberry">
+                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" NavigateUrl="javascript:void(0)" runat="server" Text='<%# Eval("JobEquipID") %>' Width="100%" Theme="iOS">
                                                                                 <ClientSideEvents Click="onHyperLinkClick" />
                                                                             </dx:ASPxHyperLink>
                                                                         </DataItemTemplate>
@@ -2374,7 +2646,7 @@
                                                                 <Templates>
                                                                     <EditForm>
                                                                         <div style="padding: 4px 4px 3px 4px; width: 600px">
-                                                                            <dx:ASPxFormLayout Width="98%" Theme="Mulberry" ID="EquipEditLayout" runat="server">
+                                                                            <dx:ASPxFormLayout Width="98%" Theme="iOS" ID="EquipEditLayout" runat="server">
                                                                                 <Items>
                                                                                     <dx:LayoutGroup Name="EquipEditGroup" Caption="Item Edit"  ColCount="4">
                                                                                         <Items>
@@ -2385,7 +2657,7 @@
                                                                                                                            Width="98%" 
                                                                                                                            MaxLength="254"
                                                                                                                            ClientInstanceName="txtEquipIDEdit"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "JobEquipID" 
                                                                                                                            ValueField = "JobEquipID"
@@ -2401,7 +2673,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit  ID="txtOtherRateEdit" 
                                                                                                                           ClientInstanceName="txtOtherRateEdit"
-                                                                                                                          Theme="Mulberry"
+                                                                                                                          Theme="iOS"
                                                                                                                           runat="server" 
                                                                                                                           TextField = "EquipCost" 
                                                                                                                           ValueField = "EquipCost"
@@ -2421,7 +2693,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit  ID="txtOtherStartMtrEdit" 
                                                                                                                           ClientInstanceName="txtOtherStartMtrEdit"
-                                                                                                                          Theme="Mulberry"
+                                                                                                                          Theme="iOS"
                                                                                                                           runat="server" 
                                                                                                                           TextField = "StartMeter" 
                                                                                                                           ValueField = "StartMeter"
@@ -2441,7 +2713,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit  ID="txtOtehrEndMtrEdit" 
                                                                                                                           ClientInstanceName="txtOtehrEndMtrEdit"
-                                                                                                                          Theme="Mulberry"
+                                                                                                                          Theme="iOS"
                                                                                                                           runat="server" 
                                                                                                                           TextField = "EndMeter" 
                                                                                                                           ValueField = "EndMeter"
@@ -2463,7 +2735,7 @@
                                                                                                                            Width="98%"
                                                                                                                            MaxLength="254"
                                                                                                                            ClientInstanceName="txtEquipEdit"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "EquipDescr" 
                                                                                                                            ValueField = "EquipDescr"
@@ -2479,7 +2751,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit  ID="txtEquipEstUnitsEdit" 
                                                                                                                           ClientInstanceName="txtEquipEstUnitsEdit"
-                                                                                                                          Theme="Mulberry"
+                                                                                                                          Theme="iOS"
                                                                                                                           runat="server" 
                                                                                                                           TextField = "qtyplanned" 
                                                                                                                           ValueField = "qtyplanned"
@@ -2499,7 +2771,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit ID="txtEquipActUnitsEdit" 
                                                                                                                          ClientInstanceName="txtEquipActUnitsEdit"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          runat="server" 
                                                                                                                          TextField = "qtyused" 
                                                                                                                          ValueField = "qtyused"
@@ -2518,7 +2790,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxDateEdit ID="txtEquipDateUsedEdit" 
                                                                                                                          ClientInstanceName="txtEquipDateUsedEdit"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          runat="server" 
                                                                                                                          TextField = "WorkDate" 
                                                                                                                          ValueField = "WorkDate"
@@ -2537,7 +2809,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxButtonEdit ID="txtEquipMiscRefEdit" 
                                                                                                                            ClientInstanceName="txtEquipMiscRefEdit"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server" 
                                                                                                                            TextField = "MiscellaneousReference" 
                                                                                                                            ValueField = "MiscellaneousReference"
@@ -2574,10 +2846,10 @@
                                                                 </Templates>
                                                                 <Templates>
                                                                 <FooterRow>
-                                                                    <dx:ASPxButton runat="server" ID="AddNewEquipButton" OnClick="AddNewItemButton_Click" Theme="Mulberry" Text="Add New Equipment">
+                                                                    <dx:ASPxButton runat="server" ID="AddNewEquipButton" OnClick="AddNewItemButton_Click" Theme="iOS" Text="Add New Equipment">
                                                                         <ClientSideEvents Click="ShowEquipPopup" />
                                                                     </dx:ASPxButton>
-                                                                    <dx:ASPxButton runat="server" ID="DeleteEquipButton" OnClick="DeleteItems_Click" Theme="Mulberry" Text="Delete Equipment"></dx:ASPxButton>
+                                                                    <dx:ASPxButton runat="server" ID="DeleteEquipButton" OnClick="DeleteItems_Click" Theme="iOS" Text="Delete Equipment"></dx:ASPxButton>
                                                                 </FooterRow>
                                                                 </Templates>
                                                             </dx:ASPxGridView>                                                    
@@ -2635,6 +2907,7 @@
                 </Items>
             </dx:TabbedLayoutGroup> <%--Tabbed Grids for adding Parts--%>
         </Items> <%--Form Layout Items--%>
+        <SettingsItems Width="100%" />
     </dx:ASPxFormLayout>
 
 <dx:ASPxPopupControl ID="AddCrewPopup" ClientInstanceName="AddCrewPopup" ShowCloseButton="true" ShowHeader="false" HeaderText=""
@@ -2654,7 +2927,7 @@
                                                                             <dx:ASPxGridView 
                                                                                 ID="CrewLookupGrid" 
                                                                                 runat="server" 
-                                                                                Theme="Mulberry" 
+                                                                                Theme="iOS" 
                                                                                 KeyFieldName="nUserID" 
                                                                                 Width="98%" 
                                                                                 KeyboardSupport="True" 
@@ -2837,7 +3110,7 @@
                                         <dx:ASPxGridView 
                                             ID="EquipLookupGrid" 
                                             runat="server" 
-                                            Theme="Mulberry" 
+                                            Theme="iOS" 
                                             KeyFieldName="n_objectid" 
                                             Width="600px" 
                                             KeyboardSupport="True" 
@@ -3008,7 +3281,7 @@
                                         <dx:ASPxGridView 
                                             ID="MemberLookupGrid" 
                                             runat="server" 
-                                            Theme="Mulberry" 
+                                            Theme="iOS" 
                                             KeyFieldName="n_objectid" 
                                             Width="600px" 
                                             KeyboardSupport="True" 
@@ -3172,7 +3445,7 @@
                                         <dx:ASPxGridView 
                                             ID="PartLookupGrid" 
                                             runat="server" 
-                                            Theme="Mulberry" 
+                                            Theme="iOS" 
                                             KeyFieldName="n_masterpartid" 
                                             Width="600px" 
                                             KeyboardSupport="True" 
@@ -3464,7 +3737,7 @@
                                                                             <dx:ASPxGridView 
                                                                                 ID="CrewLaborGridLookup" 
                                                                                 runat="server" 
-                                                                                Theme="Mulberry" 
+                                                                                Theme="iOS" 
                                                                                 KeyFieldName="n_laborclassid" 
                                                                                 Width="600px"
                                                                                 KeyboardSupport="True" 
@@ -3579,7 +3852,7 @@
                                                                             <dx:ASPxGridView 
                                                                                 ID="CrewGroupGridLookup" 
                                                                                 runat="server" 
-                                                                                Theme="Mulberry" 
+                                                                                Theme="iOS" 
                                                                                 KeyFieldName="n_groupid" 
                                                                                 Width="600px"
                                                                                 KeyboardSupport="True" 
