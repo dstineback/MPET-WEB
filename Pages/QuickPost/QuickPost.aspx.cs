@@ -2665,20 +2665,152 @@ namespace Pages.QuickPost
         #region Post Job
         public void PostPlanJob()
         {
-            //Get Values
-            var jobKey = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-            var jobStepKey = Convert.ToInt32(HttpContext.Current.Session["JobStepID"]);
+            try
+            {
+                //Save Job Details
+                if (_oJob.Update(jobId,
+                    workDesc,
+                    JobType.Corrective,
+                    JobAgainstType.MaintenanceObjects,
+                    objectAgainstId,
+                    actionPriority,
+                    reasonCode,
+                    notes,
+                    routeTo,
+                    true,
+                    requestDate,
+                    requestPriority,
+                    requestor,
+                    0,
+                    0,
+                    gpsX,
+                    gpsY,
+                    gpsZ,
+                    unitOne,
+                    unitTwo,
+                    unitThree,
+                    -1,
+                    mobileEquip,
+                    _oJob.NullDate,
+                    routeTo,
+                    -1,
+                    -1,
+                    workOp,
+                    -1,
+                    subAssemblyID,
+                    stateRouteId,
+                    milepost,
+                    milepostTo,
+                    mpIncreasing,
+                    additionalDamage,
+                    percentOverage,
+                    _oLogon.UserID,
+                    ref AssignedJobID))
+                {
+                    //Update Job Step
+                    if (!_oJobStep.Update(jobStepId,
+                        jobStepNumber,
+                        jobStepConcurNumber,
+                        jobStepFollowStepNumber,
+                        workDesc,
+                        jobStatus,
+                        jobLaborClass,
+                        postNotes,
+                        notes,
+                        -1,
+                        jobGroup,
+                        jobOutcome,
+                        jobShift,
+                        jobSupervisor,
+                        jobActualDt,
+                        jobActualLen,
+                        jobEstimatedDt,
+                        jobEstimatedLen,
+                        jobRemainingDt,
+                        jobRemainingLen,
+                        startDate,
+                        compDate,
+                        jobReturnWithin,
+                        fundSource,
+                        subAssemblyID,
+                        requestPriority,
+                        reasonCode,
+                        _oLogon.UserID,
+                        EditingTimeBachId,
+                        EditingTiemBatchItemId))
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Updating Job Step -" + _oJobStep.LastError);
+                    }
 
+                    //Save Route & Completion Information
+                    if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Updating Route To And Completion Information -" + _oJobStep.LastError);
+                    }
+
+                    if (
+                        !_oJob.UpdateJobCosting(
+                            Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
+                            costCodeId,
+                            fundSource,
+                            workOrder,
+                            workOp,
+                            orgCode,
+                            fundingGroup,
+                            equipNumber,
+                            controlSection,
+                            _oLogon.UserID))
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Updating Job Costing -" + _oJob.LastError);
+                    }
+                    if(!_oJobStep.UpdateJobstepCosting(jobID, jobStepId,
+                             costCodeId,
+                             fundSource,
+                             workOrder,
+                             workOp,
+                             orgCode,
+                             fundingGroup,
+                             equipNumber,
+                             controlSection,
+                             _oLogon.UserID))
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Updating Job Costing -" + _oJob.LastError);
+                    }
+
+                    if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Updating Route To And Completion Information -" + _oJobStep.LastError);
+                    }
+                }
+            } catch
+            {
+                throw new SystemException("Could not Update Job" + _oJob);
+            }
+
+                    //Get Values
+                    var jobKey = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
+            var jobStepKey = Convert.ToInt32(HttpContext.Current.Session["JobStepID"]);
+            #region Post functions
             //Check Keys
             if ((jobKey > 0) && (jobStepKey > -2))
             {
                 //Get Post Date
-                if ((jobPostDate.Value != null) && (jobPostDate.Value.ToString() != "") && ComboOutcomeCode.Value != null)
+                if ((TxtWorkCompDate.Value != null) && (TxtWorkCompDate.Value.ToString() != "") && ComboOutcomeCode.Value != null)
                 {
                     //Check Outcome Code
 
                     //Get Post Date
-                    var postDate = Convert.ToDateTime(jobPostDate.Value.ToString());
+                    var postDate = Convert.ToDateTime(TxtWorkCompDate.Value.ToString());
 
                     //Get Outcome Code
                     var outcomeId = Convert.ToInt32(ComboOutcomeCode.Value.ToString());
@@ -2761,6 +2893,7 @@ namespace Pages.QuickPost
             }
 
         }
+        #endregion
         #endregion
         #endregion
 

@@ -10,6 +10,7 @@
         <asp:LinkButton runat="server" class="mainButton" ID="WorkRequestListButton" href="Pages/WorkRequests/RequestsList.aspx">Job Request List</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="plannedJObsButton" href="Pages/PlannedJobs/PlannedJobsList.aspx">Planned Jobs list</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="jobHistoryButton" href="Pages/History/JobsHistoryList.aspx">Job History</asp:LinkButton>
+        <asp:LinkButton runat="server" class="mainButton" ID="QuickPost" href="Pages/QuickPost/QuickPost.aspx">Quick Post</asp:LinkButton>
         
         
 

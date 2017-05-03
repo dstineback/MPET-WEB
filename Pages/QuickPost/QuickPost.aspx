@@ -236,23 +236,28 @@
     <dx:ASPxHyperLink ID="myJobsBackLink" runat="server" Font-Size="16" Theme="iOS" Text="MY JOBS" NavigateUrl="~/Pages/PlannedJobs/myJobs.aspx" />
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxHiddenField ID="MultiGrid" ViewStateMode="Enabled"  ClientInstanceName="MultiGrid" runat="server"></dx:ASPxHiddenField>
-    <dx:ASPxFormLayout runat="server" ColCount="3" 
-         Width="95%">
+    <dx:ASPxFormLayout runat="server" 
+         ID="WorkRequestDesclayout" RequiredMark="" 
+         Width="98%">
         <Items>
-            <dx:LayoutItem Caption="Job Description" ColSpan="3">
-                <LayoutItemNestedControlCollection>
-                    <dx:LayoutItemNestedControlContainer runat="server">
-                        <dx:ASPxTextBox runat="server" Theme="iOS" ID="txtWorkDescription" ClientInstanceName="txtDescription" Width="95%" MaxLength="254" Height="50px">
-                            <ValidationSettings SetFocusOnError="true" Display="Dynamic" ErrorDisplayMode="Text">
-                                <RequiredField IsRequired="true" />
-                            </ValidationSettings>
-                        </dx:ASPxTextBox>
-                    </dx:LayoutItemNestedControlContainer>
-                </LayoutItemNestedControlCollection>
-                <CaptionSettings Location="Top"></CaptionSettings>
-            </dx:LayoutItem> <%--Job Description--%>           
-            <dx:LayoutGroup Caption="Object/Asset" ColCount="3"
-                Name="Object/Asset" ColSpan="3">
+            <dx:LayoutGroup ColCount="2" Caption="" Name="Job Description">
+                <Items>
+                <dx:LayoutItem Caption="Job Description" ColSpan="2">
+                    <LayoutItemNestedControlCollection>
+                        <dx:LayoutItemNestedControlContainer runat="server">
+                            <dx:ASPxTextBox runat="server" Theme="iOS" ID="txtWorkDescription" ClientInstanceName="txtDescription" Width="95%" MaxLength="254" Height="50px">
+                                <ValidationSettings SetFocusOnError="true" Display="Dynamic" ErrorDisplayMode="Text">
+                                    <RequiredField IsRequired="true" />
+                                </ValidationSettings>
+                            </dx:ASPxTextBox>
+                        </dx:LayoutItemNestedControlContainer>
+                    </LayoutItemNestedControlCollection>
+                    <CaptionSettings Location="Top"></CaptionSettings>
+                </dx:LayoutItem> <%--Job Description--%>           
+                </Items>
+            </dx:LayoutGroup>
+            <dx:LayoutGroup Caption="Object/Asset" ColCount="2"
+                Name="Object/Asset">
                 <Items>
                     <dx:LayoutItem Caption="ID" HelpText="Object ID" Name="ObjectID" 
                         ColSpan="2" RequiredMarkDisplayMode="Required">
@@ -312,7 +317,7 @@
                         <CaptionSettings Location="Top"></CaptionSettings>
                     </dx:LayoutItem>
                     <dx:LayoutItem Caption="Description:" Name="ObjectDescription"
-                        ColSpan="3">
+                        ColSpan="2">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxTextBox runat="server" ID="txtObjectDescription" ClientInstanceName="txtObjectDescription" Height="100px" Width="100%" MaxLength="254" ReadOnly="true" Theme="iOS"></dx:ASPxTextBox>
@@ -350,17 +355,24 @@
                     </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup> <%--Object Group--%>
-            <dx:LayoutGroup Caption="Job Details" ColCount="3"
-                Name="Job Details" ColSpan="3">
+            <dx:LayoutGroup Caption="Job Details" ColCount="2"
+                Name="Job Details">
                 <Items>
                     <dx:LayoutItem Caption="Completed By" Name="CompletedBy">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                               <dx:ASPxComboBox ID="ComboCompletedBy" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
+                               <dx:ASPxComboBox ID="ComboCompletedBy" 
+                                    runat="server" EnableCallbackMode="true" CallbackPageSize="10"
                                                     ValueType="System.String" ValueField="UserID"
                                                     OnItemsRequestedByFilterCondition="ComboCompletedBy_OnItemsRequestedByFilterCondition_SQL"
-                                                    OnItemRequestedByValue="ComboCompletedBy_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                    Width="100%" DropDownStyle="DropDown" Theme="iOS" TextField="username" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboCompletedBy">
+                                                    
+                                    OnItemRequestedByValue="ComboCompletedBy_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
+                                                    Width="53%" 
+                                    DropDownStyle="DropDown" Theme="iOS" 
+                                    TextField="username" 
+                                    DropDownButton-Enabled="True" 
+                                    AutoPostBack="False" 
+                                    ClientInstanceName="ComboCompletedBy">
                                                                                                
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="UserID" Visible="False" />
@@ -376,7 +388,7 @@
                     <dx:LayoutItem Caption="Job Length" Name="JobLength">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxTextBox runat="server" ID="_E43"></dx:ASPxTextBox>
+                                <dx:ASPxTextBox runat="server" ID="_E43" Width="100%" Theme="iOS"></dx:ASPxTextBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
 
@@ -397,7 +409,7 @@
 
                         <CaptionSettings Location="Top"></CaptionSettings>
                     </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Completed Date" Name="completedDate">
+                    <dx:LayoutItem Caption="Completed Date" Name="completedDate" Width="100%">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxDateEdit ID="TxtWorkCompDate" 
@@ -462,7 +474,7 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Priority" Name="Priority">
+                    <dx:LayoutItem Caption="Priority" Name="Priority" Width="100%">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxComboBox ID="ComboPriority" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
@@ -484,7 +496,7 @@
                     <dx:LayoutItem Caption="Element ID" Name="ElementID">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox runat="server" ID="_E15"></dx:ASPxComboBox>
+                                <dx:ASPxComboBox runat="server" ID="_E15" Width="100%" Theme="iOS"></dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
@@ -496,7 +508,7 @@
                                                 ValueType="System.String" ValueField="n_StateRouteID"
                                                 OnItemsRequestedByFilterCondition="comboHwyRoute_OnItemsRequestedByFilterCondition_SQL"
                                                 OnItemRequestedByValue="comboHwyRoute_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                Width="200px" DropDownStyle="DropDown" Theme="iOS" TextField="StateRouteID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="comboHwyRoute">
+                                                Width="100%" DropDownStyle="DropDown" Theme="iOS" TextField="StateRouteID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="comboHwyRoute">
                                                                                                
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="n_StateRouteID" Visible="False" />
@@ -515,7 +527,7 @@
                                                 ValueType="System.String" ValueField="n_MilePostDirectionID"
                                                 OnItemsRequestedByFilterCondition="comboMilePostDir_OnItemsRequestedByFilterCondition_SQL"
                                                 OnItemRequestedByValue="comboMilePostDir_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                Width="200px" DropDownStyle="DropDown" Theme="iOS" TextField="MilePostDirectionID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="comboMilePostDir">
+                                                Width="100%" DropDownStyle="DropDown" Theme="iOS" TextField="MilePostDirectionID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="comboMilePostDir">
                                                                                                
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="n_MilePostDirectionID" Visible="False" />
@@ -533,7 +545,7 @@
                                 <dx:ASPxTextBox ID="txtMilepost" 
                                                 ClientInstanceName="txtMilepost"
                                                 Theme="iOS"
-                                                Width="200px" 
+                                                Width="100%" 
                                                 runat="server">
                                     <MaskSettings Mask="<0..99999g>.<0000..9999>" IncludeLiterals="DecimalSymbol" />
                                 </dx:ASPxTextBox>
@@ -547,7 +559,7 @@
                                 <dx:ASPxTextBox ID="txtMilepostTo" 
                                                 ClientInstanceName="txtMilepostTo"
                                                 Theme="iOS"
-                                                Width="200" 
+                                                Width="100%" 
                                                 runat="server">
                                     <MaskSettings Mask="<0..99999g>.<0000..9999>" IncludeLiterals="DecimalSymbol" />
                                 </dx:ASPxTextBox>
@@ -558,7 +570,9 @@
                     <dx:LayoutItem Caption="Sub Assy" Name="SubAssy">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox runat="server" ID="_E20"></dx:ASPxComboBox>
+                                <dx:ASPxComboBox runat="server" ID="_E20" Width="100%" Theme="iOS"
+                                    
+                                    ></dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
@@ -567,7 +581,7 @@
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxCheckBox runat="server" CheckState="Unchecked"
-                                    ID="_E25"></dx:ASPxCheckBox>
+                                    ID="_E25" Theme="iOS"></dx:ASPxCheckBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
@@ -582,27 +596,12 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Completion Date:">
-                                        <LayoutItemNestedControlCollection>
-                                            <dx:LayoutItemNestedControlContainer>
-                                                <dx:ASPxDateEdit ID="jobPostDate"
-                                                    ClientInstanceName="jobPostDate"
-                                                    Theme="iOS"
-                                                    Width="300px"
-                                                    runat="server">
-                                                    <ValidationSettings SetFocusOnError="True" Display="Dynamic" ErrorDisplayMode="Text">
-                                                        <RequiredField IsRequired="True" />
-                                                    </ValidationSettings>
-                                                </dx:ASPxDateEdit>
-                                            </dx:LayoutItemNestedControlContainer>
-                                        </LayoutItemNestedControlCollection>
-                                        <CaptionSettings Location="Top" />
-                                    </dx:LayoutItem>
+                   
                     <dx:LayoutItem Name="PostDefaults" Caption="Post Defaults:" HorizontalAlign="Center" ShowCaption="False">
                                             <LayoutItemNestedControlCollection >
                                                 <dx:LayoutItemNestedControlContainer>
                                                 <dx:ASPxCheckBox ID="chkPostDefaults" runat="server" Text="Post Defaults"
-                                                            ValueField="ID" TextField="Post Defaults" RepeatColumns="3" RepeatLayout="Table" RepeatDirection="Horizontal">
+                                                            ValueField="ID" Theme="iOS" TextField="Post Defaults" RepeatColumns="3" RepeatLayout="Table" RepeatDirection="Horizontal">
                                                         </dx:ASPxCheckBox>
                                                 </dx:LayoutItemNestedControlContainer>
                                             </LayoutItemNestedControlCollection>
@@ -610,8 +609,8 @@
                                         </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup> <%--Job Details--%>
-            <dx:LayoutGroup Caption="Cost Information" ColCount="3"
-                Name="costInformation" ColSpan="3">
+            <dx:LayoutGroup Caption="Cost Information" ColCount="2"
+                Name="costInformation">
                 <Items>
                     <dx:LayoutItem Caption="Cost Code" Name="costCode">
                         <LayoutItemNestedControlCollection>
@@ -620,7 +619,7 @@
                                                 ValueType="System.String" ValueField="n_costcodeid"
                                                 OnItemsRequestedByFilterCondition="ComboCostCode_OnItemsRequestedByFilterCondition_SQL"
                                                 OnItemRequestedByValue="ComboCostCode_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                Width="450px" DropDownStyle="DropDown" Theme="iOS" TextField="CostCodeID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboCostCode">
+                                                Width="100%" DropDownStyle="DropDown" Theme="iOS" TextField="CostCodeID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboCostCode">
                                                                                               
                                 <Columns>
                                     <dx:ListBoxColumn FieldName="n_costcodeid" Visible="False" />
@@ -639,7 +638,7 @@
                                                 ValueType="System.String" ValueField="n_FundSrcCodeID"
                                                 OnItemsRequestedByFilterCondition="ComboFundSource_OnItemsRequestedByFilterCondition_SQL"
                                                 OnItemRequestedByValue="ComboFundSource_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                Width="450px" DropDownStyle="DropDown" Theme="iOS" TextField="FundSrcCodeID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboFundSource">
+                                                Width="100%" DropDownStyle="DropDown" Theme="iOS" TextField="FundSrcCodeID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboFundSource">
                                                                                                
                                 <Columns>
                                     <dx:ListBoxColumn FieldName="n_FundSrcCodeID" Visible="False" />
@@ -658,7 +657,7 @@
                                                     ValueType="System.String" ValueField="n_WorkOrderCodeID"
                                                     OnItemsRequestedByFilterCondition="ComboWorkOrder_OnItemsRequestedByFilterCondition_SQL"
                                                     OnItemRequestedByValue="ComboWorkOrder_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                    Width="450px" DropDownStyle="DropDown" Theme="iOS" TextField="WorkOrderCodeID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboWorkOrder">
+                                                    Width="100%" DropDownStyle="DropDown" Theme="iOS" TextField="WorkOrderCodeID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboWorkOrder">
                                                                                                
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="n_WorkOrderCodeID" Visible="False" />
@@ -677,7 +676,7 @@
                                                     ValueType="System.String" ValueField="n_WorkOpID"
                                                     OnItemsRequestedByFilterCondition="ComboWorkOp_OnItemsRequestedByFilterCondition_SQL"
                                                     OnItemRequestedByValue="ComboWorkOp_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                    Width="450px" DropDownStyle="DropDown" Theme="iOS" TextField="WorkOpID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboWorkOp">
+                                                    Width="100%" DropDownStyle="DropDown" Theme="iOS" TextField="WorkOpID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboWorkOp">
                                                                                                
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="n_WorkOpID" Visible="False" />
@@ -767,7 +766,7 @@
                     </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup> <%--Cost Information--%>
-            <dx:LayoutItem Caption="Post Notes" ColSpan="3" Name="PostNotes" RowSpan="2">
+            <dx:LayoutItem Caption="Post Notes" Name="PostNotes" RowSpan="2">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
                         <dx:ASPxMemo ID="txtPostNotes" Native="True" Height="400px" Width="100%" MaxLength="8000"
@@ -778,7 +777,7 @@
                 </LayoutItemNestedControlCollection>
                 <CaptionSettings Location="Top" />
             </dx:LayoutItem> <%--Post Notes--%>
-            <dx:LayoutItem Caption="Additional Information" ColSpan="3"
+            <dx:LayoutItem Caption="Additional Information"
                 Name="AddInfo" RowSpan="2">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
@@ -834,7 +833,7 @@
                 </LayoutItemNestedControlCollection>
                 <CaptionSettings Location="Top" />
             </dx:LayoutItem> <%--Attachments--%>
-            <dx:LayoutItem Caption="" ShowCaption="False" ColSpan="2" CaptionSettings-Location="Top">
+            <dx:LayoutItem Caption="" ShowCaption="False" CaptionSettings-Location="Top">
                                                                         <LayoutItemNestedControlCollection >
                                                                             <dx:LayoutItemNestedControlContainer>
                                                                                 <asp:UpdatePanel ID="UpdatePanel1" runat="server" OnUnload="UpdatePanel_Unload">
@@ -922,7 +921,7 @@
                                                                     </dx:LayoutItem>
 
 
-            <dx:TabbedLayoutGroup ColSpan="3">
+            <dx:TabbedLayoutGroup>
                 <Items>
                     <dx:LayoutItem>
                         <LayoutItemNestedControlCollection>
@@ -2056,6 +2055,162 @@
 <dx:GridViewDataTextColumn FieldName="aisle" ShowInCustomizationForm="True" VisibleIndex="39"></dx:GridViewDataTextColumn>
 <dx:GridViewDataTextColumn FieldName="shelf" ShowInCustomizationForm="True" VisibleIndex="40"></dx:GridViewDataTextColumn>
 <dx:GridViewDataTextColumn FieldName="bin" ShowInCustomizationForm="True" VisibleIndex="41"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_jobpartid" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="1">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_masterpartid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="2"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_storeroomid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="3"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="b_nonstocked" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="4"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="miscrefnum" ShowInCustomizationForm="True" VisibleIndex="5"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="nspartid" ShowInCustomizationForm="True" VisibleIndex="6"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="nspartcost" ShowInCustomizationForm="True" VisibleIndex="7"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="NSMfgPartID" ShowInCustomizationForm="True" VisibleIndex="8"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="NSPartDescr" ShowInCustomizationForm="True" VisibleIndex="9"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="qtyplanned" ShowInCustomizationForm="True" VisibleIndex="10"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="qtyused" ShowInCustomizationForm="True" VisibleIndex="11"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_MfgPartID" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="12"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="DMRKey" ShowInCustomizationForm="True" VisibleIndex="13"></dx:GridViewDataTextColumn>
+<dx:GridViewDataDateColumn FieldName="WorkDate" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="14"></dx:GridViewDataDateColumn>
+<dx:GridViewDataTextColumn FieldName="storeroomid" ShowInCustomizationForm="True" VisibleIndex="15"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="cWorkDate" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="16"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="time_batchid" ShowInCustomizationForm="True" VisibleIndex="17"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="xactionnum" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="18"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_partatlocid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="19"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_FundSrcCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="20">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="FundSrcCodeID" ShowInCustomizationForm="True" VisibleIndex="21"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_WorkOrderCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="22">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" ShowInCustomizationForm="True" VisibleIndex="23"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_WorkOpID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="24">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="WorkOpID" ShowInCustomizationForm="True" VisibleIndex="25"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_OrganizationCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="26">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="OrganizationCodeID" ShowInCustomizationForm="True" VisibleIndex="27"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_FundingGroupCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="28">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" ShowInCustomizationForm="True" VisibleIndex="29"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_ObjectCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="30">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="ObjectCodeID" ShowInCustomizationForm="True" VisibleIndex="31"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_ControlSectionID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="32">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="ControlSectionID" ShowInCustomizationForm="True" VisibleIndex="33"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_EquipmentNumberID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="34">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="EquipmentNumberID" ShowInCustomizationForm="True" VisibleIndex="35"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="Entered From" ShowInCustomizationForm="True" VisibleIndex="36"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_StoresIssueID" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="37"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_StoresIssueItemid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="38"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="aisle" ShowInCustomizationForm="True" VisibleIndex="39"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="shelf" ShowInCustomizationForm="True" VisibleIndex="40"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="bin" ShowInCustomizationForm="True" VisibleIndex="41"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_jobpartid" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="1">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_masterpartid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="2"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_storeroomid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="3"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="b_nonstocked" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="4"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="miscrefnum" ShowInCustomizationForm="True" VisibleIndex="5"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="nspartid" ShowInCustomizationForm="True" VisibleIndex="6"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="nspartcost" ShowInCustomizationForm="True" VisibleIndex="7"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="NSMfgPartID" ShowInCustomizationForm="True" VisibleIndex="8"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="NSPartDescr" ShowInCustomizationForm="True" VisibleIndex="9"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="qtyplanned" ShowInCustomizationForm="True" VisibleIndex="10"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="qtyused" ShowInCustomizationForm="True" VisibleIndex="11"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_MfgPartID" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="12"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="DMRKey" ShowInCustomizationForm="True" VisibleIndex="13"></dx:GridViewDataTextColumn>
+<dx:GridViewDataDateColumn FieldName="WorkDate" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="14"></dx:GridViewDataDateColumn>
+<dx:GridViewDataTextColumn FieldName="storeroomid" ShowInCustomizationForm="True" VisibleIndex="15"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="cWorkDate" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="16"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="time_batchid" ShowInCustomizationForm="True" VisibleIndex="17"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="xactionnum" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="18"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_partatlocid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="19"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_FundSrcCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="20">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="FundSrcCodeID" ShowInCustomizationForm="True" VisibleIndex="21"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_WorkOrderCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="22">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" ShowInCustomizationForm="True" VisibleIndex="23"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_WorkOpID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="24">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="WorkOpID" ShowInCustomizationForm="True" VisibleIndex="25"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_OrganizationCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="26">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="OrganizationCodeID" ShowInCustomizationForm="True" VisibleIndex="27"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_FundingGroupCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="28">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" ShowInCustomizationForm="True" VisibleIndex="29"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_ObjectCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="30">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="ObjectCodeID" ShowInCustomizationForm="True" VisibleIndex="31"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_ControlSectionID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="32">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="ControlSectionID" ShowInCustomizationForm="True" VisibleIndex="33"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_EquipmentNumberID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="34">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="EquipmentNumberID" ShowInCustomizationForm="True" VisibleIndex="35"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="Entered From" ShowInCustomizationForm="True" VisibleIndex="36"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_StoresIssueID" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="37"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_StoresIssueItemid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="38"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="aisle" ShowInCustomizationForm="True" VisibleIndex="39"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="shelf" ShowInCustomizationForm="True" VisibleIndex="40"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="bin" ShowInCustomizationForm="True" VisibleIndex="41"></dx:GridViewDataTextColumn>
                                                         </Columns>
                                                         <SettingsBehavior
                                                             EnableRowHotTrack="True"
@@ -2907,7 +3062,7 @@
                 </Items>
             </dx:TabbedLayoutGroup> <%--Tabbed Grids for adding Parts--%>
         </Items> <%--Form Layout Items--%>
-        <SettingsItems Width="100%" />
+        
     </dx:ASPxFormLayout>
 
 <dx:ASPxPopupControl ID="AddCrewPopup" ClientInstanceName="AddCrewPopup" ShowCloseButton="true" ShowHeader="false" HeaderText=""

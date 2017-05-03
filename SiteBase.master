@@ -6,7 +6,7 @@
             <asp:ContentPlaceHolder ID="PageTitlePartPlaceHolder" runat="server"></asp:ContentPlaceHolder><%= " | Maintenance Productivity Enhancement Tool" %>
         </title>
         <link href="~/Content/Css/MpetWebStyle.css" rel="stylesheet" />
-        <script src="~/Content/Scripts/Helper.js"></script>
+        <%--<script src="~/Content/Scripts/Helper.js"></script>--%>
         <script type="text/javascript">
             function HidePopup() {
                 window.HelpMenuPopup.Hide();
