@@ -407,6 +407,8 @@ namespace Pages.QuickPost
             CompletedByDataSource.ConnectionString = _connectionString;
             PostedByDataSource.ConnectionString = _connectionString;
             OutcomeCodeDS.ConnectionString = _connectionString;
+            ElementsDataSource.ConnectionString = _connectionString;
+            SubAssemblyDataSource.ConnectionString = _connectionString;
 
             //Setup Fields
             TxtWorkStartDate.Value = DateTime.Now;
@@ -1864,6 +1866,74 @@ namespace Pages.QuickPost
                 StoreroomPartDS.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
                 comboBox.DataSource = StoreroomPartDS;
                 comboBox.DataBind();
+            }
+            catch (Exception ex)
+            {
+                //Show Error
+                Master.ShowError(ex.Message);
+            }
+        }
+
+        protected void ComboSubAssembly_onItemRequestedByFiltercondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
+        {
+            try
+            {
+                var objectID = -1;
+                if(ObjectIDCombo.Value != null)
+                {
+                    objectID = Convert.ToInt32(ObjectIDCombo.Value.ToString());
+                }
+                ASPxComboBox comboBox = (ASPxComboBox)source;
+                SubAssemblyDataSource.SelectCommand = @"SELECT [nSubAssemblyID] AS 'n_subAssemblyID'
+                                                          ,[SubAssemblyName]
+                                                          ,[SubAssemblyDesc]
+      
+                                                      ROW_NUMBER() OVER ( ORDER By SubAssemblyName ) AS [rn]
+                                                      FROM ( [dbo].[SubAssemblyNames]
+                                                      where (( [SubAssebmlyID] + ' ' + [SubAssemblyDesc] ) Like @filter)
+                                                      AND b_IsActive = 'Y' AND nSubAssemblyID > 0 ) AS st
+                                                      WHERE st.[rn] BETWEEN @startIndex AND @endIndex";
+
+                SubAssemblyDataSource.SelectParameters.Clear();
+                SubAssemblyDataSource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}", e.Filter));
+                SubAssemblyDataSource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
+                SubAssemblyDataSource.SelectParameters.Add("endIndext", TypeCode.Int64, (e.EndIndex + 1).ToString());
+                comboBox.DataSource = SubAssemblyDataSource;
+                comboBox.DataBind();
+
+
+            }
+            catch (Exception ex)
+            {
+                //Show Error
+                Master.ShowError(ex.Message);
+            }
+        }
+
+
+        protected void ComboSubAssembly_OnitemsRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
+        {
+            try
+            {
+                var objectID = -1;
+                if (ObjectIDCombo.Value != null)
+                {
+                    objectID = Convert.ToInt32(ObjectIDCombo.Value.ToString());
+                }
+                ASPxComboBox comboBox = (ASPxComboBox)source;
+                SubAssemblyDataSource.SelectCommand = @"SELECT [nSubAssemblyID] AS 'n_subAssemblyID'
+                                                          ,[SubAssemblyName]
+                                                          ,[SubAssemblyDesc]
+      
+                                                      FROM [dbo].[SubAssemblyNames]
+                                                      where b_IsActive = 'Y' and nSubAssemblyID > 0
+                                                       ORDER By SubAssemblyName";
+
+                SubAssemblyDataSource.SelectParameters.Clear();
+                SubAssemblyDataSource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
+                comboBox.DataSource = SubAssemblyDataSource;
+                comboBox.DataBind();
+
             }
             catch (Exception ex)
             {

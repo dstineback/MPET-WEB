@@ -498,7 +498,12 @@
                     <dx:LayoutItem Caption="Element ID" Name="ElementID">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox runat="server" ID="comboElementID" Width="100%" Theme="iOS"></dx:ASPxComboBox>
+                                <dx:ASPxComboBox runat="server" ID="comboElementID" Width="100%" Theme="iOS" 
+                                    ValueType="System.String" ValueField="" DropDownButton-Enabled="true" 
+                                    AutoPostBack="false" DropDownStyle="DropDown" EnableCallbackMode="true" 
+                                    CallbackPageSize="10"
+                                    
+                                    ></dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
@@ -506,7 +511,11 @@
                     <dx:LayoutItem Caption="Sub Assy" Name="SubAssy">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox runat="server" ID="comboSubAssembly" Width="100%" Theme="iOS"
+                                <dx:ASPxComboBox runat="server" ID="comboSubAssembly" 
+                                    Width="100%" Theme="iOS" AutoPostBack="false" EnableCallbackMode="true" CallbackPageSize="10" 
+                                    ValueType="System.String" ValueField="" DropDownStyle="DropDown" DropDownButton-Enabled="true"
+                                    OnItemRequestedByValue="ComboSubAssembly_OnitemsRequestedByValue_SQL" 
+                                    OnItemsRequestedByFilterCondition="ComboSubAssembly_onItemRequestedByFiltercondition_SQL" TextFormatString="{0} - {1}"
                                     
                                     ></dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
@@ -4211,4 +4220,6 @@
     <asp:SqlDataSource ID="CompletedByDataSource" runat="server" />
     <asp:SqlDataSource ID="PostedByDataSource" runat="server" />
     <asp:SqlDataSource ID="OutcomeCodeDS" runat="server" />
+    <asp:SqlDataSource ID="ElementsDataSource" runat="server" />
+    <asp:SqlDataSource ID="SubAssemblyDataSource" runat="server" />
 </asp:Content>
