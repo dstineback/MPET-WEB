@@ -503,6 +503,16 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
+                    <dx:LayoutItem Caption="Sub Assy" Name="SubAssy">
+                        <LayoutItemNestedControlCollection>
+                            <dx:LayoutItemNestedControlContainer runat="server">
+                                <dx:ASPxComboBox runat="server" ID="comboSubAssembly" Width="100%" Theme="iOS"
+                                    
+                                    ></dx:ASPxComboBox>
+                            </dx:LayoutItemNestedControlContainer>
+                        </LayoutItemNestedControlCollection>
+                        <CaptionSettings Location="Top" />
+                    </dx:LayoutItem>
                     <dx:LayoutItem Caption="Highway Route:" Name="HighwayRoute">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -541,6 +551,15 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
+                    <dx:LayoutItem ClientVisible="False">
+                        <LayoutItemNestedControlCollection>
+                            <dx:LayoutItemNestedControlContainer runat="server">
+                                <dx:ASPxTextBox ID="WorkRequestDesclayout_E1" 
+                                    runat="server">
+                                </dx:ASPxTextBox>
+                            </dx:LayoutItemNestedControlContainer>
+                        </LayoutItemNestedControlCollection>
+                    </dx:LayoutItem>
                     <dx:LayoutItem Caption="Mile Post From" Name="MilePostFrom">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -565,16 +584,6 @@
                                                 runat="server">
                                     <MaskSettings Mask="<0..99999g>.<0000..9999>" IncludeLiterals="DecimalSymbol" />
                                 </dx:ASPxTextBox>
-                            </dx:LayoutItemNestedControlContainer>
-                        </LayoutItemNestedControlCollection>
-                        <CaptionSettings Location="Top" />
-                    </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Sub Assy" Name="SubAssy">
-                        <LayoutItemNestedControlCollection>
-                            <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox runat="server" ID="comboSubAssembly" Width="100%" Theme="iOS"
-                                    
-                                    ></dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
@@ -604,7 +613,9 @@
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
                    
-                    <dx:LayoutItem Name="PostDefaults" Caption="Post Defaults:" HorizontalAlign="Center" ShowCaption="False">
+                    <dx:LayoutItem Name="PostDefaults" 
+                        Caption="Post Defaults:" HorizontalAlign="Center" 
+                        ShowCaption="True">
                                             <LayoutItemNestedControlCollection >
                                                 <dx:LayoutItemNestedControlContainer>
                                                 <dx:ASPxCheckBox ID="chkPostDefaults" runat="server" Text="Post Defaults"
@@ -1984,6 +1995,84 @@
                                                             <dx:GridViewDataTextColumn FieldName="bin" ReadOnly="True" Caption="Bin" ToolTip="M-PET.NET Jobstep Part Bin Location" Width="100px" VisibleIndex="22">
                                                                 <CellStyle Wrap="False"></CellStyle>
                                                             </dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_jobpartid" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="1">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_masterpartid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="2"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_storeroomid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="3"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="b_nonstocked" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="4"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="miscrefnum" ShowInCustomizationForm="True" VisibleIndex="5"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="nspartid" ShowInCustomizationForm="True" VisibleIndex="6"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="nspartcost" ShowInCustomizationForm="True" VisibleIndex="7"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="NSMfgPartID" ShowInCustomizationForm="True" VisibleIndex="8"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="NSPartDescr" ShowInCustomizationForm="True" VisibleIndex="9"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="qtyplanned" ShowInCustomizationForm="True" VisibleIndex="10"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="qtyused" ShowInCustomizationForm="True" VisibleIndex="11"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_MfgPartID" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="12"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="DMRKey" ShowInCustomizationForm="True" VisibleIndex="13"></dx:GridViewDataTextColumn>
+<dx:GridViewDataDateColumn FieldName="WorkDate" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="14"></dx:GridViewDataDateColumn>
+<dx:GridViewDataTextColumn FieldName="storeroomid" ShowInCustomizationForm="True" VisibleIndex="15"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="cWorkDate" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="16"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="time_batchid" ShowInCustomizationForm="True" VisibleIndex="17"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="xactionnum" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                VisibleIndex="18"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_partatlocid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="19"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_FundSrcCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="20">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="FundSrcCodeID" ShowInCustomizationForm="True" VisibleIndex="21"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_WorkOrderCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="22">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="WorkOrderCodeID" ShowInCustomizationForm="True" VisibleIndex="23"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_WorkOpID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="24">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="WorkOpID" ShowInCustomizationForm="True" VisibleIndex="25"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_OrganizationCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="26">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="OrganizationCodeID" ShowInCustomizationForm="True" VisibleIndex="27"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_FundingGroupCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="28">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="FundingGroupCodeID" ShowInCustomizationForm="True" VisibleIndex="29"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_ObjectCodeID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="30">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="ObjectCodeID" ShowInCustomizationForm="True" VisibleIndex="31"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_ControlSectionID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="32">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="ControlSectionID" ShowInCustomizationForm="True" VisibleIndex="33"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_EquipmentNumberID" ReadOnly="True" ShowInCustomizationForm="True" 
+                                                                Visible="False" VisibleIndex="34">
+<EditFormSettings Visible="False"></EditFormSettings>
+</dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="EquipmentNumberID" ShowInCustomizationForm="True" VisibleIndex="35"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="Entered From" ShowInCustomizationForm="True" VisibleIndex="36"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_StoresIssueID" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="37"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="n_StoresIssueItemid" ShowInCustomizationForm="True" Visible="False" 
+                                                                VisibleIndex="38"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="aisle" ShowInCustomizationForm="True" VisibleIndex="39"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="shelf" ShowInCustomizationForm="True" VisibleIndex="40"></dx:GridViewDataTextColumn>
+<dx:GridViewDataTextColumn FieldName="bin" ShowInCustomizationForm="True" VisibleIndex="41"></dx:GridViewDataTextColumn>
 <dx:GridViewDataTextColumn FieldName="n_jobpartid" ReadOnly="True" ShowInCustomizationForm="True" 
                                                                 VisibleIndex="1">
 <EditFormSettings Visible="False"></EditFormSettings>

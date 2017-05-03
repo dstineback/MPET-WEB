@@ -2206,26 +2206,26 @@ namespace Pages.QuickPost
 
             #region Milepost Direction
 
-            if (comboMilePostDir.Value != null)
+            if (comboHwyRoute.Value != null)
             {
                 #region Combo Value
 
                 //Check For Prior Value
                 if (HttpContext.Current.Session["comboMilePostDir"] != null)
                 {
-                    if (HttpContext.Current.Session["comboMilePostDirText"].ToString() != comboMilePostDir.Text)
+                    if (HttpContext.Current.Session["comboMilePostDirText"].ToString() != comboHwyRoute.Text)
                     {
                         //Remove Old One
                         HttpContext.Current.Session.Remove("comboMilePostDir");
 
                         //Add New Value
-                        HttpContext.Current.Session.Add("comboMilePostDir", comboMilePostDir.Value.ToString());
+                        HttpContext.Current.Session.Add("comboMilePostDir", comboHwyRoute.Value.ToString());
                     }
                 }
                 else
                 {
                     //Add New Value
-                    HttpContext.Current.Session.Add("comboMilePostDir", comboMilePostDir.Value.ToString());
+                    HttpContext.Current.Session.Add("comboMilePostDir", comboHwyRoute.Value.ToString());
                 }
 
                 #endregion
@@ -2240,7 +2240,7 @@ namespace Pages.QuickPost
                 }
 
                 //Add New Value
-                HttpContext.Current.Session.Add("comboMilePostDirText", comboMilePostDir.Text.Trim());
+                HttpContext.Current.Session.Add("comboMilePostDirText", comboHwyRoute.Text.Trim());
 
                 #endregion
             }
