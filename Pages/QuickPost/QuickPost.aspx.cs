@@ -102,18 +102,18 @@ namespace Pages.QuickPost
             #region Check for post to Setup Form
             if (!IsPostBack)
             {
-                #region Make Job ID and Step ID
-            if(Session["LogonInfo"] != null)
-            {
-                GetJobIDStepID();
-                oJob = HttpContext.Current.Session["oJob"];
-                JobID = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-                    var editingJobStepID = Convert.ToInt32(Session["editingJobStepID"]);
-                AssignedJobID = HttpContext.Current.Session["AssignedJobID"].ToString();
-                JobStepID = Convert.ToInt32(Session["JobStepID"]);
-                    Session.Add("editingJobStepID", JobStepID);    
-            }
-            #endregion
+            //    #region Make Job ID and Step ID
+            //if(Session["LogonInfo"] != null)
+            //{
+            //    GetJobIDStepID();
+            //    oJob = HttpContext.Current.Session["oJob"];
+            //    JobID = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
+            //        var editingJobStepID = Convert.ToInt32(Session["editingJobStepID"]);
+            //    AssignedJobID = HttpContext.Current.Session["AssignedJobID"].ToString();
+            //    JobStepID = Convert.ToInt32(Session["JobStepID"]);
+            //        Session.Add("editingJobStepID", JobStepID);    
+            //}
+            //#endregion
                 SetupForAdding();
                 txtWorkDescription.Focus();
 
@@ -190,52 +190,52 @@ namespace Pages.QuickPost
                
             }
             #endregion
-            #region Is not a Post-Back
-            if (IsPostBack)
-            {
-                //Check For Previous Session Variables
-                if (HttpContext.Current.Session["ObjectIDCombo"] != null)
-                {
-                    //Get Info From Session
-                    ObjectIDCombo.Value = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
-                }
+            //#region Is not a Post-Back
+            //if (IsPostBack)
+            //{
+            //    //Check For Previous Session Variables
+            //    if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+            //    {
+            //        //Get Info From Session
+            //        ObjectIDCombo.Value = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
+            //    }
 
-                //Check For Previous Session Variables
-                if (HttpContext.Current.Session["ObjectIDComboText"] != null)
-                {
-                    //Get Info From Session
-                    ObjectIDCombo.Text = (HttpContext.Current.Session["ObjectIDComboText"].ToString());
-                }
+            //    //Check For Previous Session Variables
+            //    if (HttpContext.Current.Session["ObjectIDComboText"] != null)
+            //    {
+            //        //Get Info From Session
+            //        ObjectIDCombo.Text = (HttpContext.Current.Session["ObjectIDComboText"].ToString());
+            //    }
 
-                //Check For Previous Session Variables
-                if (HttpContext.Current.Session["txtObjectDescription"] != null)
-                {
-                    //Get Info From Session
-                    txtObjectDescription.Text = (HttpContext.Current.Session["txtObjectDescription"].ToString());
-                }
+            //    //Check For Previous Session Variables
+            //    if (HttpContext.Current.Session["txtObjectDescription"] != null)
+            //    {
+            //        //Get Info From Session
+            //        txtObjectDescription.Text = (HttpContext.Current.Session["txtObjectDescription"].ToString());
+            //    }
 
-                //Check For Previous Session Variables
-                if (HttpContext.Current.Session["txtObjectArea"] != null)
-                {
-                    //Get Info From Session
-                    txtObjectArea.Text = (HttpContext.Current.Session["txtObjectArea"].ToString());
-                }
+            //    //Check For Previous Session Variables
+            //    if (HttpContext.Current.Session["txtObjectArea"] != null)
+            //    {
+            //        //Get Info From Session
+            //        txtObjectArea.Text = (HttpContext.Current.Session["txtObjectArea"].ToString());
+            //    }
 
-                //Check For Previous Session Variables
-                if (HttpContext.Current.Session["txtObjectLocation"] != null)
-                {
-                    //Get Info From Session
-                    txtObjectLocation.Text = (HttpContext.Current.Session["txtObjectLocation"].ToString());
-                }
+            //    //Check For Previous Session Variables
+            //    if (HttpContext.Current.Session["txtObjectLocation"] != null)
+            //    {
+            //        //Get Info From Session
+            //        txtObjectLocation.Text = (HttpContext.Current.Session["txtObjectLocation"].ToString());
+            //    }
 
-                //Check For Previous Session Variables
-                if (HttpContext.Current.Session["txtObjectAssetNumber"] != null)
-                {
-                    //Get Info From Session
-                    txtObjectAssetNumber.Text = (HttpContext.Current.Session["txtObjectAssetNumber"].ToString());
-                }
-            }
-            #endregion
+            //    //Check For Previous Session Variables
+            //    if (HttpContext.Current.Session["txtObjectAssetNumber"] != null)
+            //    {
+            //        //Get Info From Session
+            //        txtObjectAssetNumber.Text = (HttpContext.Current.Session["txtObjectAssetNumber"].ToString());
+            //    }
+            //}
+            //#endregion
             #region Button Status
             Master.ShowNewButton = true;
             Master.ShowPostButton = true;
@@ -1884,20 +1884,24 @@ namespace Pages.QuickPost
                     objectID = Convert.ToInt32(ObjectIDCombo.Value.ToString());
                 }
                 ASPxComboBox comboBox = (ASPxComboBox)source;
-                SubAssemblyDataSource.SelectCommand = @"SELECT [nSubAssemblyID] AS 'n_subAssemblyID'
-                                                          ,[SubAssemblyName]
-                                                          ,[SubAssemblyDesc]
-      
-                                                      ROW_NUMBER() OVER ( ORDER By SubAssemblyName ) AS [rn]
-                                                      FROM ( [dbo].[SubAssemblyNames]
-                                                      where (( [SubAssebmlyID] + ' ' + [SubAssemblyDesc] ) Like @filter)
-                                                      AND b_IsActive = 'Y' AND nSubAssemblyID > 0 ) AS st
-                                                      WHERE st.[rn] BETWEEN @startIndex AND @endIndex";
+                SubAssemblyDataSource.SelectCommand = @"Select [subAssemblyName],
+	                                                            [n_subAssemblyID],
+	                                                            [subAssemblyDesc]
+	                                                            FROM ( Select	tblSubAssembly.nSubAssemblyID AS 'n_subAssemblyID'
+					                                                            , tblSubAssembly.SubAssemblyName AS 'subAssemblyName'
+					                                                            ,tblSubAssembly.SubAssemblyDesc AS 'subAssemblyDesc'
+					                                                            , ROW_NUMBER() OVER (Order by tblSubAssembly.[subAssemblyName]) AS [rn]
+					                                            FROM dbo.SubAssemblyNames AS tblSubAssembly
+					                                            WHERE (([subAssemblyName] + ' ' + [subAssemblyDesc] ) LIKE @filter)
+					                                                            AND tblSubAssembly.b_IsActive = 'Y'
+					                                                            AND tblSubAssembly.nSubAssemblyID > 0 
+					                                                            ) AS st
+					                                                            WHERE st.[rn] BETWEEN @startIndex AND @endIndex";
 
                 SubAssemblyDataSource.SelectParameters.Clear();
-                SubAssemblyDataSource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}", e.Filter));
+                SubAssemblyDataSource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
                 SubAssemblyDataSource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
-                SubAssemblyDataSource.SelectParameters.Add("endIndext", TypeCode.Int64, (e.EndIndex + 1).ToString());
+                SubAssemblyDataSource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString());
                 comboBox.DataSource = SubAssemblyDataSource;
                 comboBox.DataBind();
 
@@ -1940,6 +1944,16 @@ namespace Pages.QuickPost
                 //Show Error
                 Master.ShowError(ex.Message);
             }
+        }
+
+        protected void ComboElements_OnItemsRequestedByFiltercondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
+        {
+
+        }
+
+        protected void ComboElements_OnitemsRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
+        {
+
         }
         #endregion
 
@@ -2800,7 +2814,7 @@ namespace Pages.QuickPost
 
             #region Get Actual Job Length
             decimal jobActualLen = 0;
-            if (Session[""] != null)
+            if (Session["txtJobLength"] != null)
             {
                 jobActualLen = Convert.ToDecimal(Session["txtJobLength"].ToString());
             }
@@ -3129,50 +3143,255 @@ namespace Pages.QuickPost
             var jobReturnWithin = 0;
             var jobRouteTo = -1;
             var jobCompletedBy = requestor;
+            JobType jobType = JobType.Corrective;
+            //Title
+            var jobTitle = "";
+            var newJobID = "";
+            var errorFromJobIDGeneration = "";
+            var poolTypeForJob = JobPoolType.Global;
+            //Create ID
+            var plannerdJobStepId = -1;
+            //Create Class
+            var oJobStep = new WorkOrderJobStep(_connectionString, _useWeb);
+
+            if (breakdownBox.Checked == true)
+            {
+                jobType = JobType.Breakdown;
+            }
+
+            var success = false;
 
             #endregion
             try
             {
-                //Save Job Details
-                if (_oJob.Update(jobId,
-                    workDesc,
-                    JobType.Corrective,
-                    JobAgainstType.MaintenanceObjects,
-                    objectAgainstId,
-                    actionPriority,
-                    reasonCode,
-                    notes,
-                    routeTo,
-                    true,
-                    startDate,
-                    requestPriority,
-                    requestor,
-                    0,
-                    0,
-                    gpsX,
-                    gpsY,
-                    gpsZ,
-                    unitOne,
-                    unitTwo,
-                    unitThree,
-                    -1,
-                    mobileEquip,
-                    _oJob.NullDate,
-                    routeTo,
-                    -1,
-                    -1,
-                    workOp,
-                    -1,
-                    subAssemblyID,
-                    stateRouteId,
-                    milepost,
-                    milepostTo,
-                    mpIncreasing,
-                    additionalDamage,
-                    percentOverage,
-                    _oLogon.UserID,
-                    ref AssignedJobID))
+
+                #region Generate Job ID
+
+                try
                 {
+                    //Save Job Details
+                    if (_oJob.Update(jobId,
+                       workDesc,
+                       jobType,
+                       JobAgainstType.MaintenanceObjects,
+                       objectAgainstId,
+                       actionPriority,
+                       reasonCode,
+                       notes,
+                       routeTo,
+                       true,
+                       startDate,
+                       requestPriority,
+                       requestor,
+                       0,
+                       0,
+                       gpsX,
+                       gpsY,
+                       gpsZ,
+                       unitOne,
+                       unitTwo,
+                       unitThree,
+                       -1,
+                       mobileEquip,
+                       _oJob.NullDate,
+                       routeTo,
+                       -1,
+                       -1,
+                       workOp,
+                       -1,
+                       subAssemblyID,
+                       stateRouteId,
+                       milepost,
+                       milepostTo,
+                       mpIncreasing,
+                       additionalDamage,
+                       percentOverage,
+                       _oLogon.UserID,
+                       ref AssignedJobID))
+                    {
+                        success = true;
+                    }
+
+                    if (success == true)
+                        //Update Costing Information
+                        if (!_oJob.UpdateJobCosting(_oJob.RecordID,
+                            costCodeId,
+                            fundSource,
+                            workOrder,
+                            workOp,
+                            orgCode,
+                            fundingGroup,
+                            equipNumber,
+                            controlSection,
+                            _oLogon.UserID))
+                        {
+                            success = true;
+                        }       
+                }
+                catch (Exception ex)
+                {
+                    //Show Error
+                    Master.ShowError(ex.Message);
+
+                    ////Return False To Prevent Navigation
+                    //return false;
+                }
+
+                #endregion
+                #region Generate Step ID
+
+                //Check For Job ID
+                if (Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()) > 0)
+                {
+                    //Get ID
+                    var recordToPlan = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+
+                    //Validate Work Operation Selection
+                    //Approver Must Be Allowed To Approve For Specified Work Operation
+                    if (_oLogon.ValidateWorkOperations)
+                    {
+                        //Check For Work Op/Type ID
+                        if ((HttpContext.Current.Session["ComboWorkOp"] != null))
+                        {
+                            //Get ID
+                            var workOpId = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
+
+                            //Check Work Op Selection
+                            if ((workOpId.ToString(CultureInfo.InvariantCulture) != "") &&
+                                (workOpId > 0))
+                            {
+                                //Create Found Flag
+                                var foundIt = false;
+
+                                //Check User's Work Operations To See If Specified One Exists
+                                for (var i = 0; i < _oLogon.UsersWorkOperations.Rows.Count; i++)
+                                {
+                                    //Check Value
+                                    if (_oLogon.UsersWorkOperations.Rows[i][0].ToString() ==
+                                        workOpId.ToString(CultureInfo.InvariantCulture))
+                                    {
+                                        //Set Flag
+                                        foundIt = true;
+
+                                        //Break Loop
+                                        break;
+                                    }
+                                }
+
+                                //Check Flag
+                                if (!foundIt)
+                                {
+                                    //Throw Error
+                                    throw new SystemException(
+                                        @"Insufficient Permissions To Approve Request For Specified Work Operation.");
+                                }
+                            }
+                        }
+                    }
+
+
+
+
+                    //Add Default Step
+                    if (oJobStep.InsertDefaultJobStep(recordToPlan,
+                    jobType,
+                    jobTitle,
+                    notes,
+                    equipNumber,
+                    subAssemblyID,
+                    requestPriority,
+                    reasonCode,
+                    _oLogon.UserID,
+                    ref plannerdJobStepId))
+                    {
+                        Session.Add("plannedJobStepId", plannerdJobStepId);
+                        Session.Add("JobStepID", plannerdJobStepId);
+
+                        ////Set Text
+                        lblStep.Text = "Job Step ID: " + Session["JobStepID"].ToString();
+                        #region Set Default Group, Supervisor, Labor & Shift
+
+                        //Get User's Default Group And Group's Supervisor
+                        try
+                        {
+                            var loaded = true;
+                            var groupId = -1;
+                            var supervisorId = -1;
+
+                            //Check Requestor Field
+                            var userId = _oLogon.UserID;
+
+                            //Create Group Class
+                            using (
+                                var oGroup =
+                                    new MaintenanceGroup(_connectionString, _useWeb, _oLogon.UserID))
+                            {
+                                //Get Users Group
+                                using (var dt = oGroup.GetFilteredGroupList("B", "", "", -1, userId, ref loaded))
+                                {
+                                    //Check Flag
+                                    if (loaded)
+                                    {
+                                        //Set Group
+                                        if (dt.Rows.Count > 0)
+                                        {
+                                            //Get Group ID
+                                            groupId = Convert.ToInt32(dt.Rows[0][0].ToString());
+
+                                            //Get Supervisor
+                                            if (oGroup.LoadHeaderData(groupId))
+                                            {
+                                                //Get Supervisor ID
+                                                supervisorId = oGroup.SupervisorID;
+                                            }
+                                            else
+                                            {
+                                                //Throw Error
+                                                throw new SystemException(
+                                                    @"Error Loading Group/Supervisor Defaults");
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //Throw Error
+                                        throw new SystemException(
+                                            @"Error Loading Group/Supervisor Defaults");
+                                    }
+
+                                    //Update Defaults
+                                    if (
+                                        !oJobStep.UpdateUserDefaults(plannerdJobStepId, groupId, supervisorId,
+                                            _oLogon.LaborClassID, _oLogon.ShiftID, _oLogon.UserID))
+                                    {
+                                        //Throw Error
+                                        throw new SystemException(
+                                            @"Error Saving User Defaults - " + oJobStep.LastError);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //Throw Error
+                            throw new SystemException(
+                                @"Error Getting User's Default Group And Supervisor - " + ex.Message);
+                        }
+
+                        #endregion
+
+                    }
+                    else
+                    {
+                        //Throw Error
+                        throw new SystemException(
+                            @"Error Planning Job - " + oJobStep.LastError);
+                    }
+                    #endregion
+
+
+
+
                     //Update Job Step
                     if (!_oJobStep.Update(jobStepId,
                         jobStepNumber,
@@ -3204,11 +3423,13 @@ namespace Pages.QuickPost
                         _oLogon.UserID,
                         EditingTimeBachId,
                         EditingTiemBatchItemId))
+
                     {
                         //Throw Error
                         throw new SystemException(
                             @"Error Updating Job Step -" + _oJobStep.LastError);
                     }
+
 
                     //Save Route & Completion Information
                     if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
@@ -3235,7 +3456,7 @@ namespace Pages.QuickPost
                         throw new SystemException(
                             @"Error Updating Job Costing -" + _oJob.LastError);
                     }
-                    if(!_oJobStep.UpdateJobstepCosting(jobID, jobStepId,
+                    if (!_oJobStep.UpdateJobstepCosting(jobID, jobStepId,
                              costCodeId,
                              fundSource,
                              workOrder,
@@ -3257,8 +3478,11 @@ namespace Pages.QuickPost
                         throw new SystemException(
                             @"Error Updating Route To And Completion Information -" + _oJobStep.LastError);
                     }
+
+
                 }
-            } catch
+            }
+            catch
             {
                 throw new SystemException("Could not Update Job" + _oJob);
             }
@@ -3357,6 +3581,9 @@ namespace Pages.QuickPost
                 throw new SystemException(
                     @"Error Loading Job & Job Step Keys For Batch Post");
             }
+
+            System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('You have sussefully created a Quick Post.');</script>");
+            //Response.Redirect("~/main.aspx");
 
         }
         #endregion
@@ -7370,156 +7597,156 @@ namespace Pages.QuickPost
             }
 
             #endregion
-            #region Generate Step ID
+            //#region Generate Step ID
 
-            //Check For Job ID
-            if (Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()) > 0)
-            {
-                //Get ID
-                var recordToPlan = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+            ////Check For Job ID
+            //if (Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()) > 0)
+            //{
+            //    //Get ID
+            //    var recordToPlan = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
 
-                //Validate Work Operation Selection
-                //Approver Must Be Allowed To Approve For Specified Work Operation
-                if (_oLogon.ValidateWorkOperations)
-                {
-                    //Check For Work Op/Type ID
-                    if ((HttpContext.Current.Session["ComboWorkOp"] != null))
-                    {
-                        //Get ID
-                        var workOpId = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
+            //    //Validate Work Operation Selection
+            //    //Approver Must Be Allowed To Approve For Specified Work Operation
+            //    if (_oLogon.ValidateWorkOperations)
+            //    {
+            //        //Check For Work Op/Type ID
+            //        if ((HttpContext.Current.Session["ComboWorkOp"] != null))
+            //        {
+            //            //Get ID
+            //            var workOpId = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
 
-                        //Check Work Op Selection
-                        if ((workOpId.ToString(CultureInfo.InvariantCulture) != "") &&
-                            (workOpId > 0))
-                        {
-                            //Create Found Flag
-                            var foundIt = false;
+            //            //Check Work Op Selection
+            //            if ((workOpId.ToString(CultureInfo.InvariantCulture) != "") &&
+            //                (workOpId > 0))
+            //            {
+            //                //Create Found Flag
+            //                var foundIt = false;
 
-                            //Check User's Work Operations To See If Specified One Exists
-                            for (var i = 0; i < _oLogon.UsersWorkOperations.Rows.Count; i++)
-                            {
-                                //Check Value
-                                if (_oLogon.UsersWorkOperations.Rows[i][0].ToString() ==
-                                    workOpId.ToString(CultureInfo.InvariantCulture))
-                                {
-                                    //Set Flag
-                                    foundIt = true;
+            //                //Check User's Work Operations To See If Specified One Exists
+            //                for (var i = 0; i < _oLogon.UsersWorkOperations.Rows.Count; i++)
+            //                {
+            //                    //Check Value
+            //                    if (_oLogon.UsersWorkOperations.Rows[i][0].ToString() ==
+            //                        workOpId.ToString(CultureInfo.InvariantCulture))
+            //                    {
+            //                        //Set Flag
+            //                        foundIt = true;
 
-                                    //Break Loop
-                                    break;
-                                }
-                            }
+            //                        //Break Loop
+            //                        break;
+            //                    }
+            //                }
 
-                            //Check Flag
-                            if (!foundIt)
-                            {
-                                //Throw Error
-                                throw new SystemException(
-                                    @"Insufficient Permissions To Approve Request For Specified Work Operation.");
-                            }
-                        }
-                    }
-                }
-
-
+            //                //Check Flag
+            //                if (!foundIt)
+            //                {
+            //                    //Throw Error
+            //                    throw new SystemException(
+            //                        @"Insufficient Permissions To Approve Request For Specified Work Operation.");
+            //                }
+            //            }
+            //        }
+            //    }
 
 
-                //Add Default Step
-                if (oJobStep.InsertDefaultJobStep(recordToPlan,
-                JobType.Corrective,
-                jobTitle,
-                jobAdditionalInfo,
-                mobileEquip,
-                subAssemblyId,
-                priority,
-                reasonCode,
-                _oLogon.UserID,
-                ref plannerdJobStepId))
-                {
-                    Session.Add("plannedJobStepId", plannerdJobStepId);
-                    Session.Add("JobStepID", plannerdJobStepId);
 
-                    ////Set Text
-                    lblStep.Text = "Job Step ID: " + Session["JobStepID"].ToString();
-                    #region Set Default Group, Supervisor, Labor & Shift
 
-                    //Get User's Default Group And Group's Supervisor
-                    try
-                    {
-                        var loaded = true;
-                        var groupId = -1;
-                        var supervisorId = -1;
+            //    //Add Default Step
+            //    if (oJobStep.InsertDefaultJobStep(recordToPlan,
+            //    JobType.Corrective,
+            //    jobTitle,
+            //    jobAdditionalInfo,
+            //    mobileEquip,
+            //    subAssemblyId,
+            //    priority,
+            //    reasonCode,
+            //    _oLogon.UserID,
+            //    ref plannerdJobStepId))
+            //    {
+            //        Session.Add("plannedJobStepId", plannerdJobStepId);
+            //        Session.Add("JobStepID", plannerdJobStepId);
 
-                        //Check Requestor Field
-                        var userId = _oLogon.UserID;
+            //        ////Set Text
+            //        lblStep.Text = "Job Step ID: " + Session["JobStepID"].ToString();
+            //        #region Set Default Group, Supervisor, Labor & Shift
 
-                        //Create Group Class
-                        using (
-                            var oGroup =
-                                new MaintenanceGroup(_connectionString, _useWeb, _oLogon.UserID))
-                        {
-                            //Get Users Group
-                            using (var dt = oGroup.GetFilteredGroupList("B", "", "", -1, userId, ref loaded))
-                            {
-                                //Check Flag
-                                if (loaded)
-                                {
-                                    //Set Group
-                                    if (dt.Rows.Count > 0)
-                                    {
-                                        //Get Group ID
-                                        groupId = Convert.ToInt32(dt.Rows[0][0].ToString());
+            //        //Get User's Default Group And Group's Supervisor
+            //        try
+            //        {
+            //            var loaded = true;
+            //            var groupId = -1;
+            //            var supervisorId = -1;
 
-                                        //Get Supervisor
-                                        if (oGroup.LoadHeaderData(groupId))
-                                        {
-                                            //Get Supervisor ID
-                                            supervisorId = oGroup.SupervisorID;
-                                        }
-                                        else
-                                        {
-                                            //Throw Error
-                                            throw new SystemException(
-                                                @"Error Loading Group/Supervisor Defaults");
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    //Throw Error
-                                    throw new SystemException(
-                                        @"Error Loading Group/Supervisor Defaults");
-                                }
+            //            //Check Requestor Field
+            //            var userId = _oLogon.UserID;
 
-                                //Update Defaults
-                                if (
-                                    !oJobStep.UpdateUserDefaults(plannerdJobStepId, groupId, supervisorId,
-                                        _oLogon.LaborClassID, _oLogon.ShiftID, _oLogon.UserID))
-                                {
-                                    //Throw Error
-                                    throw new SystemException(
-                                        @"Error Saving User Defaults - " + oJobStep.LastError);
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        //Throw Error
-                        throw new SystemException(
-                            @"Error Getting User's Default Group And Supervisor - " + ex.Message);
-                    }
+            //            //Create Group Class
+            //            using (
+            //                var oGroup =
+            //                    new MaintenanceGroup(_connectionString, _useWeb, _oLogon.UserID))
+            //            {
+            //                //Get Users Group
+            //                using (var dt = oGroup.GetFilteredGroupList("B", "", "", -1, userId, ref loaded))
+            //                {
+            //                    //Check Flag
+            //                    if (loaded)
+            //                    {
+            //                        //Set Group
+            //                        if (dt.Rows.Count > 0)
+            //                        {
+            //                            //Get Group ID
+            //                            groupId = Convert.ToInt32(dt.Rows[0][0].ToString());
 
-                    #endregion
+            //                            //Get Supervisor
+            //                            if (oGroup.LoadHeaderData(groupId))
+            //                            {
+            //                                //Get Supervisor ID
+            //                                supervisorId = oGroup.SupervisorID;
+            //                            }
+            //                            else
+            //                            {
+            //                                //Throw Error
+            //                                throw new SystemException(
+            //                                    @"Error Loading Group/Supervisor Defaults");
+            //                            }
+            //                        }
+            //                    }
+            //                    else
+            //                    {
+            //                        //Throw Error
+            //                        throw new SystemException(
+            //                            @"Error Loading Group/Supervisor Defaults");
+            //                    }
 
-                }
-                else
-                {
-                    //Throw Error
-                    throw new SystemException(
-                        @"Error Planning Job - " + oJobStep.LastError);
-                }
-                #endregion
+            //                    //Update Defaults
+            //                    if (
+            //                        !oJobStep.UpdateUserDefaults(plannerdJobStepId, groupId, supervisorId,
+            //                            _oLogon.LaborClassID, _oLogon.ShiftID, _oLogon.UserID))
+            //                    {
+            //                        //Throw Error
+            //                        throw new SystemException(
+            //                            @"Error Saving User Defaults - " + oJobStep.LastError);
+            //                    }
+            //                }
+            //            }
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            //Throw Error
+            //            throw new SystemException(
+            //                @"Error Getting User's Default Group And Supervisor - " + ex.Message);
+            //        }
+
+            //        #endregion
+
+            //    }
+            //    else
+            //    {
+            //        //Throw Error
+            //        throw new SystemException(
+            //            @"Error Planning Job - " + oJobStep.LastError);
+            //    }
+            //    #endregion
             }
         }
     }

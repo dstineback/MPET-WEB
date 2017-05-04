@@ -498,12 +498,17 @@
                     <dx:LayoutItem Caption="Element ID" Name="ElementID">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox runat="server" ID="comboElementID" Width="100%" Theme="iOS" 
-                                    ValueType="System.String" ValueField="" DropDownButton-Enabled="true" 
-                                    AutoPostBack="false" DropDownStyle="DropDown" EnableCallbackMode="true" 
-                                    CallbackPageSize="10"
-                                    
-                                    ></dx:ASPxComboBox>
+                                <dx:ASPxComboBox runat="server" ID="comboElementID" Width="100%" Theme="iOS" TextField="elementID" TextFormatString="{0} - {1}" 
+                                    ValueType="System.String" ValueField="n_elementID" DropDownButton-Enabled="true" 
+                                    OnItemRequestedByValue="ComboElements_OnitemsRequestedByValue_SQL" 
+                                    OnItemsRequestedByFilterCondition="ComboElements_OnItemsRequestedByFiltercondition_SQL" 
+                                    AutoPostBack="false" DropDownStyle="DropDown" EnableCallbackMode="true" CallbackPageSize="10">
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="" Visible="false" />
+                                        <dx:ListBoxColumn FieldName="" Width="75px" Caption="Elements Name" ToolTip="M-PET.NET Elements Name"/>
+                                        <dx:ListBoxColumn FieldName="" Width="150px" Caption="Elements Description" ToolTip="M-PET.NET Elements Description"/>
+                                    </Columns>
+                                </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
@@ -511,13 +516,17 @@
                     <dx:LayoutItem Caption="Sub Assy" Name="SubAssy">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox runat="server" ID="comboSubAssembly" 
+                                <dx:ASPxComboBox runat="server" ID="comboSubAssembly" ClientInstanceName="comboSubAssembly" 
                                     Width="100%" Theme="iOS" AutoPostBack="false" EnableCallbackMode="true" CallbackPageSize="10" 
-                                    ValueType="System.String" ValueField="" DropDownStyle="DropDown" DropDownButton-Enabled="true"
-                                    OnItemRequestedByValue="ComboSubAssembly_OnitemsRequestedByValue_SQL" 
-                                    OnItemsRequestedByFilterCondition="ComboSubAssembly_onItemRequestedByFiltercondition_SQL" TextFormatString="{0} - {1}"
-                                    
-                                    ></dx:ASPxComboBox>
+                                    ValueType="System.String" ValueField="n_subAssemblyID" DropDownStyle="DropDown" DropDownButton-Enabled="true"
+                                    OnItemRequestedByValue="ComboSubAssembly_OnitemsRequestedByValue_SQL" TextField="subAssemblyName"
+                                    OnItemsRequestedByFilterCondition="ComboSubAssembly_onItemRequestedByFiltercondition_SQL" TextFormatString="{0} - {1}">
+                                    <Columns>
+                                        <dx:ListBoxColumn FieldName="n_subAssemblyID" Visible="false"/>
+                                        <dx:ListBoxColumn FieldName="subAssemblyName" Caption="Sub Assem Name" Width="75px" ToolTip="M-PET.NET Sub Assembly Name"/>
+                                        <dx:ListBoxColumn FieldName="subAssemblyDesc" Caption="Sub Assem Description" width="150px" ToolTip="M-PET.NET Sub Assembly Description"/>
+                                    </Columns>
+                                </dx:ASPxComboBox>                                  
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
@@ -1818,11 +1827,12 @@
                                                                                     dbo.time_batches.time_batchid
                                                                             FROM    dbo.time_batches
                                                                           ) tbl_TimeBatches ON tbl_JC.DMRKey = tbl_TimeBatches.RecordID
-                                                        WHERE   tbl_JC.JobstepID = @JobStepID 
-                                                                AND tbl_JC.JobID = @JobID">
+                                                        WHERE   tbl_JC.JobID = @JobID">
+                                                                <%--tbl_JC.JobstepID = @JobStepID 
+                                                                AND --%>
                                                                 <SelectParameters>
                                                                     <asp:SessionParameter DefaultValue="-1" Name="JobID" SessionField="editingJobID" />
-                                                                    <asp:SessionParameter DefaultValue="-1" Name="JobStepID" SessionField="editingJobStepID" />
+                                                                   <%-- <asp:SessionParameter DefaultValue="-1" Name="JobStepID" SessionField="editingJobStepID" />--%>
                                                                 </SelectParameters>
                                                             </asp:SqlDataSource>
                                                         </ContentTemplate>
