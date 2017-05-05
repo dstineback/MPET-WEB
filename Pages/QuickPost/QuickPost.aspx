@@ -272,11 +272,11 @@
                                                                 ValueField="n_objectid" 
                                                                 OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" 
                                                                 OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
-                                                                TextFormatString="{0} - {1} - {2} - {3} - {4}" 
+                                                                TextFormatString="{0}" 
                                                                 Width="600px" 
                                                                 DropDownStyle="DropDown" 
-                                                                Theme="Mulberry" 
-                                                                TextField="objectid" 
+                                                                Theme="iOS" 
+                                                                TextField="n_objectid" 
                                                                 DropDownButton-Enabled="True" 
                                                                 AutoPostBack="False" 
                                                                 ClientInstanceName="ObjectIDCombo">
@@ -285,9 +285,9 @@
                                                 var selectedItem = s.GetSelectedItem();
                                                 if(objectHasValue!=null)
                                                 {
+                                                    txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
                                                     txtObjectArea.SetText(selectedItem.GetColumnText('areaid'));
                                                     txtObjectLocation.SetText(selectedItem.GetColumnText('locationid'));
-                                                    txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
                                                     txtObjectAssetNumber.SetText(selectedItem.GetColumnText('assetnumber'));
                                                     objectImg.SetImageUrl(selectedItem.GetColumnText('LocationOrURL'));
                                                 }
@@ -301,7 +301,7 @@
 
                                             }" />
                                         <Columns>
-                                            <dx:ListBoxColumn FieldName="n_objectid" Visible="False" />
+                                            <dx:ListBoxColumn FieldName="n_objectid" Caption="N_ID" Visible="true" Width="75px" />
                                             <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
                                             <dx:ListBoxColumn FieldName="description" Caption="Description" Width="250px" ToolTip="M-PET.NET Maintenance Object Description"/>
                                             <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
@@ -606,8 +606,16 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
+                    <dx:LayoutItem>
+                        <LayoutItemNestedControlCollection>
+                            <dx:LayoutItemNestedControlContainer>
+                                <dx:ASPxButton runat="server" OnClick="NextStep_Click" ID="NextStepButton" Text="Save & move to next step"></dx:ASPxButton>
+                            </dx:LayoutItemNestedControlContainer>
+                        </LayoutItemNestedControlCollection>
+                    </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup> <%--Job Details--%>
+            
             <dx:LayoutGroup Caption="" ColCount="3">
                 <Items>
 
@@ -812,19 +820,7 @@
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
                 <CaptionSettings Location="Top" />
-            </dx:LayoutItem> <%--Post Notes--%>
-            <dx:LayoutItem Caption="Additional Information"
-                Name="AddInfo" RowSpan="2">
-                <LayoutItemNestedControlCollection>
-                    <dx:LayoutItemNestedControlContainer runat="server">
-                      <dx:ASPxMemo ID="txtAdditionalInfo" Native="True" Height="400px" Width="100%" MaxLength="8000"
-                                    ClientInstanceName="txtAdditionalInfo"
-                                    runat="server"  Theme="iOS" >                                                                                                                          
-                    </dx:ASPxMemo>
-                    </dx:LayoutItemNestedControlContainer>
-                </LayoutItemNestedControlCollection>
-                <CaptionSettings Location="Top" />
-            </dx:LayoutItem> <%--Additional Infomation--%>
+            </dx:LayoutItem> <%--Post Notes--%>          
             <dx:LayoutItem Caption="Attachments" Name="Attachments">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
@@ -869,6 +865,52 @@
                 </LayoutItemNestedControlCollection>
                 <CaptionSettings Location="Top" />
             </dx:LayoutItem> <%--Attachments--%>
+            <dx:LayoutItem>
+                <LayoutItemNestedControlCollection>
+                    <dx:LayoutItemNestedControlContainer>
+                        
+                        <dx:ASPxComboBox runat="server" id="testcombo" EnableCallbackMode="true" CallbackPageSize="10"
+                                    ValueType="System.String" ValueField="UserID"
+                                    OnItemsRequestedByFilterCondition="ComboCompletedBy_OnItemsRequestedByFilterCondition_SQL" 
+                                    OnItemRequestedByValue="ComboCompletedBy_OnItemRequestedByValue_SQL"    
+                                    TextFormatString="{0} - {1}" 
+                                    Width="100%" 
+                                    DropDownStyle="DropDown" Theme="iOS" 
+                                    TextField="username" 
+                                    DropDownButton-Enabled="True" 
+                                    AutoPostBack="False"  >
+                            <Columns>
+                               <dx:ListBoxColumn FieldName="UserID" Visible="False" />
+                                        <dx:ListBoxColumn FieldName="username" Caption="User ID" Width="75px" ToolTip="M-PET.NET User ID"/>
+                                        <dx:ListBoxColumn FieldName="FullName" Caption="Full Name" Width="150px" ToolTip="M-PET.NET User Full Name"/>
+                            </Columns>
+                        </dx:ASPxComboBox>
+                        <dx:ASPxGridView runat="server" ID="TestGrid" OnDataBound="CrewGridBound" DataSourceID="CrewDataSource1">
+                            
+                            <Columns>
+                                <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowEditButton="True" Visible="false" VisibleIndex="0" />
+                                                                    <dx:GridViewDataTextColumn FieldName="RecordID" ReadOnly="True" Visible="false" VisibleIndex="1">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="UserID" ReadOnly="True" Visible="false" VisibleIndex="2">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_skillid" ReadOnly="True" Visible="false" VisibleIndex="3">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_ShiftID" ReadOnly="True" Visible="false" VisibleIndex="4">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_PayCodeID" ReadOnly="True" Visible="false" VisibleIndex="5">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+
+                            </Columns>
+                        </dx:ASPxGridView>
+                        
+                    </dx:LayoutItemNestedControlContainer>
+                </LayoutItemNestedControlCollection>
+            </dx:LayoutItem>
             <dx:LayoutItem Caption="" ShowCaption="False" CaptionSettings-Location="Top">
                                                                         <LayoutItemNestedControlCollection >
                                                                             <dx:LayoutItemNestedControlContainer>
@@ -1201,7 +1243,7 @@
                                         <dx:TabPage Name="StepCrew" Text="CREW" ToolTip="Allows Input Of Jobstep Crew">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl10" runat="server">
-                                                    <asp:UpdatePanel ID="UpdatePanel2" runat="server" OnUnload="UpdatePanel_Unload">
+                                                    <asp:UpdatePanel ID="UpdatePanel2" runat="server" OnUnload="UpdatePanel_Unload" >
                                                         <ContentTemplate>
                                                             <dx:ASPxGridView 
                                                                 ID="CrewGrid" 
@@ -1211,7 +1253,7 @@
                                                                 Width="98%" 
                                                                 KeyboardSupport="True" 
                                                                 ClientInstanceName="CrewGrid" 
-                                                                AutoPostBack="True" 
+                                                                AutoPostBack="false" 
                                                                 EnableCallBacks="true" 
                                                                 Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="True" SettingsBehavior-AllowFocusedRow="False" 
                                                                 SettingsBehavior-AllowSelectByRowClick="true" DataSourceID="CrewDataSource" OnDataBound="CrewGridBound" OnRowUpdating="CrewGrid_RowUpdating" >
@@ -1827,12 +1869,13 @@
                                                                                     dbo.time_batches.time_batchid
                                                                             FROM    dbo.time_batches
                                                                           ) tbl_TimeBatches ON tbl_JC.DMRKey = tbl_TimeBatches.RecordID
-                                                        WHERE   tbl_JC.JobID = @JobID">
-                                                                <%--tbl_JC.JobstepID = @JobStepID 
-                                                                AND --%>
+                                                                
+                                                        WHERE   tbl_JC.JobstepID = @JobStepID 
+                                                                AND tbl_JC.JobID = @JobID">
+                                                                
                                                                 <SelectParameters>
                                                                     <asp:SessionParameter DefaultValue="-1" Name="JobID" SessionField="editingJobID" />
-                                                                   <%-- <asp:SessionParameter DefaultValue="-1" Name="JobStepID" SessionField="editingJobStepID" />--%>
+                                                                    <asp:SessionParameter DefaultValue="-1" Name="JobStepID" SessionField="editingJobStepID" />
                                                                 </SelectParameters>
                                                             </asp:SqlDataSource>
                                                         </ContentTemplate>
@@ -3340,10 +3383,10 @@
                                                           ">
                                                                             </asp:SqlDataSource>
                                                                             <div class="popup-buttons-centered">
-                                                                                <dx:ASPxButton ID="LogonButton" AutoPostBack="True" runat="server" CssClass="button" Text="Add" OnClick="btnAddCrew_Click" >
+                                                                                <dx:ASPxButton ID="LogonButton" AutoPostBack="False" runat="server" CssClass="button" Text="Add" OnClick="btnAddCrew_Click" >
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>
-                                                                                <dx:ASPxButton ID="OkButton" AutoPostBack="True" runat="server" Text="Close" CssClass="button">
+                                                                                <dx:ASPxButton ID="OkButton" AutoPostBack="False" runat="server" Text="Close" CssClass="button">
                                                                                     <ClientSideEvents Click="HidePopup" />
                                                                                     <HoverStyle CssClass="hover"></HoverStyle>
                                                                                 </dx:ASPxButton>
@@ -4232,4 +4275,91 @@
     <asp:SqlDataSource ID="OutcomeCodeDS" runat="server" />
     <asp:SqlDataSource ID="ElementsDataSource" runat="server" />
     <asp:SqlDataSource ID="SubAssemblyDataSource" runat="server" />
+                        <asp:SqlDataSource ID="CrewDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="
+                                                        DECLARE @NullDate DATETIME
+                                                        SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
+                                                        --Return Data
+                                                        SELECT  tbl_JC.n_jobcrewid AS 'RecordID' ,
+                                                        tbl_JC.n_personid AS 'UserID' ,
+                                                        case tbl_JC.n_skillid 
+                                                            WHEN 0 THEN NULL
+                                                            WHEN -1 THEN NULL
+                                                            ELSE tbl_JC.n_skillid
+                                                        END AS 'n_skillid' ,
+                                                        tbl_JC.n_ShiftID AS 'n_ShiftID' ,
+                                                        CASE tbl_JC.n_PayCodeID
+                                                            WHEN -1 THEN NULL
+                                                            WHEN 0 THEN NULL
+                                                            ELSE tbl_JC.n_PayCodeID
+                                                        END AS 'n_PayCodeID' ,
+                                                        tbl_Users.Username AS 'CrewMemberTextID' ,
+                                                        tbl_Users.Name AS 'CrewMemberName' ,
+                                                        tbl_Shifts.ShiftID AS 'ShiftIDText' ,
+                                                        tbl_Shifts.Description AS 'ShiftIDDesc' ,
+                                                        tbl_Skills.skillid AS 'SkillIDText' ,
+                                                        tbl_Skills.description AS 'SkillDesc' ,
+                                                        tbl_JC.actuallen AS 'ActualHrs' ,
+                                                        tbl_JC.estlen AS 'EstHrs' ,
+                                                        tbl_JC.Payfactor AS 'PayRate' ,
+                                                        tbl_JC.PayfactorText AS 'PayCodeText' ,
+                                                        CASE tbl_JC.WorkDate
+                                                          WHEN @NullDate THEN NULL
+                                                          ELSE tbl_JC.WorkDate
+                                                        END AS 'WorkDate' ,
+                                                        CASE tbl_JC.CertificationDate
+                                                          WHEN @NullDate THEN NULL
+                                                          ELSE tbl_JC.CertificationDate
+                                                        END AS 'CertificationDate' ,
+                                                        CASE tbl_JC.CertificationDateExpires
+                                                          WHEN @NullDate THEN NULL
+                                                          ELSE tbl_JC.CertificationDateExpires
+                                                        END AS 'CertificationDateExpires' ,
+                                                        CASE tbl_JC.n_laborclassid
+                                                            WHEN -1 THEN NULL
+                                                            WHEN 0 THEN NULL
+                                                            ELSE tbl_JC.n_laborclassid
+                                                        END AS 'n_laborclassid' ,
+                                                        tbl_JC.RateType AS 'RateType' ,
+                                                        tbl_JC.DMRKEY AS 'DMRKEY' ,
+                                                        tbl_LaborClasses.laborclassid AS 'LaborClassID' ,
+                                                        CASE tbl_JC.RateType
+                                                          WHEN 0 THEN 'STANDARD'
+                                                          WHEN 1 THEN 'OVERTIME'
+                                                          WHEN 2 THEN 'OTHER'
+                                                        END AS 'RateTypeStr' ,
+                                                        ISNULL(tbl_TimeBatches.time_batchid, 'N/A') AS 'LinkedDMR'
+                                                        FROM    dbo.Jobcrews tbl_JC
+                                                                INNER JOIN ( SELECT dbo.MPetUsers.UserID ,
+                                                                                    dbo.MPetUsers.Username ,
+                                                                                    LTRIM(RTRIM(FirstName + ' ' + LastName)) AS Name
+                                                                             FROM   dbo.MPetUsers
+                                                                           ) tbl_Users ON tbl_JC.n_personid = tbl_Users.UserID
+                                                                INNER JOIN ( SELECT dbo.skills.n_skillid ,
+                                                                                    dbo.skills.skillid ,
+                                                                                    dbo.skills.description
+                                                                             FROM   dbo.skills
+                                                                           ) tbl_Skills ON tbl_JC.n_skillid = tbl_Skills.n_skillid
+                                                                INNER JOIN ( SELECT dbo.Shifts.n_shiftid ,
+                                                                                    dbo.Shifts.ShiftID ,
+                                                                                    dbo.Shifts.Description
+                                                                             FROM   dbo.Shifts
+                                                                           ) tbl_Shifts ON tbl_JC.n_ShiftID = tbl_Shifts.n_shiftid
+                                                                INNER JOIN ( SELECT dbo.laborclasses.n_laborclassid ,
+                                                                                    dbo.laborclasses.laborclassid
+                                                                             FROM   dbo.laborclasses
+                                                                           ) tbl_LaborClasses ON tbl_JC.n_laborclassid = tbl_LaborClasses.n_laborclassid
+                                                                LEFT JOIN ( SELECT  dbo.time_batches.RecordID ,
+                                                                                    dbo.time_batches.time_batchid
+                                                                            FROM    dbo.time_batches
+                                                                          ) tbl_TimeBatches ON tbl_JC.DMRKey = tbl_TimeBatches.RecordID
+                                                                
+                                                        WHERE   tbl_JC.JobstepID = @JobStepID 
+                                                                AND tbl_JC.JobID = @JobID">
+                                                                
+                                                                <SelectParameters>
+                                                                    <asp:SessionParameter DefaultValue="-1" Name="JobID" SessionField="editingJobID" />
+                                                                    <asp:SessionParameter DefaultValue="-1" Name="JobStepID" SessionField="editingJobStepID" />
+                                                                </SelectParameters>
+                                                            </asp:SqlDataSource>
+
 </asp:Content>
