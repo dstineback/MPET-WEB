@@ -18,6 +18,7 @@
         <siteMapNode url="~/Pages/ServiceRequests/ServiceRequests.aspx" title="Add Service Requests" description="Add New Service Request" />
       </siteMapNode>
       <siteMapNode url="~/Pages/PlannedJobs/PlannedJobsList.aspx" title="Planned Jobs" description="Add/Edit/List Planned Jobs" />
+      <siteMapNode url="~/Pages/QuickPost/QuickPost.aspx" title="Quick Post" description="Post a Job to History" />
       <siteMapNode url="~/Pages/History/JobsHistoryList.aspx" title="Job History" description="Job History List" />
       <siteMapNode url="~/Pages/History/JobHistoryCostList.aspx" title="Job Costs" description="Job History Cost List" />
     </siteMapNode>

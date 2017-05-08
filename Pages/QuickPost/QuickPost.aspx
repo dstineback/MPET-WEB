@@ -82,38 +82,7 @@
         }
 </script>
     <script>
-        //function ActiveTabChanged() {
-
-        //    var index = window.requestTab.GetActiveTabIndex();
-
-        //    if (index == 2) {
-        //        var x = window.GPSX.GetValue();
-        //        var y = window.GPSY.GetValue();
-        //        var latlng;
-        //        var myOptions;
-        //        if ((x != null) && (y != null)) {
-        //            latlng = new window.google.maps.LatLng(x, y);
-        //            myOptions = {
-        //                zoom: 15,
-        //                center: latlng,
-        //                mapTypeId: window.google.maps.MapTypeId.TERRAIN
-        //            };
-        //            var map = new window.google.maps.Map(document.getElementById("map"), myOptions);
-        //            var marker = new window.google.maps.Marker({ position: latlng, map: map, title: "Current Location" });
-        //        } else {
-        //            latlng = new window.google.maps.LatLng(32.8470987, -117.2727893);
-        //            myOptions = {
-        //                zoom: 15,
-        //                center: latlng,
-        //                mapTypeId: window.google.maps.MapTypeId.TERRAIN
-        //            };
-        //            var map = new window.google.maps.Map(document.getElementById("map"), myOptions);
-
-        //        }
-        //    }
-        //}
-
-
+     
         function OnGetCrewRowId(idValue) {
             Selection.Set('RecordID', idValue[0].toString());
             Selection.Set('DMRKEY', idValue[1].toString());
@@ -171,8 +140,6 @@
         function AddEditOtherRow() {
             window.StartEdit();
         }
-
-
 
 
         function OnPartUpateClick() {
@@ -464,7 +431,7 @@
                                 <dx:ASPxDateEdit ID="TxtWorkCompDate" 
                                                     ClientInstanceName="TxtWorkCompDate"
                                                     DisplayFormatString="D" ValidationSettings-RequiredField-IsRequired="true"
-                                                    Theme="iOS"
+                                                    Theme="iOS" ValidationSettings-Display="Dynamic"
                                                     Width="100%" 
                                                     runat="server">
                                     <ValidationSettings>
@@ -483,7 +450,7 @@
                                                 ValueType="System.String" ValueField="n_priorityid"
                                                 OnItemsRequestedByFilterCondition="ComboPriority_OnItemsRequestedByFilterCondition_SQL"
                                                 OnItemRequestedByValue="ComboPriority_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                Width="400px" DropDownStyle="DropDown" Theme="iOS" TextField="priorityid" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboPriority">
+                                                Width="100%" DropDownStyle="DropDown" Theme="iOS" TextField="priorityid" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboPriority">
                                                                                                
                                     <Columns>
                                         <dx:ListBoxColumn FieldName="n_priorityid" Visible="False" />
@@ -606,19 +573,6 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
-                    <dx:LayoutItem>
-                        <LayoutItemNestedControlCollection>
-                            <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxButton runat="server" OnClick="NextStep_Click" ID="NextStepButton" Text="Save to access optional fields"></dx:ASPxButton>
-                            </dx:LayoutItemNestedControlContainer>
-                        </LayoutItemNestedControlCollection>
-                    </dx:LayoutItem>
-                </Items>
-            </dx:LayoutGroup> <%--Job Details--%>
-            
-            <dx:LayoutGroup Caption="" ColCount="3">
-                <Items>
-
                     <dx:LayoutItem Caption="Breakdown" Name="Breakdown">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -628,6 +582,19 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
+                </Items>
+            </dx:LayoutGroup> <%--Job Details--%>
+                    <dx:LayoutItem Caption="">
+                        <LayoutItemNestedControlCollection>
+                            <dx:LayoutItemNestedControlContainer>
+                                <dx:ASPxButton runat="server" OnClick="NextStep_Click" ID="NextStepButton" BackColor="#ff0000" ForeColor="White" HoverStyle-BackColor="Blue" Text="Save to access optional fields"></dx:ASPxButton>
+                            </dx:LayoutItemNestedControlContainer>
+                        </LayoutItemNestedControlCollection>
+                    </dx:LayoutItem>
+            
+            <dx:LayoutGroup Caption="" ColCount="3">
+                <Items>
+
                     <dx:LayoutItem Caption="Update Object:" Name="updateObject">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
@@ -1794,8 +1761,7 @@
                                                                     </EditForm>
                                                                 </Templates>
                                                                 <Templates>
-                                                                    <FooterRow>
-                                                                        <asp:LinkButton runat="server" ID="AddNewMemBnt" OnClick="AddNewMemBnt_Click" Text="test button"></asp:LinkButton>
+                                                                    <FooterRow>                                                               
                                                                         <dx:ASPxButton runat="server" ID="AddNewMemberButton" Theme="iOS" Text="Add New Member">
                                                                             <ClientSideEvents Click="ShowMemberPopup" />
                                                                         </dx:ASPxButton>

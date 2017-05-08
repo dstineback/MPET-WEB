@@ -136,7 +136,9 @@ namespace Pages.QuickPost
                     EquipGrid.Enabled = false;
                     EquipGrid.Visible = false;
                     Master.ShowPostButton = false;
-                    
+                    chkUpdateObjects.Enabled = false;
+
+
                 }
                 #endregion
                 SetupForAdding();
@@ -3629,10 +3631,6 @@ namespace Pages.QuickPost
 
         protected void ResetSession()
         {
-
-
-           
-
 
             //Clear Session & Fields
             if (HttpContext.Current.Session["navObject"] != null)
