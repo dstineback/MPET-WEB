@@ -29,6 +29,9 @@ public partial class Pages_Map_MapForm : Page
     int jobstepid;
     int nobjectid;
     string objectID;
+    string Area;
+    string AssetNumber;
+    string LocationID;
     HttpContext context = HttpContext.Current;
     public DataTable dt { get; private set; }
 
@@ -91,6 +94,18 @@ public partial class Pages_Map_MapForm : Page
                 nobjectid = Convert.ToInt32(HttpContext.Current.Session["n_objectid"].ToString());
                 HttpContext.Current.Session.Add("nobjectid", nobjectid);
             }
+            if(Session["Area"] != null)
+            {
+                Area = Session["Area"].ToString();
+            }
+            if(Session["AssetNumber"] != null)
+            {
+                AssetNumber = Session["AssetNumber"].ToString();
+            }
+            if(Session["LocationID"] != null)
+            {
+                LocationID = Session["LocationID"].ToString();
+            }
         }
         catch {
             System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, check to make sure items have the correct Coordinates.');</script>");
@@ -140,6 +155,9 @@ public partial class Pages_Map_MapForm : Page
                 dt.Columns.Add("Latitude");
                 dt.Columns.Add("Longitude");
                 dt.Columns.Add("objectDescription");
+                dt.Columns.Add("Area");
+                dt.Columns.Add("AssetNumber");
+                dt.Columns.Add("LocationID");
 
                 foreach (object[] row in mS)
                 {
@@ -148,8 +166,11 @@ public partial class Pages_Map_MapForm : Page
                     Latitude = Convert.ToDecimal(row[2].ToString());
                     Longitude = Convert.ToDecimal(row[3].ToString());
                     objectDescription = row[4].ToString();
+                    Area = row[5].ToString();
+                    AssetNumber = row[6].ToString();
+                    LocationID = row[7].ToString();
 
-                    dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription);
+                    dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription, Area, AssetNumber, LocationID);
                 }
 
                 DataSet ds = new DataSet();
@@ -163,6 +184,9 @@ public partial class Pages_Map_MapForm : Page
                     objList.Add(Convert.ToDecimal(row["Latitude"]).ToString());
                     objList.Add(Convert.ToDecimal(row["Longitude"]).ToString());
                     objList.Add(Convert.ToString(row["objectDescription"]));
+                    objList.Add(Convert.ToString(row["Area"]));
+                    objList.Add(Convert.ToString(row["AssetNumber"]));
+                    objList.Add(Convert.ToString(row["LocationID"]));
                 }
 
                 mapPoints = objList.ToArray();
@@ -175,6 +199,9 @@ public partial class Pages_Map_MapForm : Page
                 Longitude = Convert.ToDecimal(Session["Longitude"].ToString());
                 objectDescription = Session["objectDescription"].ToString();
                 objectID = Session["objectid"].ToString();
+                Area = Session["Area"].ToString();
+                AssetNumber = Session["AssetNumber"].ToString();
+                LocationID = Session["LocationID"].ToString();
 
                 DataTable dt = new DataTable();
                 dt.Columns.Add("objectid"); 
@@ -182,8 +209,11 @@ public partial class Pages_Map_MapForm : Page
                 dt.Columns.Add("Latitude");
                 dt.Columns.Add("Longitude");
                 dt.Columns.Add("objectDescription");
+                dt.Columns.Add("Area");
+                dt.Columns.Add("AssetNumber");
+                dt.Columns.Add("LocationID");
 
-                dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription);
+                dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription, Area, AssetNumber, LocationID);
 
                 DataSet ds = new DataSet();
                 ds.Tables.Add(dt);
@@ -196,6 +226,9 @@ public partial class Pages_Map_MapForm : Page
                     objList.Add(Convert.ToDecimal(dr["Longitude"]).ToString());
                     objList.Add(Convert.ToDecimal(dr["Latitude"]).ToString());
                     objList.Add(dr["objectDescription"].ToString());
+                    objList.Add(dr["Area"].ToString());
+                    objList.Add(dr["AssetNumber"].ToString());
+                    objList.Add(dr["LocationID"].ToString()); 
                 }
                 mapPoints = objList.ToArray();
                 rptObjectMarkers.DataSource = dt;

@@ -136,7 +136,7 @@
                         return;
                     } else { };
                     if(data.objectid != null && jobstepid === "undefined" && jobid === "undefined"){
-                        mInfoWindow.setContent('<h1>Objects</h1>'  + '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>' + 'Object ID: ' +  data.objectid + 'Description: ' + data.objectDescription + '</div>')
+                        mInfoWindow.setContent('<h1>Objects</h1>'  + '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>'  + '<a href="/../../Pages/QuickPost/QuickPost.aspx">' + 'Make a Quick Post' + '</a>' + '<br>' +'Object ID: ' +  data.objectid + 'Description: ' + data.objectDescription + '</div>')
                         mInfoWindow.open(map, marker);
                         return;
                     }else{};

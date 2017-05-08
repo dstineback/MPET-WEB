@@ -12,6 +12,9 @@
             Selection.Set('Longitude', idValue[2].toString());
             Selection.Set('Latitude', idValue[3].toString());
             Selection.Set('description', idValue[4].toString());
+            Selection.Set('Area', idValue[5].toString());
+            Selection.Set('AssetNumber', idValue[6].toString());
+            Selection.Set('LocationID', idValue[7].toString());
         }
 
         function scrollPreview() {
@@ -49,7 +52,7 @@
                 </Styles>
                 
                 <ClientSideEvents RowClick="function(s, e) {
-                        ObjectGrid.GetRowValues(e.visibleIndex, 'objectid;n_objectid;Longitude;Latitude;description', OnGetRowId);
+                        ObjectGrid.GetRowValues(e.visibleIndex, 'objectid;n_objectid;Longitude;Latitude;description;Area;Asset Number;LocationID', OnGetRowId);
                     }" />
                 <Columns>
                     <dx:GridViewCommandColumn FixedStyle="Left" ShowSelectCheckbox="True" Visible="false" VisibleIndex="0" />

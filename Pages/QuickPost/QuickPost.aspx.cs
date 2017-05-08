@@ -104,9 +104,11 @@ namespace Pages.QuickPost
             #region Check for post to Setup Form
             if (!IsPostBack)
             {
+
                 #region Make Job ID and Step ID
                 if (Session["LogonInfo"] != null)
                 {
+                    ResetSession();   
                     GetJobID();
                     oJob = HttpContext.Current.Session["oJob"];
                     JobID = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
@@ -124,6 +126,7 @@ namespace Pages.QuickPost
                     PhotoContainer.Visible = false;
                     UpdatePanel1.Visible = false;
                     TabPageControl.Visible = false;
+                    TabPageContainer.Visible = false;
                     CrewGrid.Enabled = false;
                     CrewGrid.Visible = false;
                     MemberGrid.Enabled = false;
@@ -132,21 +135,41 @@ namespace Pages.QuickPost
                     PartGrid.Visible = false;
                     EquipGrid.Enabled = false;
                     EquipGrid.Visible = false;
-                    //var editingJobStepID = Convert.ToInt32(Session["editingJobStepID"]);
-                    //JobStepID = Convert.ToInt32(Session["JobStepID"]);
-                    //Session.Add("editingJobStepID", JobStepID);
+                    Master.ShowPostButton = false;
+                    
                 }
                 #endregion
                 SetupForAdding();
                 txtWorkDescription.Focus();
-
-                if (Session["objectid"] != null)
+                #region Check for Object field population from another source
+                if (Session["nobjectid"] != null)
                 {
-                    ObjectIDCombo.Value = Convert.ToInt32(Session["objectid"]);
+                    
+                    var txtObject = HttpContext.Current.Session["objectDescription"].ToString();
+                    ObjectIDCombo.Value = Convert.ToInt32(HttpContext.Current.Session["nobjectId"]).ToString();
 
+                    if (Session["objectDescription"] != null)
+                    {
+                        
+                        txtObjectDescription.Value = Session["objectDescription"];
+                    }
+
+                    if (Session["Area"] != null)
+                    {
+                        txtObjectArea.Value = Session["Area"].ToString();
+                    }
+
+                    if (Session["AssestNumber"] != null)
+                    {
+                        txtObjectAssetNumber.Value = Session["AssetNumber"].ToString();
+                    }
+
+                    if (Session["LocationID"] != null)
+                    {
+                        txtObjectLocation.Value = Session["LocationID"].ToString();
+                    }
                 }
-
-
+                #endregion
                 #region Setup Navitation Checkboxes
 
                 //Check For Navigation Items
@@ -222,18 +245,45 @@ namespace Pages.QuickPost
             #region Is not a Post-Back
             if (IsPostBack)
             {
+                if(Session["JobStepID"] != null && Session["EditingJobID"] != null)
+                {
+                    Master.ShowPostButton = true;
+                }
+                #region Setting Headers with Job ID
+                if (Session["AssignedJobID"] != null)
+                {
+                    lblHeader.Text = "Job ID: " + Session["AssignedJobID"].ToString();
+                }
+                else
+                {
+                    lblHeader.Text = "Job ID: ";
+                }
+
+                if (Session["JobStepID"] != null)
+                {
+                    lblStep.Text = "Job Step ID: " + Session["JobStepID"].ToString();
+                }
+                else
+                {
+                    lblStep.Text = "Job Step ID: ";
+                }
+                #endregion
+
+                #region Work Description
                 if (Session["txtWorkDescription"] != null)
                 {
                     txtWorkDescription.Text = Session["txtWorkDescription"].ToString();
                 }
+                #endregion
 
+                #region Start Date
                 if (Session["TxtWorkStartDate"] != null)
                 {
                     TxtWorkStartDate.Value = Convert.ToDateTime(Session["txtWorkStartDate"].ToString());
                 }
+                #endregion
 
-
-
+                #region Object Info
                 //Check For Previous Session Variables
                 if (HttpContext.Current.Session["ObjectIDCombo"] != null)
                 {
@@ -275,6 +325,173 @@ namespace Pages.QuickPost
                     //Get Info From Session
                     txtObjectAssetNumber.Text = (HttpContext.Current.Session["txtObjectAssetNumber"].ToString());
                 }
+                #endregion
+
+                #region Complettion Date
+                if (Session["txtWorkCompDate"] != null)
+                {
+                    TxtWorkCompDate.Value = Convert.ToDateTime(Session["txtWorkCompDate"].ToString());
+                }
+                #endregion
+
+                #region Completed By
+                if (Session["comboCompletedBy"] != null)
+                {
+                    ComboCompletedBy.Value = Session["comboCompletedBy"].ToString();
+                }
+                #endregion
+
+                #region Job Length
+                if (Session["txtJobLength"] != null)
+                {
+                    txtJobLength.Value = Session["txtJobLength"].ToString();
+                }
+                #endregion
+
+                #region Reason
+                if (Session["comboReason"] != null)
+                {
+                    comboReason.Value = Session["comboReason"].ToString();
+                }
+                #endregion
+
+                #region OutCome
+                if (Session["ComboOutcome"] != null)
+                {
+                    ComboOutcomeCode.Value = Session["outcomeCode"].ToString();
+                }
+                #endregion
+
+                #region Priority
+                if (Session["ComboPriority"] != null)
+                {
+                    ComboPriority.Value = Session["ComboPriority"].ToString();
+                }
+                #endregion
+
+                #region Element
+                if (Session["elementID"] != null)
+                {
+                    comboElementID.Value = Session["elementID"].ToString();
+
+                }
+                #endregion
+
+                #region Sub Assembly
+                if (Session["subAssembly"] != null)
+                {
+                    comboSubAssembly.Value = Session["subAssembly"].ToString();
+                }
+                #endregion
+
+                #region Highway Route
+                if (Session["comboHwyRoute"] != null)
+                {
+                    comboHwyRoute.Value = Session["comboHwyRoute"].ToString();
+                }
+                #endregion
+
+                #region Milepost From
+                if (Session["txtMilepost"] != null)
+                {
+                    txtMilepost.Value = Session["txtMilepost"].ToString();
+                }
+                #endregion
+
+                #region Direction
+                if (Session["comboMilePostDir"] != null)
+                {
+                    comboMilePostDir.Value = Session["comboMilePostDir"].ToString();
+                }
+                #endregion
+
+                #region MilePost To
+                if (Session["txtMilepostTo"] != null)
+                {
+                    txtMilepostTo.Value = Session["txtMilepostTo"].ToString();
+                }
+                #endregion
+
+                #region Breakdown
+                if (Session["breakdownBox"] != null)
+                {
+                    breakdownBox.Checked = true;
+                }
+                #endregion
+
+                #region Update Object
+                
+                #endregion
+
+                #region Post Defaults
+                if (Session["chkPostDefaults"] != null)
+                {
+                    chkPostDefaults.Value = Session["chkPostDefaults"].ToString();
+                }
+                #endregion
+
+                #region CostCode
+                if (Session["ComboCostCode"] != null)
+                {
+                    ComboCostCode.Value = Session["ComboCostCode"].ToString();
+                }
+                #endregion
+
+                #region Fund Source
+                if (Session["ComboFundSource"] != null)
+                {
+                    ComboFundSource.Value = Session["ComboFundSource"].ToString();
+                }
+                #endregion
+
+                #region Work Order Code
+                if (Session["ComboWorkOrder"] != null)
+                {
+                    ComboWorkOrder.Value = Session["ComboWorkOrder"].ToString();
+                }
+                #endregion
+
+                #region Work Operation
+                if (Session["ComboWorkOp"] != null)
+                {
+                    ComboWorkOp.Value = Session["ComboWorkOp"].ToString();
+                }
+                #endregion
+
+                #region Organization Code
+                if (Session["ComboOrgCode"] != null)
+                {
+                    ComboOrgCode.Value = Session["ComboOrgCode"].ToString();
+                }
+                #endregion
+
+                #region Funding Group
+                if (Session["ComboFundGroup"] != null)
+                {
+                    ComboFundGroup.Value = Session["ComboFundGroup"].ToString();
+                }
+                #endregion
+
+                #region ControlSection
+                if (Session["ComboCtlSelection"] != null)
+                {
+                    ComboCtlSection.Value = Session["ComboCtlSelection"].ToString();
+                }
+                #endregion
+
+                #region Equipment
+                if (Session["ComboEquipNum"] != null)
+                {
+                    comboElementID.Value = Session["ComboEquipNum"].ToString();
+                }
+                #endregion
+
+                #region Post Notes
+                if (Session["txtPostNotes"] != null)
+                {
+                    txtPostNotes.Text = Session["txtPostNotes"].ToString();
+                }
+                #endregion
             }
             #endregion
             #region Button Status
@@ -282,52 +499,52 @@ namespace Pages.QuickPost
             Master.ShowPostButton = true;
 
             //Clear Prior Selection If Edit Check Is No Longer Visible
-            if (!(CrewGrid.Columns[0].Visible))
-            {
-                //Uncheck All
-                CrewGrid.Selection.UnselectAll();
-            }
-            else
-            {
-                //Make Sure Settings Are Right
-                CrewGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
-            }
+            //if (!(CrewGrid.Columns[0].Visible))
+            //{
+            //    //Uncheck All
+            //    CrewGrid.Selection.UnselectAll();
+            //}
+            //else
+            //{
+            //    //Make Sure Settings Are Right
+            //    CrewGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            //}
 
-            //Clear Prior Selection If Edit Check Is No Longer Visible
-            if (!(MemberGrid.Columns[0].Visible))
-            {
-                //Uncheck All
-                MemberGrid.Selection.UnselectAll();
-            }
-            else
-            {
-                //Make Sure Settings Are Right
-                MemberGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
-            }
+            ////Clear Prior Selection If Edit Check Is No Longer Visible
+            //if (!(MemberGrid.Columns[0].Visible))
+            //{
+            //    //Uncheck All
+            //    MemberGrid.Selection.UnselectAll();
+            //}
+            //else
+            //{
+            //    //Make Sure Settings Are Right
+            //    MemberGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            //}
 
-            //Clear Prior Selection If Edit Check Is No Longer Visible
-            if (!(PartGrid.Columns[0].Visible))
-            {
-                //Uncheck All
-                PartGrid.Selection.UnselectAll();
-            }
-            else
-            {
-                //Make Sure Settings Are Right
-                PartGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
-            }
+            ////Clear Prior Selection If Edit Check Is No Longer Visible
+            //if (!(PartGrid.Columns[0].Visible))
+            //{
+            //    //Uncheck All
+            //    PartGrid.Selection.UnselectAll();
+            //}
+            //else
+            //{
+            //    //Make Sure Settings Are Right
+            //    PartGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            //}
 
-            //Clear Prior Selection If Edit Check Is No Longer Visible
-            if (!(EquipGrid.Columns[0].Visible))
-            {
-                //Uncheck All
-                EquipGrid.Selection.UnselectAll();
-            }
-            else
-            {
-                //Make Sure Settings Are Right
-                EquipGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
-            }
+            ////Clear Prior Selection If Edit Check Is No Longer Visible
+            //if (!(EquipGrid.Columns[0].Visible))
+            //{
+            //    //Uncheck All
+            //    EquipGrid.Selection.UnselectAll();
+            //}
+            //else
+            //{
+            //    //Make Sure Settings Are Right
+            //    EquipGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            //}
 
 
 
@@ -343,7 +560,7 @@ namespace Pages.QuickPost
                         {
                             //Disable Other Tabs
 
-                            TabPageControl.TabPages[1].ClientEnabled = false;  //Crew
+                            TabPageControl.TabPages[0].ClientEnabled = false;  //Crew
                             TabPageControl.TabPages[2].ClientEnabled = false;  //Parts
                             TabPageControl.TabPages[3].ClientEnabled = false;  //Equip
 
@@ -353,7 +570,7 @@ namespace Pages.QuickPost
                         {
                             //Disable Other Tabs
 
-                            TabPageControl.TabPages[0].ClientEnabled = false;  //Members
+                            TabPageControl.TabPages[1].ClientEnabled = false;  //Members
                             TabPageControl.TabPages[2].ClientEnabled = false;  //Parts
                             TabPageControl.TabPages[3].ClientEnabled = false;  //Equip
 
@@ -384,8 +601,8 @@ namespace Pages.QuickPost
                         {
                             //Make Sure All Tabs Are Client Enabled
 
-                            TabPageControl.TabPages[0].ClientEnabled = true;  //Members
-                            TabPageControl.TabPages[1].ClientEnabled = true;  //Crew
+                            TabPageControl.TabPages[0].ClientEnabled = true;  //Crews
+                            TabPageControl.TabPages[1].ClientEnabled = true;  //Members
                             TabPageControl.TabPages[2].ClientEnabled = true;  //Parts
                             TabPageControl.TabPages[3].ClientEnabled = true;  //Equip
 
@@ -397,8 +614,8 @@ namespace Pages.QuickPost
             {
                 //Make Sure All Tabs Are Client Enabled
 
-                TabPageControl.TabPages[0].ClientEnabled = true;  //Members
-                TabPageControl.TabPages[1].ClientEnabled = true;  //Crew
+                TabPageControl.TabPages[0].ClientEnabled = true;  //Crew
+                TabPageControl.TabPages[1].ClientEnabled = true;  //Members
                 TabPageControl.TabPages[2].ClientEnabled = true;  //Parts
                 TabPageControl.TabPages[3].ClientEnabled = true;  //Equip
 
@@ -731,7 +948,7 @@ namespace Pages.QuickPost
         private void SetupForAdding()
         {
             //Setup Buttons
-            Master.ShowPostButton = (_userCanAdd || _userCanEdit);
+            Master.ShowPostButton = (_userCanAdd || _userCanEdit && Session["JobStepID"] != null);
             Master.ShowNewButton = _userCanAdd;
 
             //Disable Tabs
@@ -1998,6 +2215,22 @@ namespace Pages.QuickPost
         /// </summary>
         protected void SaveSessionData()
         {
+            if(Session["AssignedJobID"] != null)
+            {
+                lblHeader.Text = "Job ID: " + Session["AssignedJobID"].ToString();
+            } else
+            {
+                lblHeader.Text = "Job ID: ";
+            }
+
+            if (Session["JobStepID"] != null)
+            {
+                lblStep.Text = "Job Step ID: " + Session["JobStepID"].ToString();
+            } else
+            {
+                lblStep.Text = "Job Step ID: ";
+            }
+            
             #region Job Description 
 
             //Check For Input
@@ -2131,17 +2364,37 @@ namespace Pages.QuickPost
                 #endregion
             }
 
+            if(Session["ObjectIDComb"] != null)
+            {
+                ObjectIDCombo.Value = Session["ObjectIDCombo"].ToString();
+            }
+
             #endregion
 
             #region Completed By
-            if (HttpContext.Current.Session["ComboCompletedBy"] != null)
+            if (ComboCompletedBy.Value != null)
             {
+                Session.Remove("ComboCompletedBy");
                 HttpContext.Current.Session.Add("ComboCompletedBy", ComboCompletedBy.Value);
+            }
+
+            if(Session["ComboCompletedBy"] != null)
+            {
+                ComboCompletedBy.Value = Session["ComboCompletedBy"].ToString();
+            }
+            #endregion
+
+            #region Job Length
+            if (txtJobLength.Value != null)
+            {
+                var JobLength = txtJobLength.Value.ToString();
+                Session.Add("txtJobLength", JobLength);
             }
             #endregion
 
             #region Start and Completion Dates
-            if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
+
+            if (TxtWorkStartDate.Value != null)
             {
                 //Set Value
                 HttpContext.Current.Session.Add("TxtWorkStartDate", TxtWorkStartDate.Value.ToString());
@@ -2149,7 +2402,7 @@ namespace Pages.QuickPost
             }
 
             //Add Comp Date
-            if (HttpContext.Current.Session["TxtWorkCompDate"] != null)
+            if (TxtWorkCompDate.Value != null)
             {
 
                 //Set Value
@@ -2257,8 +2510,13 @@ namespace Pages.QuickPost
                 HttpContext.Current.Session.Add("ComboOutcome", ComboOutcomeCode.Value);
             }
             #endregion
-            ///TODO Add Elements combo
-            ///
+            
+            #region Elements
+            if(comboElementID.Value != null)
+            {
+                Session.Add("elementID", comboElementID.Value);
+            }
+            #endregion
 
             #region Hwy Route
 
@@ -2306,14 +2564,14 @@ namespace Pages.QuickPost
             #region Milepost
 
             //Check For Prior Value
-            //if (HttpContext.Current.Session["txtMilepost"] != null)
-            //{
-            //    //Remove Old One
-            //    HttpContext.Current.Session.Remove("txtMilepost");
-            //}
+            if (HttpContext.Current.Session["txtMilepost"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtMilepost");
+                //Add New Value
+                HttpContext.Current.Session.Add("txtMilepost", txtMilepost.Value.ToString());
+            }
 
-            ////Add New Value
-            //HttpContext.Current.Session.Add("txtMilepost", txtMilepost.Value.ToString());
 
             #endregion
 
@@ -2380,8 +2638,21 @@ namespace Pages.QuickPost
             #endregion
 
             ///TODO Add Sub ASSEMBLY Combo
+            #region Sub Assembly
+            if(comboSubAssembly.Value != null)
+            {
+                if(Session["subAssembly"] != null)
+                {
+                    Session.Remove("subAssembly");
+                }
+                Session.Add("subAssembly", comboSubAssembly.Value);
+            }
+            #endregion
 
             ///TODO add UPDATE OBJECT MAYBE
+            #region Update Object
+
+            #endregion
 
             #region Cost Code
 
@@ -2739,8 +3010,6 @@ namespace Pages.QuickPost
 
             #endregion
 
-
-
             #region Run Unit One
 
             //Check For Prior Value
@@ -2782,6 +3051,22 @@ namespace Pages.QuickPost
             //HttpContext.Current.Session.Add("txtRunUnitThree", txtRunUnitThree.Value.ToString());
 
             #endregion
+
+            #region BreakdownBox
+            if (breakdownBox.Checked == true)
+            {
+                Session.Add("breakdownBox", breakdownBox.Checked);
+            }
+            #endregion
+
+            #region PostDefaults
+            if (chkPostDefaults.Checked == true)
+            {
+                Session.Add("chkPostDefaults", chkPostDefaults.Value);
+            }
+
+            #endregion
+
 
         }
         #endregion
@@ -2832,10 +3117,10 @@ namespace Pages.QuickPost
             #endregion
 
             #region Completed By
-            var completedBy = "";
+            int completedBy = _oLogon.UserID;
             if (HttpContext.Current.Session["ComboCompletedBy"] != null)
             {
-                completedBy = HttpContext.Current.Session["ComboCompletedBy"].ToString();
+                completedBy = Convert.ToInt32(HttpContext.Current.Session["ComboCompletedBy"]);
             }
             #endregion
 
@@ -2885,11 +3170,7 @@ namespace Pages.QuickPost
             var jobOutcome = -1;
             if ((HttpContext.Current.Session["ComboOutcome"] != null))
             {
-                //var x = Convert.ToInt32(ComboOutcome.Value.ToString());
-                //var y = ComboOutcome.Text.ToString();
-
-                //jobOutcome = x;
-                //Get Info From Session
+                jobOutcome = Convert.ToInt32(Session["ComboOutcome"].ToString());
             }
 
             #endregion
@@ -3215,7 +3496,7 @@ namespace Pages.QuickPost
                     @"Error Updating Job Step -" + _oJobStep.LastError);
             }
             //Save Route & Completion Information
-            if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
+            if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, completedBy, _oLogon.UserID))
             {
                 //Throw Error
                 throw new SystemException(
@@ -3324,6 +3605,7 @@ namespace Pages.QuickPost
                     throw new SystemException(
                         @"Valid Completion Date Required For Batch Post");
                 }
+                System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('You have sussefully created a Quick Post.');</script>");
             }
             else
             {
@@ -3332,8 +3614,7 @@ namespace Pages.QuickPost
                     @"Error Loading Job & Job Step Keys For Batch Post");
             }
 
-            System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('You have sussefully created a Quick Post.');</script>");
-            //Response.Redirect("~/main.aspx");
+            Response.Redirect("~/main.aspx");
 
         }
         #endregion
@@ -3350,10 +3631,7 @@ namespace Pages.QuickPost
         {
 
 
-            MemberGrid.Columns.Clear();
-            PartGrid.Columns.Clear();
-            EquipGrid.Columns.Clear();
-            CrewGrid.Columns.Clear();
+           
 
 
             //Clear Session & Fields
@@ -4202,14 +4480,15 @@ namespace Pages.QuickPost
                 
                 case 0:
                     {
-                        //Members
-                        DeleteSelectedMembers();
+                        //Crew
+                        DeleteSelectedCrew();
                         break;
                     }
                 case 1:
                     {
-                        //Crew
-                        DeleteSelectedCrew();
+                        //Members
+                        DeleteSelectedMembers();
+                        
                         break;
                     }
                 case 2:
@@ -4631,17 +4910,7 @@ namespace Pages.QuickPost
                 
                 case 0:
                     {
-                        //Members
 
-                        //Bind Grid
-                        MemberLookupGrid.DataBind();
-
-                        //Show Popup
-                        AddMemberPopup.ShowOnPageLoad = true;
-                        break;
-                    }
-                case 1:
-                    {
                         //Crew Lookup
 
                         //Bind Grid
@@ -4649,6 +4918,19 @@ namespace Pages.QuickPost
 
                         //Show Popup
                         AddCrewPopup.ShowOnPageLoad = true;
+                       
+                        break;
+                    }
+                case 1:
+                    {
+                        //Members
+
+                        //Bind Grid
+                        MemberLookupGrid.DataBind();
+
+                        //Show Popup
+                        AddMemberPopup.ShowOnPageLoad = true;
+
                         break;
                     }
                 case 2:
@@ -4855,9 +5137,9 @@ namespace Pages.QuickPost
                         //Check Flag
                         if (addedCrewMember)
                         {
-                            TestGrid.DataBind();
+
                             //Refresh Crew Grid
-                            //CrewGrid.DataBind();
+                            CrewGrid.DataBind();
 
                             //Clear Selection
                             CrewLookupGrid.Selection.UnselectAll();
@@ -4867,7 +5149,25 @@ namespace Pages.QuickPost
                 }
             }
             SaveSessionData();
-           
+
+            NextStepButton.Enabled = false;
+            txtWorkDescription.Enabled = false;
+            //ObjectIDCombo.Enabled = false;
+            //txtObjectDescription.Enabled = false;
+            //txtObjectArea.Enabled = false;
+            //txtObjectLocation.Enabled = false;
+            //txtObjectAssetNumber.Enabled = false;
+            //ComboCompletedBy.Enabled = true;
+            txtJobLength.Enabled = false;
+            comboReason.Enabled = true;
+            ComboOutcomeCode.Enabled = true;
+            TxtWorkCompDate.Enabled = true;
+            ComboPriority.Enabled = false;
+            comboSubAssembly.Enabled = true;
+            comboHwyRoute.Enabled = false;
+            comboMilePostDir.Enabled = false;
+            txtMilepost.Enabled = false;
+            txtMilepostTo.Enabled = false;
             breakdownBox.Enabled = false;
         }
 
@@ -5231,20 +5531,6 @@ namespace Pages.QuickPost
                 
                 case 0:
                     {
-                        //Members
-                        //Check Selection
-                        if (MemberGrid.FocusedRowIndex >= 0)
-                        {
-                            //Get Record ID
-                            var recordId = Convert.ToInt32(MemberGrid.FocusedRowIndex);
-
-                            //Show Edit/Add Template
-                            MemberGrid.StartEdit(recordId);
-                        }
-                        break;
-                    }
-                case 1:
-                    {
                         //Crew Lookup
                         //Check Selection
                         if (CrewGrid.FocusedRowIndex >= 0)
@@ -5254,6 +5540,21 @@ namespace Pages.QuickPost
 
                             //Show Edit/Add Template
                             CrewGrid.StartEdit(recordId);
+                        }
+                        break;
+                    }
+                case 1:
+                    {
+                        
+                        //Members
+                        //Check Selection
+                        if (MemberGrid.FocusedRowIndex >= 0)
+                        {
+                            //Get Record ID
+                            var recordId = Convert.ToInt32(MemberGrid.FocusedRowIndex);
+
+                            //Show Edit/Add Template
+                            MemberGrid.StartEdit(recordId);
                         }
                         break;
 
@@ -7112,7 +7413,7 @@ namespace Pages.QuickPost
         protected void MemberGridBound(object sender, EventArgs e)
         {
             //Show Row Count On Tab 
-            TabPageControl.TabPages[0].Text = @"MEMBERS (" + MemberGrid.VisibleRowCount + @")";
+            TabPageControl.TabPages[1].Text = @"MEMBERS (" + MemberGrid.VisibleRowCount + @")";
         }
 
         /// <summary>
@@ -7123,7 +7424,7 @@ namespace Pages.QuickPost
         protected void CrewGridBound(object sender, EventArgs e)
         {
             //Show Row Count On Tab 
-            TabPageControl.TabPages[1].Text = @"CREW (" + CrewGrid.VisibleRowCount + @")";
+            TabPageControl.TabPages[0].Text = @"CREW (" + CrewGrid.VisibleRowCount + @")";
         }
 
         /// <summary>
@@ -8007,25 +8308,23 @@ namespace Pages.QuickPost
             SaveSessionData();
             GetJobIDStepID();
 
+            Master.ShowPostButton = true;
+
             NextStepButton.Enabled = false;
             txtWorkDescription.Enabled = false;
-            ObjectIDCombo.Enabled = false;
-            txtObjectDescription.Enabled = false;
-            txtObjectArea.Enabled = false;
-            txtObjectLocation.Enabled = false;
-            txtObjectAssetNumber.Enabled = false;
-            ComboCompletedBy.Enabled = false;
+            //ObjectIDCombo.Enabled = false;
+            //txtObjectDescription.Enabled = false;
+            //txtObjectArea.Enabled = false;
+            //txtObjectLocation.Enabled = false;
+            //txtObjectAssetNumber.Enabled = false;          
             txtJobLength.Enabled = false;
-            comboReason.Enabled = false;
-            ComboOutcomeCode.Enabled = false;
-            TxtWorkCompDate.Enabled = false;
-            ComboPriority.Enabled = false;
-            comboSubAssembly.Enabled = false;
             comboHwyRoute.Enabled = false;
             comboMilePostDir.Enabled = false;
             txtMilepost.Enabled = false;
             txtMilepostTo.Enabled = false;
             breakdownBox.Enabled = false;
+            TxtWorkCompDate.Enabled = true;
+            ComboOutcomeCode.Enabled = true;
             
 
             comboElementID.Enabled = true;
@@ -8041,6 +8340,7 @@ namespace Pages.QuickPost
             PhotoContainer.Visible = true;
             UpdatePanel1.Visible = true;
             TabPageControl.Visible = true;
+            TabPageContainer.Visible = true;
             CrewGrid.Enabled = true;
             CrewGrid.Visible = true;
             MemberGrid.Enabled = true;

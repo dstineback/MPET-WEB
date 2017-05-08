@@ -265,21 +265,21 @@
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxComboBox 
                                                                 ID="ObjectIDCombo" 
-                                                                runat="server" 
+                                                                runat="server"
                                                                 EnableCallbackMode="true" 
                                                                 CallbackPageSize="10" 
                                                                 ValueType="System.String" 
                                                                 ValueField="n_objectid" 
                                                                 OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" 
                                                                 OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
-                                                                TextFormatString="{0}" 
+                                                                TextFormatString="{0} - {1} - {2}" 
                                                                 Width="600px" 
                                                                 DropDownStyle="DropDown" 
                                                                 Theme="iOS" 
                                                                 TextField="n_objectid" 
                                                                 DropDownButton-Enabled="True" 
                                                                 AutoPostBack="False" 
-                                                                ClientInstanceName="ObjectIDCombo">
+                                                                ClientInstanceName="ObjectIDCombo" AutoResizeWithContainer="true">
                                                                 <ClientSideEvents ValueChanged="function(s, e) {
                                                 var objectHasValue = ObjectIDCombo.GetValue();
                                                 var selectedItem = s.GetSelectedItem();
@@ -301,7 +301,7 @@
 
                                             }" />
                                         <Columns>
-                                            <dx:ListBoxColumn FieldName="n_objectid" Caption="N_ID" Visible="true" Width="75px" />
+                                            <dx:ListBoxColumn FieldName="n_objectid" Caption="N_ID" Visible="false" Width="75px" />
                                             <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
                                             <dx:ListBoxColumn FieldName="description" Caption="Description" Width="250px" ToolTip="M-PET.NET Maintenance Object Description"/>
                                             <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
@@ -609,7 +609,7 @@
                     <dx:LayoutItem>
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxButton runat="server" OnClick="NextStep_Click" ID="NextStepButton" Text="Save & move to next step"></dx:ASPxButton>
+                                <dx:ASPxButton runat="server" OnClick="NextStep_Click" ID="NextStepButton" Text="Save to access optional fields"></dx:ASPxButton>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                     </dx:LayoutItem>
@@ -865,52 +865,7 @@
                 </LayoutItemNestedControlCollection>
                 <CaptionSettings Location="Top" />
             </dx:LayoutItem> <%--Attachments--%>
-            <dx:LayoutItem>
-                <LayoutItemNestedControlCollection>
-                    <dx:LayoutItemNestedControlContainer>
-                        
-                        <dx:ASPxComboBox runat="server" id="testcombo" EnableCallbackMode="true" CallbackPageSize="10"
-                                    ValueType="System.String" ValueField="UserID"
-                                    OnItemsRequestedByFilterCondition="ComboCompletedBy_OnItemsRequestedByFilterCondition_SQL" 
-                                    OnItemRequestedByValue="ComboCompletedBy_OnItemRequestedByValue_SQL"    
-                                    TextFormatString="{0} - {1}" 
-                                    Width="100%" 
-                                    DropDownStyle="DropDown" Theme="iOS" 
-                                    TextField="username" 
-                                    DropDownButton-Enabled="True" 
-                                    AutoPostBack="False"  >
-                            <Columns>
-                               <dx:ListBoxColumn FieldName="UserID" Visible="False" />
-                                        <dx:ListBoxColumn FieldName="username" Caption="User ID" Width="75px" ToolTip="M-PET.NET User ID"/>
-                                        <dx:ListBoxColumn FieldName="FullName" Caption="Full Name" Width="150px" ToolTip="M-PET.NET User Full Name"/>
-                            </Columns>
-                        </dx:ASPxComboBox>
-                        <dx:ASPxGridView runat="server" ID="TestGrid" OnDataBound="CrewGridBound" DataSourceID="CrewDataSource1">
-                            
-                            <Columns>
-                                <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowEditButton="True" Visible="false" VisibleIndex="0" />
-                                                                    <dx:GridViewDataTextColumn FieldName="RecordID" ReadOnly="True" Visible="false" VisibleIndex="1">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="UserID" ReadOnly="True" Visible="false" VisibleIndex="2">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_skillid" ReadOnly="True" Visible="false" VisibleIndex="3">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_ShiftID" ReadOnly="True" Visible="false" VisibleIndex="4">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_PayCodeID" ReadOnly="True" Visible="false" VisibleIndex="5">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-
-                            </Columns>
-                        </dx:ASPxGridView>
-                        
-                    </dx:LayoutItemNestedControlContainer>
-                </LayoutItemNestedControlCollection>
-            </dx:LayoutItem>
+           
             <dx:LayoutItem Caption="" ShowCaption="False" CaptionSettings-Location="Top">
                                                                         <LayoutItemNestedControlCollection >
                                                                             <dx:LayoutItemNestedControlContainer>
@@ -1003,250 +958,16 @@
                 <Items>
                     <dx:LayoutItem>
                         <LayoutItemNestedControlCollection>
-                            <dx:LayoutItemNestedControlContainer runat="server">
+                            <dx:LayoutItemNestedControlContainer runat="server" ID="TabPageContainer">
                                 <dx:ASPxPageControl runat="server" ID="TabPageControl" Theme="iOS" ClientInstanceName="TabPageControl" ActiveTabIndex="0" EnableHierarchyRecreation="true" TabPosition="Right"  >
                                     <TabPages>
-                                        <dx:TabPage Text="MEMBERS" ToolTip="Allows Input Of Jobstep Members">
-                                            <ContentCollection>
-                                                <dx:ContentControl ID="ContentControl9" runat="server">
-                                                    <asp:UpdatePanel ID="UpdatePanel3" runat="server" OnUnload="UpdatePanel_Unload">
-                                                        <ContentTemplate>
-                                                            <dx:ASPxGridView 
-                                                                ID="MemberGrid" 
-                                                                runat="server" 
-                                                                Theme="iOS" 
-                                                                KeyFieldName="n_JobOtherID" 
-                                                                Width="98%"  
-                                                                KeyboardSupport="True" 
-                                                                ClientInstanceName="MemberGrid" 
-                                                                AutoPostBack="True" 
-                                                                EnableCallBacks="true" 
-                                                                Settings-HorizontalScrollBarMode="Auto" 
-                                                                SettingsPager-Mode="ShowPager" 
-                                                                SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
-                                                                SettingsBehavior-AllowFocusedRow="True" 
-                                                                DataSourceID="MemberDataSource"
-                                                                OnRowUpdating="MemberGrid_RowUpdating"
-                                                                OnDataBound="MemberGridBound">
-                                                                <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
-                                                                        RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
-                                                                    <Header CssClass="gridViewHeader"></Header>
-
-                                                                    <Row CssClass="gridViewRow"></Row>
-
-                                                                    <RowHotTrack CssClass="gridViewRow"></RowHotTrack>
-
-                                                                    <FocusedRow CssClass="gridViewRowFocused"></FocusedRow>
-
-                                                                    <FilterRow CssClass="gridViewFilterRow"></FilterRow>
-                                                                </Styles>
-                                                                <ClientSideEvents RowClick="function(s, e) {
-                                                                        MemberGrid.GetRowValues(e.visibleIndex, 'n_JobOtherID', OnGetMemberRowId);
-                                                                    }"
-                                                                                  RowDblClick="function(s, e) {
-                                                                    s.StartEditRow(e.visibleIndex);
-                                                                }" />
-                                                                <Columns>
-                                                                    <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowEditButton="True" Visible="false" VisibleIndex="0" />
-                                                                    <dx:GridViewDataTextColumn FieldName="n_JobOtherID" ReadOnly="True" Visible="false" VisibleIndex="1">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_JobID" ReadOnly="True" Visible="false" VisibleIndex="2">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_JobStepID" ReadOnly="True" Visible="false" VisibleIndex="3">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_MaintenanceObjectID" ReadOnly="True" Visible="false" VisibleIndex="4">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="ObjectID" ReadOnly="True" Caption="Object ID" SortOrder="Ascending" Width="250px" VisibleIndex="5">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                       <DataItemTemplate>
-                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="javascript:void(0)"
-                                                                                Text='<%# Eval("ObjectID") %>' Width="100%" Theme="iOS"> 
-                                                                                <ClientSideEvents Click="onHyperLinkClick" />
-                                                                            </dx:ASPxHyperLink>
-                                                                        </DataItemTemplate>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="ObjectDescription" ReadOnly="True" Caption="Description" Width="450px" VisibleIndex="6">
-                                                                        <CellStyle Wrap="False"></CellStyle>
-                                                                    </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataCheckColumn FieldName="b_Completed" Caption="Completed" Width="100px" VisibleIndex="7">
-                                                                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                                                                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
-                                                                    </dx:GridViewDataCheckColumn>
-                                                                    <dx:GridViewDataDateColumn FieldName="WorkDate" Caption="Work Date" VisibleIndex="8"  Width="200px">
-                                                                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
-                                                                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>                                                                                                                                                                     
-                                                                    </dx:GridViewDataDateColumn>
-                                                                </Columns>
-                                                                <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn"  />
-                                                                <SettingsDataSecurity AllowDelete="False" AllowInsert="True" AllowEdit="True"/>
-                                                                <SettingsEditing Mode="PopupEditForm" 
-                                                                                 PopupEditFormHorizontalAlign="WindowCenter"
-                                                                                 PopupEditFormVerticalAlign="WindowCenter" 
-                                                                                 PopupEditFormWidth="800px" 
-                                                                                 PopupEditFormModal="True" 
-                                                                                 PopupEditFormShowHeader="False"></SettingsEditing>
-                                                                <Settings VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" ShowFooter="true"  />
-                                                                <SettingsPager PageSize="10">
-                                                                    <PageSizeItemSettings Visible="true" />
-                                                                </SettingsPager>
-                                                                <SettingsPopup>
-                                                                    <EditForm Width="800px" Modal="true" />
-                                                                </SettingsPopup>
-                                                                <Templates>
-                                                                    <EditForm>
-                                                                        <div style="padding: 4px 4px 3px 4px">
-                                                                            <dx:ASPxFormLayout Width="98%" Theme="iOS" ID="MemberEditLayout" runat="server">
-                                                                                <Items>
-                                                                                    <dx:LayoutGroup Name="MemberEditGroup" Caption="Item Edit"  ColCount="3">
-                                                                                        <Items>
-                                                                                            <dx:LayoutItem Name="liMemberID" Caption="Object ID:" ColSpan="1" CaptionSettings-Location="Top">
-                                                                                                <LayoutItemNestedControlCollection >
-                                                                                                    <dx:LayoutItemNestedControlContainer>
-                                                                                                        <dx:ASPxButtonEdit ID="txtMemberID" 
-                                                                                                                           Width="98%" 
-                                                                                                                           MaxLength="254"
-                                                                                                                           ClientInstanceName="txtMemberID"
-                                                                                                                           Theme="iOS"
-                                                                                                                           runat="server"
-                                                                                                                           TextField = "ObjectID" 
-                                                                                                                           ValueField = "ObjectID"
-                                                                                                                           Value='<%# Bind("ObjectID") %>'
-                                                                                                                           ValueType="System.String"
-                                                                                                                           ReadOnly="True">
-                                                                                                        </dx:ASPxButtonEdit>
-                                                                                                    </dx:LayoutItemNestedControlContainer>
-                                                                                                </LayoutItemNestedControlCollection>
-                                                                                            </dx:LayoutItem>
-                                                                                            <dx:LayoutItem Name="liMemberCompleted" Caption="Completed:" ColSpan="1" CaptionSettings-Location="Top">
-                                                                                                <LayoutItemNestedControlCollection >
-                                                                                                    <dx:LayoutItemNestedControlContainer>
-                                                                                                        <dx:ASPxCheckbox ID="txtMemberCompletedEdit" 
-                                                                                                                         ClientInstanceName="txtMemberCompletedEdit"
-                                                                                                                         Theme="iOS"
-                                                                                                                         runat="server" 
-                                                                                                                         Checked='<%# Convert.ToBoolean(Eval("b_Completed")) %>'>
-                                                                                                        </dx:ASPxCheckbox>
-                                                                                                    </dx:LayoutItemNestedControlContainer>
-                                                                                                </LayoutItemNestedControlCollection>
-                                                                                            </dx:LayoutItem>
-                                                                                            <dx:LayoutItem Name="liMemberDate" Caption="Work Date:" ColSpan="1" CaptionSettings-Location="Top">
-                                                                                                <LayoutItemNestedControlCollection >
-                                                                                                    <dx:LayoutItemNestedControlContainer>
-                                                                                                        <dx:ASPxDateEdit ID="txtMemberDateUsedEdit" 
-                                                                                                                         ClientInstanceName="txtMemberDateUsedEdit"
-                                                                                                                         Theme="iOS"
-                                                                                                                         runat="server" 
-                                                                                                                         TextField = "WorkDate" 
-                                                                                                                         ValueField = "WorkDate"
-                                                                                                                         Value='<%# Bind("WorkDate") %>'
-                                                                                                                         ValueType="System.DateTime"
-                                                                                                                         NullText="MM/DD/YYYY"
-                                                                                                                         EditFormat="Custom"
-                                                                                                                         EditFormatString="MM/dd/yyyy">
-                                                                                                            <ClearButton Visibility="True"></ClearButton>
-                                                                                                        </dx:ASPxDateEdit>
-                                                                                                    </dx:LayoutItemNestedControlContainer>
-                                                                                                </LayoutItemNestedControlCollection>
-                                                                                            </dx:LayoutItem>
-                                                                                            <dx:LayoutItem Name="liMemberDesc" Caption="Description:" ColSpan="3" CaptionSettings-Location="Top">
-                                                                                                <LayoutItemNestedControlCollection >
-                                                                                                    <dx:LayoutItemNestedControlContainer>
-                                                                                                        <dx:ASPxButtonEdit ID="txtMemberDesc" 
-                                                                                                                           Height="50px" 
-                                                                                                                           Width="98%" 
-                                                                                                                           MaxLength="254"
-                                                                                                                           ClientInstanceName="txtMemberDesc"
-                                                                                                                           Theme="iOS"
-                                                                                                                           runat="server"
-                                                                                                                           TextField = "ObjectDescription" 
-                                                                                                                           ValueField = "ObjectDescription"
-                                                                                                                           Value='<%# Bind("ObjectDescription") %>'
-                                                                                                                           ValueType="System.String"
-                                                                                                                           ReadOnly="True">
-                                                                                                        </dx:ASPxButtonEdit>
-                                                                                                    </dx:LayoutItemNestedControlContainer>
-                                                                                                </LayoutItemNestedControlCollection>
-                                                                                            </dx:LayoutItem>
-                                                                                        </Items>
-                                                                                    </dx:LayoutGroup>
-                                                                                </Items>
-                                                                            </dx:ASPxFormLayout>                                                                                                        
-                                                                                   
-                                                                        </div>
-                                                                        <div style="padding: 2px 2px 2px 2px; text-align: right;">
-                                                                            <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" OnInit="HideDefaultEditButtons"  ReplacementType="EditFormUpdateButton"
-                                                                                                                runat="server">
-                                                                            </dx:ASPxGridViewTemplateReplacement>
-                                                                            <dx:ASPxGridViewTemplateReplacement ID="CancelButton" OnInit="HideDefaultEditButtons" ReplacementType="EditFormCancelButton"
-                                                                                                                runat="server">
-                                                                            </dx:ASPxGridViewTemplateReplacement>
-                                                                            <dx:ASPxButton ID="btnUpdateMember" AutoPostBack="false" runat="server" CssClass="button" Text="Update" >
-                                                                                <ClientSideEvents Click="function (s, e) { OnMemberUpateClick(s, e); }" />                                                                                
-                                                                                <HoverStyle CssClass="hover"></HoverStyle>
-                                                                            </dx:ASPxButton>
-                                                                            <dx:ASPxButton ID="btnCancelMember" AutoPostBack="False" runat="server" Text="Cancel" CssClass="button">
-                                                                                <ClientSideEvents Click="function (s, e) { OnMemberCancelClick(s, e); }" />
-                                                                                <HoverStyle CssClass="hover"></HoverStyle>
-                                                                            </dx:ASPxButton>     
-                                                                        </div>
-                                                                    </EditForm>
-                                                                </Templates>
-                                                                <Templates>
-                                                                    <FooterRow>
-                                                                        <asp:LinkButton runat="server" ID="AddNewMemBnt" OnClick="AddNewMemBnt_Click" Text="test button"></asp:LinkButton>
-                                                                        <dx:ASPxButton runat="server" ID="AddNewMemberButton" Theme="iOS" Text="Add New Member">
-                                                                            <ClientSideEvents Click="ShowMemberPopup" />
-                                                                        </dx:ASPxButton>
-                                                                        <dx:ASPxButton runat="server" ID="DeleteMemberButton" OnClick="DeleteItems_Click" Theme="iOS" Text="Delete Member"></dx:ASPxButton>
-                                                                    </FooterRow>
-                                                                </Templates>
-                                                            </dx:ASPxGridView>                                                    
-                                                            <asp:SqlDataSource ID="MemberDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="
-                                                         DECLARE @NullDate DATETIME
-                                                            SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
-
-                                                        --Return Jobstep Member Records For Specified Job/Jobstep IDs
-                                                            SELECT  tbl_JobMember.n_JobMembersID AS 'n_JobOtherID',
-                                                                    tbl_JobMember.n_JobID AS 'n_JobID',
-                                                                    tbl_JobMember.n_JobStepID AS 'n_JobStepID',
-                                                                    tbl_JobMember.n_MaintenanceObjectID AS 'n_MaintenanceObjectID',
-                                                                    CASE tbl_JobMember.b_Completed 
-			                                                        WHEN 'Y' THEN 1
-			                                                        ELSE 0
-			                                                        END AS 'b_Completed',
-			                                                        tbl_Objects.objectid AS 'ObjectID',
-			                                                        tbl_Objects.DESCRIPTION AS 'ObjectDescription',
-                                                                    CASE tbl_JobMember.WorkDate
-                                                                      WHEN @NullDate THEN NULL
-                                                                      ELSE tbl_JobMember.WorkDate
-                                                                    END AS 'WorkDate'
-                                                            FROM    dbo.JobMembers tbl_JobMember
-	                                                        INNER JOIN (SELECT tblObjects.n_objectid,
-					                                                           tblObjects.objectid,
-					                                                           tblObjects.description
-				                                                        FROM dbo.MaintenanceObjects tblObjects) tbl_Objects ON tbl_JobMember.n_MaintenanceObjectID = tbl_Objects.n_objectid
-                                                            WHERE   ( tbl_JobMember.n_JobID = @JobID )
-                                                                    AND ( tbl_JobMember.n_jobstepid = -1 ) ">
-                                                                <SelectParameters>
-                                                                    <asp:SessionParameter DefaultValue="-1" Name="JobID" SessionField="editingJobID" />
-                                                                </SelectParameters>
-                                                            </asp:SqlDataSource>
-                                                        </ContentTemplate>
-                                                    </asp:UpdatePanel>                                                    
-                                                </dx:ContentControl>
-                                            </ContentCollection>
-                                        </dx:TabPage> <%--Members--%>
-                                        <dx:TabPage Name="StepCrew" Text="CREW" ToolTip="Allows Input Of Jobstep Crew">
+                                        <dx:TabPage Name="StepCrew" Text="CREW" ToolTip="Allows Input Of Job Crew">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl10" runat="server">
-                                                    <asp:UpdatePanel ID="UpdatePanel2" runat="server" OnUnload="UpdatePanel_Unload" >
+                                                    <asp:UpdatePanel ID="UpdatePanel2" runat="server" OnUnload="UpdatePanel_Unload" UpdateMode="Conditional" >
                                                         <ContentTemplate>
                                                             <dx:ASPxGridView 
-                                                                ID="CrewGrid" 
+                                                                ID="CrewGrid" EditFormLayoutProperties-RequiredMark="*" EditFormLayoutProperties-RequiredMarkDisplayMode="RequiredOnly"
                                                                 runat="server" 
                                                                 Theme="iOS" 
                                                                 KeyFieldName="RecordID" 
@@ -1883,6 +1604,240 @@
                                                 </dx:ContentControl>
                                             </ContentCollection>
                                         </dx:TabPage> <%--Crew--%>
+                                        <dx:TabPage Text="MEMBERS" ToolTip="Allows Input Of Jobstep Members">
+                                            <ContentCollection>
+                                                <dx:ContentControl ID="ContentControl9" runat="server">
+                                                    <asp:UpdatePanel ID="UpdatePanel3" runat="server" OnUnload="UpdatePanel_Unload">
+                                                        <ContentTemplate>
+                                                            <dx:ASPxGridView 
+                                                                ID="MemberGrid" 
+                                                                runat="server" 
+                                                                Theme="iOS" 
+                                                                KeyFieldName="n_JobOtherID" 
+                                                                Width="98%"  
+                                                                KeyboardSupport="True" 
+                                                                ClientInstanceName="MemberGrid" 
+                                                                AutoPostBack="True" 
+                                                                EnableCallBacks="true" 
+                                                                Settings-HorizontalScrollBarMode="Auto" 
+                                                                SettingsPager-Mode="ShowPager" 
+                                                                SettingsBehavior-ProcessFocusedRowChangedOnServer="True" 
+                                                                SettingsBehavior-AllowFocusedRow="True" 
+                                                                DataSourceID="MemberDataSource"
+                                                                OnRowUpdating="MemberGrid_RowUpdating"
+                                                                OnDataBound="MemberGridBound">
+                                                                <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
+                                                                        RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
+                                                                    <Header CssClass="gridViewHeader"></Header>
+
+                                                                    <Row CssClass="gridViewRow"></Row>
+
+                                                                    <RowHotTrack CssClass="gridViewRow"></RowHotTrack>
+
+                                                                    <FocusedRow CssClass="gridViewRowFocused"></FocusedRow>
+
+                                                                    <FilterRow CssClass="gridViewFilterRow"></FilterRow>
+                                                                </Styles>
+                                                                <ClientSideEvents RowClick="function(s, e) {
+                                                                        MemberGrid.GetRowValues(e.visibleIndex, 'n_JobOtherID', OnGetMemberRowId);
+                                                                    }"
+                                                                                  RowDblClick="function(s, e) {
+                                                                    s.StartEditRow(e.visibleIndex);
+                                                                }" />
+                                                                <Columns>
+                                                                    <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowEditButton="True" Visible="false" VisibleIndex="0" />
+                                                                    <dx:GridViewDataTextColumn FieldName="n_JobOtherID" ReadOnly="True" Visible="false" VisibleIndex="1">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_JobID" ReadOnly="True" Visible="false" VisibleIndex="2">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_JobStepID" ReadOnly="True" Visible="false" VisibleIndex="3">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="n_MaintenanceObjectID" ReadOnly="True" Visible="false" VisibleIndex="4">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="ObjectID" ReadOnly="True" Caption="Object ID" SortOrder="Ascending" Width="250px" VisibleIndex="5">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                       <DataItemTemplate>
+                                                                            <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="javascript:void(0)"
+                                                                                Text='<%# Eval("ObjectID") %>' Width="100%" Theme="iOS"> 
+                                                                                <ClientSideEvents Click="onHyperLinkClick" />
+                                                                            </dx:ASPxHyperLink>
+                                                                        </DataItemTemplate>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataTextColumn FieldName="ObjectDescription" ReadOnly="True" Caption="Description" Width="450px" VisibleIndex="6">
+                                                                        <CellStyle Wrap="False"></CellStyle>
+                                                                    </dx:GridViewDataTextColumn>
+                                                                    <dx:GridViewDataCheckColumn FieldName="b_Completed" Caption="Completed" Width="100px" VisibleIndex="7">
+                                                                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                                                                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                                                                    </dx:GridViewDataCheckColumn>
+                                                                    <dx:GridViewDataDateColumn FieldName="WorkDate" Caption="Work Date" VisibleIndex="8"  Width="200px">
+                                                                        <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                                                                        <HeaderStyle HorizontalAlign="Center"></HeaderStyle>                                                                                                                                                                     
+                                                                    </dx:GridViewDataDateColumn>
+                                                                </Columns>
+                                                                <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn"  />
+                                                                <SettingsDataSecurity AllowDelete="False" AllowInsert="True" AllowEdit="True"/>
+                                                                <SettingsEditing Mode="PopupEditForm" 
+                                                                                 PopupEditFormHorizontalAlign="WindowCenter"
+                                                                                 PopupEditFormVerticalAlign="WindowCenter" 
+                                                                                 PopupEditFormWidth="800px" 
+                                                                                 PopupEditFormModal="True" 
+                                                                                 PopupEditFormShowHeader="False"></SettingsEditing>
+                                                                <Settings VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" ShowFooter="true"  />
+                                                                <SettingsPager PageSize="10">
+                                                                    <PageSizeItemSettings Visible="true" />
+                                                                </SettingsPager>
+                                                                <SettingsPopup>
+                                                                    <EditForm Width="800px" Modal="true" />
+                                                                </SettingsPopup>
+                                                                <Templates>
+                                                                    <EditForm>
+                                                                        <div style="padding: 4px 4px 3px 4px">
+                                                                            <dx:ASPxFormLayout Width="98%" Theme="iOS" ID="MemberEditLayout" runat="server">
+                                                                                <Items>
+                                                                                    <dx:LayoutGroup Name="MemberEditGroup" Caption="Item Edit"  ColCount="3">
+                                                                                        <Items>
+                                                                                            <dx:LayoutItem Name="liMemberID" Caption="Object ID:" ColSpan="1" CaptionSettings-Location="Top">
+                                                                                                <LayoutItemNestedControlCollection >
+                                                                                                    <dx:LayoutItemNestedControlContainer>
+                                                                                                        <dx:ASPxButtonEdit ID="txtMemberID" 
+                                                                                                                           Width="98%" 
+                                                                                                                           MaxLength="254"
+                                                                                                                           ClientInstanceName="txtMemberID"
+                                                                                                                           Theme="iOS"
+                                                                                                                           runat="server"
+                                                                                                                           TextField = "ObjectID" 
+                                                                                                                           ValueField = "ObjectID"
+                                                                                                                           Value='<%# Bind("ObjectID") %>'
+                                                                                                                           ValueType="System.String"
+                                                                                                                           ReadOnly="True">
+                                                                                                        </dx:ASPxButtonEdit>
+                                                                                                    </dx:LayoutItemNestedControlContainer>
+                                                                                                </LayoutItemNestedControlCollection>
+                                                                                            </dx:LayoutItem>
+                                                                                            <dx:LayoutItem Name="liMemberCompleted" Caption="Completed:" ColSpan="1" CaptionSettings-Location="Top">
+                                                                                                <LayoutItemNestedControlCollection >
+                                                                                                    <dx:LayoutItemNestedControlContainer>
+                                                                                                        <dx:ASPxCheckbox ID="txtMemberCompletedEdit" 
+                                                                                                                         ClientInstanceName="txtMemberCompletedEdit"
+                                                                                                                         Theme="iOS"
+                                                                                                                         runat="server" 
+                                                                                                                         Checked='<%# Convert.ToBoolean(Eval("b_Completed")) %>'>
+                                                                                                        </dx:ASPxCheckbox>
+                                                                                                    </dx:LayoutItemNestedControlContainer>
+                                                                                                </LayoutItemNestedControlCollection>
+                                                                                            </dx:LayoutItem>
+                                                                                            <dx:LayoutItem Name="liMemberDate" Caption="Work Date:" ColSpan="1" CaptionSettings-Location="Top">
+                                                                                                <LayoutItemNestedControlCollection >
+                                                                                                    <dx:LayoutItemNestedControlContainer>
+                                                                                                        <dx:ASPxDateEdit ID="txtMemberDateUsedEdit" 
+                                                                                                                         ClientInstanceName="txtMemberDateUsedEdit"
+                                                                                                                         Theme="iOS"
+                                                                                                                         runat="server" 
+                                                                                                                         TextField = "WorkDate" 
+                                                                                                                         ValueField = "WorkDate"
+                                                                                                                         Value='<%# Bind("WorkDate") %>'
+                                                                                                                         ValueType="System.DateTime"
+                                                                                                                         NullText="MM/DD/YYYY"
+                                                                                                                         EditFormat="Custom"
+                                                                                                                         EditFormatString="MM/dd/yyyy">
+                                                                                                            <ClearButton Visibility="True"></ClearButton>
+                                                                                                        </dx:ASPxDateEdit>
+                                                                                                    </dx:LayoutItemNestedControlContainer>
+                                                                                                </LayoutItemNestedControlCollection>
+                                                                                            </dx:LayoutItem>
+                                                                                            <dx:LayoutItem Name="liMemberDesc" Caption="Description:" ColSpan="3" CaptionSettings-Location="Top">
+                                                                                                <LayoutItemNestedControlCollection >
+                                                                                                    <dx:LayoutItemNestedControlContainer>
+                                                                                                        <dx:ASPxButtonEdit ID="txtMemberDesc" 
+                                                                                                                           Height="50px" 
+                                                                                                                           Width="98%" 
+                                                                                                                           MaxLength="254"
+                                                                                                                           ClientInstanceName="txtMemberDesc"
+                                                                                                                           Theme="iOS"
+                                                                                                                           runat="server"
+                                                                                                                           TextField = "ObjectDescription" 
+                                                                                                                           ValueField = "ObjectDescription"
+                                                                                                                           Value='<%# Bind("ObjectDescription") %>'
+                                                                                                                           ValueType="System.String"
+                                                                                                                           ReadOnly="True">
+                                                                                                        </dx:ASPxButtonEdit>
+                                                                                                    </dx:LayoutItemNestedControlContainer>
+                                                                                                </LayoutItemNestedControlCollection>
+                                                                                            </dx:LayoutItem>
+                                                                                        </Items>
+                                                                                    </dx:LayoutGroup>
+                                                                                </Items>
+                                                                            </dx:ASPxFormLayout>                                                                                                        
+                                                                                   
+                                                                        </div>
+                                                                        <div style="padding: 2px 2px 2px 2px; text-align: right;">
+                                                                            <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" OnInit="HideDefaultEditButtons"  ReplacementType="EditFormUpdateButton"
+                                                                                                                runat="server">
+                                                                            </dx:ASPxGridViewTemplateReplacement>
+                                                                            <dx:ASPxGridViewTemplateReplacement ID="CancelButton" OnInit="HideDefaultEditButtons" ReplacementType="EditFormCancelButton"
+                                                                                                                runat="server">
+                                                                            </dx:ASPxGridViewTemplateReplacement>
+                                                                            <dx:ASPxButton ID="btnUpdateMember" AutoPostBack="false" runat="server" CssClass="button" Text="Update" >
+                                                                                <ClientSideEvents Click="function (s, e) { OnMemberUpateClick(s, e); }" />                                                                                
+                                                                                <HoverStyle CssClass="hover"></HoverStyle>
+                                                                            </dx:ASPxButton>
+                                                                            <dx:ASPxButton ID="btnCancelMember" AutoPostBack="False" runat="server" Text="Cancel" CssClass="button">
+                                                                                <ClientSideEvents Click="function (s, e) { OnMemberCancelClick(s, e); }" />
+                                                                                <HoverStyle CssClass="hover"></HoverStyle>
+                                                                            </dx:ASPxButton>     
+                                                                        </div>
+                                                                    </EditForm>
+                                                                </Templates>
+                                                                <Templates>
+                                                                    <FooterRow>
+                                                                        <asp:LinkButton runat="server" ID="AddNewMemBnt" OnClick="AddNewMemBnt_Click" Text="test button"></asp:LinkButton>
+                                                                        <dx:ASPxButton runat="server" ID="AddNewMemberButton" Theme="iOS" Text="Add New Member">
+                                                                            <ClientSideEvents Click="ShowMemberPopup" />
+                                                                        </dx:ASPxButton>
+                                                                        <dx:ASPxButton runat="server" ID="DeleteMemberButton" OnClick="DeleteItems_Click" Theme="iOS" Text="Delete Member"></dx:ASPxButton>
+                                                                    </FooterRow>
+                                                                </Templates>
+                                                            </dx:ASPxGridView>                                                    
+                                                            <asp:SqlDataSource ID="MemberDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="
+                                                         DECLARE @NullDate DATETIME
+                                                            SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
+
+                                                        --Return Jobstep Member Records For Specified Job/Jobstep IDs
+                                                            SELECT  tbl_JobMember.n_JobMembersID AS 'n_JobOtherID',
+                                                                    tbl_JobMember.n_JobID AS 'n_JobID',
+                                                                    tbl_JobMember.n_JobStepID AS 'n_JobStepID',
+                                                                    tbl_JobMember.n_MaintenanceObjectID AS 'n_MaintenanceObjectID',
+                                                                    CASE tbl_JobMember.b_Completed 
+			                                                        WHEN 'Y' THEN 1
+			                                                        ELSE 0
+			                                                        END AS 'b_Completed',
+			                                                        tbl_Objects.objectid AS 'ObjectID',
+			                                                        tbl_Objects.DESCRIPTION AS 'ObjectDescription',
+                                                                    CASE tbl_JobMember.WorkDate
+                                                                      WHEN @NullDate THEN NULL
+                                                                      ELSE tbl_JobMember.WorkDate
+                                                                    END AS 'WorkDate'
+                                                            FROM    dbo.JobMembers tbl_JobMember
+	                                                        INNER JOIN (SELECT tblObjects.n_objectid,
+					                                                           tblObjects.objectid,
+					                                                           tblObjects.description
+				                                                        FROM dbo.MaintenanceObjects tblObjects) tbl_Objects ON tbl_JobMember.n_MaintenanceObjectID = tbl_Objects.n_objectid
+                                                            WHERE   ( tbl_JobMember.n_JobID = @JobID )
+                                                                    AND ( tbl_JobMember.n_jobstepid = -1 ) ">
+                                                                <SelectParameters>
+                                                                    <asp:SessionParameter DefaultValue="-1" Name="JobID" SessionField="editingJobID" />
+                                                                </SelectParameters>
+                                                            </asp:SqlDataSource>
+                                                        </ContentTemplate>
+                                                    </asp:UpdatePanel>                                                    
+                                                </dx:ContentControl>
+                                            </ContentCollection>
+                                        </dx:TabPage> <%--Members--%>
                                         <dx:TabPage Text="PARTS" ToolTip="Allows Input Of Jobstep Parts">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl11" runat="server">

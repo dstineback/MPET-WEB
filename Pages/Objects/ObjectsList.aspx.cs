@@ -370,7 +370,7 @@ namespace Pages.Objects
         private void MapItem()
         {
             var sel = Selection.Count;
-            var MapSelected = ObjectGrid.GetSelectedFieldValues("objectid","n_objectid", "Latitude", "Longitude", "description");
+            var MapSelected = ObjectGrid.GetSelectedFieldValues("objectid","n_objectid", "Latitude", "Longitude", "description", "Area", "AssetNumber", "LocationID");
 
             if (sel > 0 || MapSelected.Count > 0) { 
                 if(HttpContext.Current.Session["MapSelected"] != null)
@@ -433,7 +433,28 @@ namespace Pages.Objects
                         HttpContext.Current.Session.Remove("description");
                     }
                     //Add session object description
-                    HttpContext.Current.Session.Add("objectDescription", Selection.Get("description"));   
+                    HttpContext.Current.Session.Add("objectDescription", Selection.Get("description")); 
+                    
+                    //Check for Previous Session Object Area
+                    if(Session["Area"] != null)
+                    {
+                        Session.Remove("Area");
+                    }
+                    Session.Add("Area", Selection.Get("Area"));
+
+                    //Check for previous Session Object Asset number
+                    if(Session["AssetNumber"] != null)
+                    {
+                        Session.Remove("AssetNumber");
+                    }
+                    Session.Add("AssetNumber", Selection.Get("AssetNumber"));
+
+                    //Check for previous Session Object Location
+                    if(Session["LocationID"] != null)
+                    {
+                        Session.Remove("LocationID");
+                    }
+                    Session.Add("LocationID", Selection.Get("LocationID"));
                 }
                     //Redirect To Report Page
                     Response.Redirect("~/Pages/Map/MapForm.aspx", true);
