@@ -12,6 +12,7 @@ using DevExpress.Web.Data;
 using DevExpress.XtraPrinting;
 using MPETDSFactory;
 using Page = System.Web.UI.Page;
+using System.Web.Script.Serialization;
 using System.Web.UI.HtmlControls;
 
 public partial class Pages_Map_MapForm : Page
@@ -34,6 +35,9 @@ public partial class Pages_Map_MapForm : Page
     string LocationID;
     HttpContext context = HttpContext.Current;
     public DataTable dt { get; private set; }
+    public DataSet ds { get; private set; }
+    public List<string> objList { get; private set; }
+    public JavaScriptSerializer j;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -155,9 +159,9 @@ public partial class Pages_Map_MapForm : Page
                 dt.Columns.Add("Latitude");
                 dt.Columns.Add("Longitude");
                 dt.Columns.Add("objectDescription");
-                dt.Columns.Add("Area");
-                dt.Columns.Add("AssetNumber");
-                dt.Columns.Add("LocationID");
+                //dt.Columns.Add("Area");
+                //dt.Columns.Add("AssetNumber");
+                //dt.Columns.Add("LocationID");
 
                 foreach (object[] row in mS)
                 {
@@ -166,11 +170,11 @@ public partial class Pages_Map_MapForm : Page
                     Latitude = Convert.ToDecimal(row[2].ToString());
                     Longitude = Convert.ToDecimal(row[3].ToString());
                     objectDescription = row[4].ToString();
-                    Area = row[5].ToString();
-                    AssetNumber = row[6].ToString();
-                    LocationID = row[7].ToString();
+                    //Area = row[5].ToString();
+                    //AssetNumber = row[6].ToString();
+                    //LocationID = row[7].ToString();
 
-                    dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription, Area, AssetNumber, LocationID);
+                    dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription /*Area, AssetNumber, LocationID*/);
                 }
 
                 DataSet ds = new DataSet();
@@ -184,24 +188,25 @@ public partial class Pages_Map_MapForm : Page
                     objList.Add(Convert.ToDecimal(row["Latitude"]).ToString());
                     objList.Add(Convert.ToDecimal(row["Longitude"]).ToString());
                     objList.Add(Convert.ToString(row["objectDescription"]));
-                    objList.Add(Convert.ToString(row["Area"]));
-                    objList.Add(Convert.ToString(row["AssetNumber"]));
-                    objList.Add(Convert.ToString(row["LocationID"]));
+                    //objList.Add(Convert.ToString(row["Area"]));
+                    //objList.Add(Convert.ToString(row["AssetNumber"]));
+                    //objList.Add(Convert.ToString(row["LocationID"]));
                 }
 
                 mapPoints = objList.ToArray();
+                
                 rptObjectMarkers.DataSource = dt;
                 rptObjectMarkers.DataBind();
             } else
             {
+                objectID = Session["objectid"].ToString();
                 nobjectid = Convert.ToInt32(Session["n_objectid"].ToString());
                 Latitude = Convert.ToDecimal(Session["Latitude"].ToString());
                 Longitude = Convert.ToDecimal(Session["Longitude"].ToString());
                 objectDescription = Session["objectDescription"].ToString();
-                objectID = Session["objectid"].ToString();
-                Area = Session["Area"].ToString();
-                AssetNumber = Session["AssetNumber"].ToString();
-                LocationID = Session["LocationID"].ToString();
+                //Area = Session["Area"].ToString();
+                //AssetNumber = Session["AssetNumber"].ToString();
+                //LocationID = Session["LocationID"].ToString();
 
                 DataTable dt = new DataTable();
                 dt.Columns.Add("objectid"); 
@@ -209,11 +214,11 @@ public partial class Pages_Map_MapForm : Page
                 dt.Columns.Add("Latitude");
                 dt.Columns.Add("Longitude");
                 dt.Columns.Add("objectDescription");
-                dt.Columns.Add("Area");
-                dt.Columns.Add("AssetNumber");
-                dt.Columns.Add("LocationID");
+                //dt.Columns.Add("Area");
+                //dt.Columns.Add("AssetNumber");
+                //dt.Columns.Add("LocationID");
 
-                dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription, Area, AssetNumber, LocationID);
+                dt.Rows.Add(objectID, nobjectid, Latitude, Longitude, objectDescription /*Area, AssetNumber, LocationID*/);
 
                 DataSet ds = new DataSet();
                 ds.Tables.Add(dt);
@@ -226,9 +231,9 @@ public partial class Pages_Map_MapForm : Page
                     objList.Add(Convert.ToDecimal(dr["Longitude"]).ToString());
                     objList.Add(Convert.ToDecimal(dr["Latitude"]).ToString());
                     objList.Add(dr["objectDescription"].ToString());
-                    objList.Add(dr["Area"].ToString());
-                    objList.Add(dr["AssetNumber"].ToString());
-                    objList.Add(dr["LocationID"].ToString()); 
+                    //objList.Add(dr["Area"].ToString());
+                    //objList.Add(dr["AssetNumber"].ToString());
+                    //objList.Add(dr["LocationID"].ToString()); 
                 }
                 mapPoints = objList.ToArray();
                 rptObjectMarkers.DataSource = dt;
@@ -239,7 +244,7 @@ public partial class Pages_Map_MapForm : Page
         }
         catch { System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, check to make sure items have the correct Coordinates.');</script>"); };
     }
-    protected void GetPlannedJobsData()
+    public void GetPlannedJobsData()
     {
         try { 
             var count = MapSelected as List<object>;
@@ -293,6 +298,7 @@ public partial class Pages_Map_MapForm : Page
                 mapPoints = objList.ToArray();
                 rptJobStepMarkers.DataSource = dt;
                 rptJobStepMarkers.DataBind();
+               
             }
             else
             {
@@ -319,7 +325,7 @@ public partial class Pages_Map_MapForm : Page
                 DataSet ds = new DataSet();
                 ds.Tables.Add(dt);
 
-                List<string> objList = new List<string>();
+                objList = new List<string>();
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     objList.Add(Convert.ToDecimal(dr["Longitude"]).ToString());
@@ -330,8 +336,11 @@ public partial class Pages_Map_MapForm : Page
                     objList.Add(dr["jobID"].ToString());
                 }
                 mapPoints = objList.ToArray();
+                //var j = new JavaScriptSerializer();
+                //var result = j.Serialize(dt.Select(i => new { jobid = i.jobID, njobid = i.njobid, jobstepid = i.jobstepid, lat = i.Latitude, lng = i.longitude, description = i.description }));
                 rptJobStepMarkers.DataSource = dt;
                 rptJobStepMarkers.DataBind();
+                
             }
         }
         catch { System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, check to make sure items have the correct Coordinates.');</script>"); };

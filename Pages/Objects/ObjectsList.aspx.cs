@@ -37,9 +37,11 @@ namespace Pages.Objects
                 //Add Use ID TO Session
                 HttpContext.Current.Session.Add("UserID", _oLogon.UserID);
 
+                RestSession();
                 //Load Form Permissions
                 if (FormSetup(_oLogon.UserID))
                 {
+                    
                     //Setup Buttons
                     Master.ShowSaveButton = false;
                     Master.ShowNewButton = false;/*_userCanAdd;*/
@@ -61,6 +63,7 @@ namespace Pages.Objects
                 ObjectGrid.DataBind();
                 ObjectGrid.Focus();
                 MaintainScrollPositionOnPostBack = true;
+
                 
                 
             }
@@ -365,6 +368,30 @@ namespace Pages.Objects
                 //Redirect To Report Page
                 Response.Redirect("~/Reports/ViewReport.aspx", true);
             }
+        }
+
+        private void RestSession()
+        {
+            if (HttpContext.Current.Session["MapSelected"] != null)
+            {
+                //Remove Value
+                HttpContext.Current.Session.Remove("MapSelected");
+            }
+
+            //Check For Previous Session n_objectid
+            if (HttpContext.Current.Session["n_objectid"] != null)
+            {
+                //Remove Value
+                HttpContext.Current.Session.Remove("n_objectid");
+            }
+
+            //Check for previous session object ID
+            if (HttpContext.Current.Session["objectid"] != null)
+            {
+                //Remove Value
+                HttpContext.Current.Session.Remove("objectid");
+            }
+
         }
 
         private void MapItem()

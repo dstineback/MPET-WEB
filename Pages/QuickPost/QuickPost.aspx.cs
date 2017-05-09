@@ -220,7 +220,13 @@ namespace Pages.QuickPost
                         case "PostJob":
                             {
                                 SaveSessionData();
-                                PostPlanJob();
+                                if(Session["editingJobID"] != null && Session["JobStepID"] != null)
+                                {
+                                    PostPlanJob();
+                                } else
+                                {
+                                    System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Not all fields or IDs are obtained. Please make sure to save and popluate required fields to proceed.');</script>");
+                                }
 
                             }
                             break;
@@ -247,9 +253,12 @@ namespace Pages.QuickPost
             #region Is not a Post-Back
             if (IsPostBack)
             {
-                if(Session["JobStepID"] != null && Session["EditingJobID"] != null)
+                if(Session["JobStepID"] != null && Session["editingJobID"] != null)
                 {
                     Master.ShowPostButton = true;
+                } else
+                {
+                    Master.ShowPostButton = false;
                 }
                 #region Setting Headers with Job ID
                 if (Session["AssignedJobID"] != null)
@@ -498,7 +507,16 @@ namespace Pages.QuickPost
             #endregion
             #region Button Status
             Master.ShowNewButton = true;
-            Master.ShowPostButton = true;
+            if (Session["editingJobID"] != null && Session["JobStepID"] != null)
+            {
+                Master.ShowPostButton = true;
+                
+            }
+            else
+            {
+                Master.ShowPostButton = false;
+            }
+
 
             //Clear Prior Selection If Edit Check Is No Longer Visible
             //if (!(CrewGrid.Columns[0].Visible))
@@ -3607,7 +3625,6 @@ namespace Pages.QuickPost
                     throw new SystemException(
                         @"Valid Completion Date Required For Batch Post");
                 }
-                System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('You have sussefully created a Quick Post.');</script>");
             }
             else
             {
@@ -3616,7 +3633,9 @@ namespace Pages.QuickPost
                     @"Error Loading Job & Job Step Keys For Batch Post");
             }
 
+
             Response.Redirect("~/main.aspx");
+            Response.Write("<script language='javascript'>alert('You have sussefully created a Quick Post.');</script>");
 
         }
         #endregion

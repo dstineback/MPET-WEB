@@ -209,13 +209,15 @@
         <Items>
             <dx:LayoutGroup ColCount="2" Caption="" Name="Job Description">
                 <Items>
-                <dx:LayoutItem Caption="Job Description" ColSpan="2">
+                <dx:LayoutItem Caption="*Job Description:" ColSpan="2">
                     <LayoutItemNestedControlCollection>
-                        <dx:LayoutItemNestedControlContainer runat="server">
-                            <dx:ASPxTextBox runat="server" Theme="iOS" ID="txtWorkDescription" ClientInstanceName="txtDescription" Width="95%" MaxLength="254" Height="50px">
-                                <ValidationSettings SetFocusOnError="true" Display="Dynamic" ErrorDisplayMode="Text">
+                        <dx:LayoutItemNestedControlContainer runat="server">          
+                            <dx:ASPxTextBox runat="server" CaptionSettings-RequiredMark="*" Theme="iOS" ID="txtWorkDescription" ClientInstanceName="txtDescription" Width="95%" MaxLength="254" Height="50px">
+                                <ValidationSettings SetFocusOnError="true" Display="Static" ErrorDisplayMode="Text" ErrorText="Must Add Description" ErrorFrameStyle-BackColor="Yellow">
+                                    
                                     <RequiredField IsRequired="true" />
                                 </ValidationSettings>
+                                
                             </dx:ASPxTextBox>
                         </dx:LayoutItemNestedControlContainer>
                     </LayoutItemNestedControlCollection>
@@ -325,7 +327,7 @@
             <dx:LayoutGroup Caption="Job Details" ColCount="3"
                 Name="Job Details">
                 <Items>
-                    <dx:LayoutItem Caption="Completed By" Name="CompletedBy">
+                    <dx:LayoutItem Caption="*Completed By" Name="CompletedBy" >
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                <dx:ASPxComboBox ID="ComboCompletedBy" 
@@ -338,7 +340,7 @@
                                     DropDownStyle="DropDown" Theme="iOS" 
                                     TextField="username" 
                                     DropDownButton-Enabled="True" 
-                                    AutoPostBack="False" 
+                                    AutoPostBack="False" CaptionSettings-RequiredMark="*"  
                                     ClientInstanceName="ComboCompletedBy">
                                                            
                                     <Columns>
@@ -346,6 +348,10 @@
                                         <dx:ListBoxColumn FieldName="username" Caption="User ID" Width="75px" ToolTip="M-PET.NET User ID"/>
                                         <dx:ListBoxColumn FieldName="FullName" Caption="Full Name" Width="150px" ToolTip="M-PET.NET User Full Name"/>
                                     </Columns>
+                                   <ValidationSettings SetFocusOnError="true" ErrorFrameStyle-BackColor="Yellow" Display="Static" >
+                                       <RequiredField IsRequired="true" />
+                                   </ValidationSettings>
+                                  
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
@@ -363,15 +369,19 @@
 
                         <CaptionSettings Location="Top"></CaptionSettings>
                     </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Starting Date" Name="StartingDate">
+                    <dx:LayoutItem Caption="*Starting Date" Name="StartingDate">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxDateEdit ID="TxtWorkStartDate" 
                                                     ClientInstanceName="TxtWorkStartDate"
                                                     DisplayFormatString="D"
                                                     Theme="iOS"
-                                                    Width="100%" 
+                                                    Width="100%" CaptionSettings-RequiredMark="*" 
                                                     runat="server">
+                                    <ValidationSettings SetFocusOnError="true" ErrorFrameStyle-BackColor="Yellow" Display="Static" >
+
+                                        <RequiredField IsRequired="true" />
+                                    </ValidationSettings>
                                 </dx:ASPxDateEdit>  
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
@@ -393,7 +403,7 @@
 
                         <CaptionSettings Location="Top"></CaptionSettings>
                     </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Outcome" Name="Outcome Code:">
+                    <dx:LayoutItem Caption="*Outcome" Name="Outcome Code:">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxComboBox ID="ComboOutcomeCode"
@@ -410,11 +420,13 @@
                                                     Theme="iOS"
                                                     TextField="outcomecodeid"
                                                     DropDownButton-Enabled="True"
-                                                    AutoPostBack="False"
+                                                    AutoPostBack="False" CaptionSettings-RequiredMark="*" 
                                                     ClientInstanceName="ComboOutcomeCode">
-                                                    <ValidationSettings SetFocusOnError="True" Display="Dynamic" ErrorDisplayMode="Text">
+                                                    <ValidationSettings SetFocusOnError="True" Display="Static" ErrorFrameStyle-BackColor="Yellow">
                                                         <RequiredField IsRequired="True" />
                                                     </ValidationSettings>
+                                                    
+                                                   
                                                     <Columns>
                                                         <dx:ListBoxColumn FieldName="n_outcomecodeid" Visible="False" />
                                                         <dx:ListBoxColumn FieldName="outcomecodeid" Caption="Outcome ID" Width="75px" ToolTip="M-PET.NET Outcome Code ID" />
@@ -425,18 +437,19 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top" />
                     </dx:LayoutItem>
-                    <dx:LayoutItem Caption="Completed Date" Name="completedDate">
+                    <dx:LayoutItem Caption="*Completed Date" Name="completedDate">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
                                 <dx:ASPxDateEdit ID="TxtWorkCompDate" 
                                                     ClientInstanceName="TxtWorkCompDate"
                                                     DisplayFormatString="D" ValidationSettings-RequiredField-IsRequired="true"
                                                     Theme="iOS" ValidationSettings-Display="Dynamic"
-                                                    Width="100%" 
+                                                    Width="100%" CaptionSettings-RequiredMark="*" 
                                                     runat="server">
-                                    <ValidationSettings>
+                                    <ValidationSettings ErrorFrameStyle-BackColor="Yellow" Display="Static" SetFocusOnError="true">
                                     <RequiredField IsRequired="True"></RequiredField>
                                     </ValidationSettings>
+                                   
                                 </dx:ASPxDateEdit>   
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
@@ -584,9 +597,10 @@
                     </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup> <%--Job Details--%>
-                    <dx:LayoutItem Caption="">
+                    <dx:LayoutItem Caption="" >
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
+                                <dx:ASPxLabel runat="server" Text="*" Font-Size="Medium"></dx:ASPxLabel>
                                 <dx:ASPxButton runat="server" OnClick="NextStep_Click" ID="NextStepButton" BackColor="#ff0000" ForeColor="White" HoverStyle-BackColor="Blue" Text="Save to access optional fields"></dx:ASPxButton>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
@@ -921,14 +935,14 @@
                                                                     </dx:LayoutItem>
 
 
-            <dx:TabbedLayoutGroup>
+            <dx:TabbedLayoutGroup TabImage-AlternateText="Add Options" Caption="Add Options">
                 <Items>
-                    <dx:LayoutItem>
+                    <dx:LayoutItem HelpText="Crew Member must be selected to complete a Quick Post">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server" ID="TabPageContainer">
                                 <dx:ASPxPageControl runat="server" ID="TabPageControl" Theme="iOS" ClientInstanceName="TabPageControl" ActiveTabIndex="0" EnableHierarchyRecreation="true" TabPosition="Right"  >
                                     <TabPages>
-                                        <dx:TabPage Name="StepCrew" Text="CREW" ToolTip="Allows Input Of Job Crew">
+                                        <dx:TabPage Name="StepCrew" Text="*CREW" ToolTip="Allows Input Of Job Crew">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl10" runat="server">
                                                     <asp:UpdatePanel ID="UpdatePanel2" runat="server" OnUnload="UpdatePanel_Unload" UpdateMode="Conditional" >
@@ -941,7 +955,7 @@
                                                                 Width="98%" 
                                                                 KeyboardSupport="True" 
                                                                 ClientInstanceName="CrewGrid" 
-                                                                AutoPostBack="false" 
+                                                                AutoPostBack="false" CaptionSettings-RequiredMark="*" 
                                                                 EnableCallBacks="true" 
                                                                 Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="True" SettingsBehavior-AllowFocusedRow="False" 
                                                                 SettingsBehavior-AllowSelectByRowClick="true" DataSourceID="CrewDataSource" OnDataBound="CrewGridBound" OnRowUpdating="CrewGrid_RowUpdating" >

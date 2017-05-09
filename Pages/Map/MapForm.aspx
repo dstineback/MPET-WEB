@@ -49,56 +49,80 @@
 </script>
 
 <%-- Code for Google maps functions. This code takes in data from the code behinde and loops through markers to provide display --%>
-<script type="text/javascript">
-    window.onload = function () {
-        var markers = [
-            <asp:Repeater ID="rptJobMarkers" runat="server">
+  
+<body runat="server" >
+    <script type="text/javascript">
+        var markers = [];
+    </script>
+    <asp:Repeater ID="rptJobStepMarkers" runat="server">
+        <ItemTemplate>
+                                  
+                jobid: <%# Eval("jobID")%>,
+                "njobid": <%# Eval("njobid")%>, 
+                "jobstepid": <%# Eval("jobstepid")%>,                                                
+                "lat": <%# Eval("Latitude") %>,
+                "lng": <%# Eval("Longitude") %>,
+                "description": <%# Eval("description") %>,
+            
+             <script type="text/javascript">         
+                 debugger;
+                 window.markers = window.markers || [];
+                 markers.push({'jobid': '<%# Eval("jobID") %>','njobid': '<%# Eval("njobid") %>', 'jobstepid': '<%# Eval("jobstepid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','description': '<%# Eval("description") %>'});            
+            </script>
+        </ItemTemplate>
+        <SeparatorTemplate>
+            ,
+        </SeparatorTemplate>
+        </asp:Repeater>
+    <asp:Repeater ID="rptJobMarkers" runat="server" >
                 <ItemTemplate>
-                    {                       
+                                          
                         "jobid": '<%# Eval("jobID")%>',
                         "njobid": '<%# Eval("njobid")%>',                     
                         "lat": '<%# Eval("Latitude") %>',
                         "lng": '<%# Eval("Longitude") %>',
                         "description": '<%# Eval("description") %>',
-                    }
+                    
+                    <script type="text/javascript">
+                    debugger;
+                     
+                     window.markers = window.markers || [];
+                     markers.push({'jobid': '<%# Eval("jobID") %>','njobid': '<%# Eval("njobid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>'});
+                    </script>
                 </ItemTemplate>
                 <SeparatorTemplate>
                     ,
         </SeparatorTemplate>
         </asp:Repeater>
-    <asp:Repeater ID="rptJobStepMarkers" runat="server">
-        <ItemTemplate>
-            {                       
-                "jobid": '<%# Eval("jobID")%>',
-                "njobid": '<%# Eval("njobid")%>', 
-                "jobstepid": '<%# Eval("jobstepid")%>',                                                
-                "lat": '<%# Eval("Latitude") %>',
-                "lng": '<%# Eval("Longitude") %>',
-                "description": '<%# Eval("description") %>',
-            }
-        </ItemTemplate>
-        <SeparatorTemplate>
-            ,
-        </SeparatorTemplate>
-        </asp:Repeater>
-    <asp:Repeater ID="rptObjectMarkers" runat="server">
+    <asp:Repeater ID="rptObjectMarkers" runat="server"  >
         <ItemTemplate>
             {          
-                "nobjectid": '<%# Eval("nobjectid")%>',
                 "objectid": '<%# Eval("objectid")%>',               
+                "nobjectid": '<%# Eval("nobjectid")%>',
                 "lat": '<%# Eval("Latitude") %>',
                 "lng": '<%# Eval("Longitude") %>',
                 "objectDescription": '<%# Eval("objectDescription") %>',
+                <%--"Area": '<%# Eval("Area") %>',
+                "AssetNumber": '<%# Eval("AssetNumber") %>',
+                "LocationID": '<%# Eval("LocationID") %>',--%>
             }
+            <script type="text/javascript">
+                debugger;
+                window.markers = window.markers || [];
+                markers.push({'nobjectid': '<%# Eval("nobjectid") %>','objectid': '<%# Eval("objectid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','objectDescription': '<%# Eval("objectDescription") %>'});
+            </script>
         </ItemTemplate>
         <SeparatorTemplate>
             ,
         </SeparatorTemplate>
         </asp:Repeater>
-    ];
+    <script type="text/javascript">
+     window.onload = function() {
+         var getLat = markers[0].lat;
+         var getLng = markers[0].lng;
 
         var mapOptions = {
-            center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+            center: new google.maps.LatLng(getLat, getLng),
             zoom: 10,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -115,8 +139,10 @@
             var description = String(data.description);
             var objectDescription = String(data.objectDescription);
             var njobid = String(data.njobid);
+            var lat = String(data.lat);
+            var lng = String(data.lng);
             
-            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+            var myLatlng = new google.maps.LatLng(lat, lng);
             var marker = new google.maps.Marker({
                 position: myLatlng,
                 map: map,
@@ -162,13 +188,15 @@
             
             for (var i = 0; i < markers.length; i++){
                 var marker = markers[i];
+                var id = marker.objectid;
                 if(marker.object != null){
                     content += ('<div id="mapInfoWindow">');
                     content += ('Object ID:' +  ' ' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + marker.object + "</a>");
                     content += ("&nbsp");
-                    content += 'Description:' + ' ' + marker.objectDescription;
+                    content += 'Description:' + ' ' + marker.objectDescription + '<a href="/../../Pages/QuickPost/QuickPost.aspx">'+ ' ' + 'Quick Post?' + '</a>';
                     content += ("<br>"); 
                     content += ('</div>');
+                    content += (sessionStorage.setItem("objectid", id));
                 };
                 if(marker.jobid != null && marker.njobid > 0 && marker.step == null){ 
                     content += ('<div id="mapInfoWindow">');
@@ -195,8 +223,6 @@
         });
     }
 </script>
-  
-<body runat="server" >
 
     <div runat="server" id="backButton">
         
@@ -208,7 +234,7 @@
         
         
     </div>
-    <div runat="server" id="map"></div>  
+    <div runat="server" id="map" ></div>  
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARk0BJK-cnQ27jHObwdI4xtqsNY9n7z9E" async defer></script>
     <script  src="../../Content/v3-utility-library-master/markerclusterer/src/markerclusterer.js"></script>
 </body>
