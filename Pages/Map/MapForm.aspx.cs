@@ -41,7 +41,8 @@ public partial class Pages_Map_MapForm : Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-       try {  
+        Response.Write("<script>console.log('You hit the page');</script>");
+        try {  
             ///Setting the local variables from Session data
             if (HttpContext.Current.Session["MapSelected"] != null)
             {
@@ -82,6 +83,7 @@ public partial class Pages_Map_MapForm : Page
             if(context.Session["jobstepid"] != null)
             {
                 jobstepid =  Convert.ToInt32(HttpContext.Current.Session["jobstepid"].ToString());
+                Response.Write("<script>console.log('Job step', jobstepid);</script>");
             }
 
             if (context.Session["step"] != null)
@@ -246,6 +248,7 @@ public partial class Pages_Map_MapForm : Page
     }
     public void GetPlannedJobsData()
     {
+        Response.Write("<script>console.log('You hit the planned job page');</script>");
         try { 
             var count = MapSelected as List<object>;
 

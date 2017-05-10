@@ -58,7 +58,7 @@
   <div id="repeaters" runat="server" style="display:none;">
      <asp:Repeater ID="rptJobStepMarkers" runat="server">
         <ItemTemplate>
-                                  
+                      <p>PLease work</p>            
                 jobid: <%# Eval("jobID")%>,
                 "njobid": <%# Eval("njobid")%>, 
                 "jobstepid": <%# Eval("jobstepid")%>,                                                
@@ -66,7 +66,7 @@
                 "lng": <%# Eval("Longitude") %>,
                 "description": <%# Eval("description") %>,
             
-             <script type="text/javascript">         
+             <script type="text/javascript" >         
                 
                  window.markers = window.markers || [];
                  markers.push({'jobid': '<%# Eval("jobID") %>','njobid': '<%# Eval("njobid") %>', 'jobstepid': '<%# Eval("jobstepid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','description': '<%# Eval("description") %>'});            
@@ -108,7 +108,7 @@
                 "AssetNumber": '<%# Eval("AssetNumber") %>',
                 "LocationID": '<%# Eval("LocationID") %>',--%>
             }
-            <script type="text/javascript">
+            <script type="text/javascript" >
                 
                 window.markers = window.markers || [];
                 markers.push({'nobjectid': '<%# Eval("nobjectid") %>','objectid': '<%# Eval("objectid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','objectDescription': '<%# Eval("objectDescription") %>'});
@@ -196,10 +196,10 @@
                     content += ('<div id="mapInfoWindow">');
                     content += ('Object ID:' +  ' ' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + marker.object + "</a>");
                     content += ("&nbsp");
-                    content += 'Description:' + ' ' + marker.objectDescription + '<a href="/../../Pages/QuickPost/QuickPost.aspx">'+ ' ' + 'Quick Post?' + '</a>';
+                    content += 'Description:' + ' ' + marker.objectDescription;
                     content += ("<br>"); 
                     content += ('</div>');
-                    content += (sessionStorage.setItem("objectid", id));
+                    
                 };
                 if(marker.jobid != null && marker.njobid > 0 && marker.step == null){ 
                     content += ('<div id="mapInfoWindow">');
@@ -227,15 +227,12 @@
     }
 </script>
 
-    <div runat="server" id="backButton">
-        
+    <div runat="server" id="backButton">       
         <a id="link" runat="server" title="Go to Job"></a>
         <dx:ASPxHyperLink runat="server" ID="HomeBnt" CssClass="mapbutton" Text="Back to Main Page" ForeColor="White" NavigateUrl="~/main.aspx"></dx:ASPxHyperLink>
         <dx:ASPxHyperLink runat="server" ID="ObjectBack" CssClass="mapbutton" Text="Back to Objects List" ForeColor="White" NavigateUrl="../Objects/ObjectsList.aspx"></dx:ASPxHyperLink>
         <dx:ASPxHyperLink runat="server" ID="PlannedJobsBack" CssClass="mapbutton" Text="Back to Planned Jobs List" ForeColor="White" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"></dx:ASPxHyperLink>
-        <dx:ASPxHyperLink runat="server" ID="RequestJobsBack" CssClass="mapbutton" Text="Back to Request List" ForeColor="White" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx"></dx:ASPxHyperLink>
-        
-        
+        <dx:ASPxHyperLink runat="server" ID="RequestJobsBack" CssClass="mapbutton" Text="Back to Request List" ForeColor="White" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx"></dx:ASPxHyperLink>  
     </div>
     <div runat="server" id="map" ></div>
     <script type="text/javascript">
