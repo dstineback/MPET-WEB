@@ -44,7 +44,8 @@ namespace Pages.Objects
                     
                     //Setup Buttons
                     Master.ShowSaveButton = false;
-                    Master.ShowNewButton = false;/*_userCanAdd;*/
+                    Master.ShowNewWRButton = _userCanAdd;
+                    
                     Master.ShowEditButton = false;/*_userCanEdit;*/
                     Master.ShowDeleteButton = false; /*_userCanDelete;*/
                     Master.ShowViewButton = false;  /*_userCanView;*/
@@ -84,8 +85,8 @@ namespace Pages.Objects
                     //Determing What To Do
                     switch (controlName.Replace("ctl00$Footer$", ""))
                     {
-                        case "NewButton":
-                        {
+                        case "NewWRButton":
+                        {                            
                             //Call View Routine
                             AddNewRow();
                             break;
@@ -150,7 +151,7 @@ namespace Pages.Objects
             }
 
             //Enable/Disable Buttons
-            //Master.ShowNewButton = !(ObjectGrid.Columns[0].Visible);
+            Master.ShowNewWRButton = !(ObjectGrid.Columns[0].Visible);
             //Master.ShowEditButton = !(ObjectGrid.Columns[0].Visible);
             //Master.ShowViewButton = !(ObjectGrid.Columns[0].Visible);
             //Master.ShowPrintButton = !(ObjectGrid.Columns[0].Visible);
@@ -217,8 +218,30 @@ namespace Pages.Objects
         /// </summary>
         private void AddNewRow()
         {
+
+            if (Selection.Contains("objectid"))
+            {
+                Session.Remove("objectid");
+                Session.Add("objectid", Selection.Get("objectid"));
+
+                if (Selection.Contains("description"))
+                {
+                    Session.Remove("description");
+                    Session.Add("description", Selection.Get("description"));
+                }
+
+                if (Selection.Contains("n_object"))
+                {
+                    Session.Remove("n_object");
+                    Session.Add("n_object", Selection.Get("n_object"));
+                }
+
             //Redirect To Task Page
-            Response.Redirect("~/Pages/Objects/Objects.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
+            } else
+            {
+                Response.Write("<script language='javascript'>alert('No Item was selected from Grid. Please choose one item to make a new work request.');</script>");
+            }
         }
 
         /// <summary>

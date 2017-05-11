@@ -99,6 +99,17 @@ namespace Pages.WorkRequests
                     //Setup For Adding
                     SetupForAdding();
 
+                    if(Session["objectid"] != null)
+                    {
+                        ObjectIDCombo.Value = Session["objectid"];
+                       
+                    }
+
+                    if(Session["description"] != null)
+                    {
+                        txtObjectDescription.Value = Session["description"];
+                    }
+
                     //Check Tab
                     txtWorkDescription.Focus();
                     AttachmentGrid.Visible = false;
@@ -127,7 +138,7 @@ namespace Pages.WorkRequests
                     //Determing What To Do
                     switch (controlName.Replace("ctl00$Footer$", ""))
                     {
-                        case "NewButton":
+                        case "NewWRButton":
                             {
                                 //Call View Routine
                                 AddNewRow();
@@ -179,9 +190,7 @@ namespace Pages.WorkRequests
                                 else
                                 {
                                     PlanJobRoutine();
-                                }
-                                
-
+                                }                                
                                 //Break
                                 break;
                             }

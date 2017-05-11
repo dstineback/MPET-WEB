@@ -35,9 +35,9 @@
                 KeyboardSupport="True" 
                 ClientInstanceName="ObjectGrid"
                 AutoPostBack="False"
-                Settings-HorizontalScrollBarMode="Auto"
+                Settings-HorizontalScrollBarMode="Auto" Settings-VerticalScrollBarMode="Visible" Settings-VerticalScrollBarStyle="Standard"
                 SettingsPager-Mode="ShowPager"
-                SettingsBehavior-ProcessFocusedRowChangedOnServer="True"
+                SettingsBehavior-ProcessFocusedRowChangedOnServer="false"
                 SettingsBehavior-AllowFocusedRow="True"
                 SelectionMode="Multiple"
                 DataSourceID="ObjectGridDataSource" 
@@ -64,7 +64,7 @@
                         SortOrder="Ascending"
                         Caption="Object"
                         Width="150px"
-                        HeaderStyle-Font-Bold="True"
+                        HeaderStyle-Font-Bold="True" 
                         VisibleIndex="4">
                         <CellStyle Wrap="False"></CellStyle>
                         <PropertiesHyperLinkEdit NavigateUrlFormatString="~/Pages/Objects/Objects.aspx?objectid={0}"></PropertiesHyperLinkEdit>
@@ -216,7 +216,7 @@
                 <SettingsSearchPanel Visible="true" />
                 <SettingsBehavior
                     EnableRowHotTrack="True" AllowGroup="true"
-                    AllowFocusedRow="True"
+                    AllowFocusedRow="True" 
                     AllowClientEventsOnLoad="false" AllowSelectByRowClick="true" AllowSelectSingleRowOnly="false"
                     ColumnResizeMode="NextColumn" />
                 <SettingsDataSecurity
@@ -226,7 +226,7 @@
                 <Settings 
                     ShowFilterBar="Visible" ShowGroupPanel="true" ShowFilterRow="true" ShowFilterRowMenu="true"
                     VerticalScrollBarMode="Visible"
-                    VerticalScrollBarStyle="Standard"
+                    VerticalScrollBarStyle="Standard" 
                     VerticalScrollableHeight="450" />
                 <SettingsFilterControl ViewMode="Visual" ShowAllDataSourceColumns="true"></SettingsFilterControl>
                 <SettingsPager PageSize="20">

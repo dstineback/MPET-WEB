@@ -23,6 +23,7 @@ public partial class SiteMasterBase : MasterPage {
     //Create Show Button Flags
     private bool _showSaveButton;
     private bool _showNewButton;
+    private bool _showNewWRButton;
     private bool _showEditButton;
     private bool _showDeleteButton;
     private bool _showPdfButton;
@@ -57,6 +58,7 @@ public partial class SiteMasterBase : MasterPage {
     //Create Show Button Events
     public bool ShowSaveButton { get { return _showSaveButton; } set { _showSaveButton = value; } }
     public bool ShowNewButton { get { return _showNewButton; } set { _showNewButton = value; } }
+    public bool ShowNewWRButton { get { return _showNewWRButton; } set { _showNewWRButton = value; } }
     public bool ShowEditButton { get { return _showEditButton; } set { _showEditButton = value; } }
     public bool ShowDeleteButton { get { return _showDeleteButton; } set { _showDeleteButton = value; } }
     public bool ShowPdfButton { get { return _showPdfButton; } set { _showPdfButton = value; } }
@@ -95,6 +97,7 @@ public partial class SiteMasterBase : MasterPage {
     //Create Show Button Flags
     private bool _enableSaveButton = true;
     private bool _enableNewButton = true;
+    private bool _enableNewWRButton = true;
     private bool _enableEditButton = true;
     private bool _enableDeleteButton = true;
     private bool _enablePdfButton = true;
@@ -127,6 +130,7 @@ public partial class SiteMasterBase : MasterPage {
     //Create Show Button Events
     public bool EnableSaveButton { get { return _enableSaveButton; } set { _enableSaveButton = value; } }
     public bool EnableNewButton { get { return _enableNewButton; } set { _enableNewButton = value; } }
+    public bool EnableNewWRButton { get { return _enableNewWRButton; } set { _enableNewWRButton = value; } }
     public bool EnableEditButton { get { return _enableEditButton; } set { _enableEditButton = value; } }
     public bool EnableDeleteButton { get { return _enableDeleteButton; } set { _enableDeleteButton = value; } }
     public bool EnablePdfButton { get { return _enablePdfButton; } set { _enablePdfButton = value; } }
@@ -194,6 +198,10 @@ public partial class SiteMasterBase : MasterPage {
         var newButton = ((ASPxButton)Footer.FindControl("NewButton"));
         newButton.Visible = _showNewButton;
         newButton.Enabled = _enableNewButton;
+
+        var newWRButton = ((ASPxButton)Footer.FindControl("NewWRButton"));
+        newWRButton.Visible = _showNewWRButton;
+        newWRButton.Enabled = _enableNewWRButton;
 
         //Setup New Non-Stock Button
         var newNonStockPart = ((ASPxButton)Footer.FindControl("NewNonStockPart"));

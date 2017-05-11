@@ -353,7 +353,7 @@
                 <dx:LayoutItem Caption="" ShowCaption="False" ColSpan="2" CaptionSettings-Location="Top">
                     <LayoutItemNestedControlCollection>
                         <dx:LayoutItemNestedControlContainer>
-                            '
+                            
                             <asp:UpdatePanel runat="server">
                                 <ContentTemplate>
                                     <dx:ASPxGridView SettingsDataSecurity-AllowDelete="true" runat="server" Id="AttachmentGrid" Theme="iOS" KeyFieldName="LocationOrURL" Width="95%" KeyboardSupport="true" ClientInstanceName="AttachmentGrid" AutoPostBack="true" Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" SettingsBehavior-AllowFocusedRow="true" EnableCallBacks="true" AutoGenerateColumns="false" DataSourceID="AttachmentDataSource">
