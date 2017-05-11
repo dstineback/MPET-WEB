@@ -197,6 +197,10 @@
             crewGrid.dispatchEvent(dblClick);
         }
     </script>
+    <script>
+        var nobjectid = localStorage.getItem("nobjectid");
+        Selection.Set("nobjectid", nobjectid);
+    </script>
 
     <asp:ScriptManager ID="ScriptManger1" runat="server" EnablePartialRendering="true"></asp:ScriptManager>
     <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="iOS" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="iOS" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="iOS" runat="server" Text="Step: "></dx:ASPxLabel> <br />

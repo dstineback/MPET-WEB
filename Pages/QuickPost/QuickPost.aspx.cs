@@ -138,17 +138,29 @@ namespace Pages.QuickPost
                     Master.ShowPostButton = false;
                     chkUpdateObjects.Enabled = false;
 
-
                 }
                 #endregion
                 SetupForAdding();
                 txtWorkDescription.Focus();
                 #region Check for Object field population from another source
-                if (Session["nobjectid"] != null)
+                
+                if (Selection.Contains("nobjectid"))
+                {
+                    Session.Remove("nobjectid");
+                    Session.Add("nobjectid", Selection.Get("nobjectid"));
+                }
                 {
                     
-                    var txtObject = HttpContext.Current.Session["objectDescription"].ToString();
+                }
+                if (Session["nobjectid"] != null)
+                {
                     ObjectIDCombo.Value = Convert.ToInt32(HttpContext.Current.Session["nobjectId"]).ToString();
+                    
+                    
+                    if (Session["description"] != null)
+                    {
+                        txtObjectDescription.Value = Session["description"];
+                    }
 
                     if (Session["objectDescription"] != null)
                     {

@@ -45,6 +45,7 @@ namespace Pages.Objects
                     //Setup Buttons
                     Master.ShowSaveButton = false;
                     Master.ShowNewWRButton = _userCanAdd;
+                    Master.ShowQuickPostButton = _userCanAdd;
                     
                     Master.ShowEditButton = false;/*_userCanEdit;*/
                     Master.ShowDeleteButton = false; /*_userCanDelete;*/
@@ -89,6 +90,11 @@ namespace Pages.Objects
                         {                            
                             //Call View Routine
                             AddNewRow();
+                            break;
+                        }
+                        case "QuickPostButton":
+                        {
+                                QuickPost();
                             break;
                         }
                         case "EditButton":
@@ -152,6 +158,7 @@ namespace Pages.Objects
 
             //Enable/Disable Buttons
             Master.ShowNewWRButton = !(ObjectGrid.Columns[0].Visible);
+            Master.ShowQuickPostButton = !(ObjectGrid.Columns[0].Visible);
             //Master.ShowEditButton = !(ObjectGrid.Columns[0].Visible);
             //Master.ShowViewButton = !(ObjectGrid.Columns[0].Visible);
             //Master.ShowPrintButton = !(ObjectGrid.Columns[0].Visible);
@@ -239,6 +246,53 @@ namespace Pages.Objects
             //Redirect To Task Page
             Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
             } else
+            {
+                Response.Write("<script language='javascript'>alert('No Item was selected from Grid. Please choose one item to make a new work request.');</script>");
+            }
+        }
+
+        private void QuickPost()
+        {
+            
+            if (Selection.Contains("objectid"))
+            {
+                Session.Remove("objectid");
+                Session.Add("objectid", Selection.Get("objectid"));
+
+                if (Selection.Contains("description"))
+                {
+                    Session.Remove("description");
+                    Session.Add("description", Selection.Get("description"));
+                }
+
+                if (Selection.Contains("n_objectid"))
+                {
+                    Session.Remove("n_objectid");
+                    Session.Add("nobjectid", Selection.Get("n_objectid"));
+                }
+
+                if (Selection.Contains("Area"))
+                {
+                    Session.Remove("Area");
+                    Session.Add("Area", Selection.Get("Area"));
+                }
+
+                if (Selection.Contains("Location"))
+                {
+                    Session.Remove("LocationID");
+                    Session.Add("LocationID", Selection.Get("LocationID"));
+                }
+                
+                if (Selection.Contains("AssetNumber"))
+                {
+                    Session.Remove("AssetNumber");
+                    Session.Add("AssetNumber", Selection.Get("AssetNumber"));
+                }
+
+                //Redirect To Task Page
+                Response.Redirect("~/Pages/QuickPost/QuickPost.aspx", true);
+            }
+            else
             {
                 Response.Write("<script language='javascript'>alert('No Item was selected from Grid. Please choose one item to make a new work request.');</script>");
             }

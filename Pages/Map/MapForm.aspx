@@ -144,6 +144,7 @@
             var njobid = String(data.njobid);
             var lat = String(data.lat);
             var lng = String(data.lng);
+            var nobjectid = String(data.nobjectid);
             
             var myLatlng = new google.maps.LatLng(lat, lng);
             var marker = new google.maps.Marker({
@@ -154,7 +155,8 @@
                 object: data.objectid,
                 step: data.jobstepid,
                 njobid: data.njobid,
-                objectDescription: data.objectDescription              
+                objectDescription: data.objectDescription,
+                nobjectid: data.nobjectid
             });          
             (function (marker, data) {
                 google.maps.event.addListener(marker, "click", function (e) {
@@ -191,12 +193,12 @@
             
             for (var i = 0; i < markers.length; i++){
                 var marker = markers[i];
-                var id = marker.objectid;
+                var id = marker.nobjectid;
                 if(marker.object != null){
                     content += ('<div id="mapInfoWindow">');
                     content += ('Object ID:' +  ' ' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + marker.object + "</a>");
                     content += ("&nbsp");
-                    content += 'Description:' + ' ' + marker.objectDescription;
+                    content += 'Description:' + ' ' + marker.objectDescription + '<a href="../../Pages/QuickPost/QuickPost.aspx">' + "Quick Post?" + "</a>" + localStorage.setItem("objectid", marker.nobjectid);
                     content += ("<br>"); 
                     content += ('</div>');
                     

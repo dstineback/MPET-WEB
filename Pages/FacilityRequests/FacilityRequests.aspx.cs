@@ -285,7 +285,10 @@ namespace Pages.FacilityRequests
 
                                     //Update Job
                                     AddRequest();
-                                }
+                                        var savedID = Session["AssignedJobID"];
+                                        Response.Write("<script language='javascript'>window.alert('Work Request Created. " + savedID + "');window.location='./../../main.aspx';</script>");
+                                        //Response.Write("<script language='javascript'>window.alert('Work Order Created');window.location='/main.aspx';</script>");
+                                    }
 
                                 //Break
                                 break;
@@ -2360,7 +2363,11 @@ namespace Pages.FacilityRequests
                 {
                     HttpContext.Current.Session.Remove("ObjectIDCombo");
                 }
-                if(HttpContext.Current.Session["txtObjectDescription"] != null)
+                if (HttpContext.Current.Session["ObjectIDComboText"] != null)
+                {
+                    Session.Remove("ObjectIDComboText");
+                }
+                if (HttpContext.Current.Session["txtObjectDescription"] != null)
                 {
                     HttpContext.Current.Session.Remove("txtObjectDescription");
                 }
@@ -2861,6 +2868,16 @@ namespace Pages.FacilityRequests
 
             //Update Job
             AddRequest();
+
+            var savedID = Session["AssignedJobID"];
+
+            //System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Work Request Created. "+ savedID + "');</script>");
+
+            Response.Write("<script language='javascript'>window.alert('Work Request Created. " + savedID + "');window.location='./../../main.aspx';</script>");
+
+            //Response.Write("<script language='javascript'>window.alert('Work Request Created. "+ savedID + "');window.location='/main.aspx';</script>");
+
+            //Response.Redirect("~/main.aspx");
         }
     }
 }
