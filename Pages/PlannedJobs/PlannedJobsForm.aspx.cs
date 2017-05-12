@@ -89,7 +89,7 @@ namespace Pages.PlannedJobs
 
             #endregion
 
-            //#region Attempt To Load Azure Details
+            #region Attempt To Load Azure Details
 
             ////Check For Null Azure Account
             //if (!string.IsNullOrEmpty(AzureAccount))
@@ -109,35 +109,43 @@ namespace Pages.PlannedJobs
             //    UploadControl.AzureSettings.ContainerName = AzureContainer;
             //}
 
-            //#endregion
+            #endregion
 
 
             //Check For Post To Setup Form
-            if (!IsPostBack)
+            (!IsPostBack)
             {
-                
-                
+                ResetSession();
+
+
                 //Check For Session Variable To Distinguish Previous Edit
                 if (HttpContext.Current.Session["editingJobStepID"] != null)
                 {
-                    //Reset Session
-                    ResetSession();
+                    BreakDownCheckBox.Enabled = false;
+                    CrewGrid.Visible = true;
+
 
                     //Setup For Editing -> Checks Later For Viewing Only 
                     SetupForEditing();
                 }
                 else
                 {
-                    
-                    //Setup For Adding
-                    SetupForAdding();
+                    if (Session["editingJobD"] != null)
+                    {
+                        SetupForEditing();
+                        CrewGrid.Visible = false;
+                    } else {
 
-                    ResetSession();
+                        AddRequest();
+                        //Setup For Adding
+                        SetupForAdding();
 
-                    ////Set Focus
-                    txtWorkDescription.Focus();
-                    
+                        CrewGrid.Visible = false;
+                        ////Set Focus
+                        txtWorkDescription.Focus();
 
+
+                    }
                 }
 
                 #region Setup Navitation Checkboxes
@@ -155,8 +163,7 @@ namespace Pages.PlannedJobs
                 //chkUpdateObjects.Items.Add("In-Service", "3");
 
                 #endregion
-            }
-            else
+            } else
             {
                 if (ScriptManager.GetCurrent(Page).IsInAsyncPostBack)
                 {
@@ -195,33 +202,30 @@ namespace Pages.PlannedJobs
                                 //Check For Job ID
                                 if (HttpContext.Current.Session["editingJobStepID"] != null)
                                 {
-                                    if (BreakDownCheckBox.Checked == true)
-                                    {
-                                        jobType = JobType.Breakdown;
-                                        HttpContext.Current.Session.Remove("BreakDownCheckBox");
-                                        HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked = true);
-                                    }
                                     //Save Session Data
                                     SaveSessionData();
+                                    UpdateJobStep();
 
-                                    //Update Job
-                                    UpdateRequest();
                                 }
                                 else
                                 {
-                                    if(HttpContext.Current.Session["editingJobID"] != null)
+                                    if (HttpContext.Current.Session["editingJobID"] != null)
                                     {
-                                        //Save Session Data
+
                                         SaveSessionData();
+                                        UpdateRequest();
+                                        PlanJobRoutine();
+                                        UpdateJobStep();
+                                        BreakDownCheckBox.Enabled = false;
+
                                     } else
                                     {
                                         //Save Session Data
                                         SaveSessionData();
-                                   
-
-                                        //Update Job
                                         AddRequest();
                                         PlanJobRoutine();
+                                        UpdateJobStep();
+                                        BreakDownCheckBox.Enabled = false;
 
                                     }
                                 }
@@ -393,6 +397,7 @@ namespace Pages.PlannedJobs
                     //AddPartPopup.ShowOnPageLoad = false;
                 }
             }
+        
 
             //Check For Query String
             if (!String.IsNullOrEmpty(Request.QueryString["n_jobstepid"]))
@@ -1051,6 +1056,15 @@ namespace Pages.PlannedJobs
 
             if (!IsPostBack)
             {
+                if(Session["editingJobStepID"] != null)
+                {
+                    BreakDownCheckBox.Enabled = false;
+                    CrewGrid.Visible = true;
+
+                }
+
+                
+
                 //Check For Previous Step
                 //if (HttpContext.Current.Session["PreviousStep"] != null)
                 //{
@@ -1073,23 +1087,11 @@ namespace Pages.PlannedJobs
                     txtWorkDescription.Text = (HttpContext.Current.Session["txtWorkDescription"].ToString());
                 }
 
-               
-                if(BreakDownCheckBox.Checked == true)
-                    {
-                        BreakDownCheckBox.Value = (HttpContext.Current.Session["BreakDownCheckBox"]);
-                        var BreakDown = BreakDownCheckBox.Value;
-                        if(BreakDown != null )
-                        {
-                            int BreakDownInt = Convert.ToInt32(BreakDown.ToString());
-                        
-                            if (BreakDownInt == 4)
-                            {
-                                BreakDownCheckBox.Checked = true;
-                            }
-                        }
-
-                    
-                    }
+               if (Session["BreakDownCheckBox"] != null)
+                {
+                    BreakDownCheckBox.Checked = true;
+                }
+                
 
                 //Job ID
                 //if (HttpContext.Current.Session["editingJobStepNum"] != null)
@@ -3960,6 +3962,456 @@ namespace Pages.PlannedJobs
             }
         }
 
+        protected void UpdateJobStep()
+        {
+            #region Setting Vars to use in Stored Procedures from Session
+
+
+
+            #region Get Logon Info
+
+            //Get Value
+            if (HttpContext.Current.Session["LogonInfo"] != null)
+            {
+                //Get Logon Info From Session
+                _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+            }
+
+            if (HttpContext.Current.Session[""] != null)
+            {
+
+            }
+
+            #endregion
+            #region Job Step info
+            #region Get Description
+
+            var workDesc = "";
+            if (HttpContext.Current.Session["txtWorkDescription"] != null)
+            {
+                //Get Additional Info From Session
+                workDesc = (HttpContext.Current.Session["txtWorkDescription"].ToString());
+            }
+
+            #endregion
+
+            #region Get Object
+
+            var objectAgainstId = -1;
+            if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+            {
+                //Get Info From Session
+                objectAgainstId = Convert.ToInt32((HttpContext.Current.Session["ObjectIDCombo"].ToString()));
+            }
+
+            #endregion
+
+            #region Completed By
+            int completedBy = _oLogon.UserID;
+            if (HttpContext.Current.Session["ComboCompletedBy"] != null)
+            {
+                completedBy = Convert.ToInt32(HttpContext.Current.Session["ComboCompletedBy"]);
+            }
+            #endregion
+
+            #region Get Actual Job Length
+            decimal jobActualLen = 0;
+            if (Session["txtJobLength"] != null)
+            {
+                jobActualLen = Convert.ToDecimal(Session["txtJobLength"].ToString());
+            }
+            #endregion
+
+            #region Get Start Date
+
+            var startDate = DateTime.Now;
+            if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
+            {
+                //Get Info From Session
+                startDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkStartDate"].ToString());
+            }
+
+            #endregion
+
+            #region Get Comp Date
+
+            var compDate = DateTime.Now;
+            if (HttpContext.Current.Session["TxtWorkCompDate"] != null)
+            {
+                //Get Info From Session
+                compDate = Convert.ToDateTime(HttpContext.Current.Session["TxtWorkCompDate"].ToString());
+            }
+
+            #endregion
+
+            #region Get Job Reason
+
+            var reasonCode = -1;
+            if ((HttpContext.Current.Session["comboReason"] != null))
+            {
+                //Get Info From Session
+                reasonCode = Convert.ToInt32((HttpContext.Current.Session["comboReason"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Outcome
+
+            var jobOutcome = -1;
+            if ((HttpContext.Current.Session["ComboOutcome"] != null))
+            {
+                jobOutcome = Convert.ToInt32(Session["ComboOutcome"].ToString());
+            }
+
+            #endregion
+
+            #region Get Priority
+
+            var requestPriority = -1;
+            if ((HttpContext.Current.Session["ComboPriority"] != null))
+            {
+                //Get Info From Session
+                requestPriority = Convert.ToInt32((HttpContext.Current.Session["ComboPriority"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Element
+            var elementID = -1;
+            if (Session["comboElementID"] != null)
+            {
+                elementID = Convert.ToInt32(Session["comboElementID"].ToString());
+            }
+            #endregion
+
+            #region Get State Route
+
+            var stateRouteId = -1;
+            if ((HttpContext.Current.Session["comboHwyRoute"] != null))
+            {
+                //Get Info From Session
+                stateRouteId = Convert.ToInt32((HttpContext.Current.Session["comboHwyRoute"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Milepost
+
+            decimal milepost = 0;
+            if (HttpContext.Current.Session["txtMilepost"] != null)
+            {
+                //Get Info From Session
+                milepost = Convert.ToDecimal(HttpContext.Current.Session["txtMilepost"].ToString());
+            }
+
+            #endregion
+
+            #region Get Milepost To
+
+            decimal milepostTo = 0;
+            if (HttpContext.Current.Session["txtMilepostTo"] != null)
+            {
+                //Get Info From Session
+                milepostTo = Convert.ToDecimal(HttpContext.Current.Session["txtMilepostTo"].ToString());
+            }
+
+            #endregion
+
+            #region Get Milepost Direction
+
+            var mpIncreasing = -1;
+            if ((HttpContext.Current.Session["comboMilePostDir"] != null))
+            {
+                //Get Info From Session
+                mpIncreasing = Convert.ToInt32((HttpContext.Current.Session["comboMilePostDir"].ToString()));
+            }
+
+            #endregion
+
+            #region Sub Assembly
+            var subAssemblyID = -1;
+            if (Session["comboSubAssembly"] != null)
+            {
+                subAssemblyID = Convert.ToInt32(Session["comboSubAssembly"].ToString());
+            }
+            #endregion
+
+        
+
+          
+
+         
+
+            #region Get Cost Code
+
+            var costCodeId = -1;
+            if ((HttpContext.Current.Session["ComboCostCode"] != null))
+            {
+                //Get Info From Session
+                costCodeId = Convert.ToInt32((HttpContext.Current.Session["ComboCostCode"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Fund Source
+
+            var fundSource = -1;
+            if ((HttpContext.Current.Session["ComboFundSource"] != null))
+            {
+                //Get Info From Session
+                fundSource = Convert.ToInt32((HttpContext.Current.Session["ComboFundSource"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Work Order
+
+            var workOrder = -1;
+            if ((HttpContext.Current.Session["ComboWorkOrder"] != null))
+            {
+                //Get Info From Session
+                workOrder = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOrder"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Work Op
+
+            var workOp = -1;
+            if ((HttpContext.Current.Session["ComboWorkOp"] != null))
+            {
+                //Get Info From Session
+                workOp = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Org Code
+
+            var orgCode = -1;
+            if ((HttpContext.Current.Session["ComboOrgCode"] != null))
+            {
+                //Get Info From Session
+                orgCode = Convert.ToInt32((HttpContext.Current.Session["ComboOrgCode"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Fund Group
+
+            var fundingGroup = -1;
+            if ((HttpContext.Current.Session["ComboFundGroup"] != null))
+            {
+                //Get Info From Session
+                fundingGroup = Convert.ToInt32((HttpContext.Current.Session["ComboFundGroup"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Equip Num
+
+            var equipNumber = -1;
+            if ((HttpContext.Current.Session["ComboEquipNum"] != null))
+            {
+                //Get Info From Session
+                equipNumber = Convert.ToInt32((HttpContext.Current.Session["ComboEquipNum"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Ctl Section
+
+            var controlSection = -1;
+            if ((HttpContext.Current.Session["ComboCtlSection"] != null))
+            {
+                //Get Info From Session
+                controlSection = Convert.ToInt32((HttpContext.Current.Session["ComboCtlSection"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Notes
+
+            var notes = "";
+            if (HttpContext.Current.Session["txtAddDetail"] != null)
+            {
+                //Get Additional Info From Session
+                notes = (HttpContext.Current.Session["txtAddDetail"].ToString());
+            }
+
+            #endregion
+
+            #region Get Post Notes
+
+            var postNotes = "";
+            if (HttpContext.Current.Session["txtPostNotes"] != null)
+            {
+                //Get Post Notes From Session
+                postNotes = (HttpContext.Current.Session["txtPostNotes"].ToString());
+            }
+
+            #endregion
+
+            #region Get Run Units
+
+            //Create Variables
+            decimal unitOne = 0;
+            decimal unitTwo = 0;
+            decimal unitThree = 0;
+
+            //Check For First Unit
+            if (HttpContext.Current.Session["txtRunUnitOne"] != null)
+            {
+                //Get From Session
+                unitOne = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitOne"].ToString()));
+            }
+
+            //Check For Second Unit
+            if (HttpContext.Current.Session["txtRunUnitTwo"] != null)
+            {
+                //Get From Session
+                unitTwo = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitTwo"].ToString()));
+            }
+
+            //Check For Third Unit
+            if (HttpContext.Current.Session["txtRunUnitThree"] != null)
+            {
+                //Get From Session
+                unitThree = Convert.ToDecimal((HttpContext.Current.Session["txtRunUnitThree"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Charge To
+
+            var jobChargeTo = "";
+            if ((HttpContext.Current.Session["txtChargeTo"] != null))
+            {
+                //Get Info From Session
+                jobChargeTo = (HttpContext.Current.Session["txtChargeTo"].ToString());
+            }
+
+            #endregion
+
+            #region Get Incident Log
+
+            var jobIncidentLog = -1;
+            if ((HttpContext.Current.Session["ComboIncidentLog"] != null))
+            {
+                //Get Info From Session
+                jobIncidentLog = Convert.ToInt32((HttpContext.Current.Session["ComboIncidentLog"].ToString()));
+            }
+
+            #endregion
+
+            #region Get Job ID
+
+            var jobID = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+            var jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+
+            #endregion
+
+            #region Get Job Step ID
+
+            var jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
+
+            #endregion
+
+            #region Get Step #
+            var jobStepNumber = 1;
+            if (HttpContext.Current.Session["stepnumber"] != null)
+            {
+                jobStepNumber = Convert.ToInt32(HttpContext.Current.Session["stepnumber"].ToString());
+
+            }
+
+
+            #endregion
+
+            var requestor = _oLogon.UserID;
+
+            var jobStepConcurNumber = -1;
+            var jobStepFollowStepNumber = -1;
+            var jobStatus = -1;
+            var jobLaborClass = -1;
+            var jobGroup = -1;
+
+            var jobShift = -1;
+            var jobSupervisor = -1;
+            var jobActualDt = 0;
+            var jobEstimatedDt = 0;
+            var jobEstimatedLen = 0;
+            var jobRemainingDt = 0;
+            var jobRemainingLen = 0;
+            var jobReturnWithin = 0;
+            var jobRouteTo = -1;
+            var jobCompletedBy = requestor;
+            //Create Class
+            var oJobStep = new WorkOrderJobStep(_connectionString, _useWeb);
+            #endregion
+            //Update Job Step
+            if (!_oJobStep.Update(jobStepId,
+                jobStepNumber,
+                jobStepConcurNumber,
+                jobStepFollowStepNumber,
+                workDesc,
+                jobStatus,
+                jobLaborClass,
+                postNotes,
+                notes,
+                -1,
+                jobGroup,
+                jobOutcome,
+                jobShift,
+                jobSupervisor,
+                jobActualDt,
+                jobActualLen,
+                jobEstimatedDt,
+                jobEstimatedLen,
+                jobRemainingDt,
+                jobRemainingLen,
+                startDate,
+                compDate,
+                jobReturnWithin,
+                fundSource,
+                subAssemblyID,
+                requestPriority,
+                reasonCode,
+                _oLogon.UserID,
+                EditingTimeBachId,
+                EditingTiemBatchItemId))
+            {
+                //Throw Error
+                throw new SystemException(
+                    @"Error Updating Job Step -" + _oJobStep.LastError);
+            }
+
+            //Save Route & Completion Information
+            if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
+            {
+                //Throw Error
+                throw new SystemException(
+                    @"Error Updating Route To And Completion Information -" + _oJobStep.LastError);
+            }
+
+            //Update Charge To
+            if (!_oJobStep.UpdateChargeTo(jobId, jobStepId, jobChargeTo, _oLogon.UserID))
+            {
+                //Throw Error
+                throw new SystemException(
+                    @"Error Updating Charge To -" + _oJobStep.LastError);
+            }
+
+            //Update Incident Log Link
+            if (!_oJobStep.UpdateIncidentLogLink(jobId, jobStepId, jobIncidentLog, _oLogon.UserID))
+            {
+                //Throw Error
+                throw new SystemException(
+                    @"Error Updating Incident Log Link -" + _oJobStep.LastError);
+            }
+
+        }
+
         /// <summary>
         /// Updates Work Reqeust
         /// </summary>
@@ -4317,29 +4769,7 @@ namespace Pages.PlannedJobs
 
             #endregion
 
-            #region Get Job Step ID
-
-            var jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
-
-            #endregion
-
-            #region Get Step #
-
-            var jobStepNumber = Convert.ToInt32(HttpContext.Current.Session["stepnumber"].ToString());
-
-            #endregion
-
-            #region Get Concur Step Number
-
-            var jobStepConcurNumber = Convert.ToInt32(HttpContext.Current.Session["concurwithstep"].ToString());
-
-            #endregion
-
-            #region Get Follow Step Number
-
-            var jobStepFollowStepNumber = Convert.ToInt32(HttpContext.Current.Session["followstep"].ToString());
-
-            #endregion
+          
 
             #region Get Status
 
@@ -4552,13 +4982,12 @@ namespace Pages.PlannedJobs
 
             #region Get JobType
 
-            if (HttpContext.Current.Session["BreakDownCheckBox"] != null)
-            {   
+               
                 if (BreakDownCheckBox.Checked == true)
                 {
                     jobType = JobType.Breakdown;
                 }
-            }
+            
 
             #endregion
             if (HttpContext.Current.Session["editingJobStepID"] != null)
@@ -4612,50 +5041,9 @@ namespace Pages.PlannedJobs
                 //Save Job Details
                 if (updateSuccessful)
                 {
-                    //Update Job Step
-                    if (!_oJobStep.Update(jobStepId,
-                        jobStepNumber,
-                        jobStepConcurNumber,
-                        jobStepFollowStepNumber,
-                        workDesc,
-                        jobStatus,
-                        jobLaborClass,
-                        postNotes,
-                        notes,
-                        -1,
-                        jobGroup,
-                        jobOutcome,
-                        jobShift,
-                        jobSupervisor,
-                        jobActualDt,
-                        jobActualLen,
-                        jobEstimatedDt,
-                        jobEstimatedLen,
-                        jobRemainingDt,
-                        jobRemainingLen,
-                        startDate,
-                        compDate,
-                        jobReturnWithin,
-                        fundSource,
-                        subAssemblyID,
-                        requestPriority,
-                        reasonCode,
-                        _oLogon.UserID,
-                        EditingTimeBachId,
-                        EditingTiemBatchItemId))
-                    {
-                        //Throw Error
-                        throw new SystemException(
-                            @"Error Updating Job Step -" + _oJobStep.LastError);
-                    }
+                    
 
-                    //Save Route & Completion Information
-                    if (!_oJobStep.UpdateRouteAndCompletionInfo(jobStepId, jobRouteTo, jobCompletedBy, _oLogon.UserID))
-                    {
-                        //Throw Error
-                        throw new SystemException(
-                            @"Error Updating Route To And Completion Information -" + _oJobStep.LastError);
-                    }
+                   
 
                     //Check Run Unit Table
                     if (_oRunUnit.Ds.Tables.Count > 0)
@@ -4774,22 +5162,7 @@ namespace Pages.PlannedJobs
                         }
                     }
 
-                    //Update Charge To
-                    if (!_oJobStep.UpdateChargeTo(jobId, jobStepId, jobChargeTo, _oLogon.UserID))
-                    {
-                        //Throw Error
-                        throw new SystemException(
-                            @"Error Updating Charge To -" + _oJobStep.LastError);
-                    }
-
-                    //Update Incident Log Link
-                    if (!_oJobStep.UpdateIncidentLogLink(jobId, jobStepId, jobIncidentLog, _oLogon.UserID))
-                    {
-                        //Throw Error
-                        throw new SystemException(
-                            @"Error Updating Incident Log Link -" + _oJobStep.LastError);
-                    }
-
+                   
                     //Update Production Units
                     if (!_oJob.UpdateProductionUnits(jobId, jobEstimatedUnits, jobActualUnits, _oLogon.UserID))
                     {
@@ -5196,24 +5569,42 @@ namespace Pages.PlannedJobs
         protected void SaveSessionData()
         {
                 
-           
-           
-           if (HttpContext.Current.Session["BreakDownCheckBox"] != null)
-              
+                if(Session["BreakDownCheckBox"] != null)
             {
+                Session.Remove("BreakDownCheckBox");
                 if(BreakDownCheckBox.Checked == true)
                 {
                     jobType = JobType.Breakdown;
-                    BreakDownCheckBox.Checked = true;
+                   
                     
-                HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked);
+                HttpContext.Current.Session.Add("BreakDownCheckBox", jobType);
                 } else
                 {
                     BreakDownCheckBox.Checked = false;
                     HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked);
                 }
 
+            } else
+            {
+                Session.Remove("BreakDownCheckBox");
+                if (BreakDownCheckBox.Checked == true)
+                {
+                    jobType = JobType.Breakdown;
+
+
+                    HttpContext.Current.Session.Add("BreakDownCheckBox", jobType);
+                }
+                else
+                {
+                    BreakDownCheckBox.Checked = false;
+                    HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked);
+                }
             }
+           
+           
+                
+
+            
 
             #region Request Description 
 
@@ -7558,15 +7949,7 @@ namespace Pages.PlannedJobs
         //    }
         //}
 
-        /// <summary>
-        /// Sets Selected Members Work Dates To Start Date If Exists
-        /// </summary>
        
-
-        /// <summary>
-        /// Sets Selected Members Work Dates To End Date If Exists
-        /// </summary>
-      
 
         /// <summary>
         /// Hides Default Edit Button
@@ -8799,6 +9182,7 @@ namespace Pages.PlannedJobs
 
                     //Sub Assembly
                     const int subAssemblyId = -1;
+                    
 
                     //Title
                     var jobTitle = "";
@@ -8816,9 +9200,15 @@ namespace Pages.PlannedJobs
                         jobAdditionalInfo = (HttpContext.Current.Session["txtAddDetail"].ToString());
                     }
 
+                    var jobType = JobType.Corrective;
+                    if(BreakDownCheckBox.Checked == true)
+                    {
+                        jobType = JobType.Breakdown;
+                    }
+
                     //Add Default Step
                     if (oJobStep.InsertDefaultJobStep(recordToPlan,
-                        JobType.Corrective,
+                        jobType,
                         jobTitle,
                         jobAdditionalInfo,
                         mobileEquip,
@@ -8828,8 +9218,10 @@ namespace Pages.PlannedJobs
                         _oLogon.UserID,
                         ref plannerdJobStepId))
                     {
+                        Session.Add("editingJobStepID", plannerdJobStepId);
                         #region Set Default Group, Supervisor, Labor & Shift
-
+                        lblStep.Text = "Job Step ID: " + Session["editingJobStepID"].ToString();
+                        CrewGrid.Visible = true;
                         //Get User's Default Group And Group's Supervisor
                         try
                         {
@@ -8903,8 +9295,7 @@ namespace Pages.PlannedJobs
 
                         #endregion
 
-                        //Forward User To Planned Job
-                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                  
                     }
                     else
                     {
@@ -8921,6 +9312,6 @@ namespace Pages.PlannedJobs
             }
         }
 
-       
+        #endregion
     }
 }
