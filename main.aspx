@@ -11,8 +11,6 @@
         <asp:LinkButton runat="server" class="mainButton" ID="WorkRequestListButton" href="Pages/WorkRequests/RequestsList.aspx">Work Request List</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="plannedJObsButton" href="Pages/PlannedJobs/PlannedJobsList.aspx">Planned Jobs list</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="jobHistoryButton" href="Pages/History/JobsHistoryList.aspx">Job History</asp:LinkButton>
-        
-        
 
     </div> 
 </asp:Content>

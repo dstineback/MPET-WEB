@@ -89,7 +89,7 @@
                    
                      
                      window.markers = window.markers || [];
-                     markers.push({'jobid': '<%# Eval("jobID") %>','njobid': '<%# Eval("njobid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>'});
+                     markers.push({'jobid': '<%# Eval("jobID") %>','njobid': '<%# Eval("njobid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','description': '<%# Eval("description") %>'});
                     </script>
                 </ItemTemplate>
                 <SeparatorTemplate>
@@ -98,8 +98,8 @@
         </asp:Repeater>
     <asp:Repeater ID="rptObjectMarkers" runat="server"  >
         <ItemTemplate>
-            {          
-                "objectid": '<%# Eval("objectid")%>',               
+            {
+                            "objectid": '<%# Eval("objectid")%>',               
                 "nobjectid": '<%# Eval("nobjectid")%>',
                 "lat": '<%# Eval("Latitude") %>',
                 "lng": '<%# Eval("Longitude") %>',
