@@ -194,11 +194,12 @@
             for (var i = 0; i < markers.length; i++){
                 var marker = markers[i];
                 var id = marker.nobjectid;
+                localStorage.setItem("objectid", marker.nobjectid)
                 if(marker.object != null){
                     content += ('<div id="mapInfoWindow">');
-                    content += ('Object ID:' +  ' ' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + marker.object + "</a>");
+                    content += ('Object ID:' +  ' '  + marker.object);
                     content += ("&nbsp");
-                    content += 'Description:' + ' ' + marker.objectDescription + '<a href="../../Pages/QuickPost/QuickPost.aspx">' + "Quick Post?" + "</a>" + localStorage.setItem("objectid", marker.nobjectid);
+                    content += 'Description:' + ' ' + marker.objectDescription;
                     content += ("<br>"); 
                     content += ('</div>');
                     

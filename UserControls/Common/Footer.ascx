@@ -21,7 +21,7 @@
     </dx:ASPxButton>
     <dx:ASPxButton ID="QuickPostButton" UseSubmitBehavior="false" AutoPostBack="true" runat="server" CssClass="button" ToolTip="Create a Quick Post" >
         <HoverStyle CssClass="hover"></HoverStyle>
-        <Image Url="../../Content/Images/icon3.png" ></Image>
+        <Image Url="../../Content/Images/QuickPosticon.png" ></Image>
     </dx:ASPxButton>
     <dx:ASPxButton ID="NewNonStockPart" UseSubmitBehavior="false" AutoPostBack="True" runat="server"  CssClass="button" ToolTip="New Non-Stock Part"  >
         <HoverStyle CssClass="hover"></HoverStyle>
