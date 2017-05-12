@@ -14,7 +14,20 @@
         html, body {
             height: 100%;
         }
+        h1 {
+            margin-bottom: -10px;
+        }
+        hr {
+            margin-top: -10px;
+        }
+        #mapInfoWindow {
+    
+        font-size: 12px;
+        width: 100%;
+        }
+        
     </style>
+    <link href="../../Content/Css/MpetWebStyle.css" rel="stylesheet" type="text/css" />
 </head>
 <%-- Script finds current location of the computer/Device. Not currently in use but here for future development --%>
 <script type='text/javascript'>
@@ -36,56 +49,83 @@
 </script>
 
 <%-- Code for Google maps functions. This code takes in data from the code behinde and loops through markers to provide display --%>
-<script type="text/javascript">
-    window.onload = function () {
-        var markers = [
-            <asp:Repeater ID="rptJobMarkers" runat="server">
+  
+<body runat="server" >
+    <script type="text/javascript">
+        var markers = [];
+    </script>
+    
+  <div id="repeaters" runat="server" style="display:none;">
+     <asp:Repeater ID="rptJobStepMarkers" runat="server">
+        <ItemTemplate>
+                      <p>PLease work</p>            
+                jobid: <%# Eval("jobID")%>,
+                "njobid": <%# Eval("njobid")%>, 
+                "jobstepid": <%# Eval("jobstepid")%>,                                                
+                "lat": <%# Eval("Latitude") %>,
+                "lng": <%# Eval("Longitude") %>,
+                "description": <%# Eval("description") %>,
+            
+             <script type="text/javascript" >         
+                
+                 window.markers = window.markers || [];
+                 markers.push({'jobid': '<%# Eval("jobID") %>','njobid': '<%# Eval("njobid") %>', 'jobstepid': '<%# Eval("jobstepid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','description': '<%# Eval("description") %>'});            
+            </script>
+        </ItemTemplate>
+        <SeparatorTemplate>
+            ,
+        </SeparatorTemplate>
+        </asp:Repeater>
+    <asp:Repeater ID="rptJobMarkers" runat="server" >
                 <ItemTemplate>
-                    {                       
+                                          
                         "jobid": '<%# Eval("jobID")%>',
                         "njobid": '<%# Eval("njobid")%>',                     
                         "lat": '<%# Eval("Latitude") %>',
                         "lng": '<%# Eval("Longitude") %>',
                         "description": '<%# Eval("description") %>',
-                    }
+                    
+                    <script type="text/javascript">
+                   
+                     
+                     window.markers = window.markers || [];
+                     markers.push({'jobid': '<%# Eval("jobID") %>','njobid': '<%# Eval("njobid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>'});
+                    </script>
                 </ItemTemplate>
                 <SeparatorTemplate>
                     ,
         </SeparatorTemplate>
         </asp:Repeater>
-    <asp:Repeater ID="rptJobStepMarkers" runat="server">
-        <ItemTemplate>
-            {                       
-                "jobid": '<%# Eval("jobID")%>',
-                "njobid": '<%# Eval("njobid")%>', 
-                "jobstepid": '<%# Eval("jobstepid")%>',                                                
-                "lat": '<%# Eval("Latitude") %>',
-                "lng": '<%# Eval("Longitude") %>',
-                "description": '<%# Eval("description") %>',
-            }
-        </ItemTemplate>
-        <SeparatorTemplate>
-            ,
-        </SeparatorTemplate>
-        </asp:Repeater>
-    <asp:Repeater ID="rptObjectMarkers" runat="server">
+    <asp:Repeater ID="rptObjectMarkers" runat="server"  >
         <ItemTemplate>
             {          
-                "nobjectid": '<%# Eval("nobjectid")%>',
                 "objectid": '<%# Eval("objectid")%>',               
+                "nobjectid": '<%# Eval("nobjectid")%>',
                 "lat": '<%# Eval("Latitude") %>',
                 "lng": '<%# Eval("Longitude") %>',
                 "objectDescription": '<%# Eval("objectDescription") %>',
+                <%--"Area": '<%# Eval("Area") %>',
+                "AssetNumber": '<%# Eval("AssetNumber") %>',
+                "LocationID": '<%# Eval("LocationID") %>',--%>
             }
+            <script type="text/javascript" >
+                
+                window.markers = window.markers || [];
+                markers.push({'nobjectid': '<%# Eval("nobjectid") %>','objectid': '<%# Eval("objectid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','objectDescription': '<%# Eval("objectDescription") %>'});
+            </script>
         </ItemTemplate>
         <SeparatorTemplate>
             ,
         </SeparatorTemplate>
         </asp:Repeater>
-    ];
+   </div>
+    <script type="text/javascript">
+     window.onload = function() {
+         var getLat = markers[0].lat;
+         var getLng = markers[0].lng;
 
         var mapOptions = {
-            center: new google.maps.LatLng(markers[0].lat, markers[0].lng),
+            center: new google.maps.LatLng(getLat, getLng),
             zoom: 10,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -102,8 +142,11 @@
             var description = String(data.description);
             var objectDescription = String(data.objectDescription);
             var njobid = String(data.njobid);
+            var lat = String(data.lat);
+            var lng = String(data.lng);
+            var nobjectid = String(data.nobjectid);
             
-            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+            var myLatlng = new google.maps.LatLng(lat, lng);
             var marker = new google.maps.Marker({
                 position: myLatlng,
                 map: map,
@@ -112,23 +155,24 @@
                 object: data.objectid,
                 step: data.jobstepid,
                 njobid: data.njobid,
-                objectDescription: data.objectDescription              
+                objectDescription: data.objectDescription,
+                nobjectid: data.nobjectid
             });          
             (function (marker, data) {
                 google.maps.event.addListener(marker, "click", function (e) {
 
-                    if(data.njobid != null && data.njobid > 0){
-                        mInfoWindow.setContent('<div>' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a Work Request' + '</a>' + '<br>' + '<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a Planned Job' + '</a>' + '<br>' + '<a id="link" href="/../../Pages/WorkRequests/WorkRequestForm.aspx?n_jobid=' + data.njobid +'">' + data.jobid + '</a>' + '</div>')
+                    if(data.njobid != null && data.njobid > 0 && jobstepid === "undefined"){
+                        mInfoWindow.setContent('<h1>Jobs</h1>' +  '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>' + 'Job ID: ' + '<a id="link" href="../../Pages/WorkRequests/WorkRequestForm.aspx?n_jobid=' + data.njobid +'">'  + data.jobid + '</a>' + 'Description: ' + data.description + '</div>')
                         mInfoWindow.open(map, marker);
                         return;
                     } else { };
                     if(data.objectid != null && jobstepid === "undefined" && jobid === "undefined"){
-                        mInfoWindow.setContent('<div>' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a Work Request' + '</a>' + '<br>' + '<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a Planned Job' + '</a>' + '<br>' + '<a runat="server" href="javascript:void(0);" Onclick="GoToWorkRequest">' + data.objectDescription + '</a>' + '</div>')
+                        mInfoWindow.setContent('<h1>Objects</h1>'  + '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>'  + '<a href="../../Pages/QuickPost/QuickPost.aspx">' + 'Make a Quick Post' + '</a>' + '<br>' +'Object ID: ' +  data.objectid + 'Description: ' + data.objectDescription + '</div>')
                         mInfoWindow.open(map, marker);
                         return;
                     }else{};
                     if(data.jobstepid > 0 && data.jobstepid != null){
-                        mInfoWindow.setContent('<div>' + '<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a Work Request' + '</a>' + '<br>' + '<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a Planned Job' + '</a>' + '<br>' + '<a id="link" href="/../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=' + data.jobstepid +'">' + data.description + '</a>' + '</div>')
+                        mInfoWindow.setContent('<h1>Planned Jobs</h1>' +  '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>' + 'Job ID: ' + '<a id="link" href="../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=' + data.jobstepid +'">' + data.jobid + '</a>' + 'Description: ' + data.description + '</div>')
                         mInfoWindow.open(map, marker);
                         return
                     }else{};
@@ -144,26 +188,37 @@
 
         google.maps.event.addListener(markerCluster, 'clusterclick', function(cluster) {   
             var markers = cluster.getMarkers();            
-            var content = '';
+            
+            var content = '<h1>Jobs/Objects</h1>' + '<br>' + '<hr>' + '<div id="windowHeading">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '</div>' ;
+            
             for (var i = 0; i < markers.length; i++){
                 var marker = markers[i];
-                    content += ('<H3>Items in Cluster</h3>')
-                if(marker.jobid != null && marker.njobid > 0 &&  marker.step === "undefined" ){ 
-                    content += ('<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobid=' + marker.njobid +'">' + marker.jobid + "</a>");
+                var id = marker.nobjectid;
+                localStorage.setItem("objectid", marker.nobjectid)
+                if(marker.object != null){
+                    content += ('<div id="mapInfoWindow">');
+                    content += ('Object ID:' +  ' '  + marker.object);
                     content += ("&nbsp");
-                    content += marker.title;
-                    content += ("<br>"); };
-                if(marker.object != null && marker.step === "undefined" && marker.jobid === "undefined"){
-                    content += ('<a href="/../../Pages/WorkRequests/WorkRequestForm.aspx">' + marker.object + "</a>");
-                    content += ("&nbsp");
-                    content += marker.objectDescription;
+                    content += 'Description:' + ' ' + marker.objectDescription;
                     content += ("<br>"); 
+                    content += ('</div>');
+                    
+                };
+                if(marker.jobid != null && marker.njobid > 0 && marker.step == null){ 
+                    content += ('<div id="mapInfoWindow">');
+                    content += ('Job ID:' + ' ' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx?n_jobid=' + marker.njobid +'">' + marker.jobid + "</a>");
+                    content += ("&nbsp");
+                    content += 'Description:' + ' ' + marker.title;
+                    content += ("<br>");
+                    content += ('</div>');
                 };
                 if(marker.step > 0 && marker.step != null){
-                    content += ('<a href="/../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=' + marker.step +'">' + marker.jobid + "</a>");
+                    content += ('<div id="mapInfoWindow">');
+                    content += ('Job ID:' + ' ' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=' + marker.step +'">' + marker.jobid + "</a>");
                     content += ("&nbsp");
-                    content += marker.title;
+                    content += 'Description:' + ' ' + marker.title;
                     content += ("<br>"); 
+                    content += ('</div>');
                 };
             }
             var infowindow = new google.maps.InfoWindow();
@@ -174,16 +229,22 @@
         });
     }
 </script>
-  
-<body runat="server" >
-    <div runat="server" id="backButton">
-        
+
+    <div runat="server" id="backButton">       
         <a id="link" runat="server" title="Go to Job"></a>
-        <dx:ASPxHyperLink runat="server" ID="ObjectBack" Text="Back to Objects List" NavigateUrl="../Objects/ObjectsList.aspx"></dx:ASPxHyperLink>
-        <dx:ASPxHyperLink runat="server" ID="PlannedJobsBack" Text="Back to Planned Jobs List" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"></dx:ASPxHyperLink>
-        <dx:ASPxHyperLink runat="server" ID="RequestJobsBack" Text="Back to Request List" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx"></dx:ASPxHyperLink>
+        <dx:ASPxHyperLink runat="server" ID="HomeBnt" CssClass="mapbutton" Text="Back to Main Page" ForeColor="White" NavigateUrl="~/main.aspx"></dx:ASPxHyperLink>
+        <dx:ASPxHyperLink runat="server" ID="ObjectBack" CssClass="mapbutton" Text="Back to Objects List" ForeColor="White" NavigateUrl="../Objects/ObjectsList.aspx"></dx:ASPxHyperLink>
+        <dx:ASPxHyperLink runat="server" ID="PlannedJobsBack" CssClass="mapbutton" Text="Back to Planned Jobs List" ForeColor="White" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"></dx:ASPxHyperLink>
+        <dx:ASPxHyperLink runat="server" ID="RequestJobsBack" CssClass="mapbutton" Text="Back to Request List" ForeColor="White" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx"></dx:ASPxHyperLink>  
     </div>
-    <div runat="server" id="map"></div>  
+    <div runat="server" id="map" ></div>
+    <script type="text/javascript">
+        if (map) {
+            
+            document.getElementById("repeater").style.display = 'none';
+        }
+    </script>
+      
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARk0BJK-cnQ27jHObwdI4xtqsNY9n7z9E" async defer></script>
     <script  src="../../Content/v3-utility-library-master/markerclusterer/src/markerclusterer.js"></script>
 </body>

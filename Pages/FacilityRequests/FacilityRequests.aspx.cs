@@ -7,6 +7,9 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 using DevExpress.Web;
+using System.Data.Sql;
+using System.Data.SqlClient;
+using System.Data.Common;
 using MPETDSFactory;
 
 namespace Pages.FacilityRequests
@@ -48,6 +51,8 @@ namespace Pages.FacilityRequests
         /// Job Request Info Class
         /// </summary>
         private JobRequestInfo _oJobRequestInfo;
+
+        private EmailAddresses _oEmail;
 
         #endregion
 
@@ -164,8 +169,12 @@ namespace Pages.FacilityRequests
         /// Connection String
         /// </summary>
         private string _connectionString = "";
+        private int userId;
         public string userFirstName;
         public string userLastName;
+        public string userPhone;
+        public string userEmail;
+
 
 
         #endregion
@@ -192,6 +201,35 @@ namespace Pages.FacilityRequests
                     //userName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FullName.ToString();
                     userFirstName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FirstName.ToString();
                     userLastName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).LastName.ToString();
+                    userPhone = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).PhoneNumber.ToString().Trim();
+
+                    userPhone = userPhone.Replace(" ", string.Empty);
+                    userId = _oLogon.UserID;
+                   
+                    
+
+                    if (HttpContext.Current.Session["LogonInfo"] != null)
+                    {
+                        SqlConnection connection = new SqlConnection(_connectionString);
+                        SqlCommand cmd = new SqlCommand();
+                        Object returnValue;
+                        cmd.CommandText = "Declare  @userID int =" + userId + " SELECT [EmailAddress] FROM[dbo].[UserEmailAddresses] Where UserID = @userID";
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.Connection = connection;
+                        connection.Open();
+                        returnValue = cmd.ExecuteScalar();
+                        connection.Close();
+
+                        if(returnValue != null)
+                        {
+
+                            userEmail = returnValue.ToString(); 
+                            if(userEmail != null)
+                            {
+                               HttpContext.Current.Session.Add("userEmail", userEmail);
+                            }                    
+                        }
+                    }    
                 }
 
                 //Set Flag
@@ -247,7 +285,10 @@ namespace Pages.FacilityRequests
 
                                     //Update Job
                                     AddRequest();
-                                }
+                                        var savedID = Session["AssignedJobID"];
+                                        Response.Write("<script language='javascript'>window.alert('Work Request Created. " + savedID + "');window.location='./../../main.aspx';</script>");
+                                        //Response.Write("<script language='javascript'>window.alert('Work Order Created');window.location='/main.aspx';</script>");
+                                    }
 
                                 //Break
                                 break;
@@ -284,6 +325,7 @@ namespace Pages.FacilityRequests
                             {
                                 userId = _oLogon.UserID;
                             }
+                            
 
                             //Load Job Info From GUID
                             if (_oJob.LoadDataByGuid(jobGuid, userId))
@@ -360,10 +402,12 @@ namespace Pages.FacilityRequests
                                 //tbl_Jobs.n_EquipmentNumberID AS 'n_EquipmentNumberID' ,
                                 //tbl_EquipNum.EquipmentNumberID AS 'EquipmentNumberID'
                                 //tbl_MO.objectid AS 'ObjectID',
+                               
                                 //tbl_MO.description AS 'ObjectDesc',
                                 //tbl_MO.assetnumber AS 'ObjectAsset',
                                 //tbl_MO.locationid AS 'ObjectLoc',
                                 //tbl_MO.areaid AS 'ObjectArea'
+
 
                                 #region Setup Job Data
 
@@ -716,18 +760,35 @@ namespace Pages.FacilityRequests
                     {
                         //Get Info From Session
                         txtEmail.Value = (HttpContext.Current.Session["txtEmail"].ToString());
+                    } else
+                    {
+                        if(userEmail != null)
+                        {
+                        txtEmail.Value = userEmail;
+                        } else
+                        {
+                            
+                        }
                     }
 
                     //Check For Previous Session Variables
                     if (HttpContext.Current.Session["txtPhone"] != null)
                     {
+                        txtPhone.Value = userPhone;
                         //Get Info From Session
-                        txtPhone.Value = (HttpContext.Current.Session["txtPhone"].ToString());
+                        //txtPhone.Value = (HttpContext.Current.Session["txtPhone"].ToString());
                     }
                     else
-                    {
-                        //Set Default
-                        txtPhone.Value = 1111111111;
+                    { 
+                        if(userPhone != null)
+                        {
+                            txtPhone.Value = userPhone;
+                        }
+                        else
+                        {
+                            //Set Default
+                            txtPhone.Value = 1111111111;
+                        }
                     }
 
                     //Check For Previous Session Variables
@@ -783,6 +844,7 @@ namespace Pages.FacilityRequests
                 _oJobRequestInfo = new JobRequestInfo(_connectionString, _useWeb);
 
                 //Set Datasources
+               
                 ObjectDataSource.ConnectionString = _connectionString;
                 HwyRouteSqlDatasource.ConnectionString = _connectionString;
                 MilePostDirSqlDatasource.ConnectionString = _connectionString;
@@ -2301,7 +2363,11 @@ namespace Pages.FacilityRequests
                 {
                     HttpContext.Current.Session.Remove("ObjectIDCombo");
                 }
-                if(HttpContext.Current.Session["txtObjectDescription"] != null)
+                if (HttpContext.Current.Session["ObjectIDComboText"] != null)
+                {
+                    Session.Remove("ObjectIDComboText");
+                }
+                if (HttpContext.Current.Session["txtObjectDescription"] != null)
                 {
                     HttpContext.Current.Session.Remove("txtObjectDescription");
                 }
@@ -2794,5 +2860,24 @@ namespace Pages.FacilityRequests
         }
 
         #endregion   
+
+        protected void submitButton_Click(object sender, EventArgs e)
+        {
+            //Save Session Data
+            SaveSessionData();
+
+            //Update Job
+            AddRequest();
+
+            var savedID = Session["AssignedJobID"];
+
+            //System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Work Request Created. "+ savedID + "');</script>");
+
+            Response.Write("<script language='javascript'>window.alert('Work Request Created. " + savedID + "');window.location='./../../main.aspx';</script>");
+
+            //Response.Write("<script language='javascript'>window.alert('Work Request Created. "+ savedID + "');window.location='/main.aspx';</script>");
+
+            //Response.Redirect("~/main.aspx");
+        }
     }
 }

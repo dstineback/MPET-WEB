@@ -7,11 +7,15 @@
     <script type="text/javascript">
 
         function OnGetRowId(idValue) {
+            debugger;
             Selection.Set('objectid', idValue[0].toString());
             Selection.Set('n_objectid', idValue[1].toString());
             Selection.Set('Longitude', idValue[2].toString());
             Selection.Set('Latitude', idValue[3].toString());
             Selection.Set('description', idValue[4].toString());
+            Selection.Set('Area', idValue[5].toString());
+            Selection.Set('AssetNumber', idValue[6].toString());
+            Selection.Set('LocationID', idValue[7].toString());
         }
 
         function scrollPreview() {
@@ -32,9 +36,9 @@
                 KeyboardSupport="True" 
                 ClientInstanceName="ObjectGrid"
                 AutoPostBack="False"
-                Settings-HorizontalScrollBarMode="Auto"
+                Settings-HorizontalScrollBarMode="Auto" Settings-VerticalScrollBarMode="Visible" Settings-VerticalScrollBarStyle="Standard"
                 SettingsPager-Mode="ShowPager"
-                SettingsBehavior-ProcessFocusedRowChangedOnServer="True"
+                SettingsBehavior-ProcessFocusedRowChangedOnServer="false"
                 SettingsBehavior-AllowFocusedRow="True"
                 SelectionMode="Multiple"
                 DataSourceID="ObjectGridDataSource" 
@@ -49,7 +53,7 @@
                 </Styles>
                 
                 <ClientSideEvents RowClick="function(s, e) {
-                        ObjectGrid.GetRowValues(e.visibleIndex, 'objectid;n_objectid;Longitude;Latitude;description', OnGetRowId);
+                        ObjectGrid.GetRowValues(e.visibleIndex, 'objectid;n_objectid;Longitude;Latitude;description;Area;Asset Number;LocationID', OnGetRowId);
                     }" />
                 <Columns>
                     <dx:GridViewCommandColumn FixedStyle="Left" ShowSelectCheckbox="True" Visible="false" VisibleIndex="0" />
@@ -61,7 +65,7 @@
                         SortOrder="Ascending"
                         Caption="Object"
                         Width="150px"
-                        HeaderStyle-Font-Bold="True"
+                        HeaderStyle-Font-Bold="True" 
                         VisibleIndex="4">
                         <CellStyle Wrap="False"></CellStyle>
                         <PropertiesHyperLinkEdit NavigateUrlFormatString="~/Pages/Objects/Objects.aspx?objectid={0}"></PropertiesHyperLinkEdit>
@@ -213,7 +217,7 @@
                 <SettingsSearchPanel Visible="true" />
                 <SettingsBehavior
                     EnableRowHotTrack="True" AllowGroup="true"
-                    AllowFocusedRow="True"
+                    AllowFocusedRow="True" 
                     AllowClientEventsOnLoad="false" AllowSelectByRowClick="true" AllowSelectSingleRowOnly="false"
                     ColumnResizeMode="NextColumn" />
                 <SettingsDataSecurity
@@ -223,7 +227,7 @@
                 <Settings 
                     ShowFilterBar="Visible" ShowGroupPanel="true" ShowFilterRow="true" ShowFilterRowMenu="true"
                     VerticalScrollBarMode="Visible"
-                    VerticalScrollBarStyle="Standard"
+                    VerticalScrollBarStyle="Standard" 
                     VerticalScrollableHeight="450" />
                 <SettingsFilterControl ViewMode="Visual" ShowAllDataSourceColumns="true"></SettingsFilterControl>
                 <SettingsPager PageSize="20">

@@ -1,6 +1,6 @@
 ﻿ <%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/SiteBase.master" CodeFile="myJobs.aspx.cs" Inherits="Pages_PlannedJobs_myJobs" %>
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
-<%@ Register assembly="Infragistics4.WebUI.WebResizingExtender.v15.1, Version=15.1.20151.2400, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" namespace="Infragistics.WebUI" tagprefix="igui" %>
+
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">MY Jobs</asp:Content>
 <asp:Content runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <h1>MY JOBS</h1>

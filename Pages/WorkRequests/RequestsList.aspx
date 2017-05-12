@@ -39,7 +39,7 @@
                 KeyboardSupport="True" 
                 ClientInstanceName="ReqGrid" 
                 AutoPostBack="True" 
-                Settings-HorizontalScrollBarMode="Auto" 
+                Settings-HorizontalScrollBarMode="Auto" Settings-VerticalScrollBarStyle="Standard" Settings-VerticalScrollBarMode="Visible"
                 SettingsPager-Mode="ShowPager" 
                 SettingsBehavior-ProcessFocusedRowChangedOnServer="false" 
                 SettingsBehavior-AllowFocusedRow="True"
@@ -158,7 +158,7 @@
                 <SettingsBehavior 
                     EnableRowHotTrack="True" 
                     AllowFocusedRow="True" 
-                    AllowClientEventsOnLoad="false" 
+                    AllowClientEventsOnLoad="false" AllowSelectByRowClick="true" AllowSelectSingleRowOnly="false"
                     ColumnResizeMode="NextColumn" />
                 <SettingsDataSecurity 
                     AllowDelete="False" 
