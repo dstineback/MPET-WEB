@@ -194,14 +194,17 @@
             for (var i = 0; i < markers.length; i++){
                 var marker = markers[i];
                 var id = marker.nobjectid;
-                localStorage.setItem("objectid", marker.nobjectid)
+                localStorage.setItem("objectid", marker.nobjectid);
+                localStorage.setItem("description", marker.objectDescription);
+                console.log(localStorage);
                 if(marker.object != null){
                     content += ('<div id="mapInfoWindow">');
                     content += ('Object ID:' +  ' '  + marker.object);
                     content += ("&nbsp");
-                    content += 'Description:' + ' ' + marker.objectDescription;
+                    content += 'Description:' + ' ' + marker.objectDescription + '<a href="../../Pages/QuickPost/QuickPost.aspx">' + 'Quick Post' + '</a>';
                     content += ("<br>"); 
                     content += ('</div>');
+                    //content += localStorage.setItem("objectid", marker.object);
                     
                 };
                 if(marker.jobid != null && marker.njobid > 0 && marker.step == null){ 

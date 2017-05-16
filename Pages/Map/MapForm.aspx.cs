@@ -33,6 +33,7 @@ public partial class Pages_Map_MapForm : Page
     string Area;
     string AssetNumber;
     string LocationID;
+    
     HttpContext context = HttpContext.Current;
     public DataTable dt { get; private set; }
     public DataSet ds { get; private set; }
@@ -431,6 +432,11 @@ public partial class Pages_Map_MapForm : Page
                     rptJobMarkers.DataBind();
                 }
             } catch { System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, check to make sure items have the correct Coordinates.');</script>"); };
+    }
+
+    protected void Page_UnLoad()
+    {
+        
     }
 
     protected void HomeBnt_Click(object sender, EventArgs e)

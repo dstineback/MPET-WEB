@@ -198,8 +198,32 @@
         }
     </script>
     <script>
-        var nobjectid = localStorage.getItem("nobjectid");
-        Selection.Set("nobjectid", nobjectid);
+        var isWebStorageSupported = false;
+
+        window.onload = function () {
+            if (typeof (Storage) !== "undefined") {
+                //your browser supports web storage.
+                isWebStorageSupported = true;
+            }
+            else {
+                //your browser doesn't support web storage.
+                isWebStorageSupported = false;
+            }
+        }
+
+        var nobjectid = localStorage.getItem("objectid");
+        var description = localStorage.getItem("description");
+        console.log("objectid", nobjectid);
+        console.log("description", description);
+        
+        function onInit() {
+            ObjectIDCombo.SetValue( nobjectid);
+            ObjectIDCombo.SetText(nobjectid);
+            txtObjectDescription.SetValue(description);
+        }
+       
+        
+       
     </script>
 
     <asp:ScriptManager ID="ScriptManger1" runat="server" EnablePartialRendering="true"></asp:ScriptManager>
@@ -252,7 +276,8 @@
                                                                 TextField="n_objectid" 
                                                                 DropDownButton-Enabled="True" 
                                                                 AutoPostBack="False" 
-                                                                ClientInstanceName="ObjectIDCombo" AutoResizeWithContainer="true">
+                                                                ClientInstanceName="ObjectIDCombo" AutoResizeWithContainer="true" >
+                                                                <ClientSideEvents Init="onInit" />
                                                                 <ClientSideEvents ValueChanged="function(s, e) {
                                                 var objectHasValue = ObjectIDCombo.GetValue();
                                                 var selectedItem = s.GetSelectedItem();
@@ -273,6 +298,7 @@
                                                 }
 
                                             }" />
+                                    
                                         <Columns>
                                             <dx:ListBoxColumn FieldName="n_objectid" Caption="N_ID" Visible="false" Width="75px" />
                                             <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>

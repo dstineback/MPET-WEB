@@ -58,7 +58,7 @@ namespace Pages.PlannedJobs
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
                     Master.ShowMultiSelectButton = _userCanDelete;
                     Master.ShowPrintButton = _userCanView;
-                    Master.ShowMapDisplayButton = false;
+                    Master.ShowMapDisplayButton = _userCanEdit;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = false;
                     
