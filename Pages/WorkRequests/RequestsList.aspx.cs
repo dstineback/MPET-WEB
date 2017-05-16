@@ -57,7 +57,7 @@ namespace Pages.WorkRequests
                     Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd); 
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
                     Master.ShowPrintButton = true;
-                    Master.ShowMapDisplayButton = _userCanView;
+                    Master.ShowMapDisplayButton = false;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = true;
                     Master.ShowMultiSelectButton = _userCanDelete;

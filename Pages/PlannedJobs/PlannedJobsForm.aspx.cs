@@ -113,7 +113,7 @@ namespace Pages.PlannedJobs
 
 
             //Check For Post To Setup Form
-            (!IsPostBack)
+            if(!IsPostBack)
             {
                 ResetSession();
 
@@ -130,7 +130,7 @@ namespace Pages.PlannedJobs
                 }
                 else
                 {
-                    if (Session["editingJobD"] != null)
+                    if (Session["editingJobID"] != null)
                     {
                         SetupForEditing();
                         CrewGrid.Visible = false;
@@ -182,7 +182,18 @@ namespace Pages.PlannedJobs
                         case "NewButton":
                             {
                                 //Call Add Routine
-                                AddItems();
+
+                                ResetSession();
+                                if(Session["editingJobID"] != null)
+                                {
+                                    Session.Remove("editingJobID");
+                                }
+                                if(Session["editingJobStepID"] != null)
+                                {
+                                    Session.Remove("editingJobStepID");
+                                }
+                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx", true);
+                                //AddItems();
                                 break;
                             }
                         case "EditButton":
@@ -203,6 +214,7 @@ namespace Pages.PlannedJobs
                                 if (HttpContext.Current.Session["editingJobStepID"] != null)
                                 {
                                     //Save Session Data
+                                    BreakDownCheckBox.Enabled = false;
                                     SaveSessionData();
                                     UpdateJobStep();
 
@@ -388,6 +400,33 @@ namespace Pages.PlannedJobs
                 }
                 else
                 {
+
+                    if (!(CrewGrid.Columns[0].Visible))
+                    {
+                        //uncheck all
+                        CrewGrid.Selection.UnselectAll();
+                    }
+                    else
+                    {
+                        //make sure settings are right
+                        CrewGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+                    }
+
+                    if (Session["BreakDownCheckBoxChecked"] != null)
+                    {
+                        var Checked = Session["BreakDownCheckBoxChecked"].ToString();
+                        if (Checked == "True")
+                        {
+                            BreakDownCheckBox.Checked = true;
+
+                        }
+                        if (Checked == "False")
+                        {
+                            BreakDownCheckBox.Checked = false;
+                        }
+
+                    }
+                    BreakDownCheckBox.Enabled = false;
                     //Hide Popups
                     AddCrewPopup.ShowOnPageLoad = false;
                     //AddEquipPopup.ShowOnPageLoad = false;
@@ -1087,9 +1126,26 @@ namespace Pages.PlannedJobs
                     txtWorkDescription.Text = (HttpContext.Current.Session["txtWorkDescription"].ToString());
                 }
 
-               if (Session["BreakDownCheckBox"] != null)
+               
+
+               if(Session["BreakDownCheckBoxChecked"] != null)
                 {
+                    var Checked = Session["BreakDownCheckBoxChecked"].ToString();
+                    if(Checked == "True")
+                    {
                     BreakDownCheckBox.Checked = true;
+
+                    }
+                    if(Checked == "False")
+                    {
+                        BreakDownCheckBox.Checked = false;
+                    }
+
+                }
+
+               if(Session["BreakDownCheckBox"] != null)
+                {
+                    BreakDownCheckBox.Value = Session["BreakDownCheckBox"];
                 }
                 
 
@@ -1552,9 +1608,9 @@ namespace Pages.PlannedJobs
             Master.ShowViewButton = false;
             Master.ShowSaveButton = showButtons;
 
-            Master.ShowPrintButton = showButtons;
-            Master.ShowIssueButton = showButtons;
-            Master.ShowCopyJobButton = showButtons;
+            Master.ShowPrintButton = false;
+            Master.ShowIssueButton = false;
+            Master.ShowCopyJobButton = false;
             Master.ShowAddCrewGroupButton = (!showButtons && (CrewGrid.Columns[0].Visible));
             Master.ShowAddCrewLaborButton = (!showButtons && (CrewGrid.Columns[0].Visible));
             Master.ShowSetStartDateButton = (!showButtons
@@ -1564,17 +1620,17 @@ namespace Pages.PlannedJobs
                                            && (HttpContext.Current.Session["TxtCompletionDate"] != null));
             //&& (MemberGrid.Columns[0].Visible));
             Master.ShowNonStockAddButton = (!showButtons);
-                                           //&& (PartGrid.Columns[0].Visible));
+            //&& (PartGrid.Columns[0].Visible));
 
             //Clear Prior Selection If Edit Check Is No Longer Visible
             //if (!(CrewGrid.Columns[0].Visible))
             //{
-            //    //Uncheck All
+            //    //uncheck all
             //    CrewGrid.Selection.UnselectAll();
             //}
             //else
             //{
-            //    //Make Sure Settings Are Right
+            //    //make sure settings are right
             //    CrewGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
             //}
 
@@ -1626,91 +1682,91 @@ namespace Pages.PlannedJobs
             //    OtherGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
             //}
 
-        //    //Check For MultiGrid
-        //    if (MultiGrid.Contains("Grid"))
-        //    {
-        //        //Determine Current Grid In Multi Mode
-        //        switch (MultiGrid.Get("Grid").ToString())
-        //        {
-        //            case "MemberGrid":
-        //                {
-        //                    //Disable Other Tabs
-        //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-        //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
-        //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
-        //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
-        //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
-        //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-        //                    break;
-        //                }
-        //            case "CrewGrid":
-        //                {
-        //                    //Disable Other Tabs
-        //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-        //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
-        //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
-        //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
-        //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
-        //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-        //                    break;
-        //                }
-        //            case "PartGrid":
-        //                {
-        //                    //Disable Other Tabs
-        //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-        //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
-        //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
-        //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
-        //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
-        //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-        //                    break;
-        //                }
-        //            case "EquipGrid":
-        //                {
-        //                    //Disable Other Tabs
-        //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-        //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
-        //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
-        //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
-        //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
-        //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-        //                    break;
-        //                }
-        //            case "OtherGrid":
-        //                {
-        //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-        //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
-        //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
-        //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
-        //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
-        //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-        //                    break;
-        //                }
-        //            default:
-        //                {
-        //                    //Make Sure All Tabs Are Client Enabled
-        //                    StepTab.TabPages[0].ClientEnabled = true;  //Step
-        //                    StepTab.TabPages[1].ClientEnabled = true;  //Members
-        //                    StepTab.TabPages[2].ClientEnabled = true;  //Crew
-        //                    StepTab.TabPages[3].ClientEnabled = true;  //Parts
-        //                    StepTab.TabPages[4].ClientEnabled = true;  //Equip
-        //                    StepTab.TabPages[5].ClientEnabled = true;  //Other
-        //                    StepTab.TabPages[6].ClientEnabled = true;  //Attachments
-        //                    break;
-        //                }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //Make Sure All Tabs Are Client Enabled
-        //        StepTab.TabPages[0].ClientEnabled = true;  //Step
-        //        StepTab.TabPages[1].ClientEnabled = true;  //Members
-        //        StepTab.TabPages[2].ClientEnabled = true;  //Crew
-        //        StepTab.TabPages[3].ClientEnabled = true;  //Parts
-        //        StepTab.TabPages[4].ClientEnabled = true;  //Equip
-        //        StepTab.TabPages[5].ClientEnabled = true;  //Other
-        //        StepTab.TabPages[6].ClientEnabled = true;  //Attachments
-        //    }
+            //    //Check For MultiGrid
+            //    if (MultiGrid.Contains("Grid"))
+            //    {
+            //        //Determine Current Grid In Multi Mode
+            //        switch (MultiGrid.Get("Grid").ToString())
+            //        {
+            //            case "MemberGrid":
+            //                {
+            //                    //Disable Other Tabs
+            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
+            //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
+            //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
+            //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
+            //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
+            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
+            //                    break;
+            //                }
+            //            case "CrewGrid":
+            //                {
+            //                    //Disable Other Tabs
+            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
+            //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
+            //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
+            //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
+            //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
+            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
+            //                    break;
+            //                }
+            //            case "PartGrid":
+            //                {
+            //                    //Disable Other Tabs
+            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
+            //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
+            //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
+            //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
+            //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
+            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
+            //                    break;
+            //                }
+            //            case "EquipGrid":
+            //                {
+            //                    //Disable Other Tabs
+            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
+            //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
+            //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
+            //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
+            //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
+            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
+            //                    break;
+            //                }
+            //            case "OtherGrid":
+            //                {
+            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
+            //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
+            //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
+            //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
+            //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
+            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
+            //                    break;
+            //                }
+            //            default:
+            //                {
+            //                    //Make Sure All Tabs Are Client Enabled
+            //                    StepTab.TabPages[0].ClientEnabled = true;  //Step
+            //                    StepTab.TabPages[1].ClientEnabled = true;  //Members
+            //                    StepTab.TabPages[2].ClientEnabled = true;  //Crew
+            //                    StepTab.TabPages[3].ClientEnabled = true;  //Parts
+            //                    StepTab.TabPages[4].ClientEnabled = true;  //Equip
+            //                    StepTab.TabPages[5].ClientEnabled = true;  //Other
+            //                    StepTab.TabPages[6].ClientEnabled = true;  //Attachments
+            //                    break;
+            //                }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        //Make Sure All Tabs Are Client Enabled
+            //        StepTab.TabPages[0].ClientEnabled = true;  //Step
+            //        StepTab.TabPages[1].ClientEnabled = true;  //Members
+            //        StepTab.TabPages[2].ClientEnabled = true;  //Crew
+            //        StepTab.TabPages[3].ClientEnabled = true;  //Parts
+            //        StepTab.TabPages[4].ClientEnabled = true;  //Equip
+            //        StepTab.TabPages[5].ClientEnabled = true;  //Other
+            //        StepTab.TabPages[6].ClientEnabled = true;  //Attachments
+            //    }
         }
 
         /// <summary>
@@ -5568,44 +5624,44 @@ namespace Pages.PlannedJobs
         /// </summary>
         protected void SaveSessionData()
         {
-                
-                if(Session["BreakDownCheckBox"] != null)
+            if(BreakDownCheckBox.Enabled == true)
             {
-                Session.Remove("BreakDownCheckBox");
-                if(BreakDownCheckBox.Checked == true)
-                {
-                    jobType = JobType.Breakdown;
-                   
-                    
-                HttpContext.Current.Session.Add("BreakDownCheckBox", jobType);
-                } else
-                {
-                    BreakDownCheckBox.Checked = false;
-                    HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked);
-                }
-
-            } else
-            {
-                Session.Remove("BreakDownCheckBox");
                 if (BreakDownCheckBox.Checked == true)
                 {
-                    jobType = JobType.Breakdown;
-
-
-                    HttpContext.Current.Session.Add("BreakDownCheckBox", jobType);
-                }
-                else
+                    var Checked = (BreakDownCheckBox.Checked = true);
+                    var jobType = JobType.Breakdown;
+                    Session.Remove("BreakDownCheckBoxChecked");
+                    Session.Remove("BreakDownCheckBox");
+                    Session.Add("BreakDownCheckBoxChecked", Checked);
+                    Session.Add("BreakDownCheckBox", jobType);
+                } else
                 {
-                    BreakDownCheckBox.Checked = false;
-                    HttpContext.Current.Session.Add("BreakDownCheckBox", BreakDownCheckBox.Checked);
+                    var Checked = (BreakDownCheckBox.Checked = false);
+                    var jobType = JobType.Corrective;
+                    Session.Remove("BreakDownCheckBoxChecked");
+                    Session.Remove("BreakDownCheckBox");
+                    Session.Add("BreakDownCheckBoxChecked", Checked);
+                    Session.Add("BreakDownCheckBox", jobType);
+                }
+            } else
+            {
+                if (Session["BreakDownCheckBoxChecked"] != null)
+                {
+                    var Checked = Session["BreakDownCheckBoxChecked"].ToString();
+                    if (Checked == "True")
+                    {
+                        BreakDownCheckBox.Checked = true;
+
+                    }
+                    if (Checked == "False")
+                    {
+                        BreakDownCheckBox.Checked = false;
+                    }
+
                 }
             }
-           
-           
-                
 
-            
-
+           
             #region Request Description 
 
             //Check For Input
@@ -6957,7 +7013,7 @@ namespace Pages.PlannedJobs
 
                             //Clear Selection
                             CrewLookupGrid.Selection.UnselectAll();
-                            AddCrewPopup.Visible = false;
+                            //AddCrewPopup.Visible = false;
                         }
                     }
                 }
@@ -9313,5 +9369,12 @@ namespace Pages.PlannedJobs
         }
 
         #endregion
+
+        protected void TestButton_Click(object sender, EventArgs e)
+        {
+            AddCrewPopup.Enabled = true;
+            AddCrewPopup.ShowOnPageLoad = true;
+            
+        }
     }
 }

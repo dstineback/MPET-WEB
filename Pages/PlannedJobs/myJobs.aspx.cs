@@ -197,7 +197,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
 
         if (v != null)
         {
-            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + v);
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + v);
         }
     }
 
@@ -207,7 +207,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         if (true)
         {
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
         }
         else
         {
@@ -218,6 +218,6 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
     protected string GetUrl(GridViewDataItemTemplateContainer container)
     {
         var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
-        return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+        return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
     }
 }

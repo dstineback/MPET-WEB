@@ -54,7 +54,7 @@ namespace Pages.Objects
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = false;
                     Master.ShowMultiSelectButton = _userCanView; /*_userCanDelete;*/
-                    Master.ShowMapDisplayButton = _userCanView;
+                    Master.ShowMapDisplayButton = false;
                 }
             }
 
