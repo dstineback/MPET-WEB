@@ -192,7 +192,7 @@ namespace Pages.PlannedJobs
                                 {
                                     Session.Remove("editingJobStepID");
                                 }
-                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx", true);
+                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx", true);
                                 //AddItems();
                                 break;
                             }
@@ -9370,11 +9370,6 @@ namespace Pages.PlannedJobs
 
         #endregion
 
-        protected void TestButton_Click(object sender, EventArgs e)
-        {
-            AddCrewPopup.Enabled = true;
-            AddCrewPopup.ShowOnPageLoad = true;
-            
-        }
+     
     }
 }
