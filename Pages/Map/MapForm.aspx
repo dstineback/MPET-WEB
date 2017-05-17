@@ -53,13 +53,20 @@
 <body runat="server" >
     <script type="text/javascript">
         var markers = [];
+        var tjobid = <%# Eval("jobID")%>;
+        var tnjobid = <%# Eval("njobid")%>;
+        var tjobstepid = <%# Eval("jobstepid")%>;
+        var tlat =  <%# Eval("Latitude") %>;
+        var tlng = <%# Eval("Longitude") %>;
+        var tdescription = <%# Eval("description") %>;
+        var tarea = <%# Eval("Area") %>;
     </script>
     
   <div id="repeaters" runat="server" style="display:none;">
      <asp:Repeater ID="rptJobStepMarkers" runat="server">
         <ItemTemplate>
-                      <p>PLease work</p>            
-                jobid: <%# Eval("jobID")%>,
+                                  
+                "jobid": <%# Eval("jobID")%>,
                 "njobid": <%# Eval("njobid")%>, 
                 "jobstepid": <%# Eval("jobstepid")%>,                                                
                 "lat": <%# Eval("Latitude") %>,
@@ -104,7 +111,12 @@
                 "lat": '<%# Eval("Latitude") %>',
                 "lng": '<%# Eval("Longitude") %>',
                 "objectDescription": '<%# Eval("objectDescription") %>',
-                <%--"Area": '<%# Eval("Area") %>',
+            if( != null){
+                console.log("there was an Area");
+            } else { console.log("there was NO Area");
+
+                
+            <%--"Area": '<%# Eval("Area") %>',
                 "AssetNumber": '<%# Eval("AssetNumber") %>',
                 "LocationID": '<%# Eval("LocationID") %>',--%>
             }
