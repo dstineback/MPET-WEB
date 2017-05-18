@@ -281,8 +281,7 @@
         }
 
         function onHyperLinkClick(sender) {
-            //console.log('sender', sender);
-            //window._xyz = sender.GetMainElement();
+            
             var s = sender.GetMainElement();
           
             var crewGrid = s.parentNode.parentNode;
@@ -1868,8 +1867,7 @@
                                                                         _myRowClickObject.s = s;
                                                                         _myRowClickObject.e = e;
                                                                         
-                                                                        console.log('s', s);
-                                                                        console.log('e vis', e.visibleIndex);
+                                                                       
                                                                     }"
                                                                                 RowDblClick="function(s, e) {
                                                                                 window._myRowBblClickObject = window._myRowBblClickObject || {};
@@ -1877,9 +1875,7 @@
                                                                                 _myRowBblClickObject.e = e;
                                                                     
                                                                                 s.StartEditRow(e.visibleIndex);
-                                                                                console.log('s db', s);
-                                                                                
-                                                                                console.log('e vis db', e.visibleIndex);
+                                                                               
                                                                         
                                                                     }" />
                                                                 <Columns>

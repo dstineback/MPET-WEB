@@ -178,8 +178,7 @@
         }
 
         function onHyperLinkClick(sender) {
-            //console.log('sender', sender);
-            //window._xyz = sender.GetMainElement();
+            
             var s = sender.GetMainElement();
 
             var crewGrid = s.parentNode.parentNode;
@@ -211,15 +210,37 @@
             }
         }
 
-        var nobjectid = localStorage.getItem("objectid");
+        var nobjectid = localStorage.getItem("nobjectid");
+        var objectid = localStorage.getItem("objectid");
         var description = localStorage.getItem("description");
-        console.log("objectid", nobjectid);
-        console.log("description", description);
+        var area = localStorage.getItem("area");
+        if (area === "undefined") {
+            area = " ";
+        }
+        var locationID = localStorage.getItem("locationID");
+        if (locationID === "undefined") {
+            locationID = " ";
+        }
+        var assetNumber = localStorage.getItem("assetNumber");
+        if (assetNumber === "undefined") {
+            assetNumber = " ";
+        }
+        
         
         function onInit() {
-            ObjectIDCombo.SetValue( nobjectid);
-            ObjectIDCombo.SetText(nobjectid);
+            ObjectIDCombo.SetValue(nobjectid);
+            ObjectIDCombo.SetText(nobjectid + " " + "-" + " " + objectid + " " + "-" + " " + description);
             txtObjectDescription.SetValue(description);
+            txtObjectDescription.SetText(description);
+            txtObjectArea.SetValue(area);
+            txtObjectArea.SetText(area);
+            txtObjectLocation.SetValue(locationID);
+            txtObjectLocation.SetText(locationID);
+            txtObjectAssetNumber.SetValue(assetNumber);
+            txtObjectAssetNumber.SetText(assetNumber);
+
+            localStorage.clear();
+            
         }
        
         
@@ -1009,8 +1030,7 @@
                                                                         _myRowClickObject.s = s;
                                                                         _myRowClickObject.e = e;
                                                                         
-                                                                        console.log('s', s);
-                                                                        console.log('e vis', e.visibleIndex);
+                                                                        
                                                                     }"
                                                                                 RowDblClick="function(s, e) {
                                                                                 window._myRowBblClickObject = window._myRowBblClickObject || {};
@@ -1018,9 +1038,7 @@
                                                                                 _myRowBblClickObject.e = e;
                                                                     
                                                                                 s.StartEditRow(e.visibleIndex);
-                                                                                console.log('s db', s);
                                                                                 
-                                                                                console.log('e vis db', e.visibleIndex);
                                                                         
                                                                     }" />
                                                                 <Columns>
