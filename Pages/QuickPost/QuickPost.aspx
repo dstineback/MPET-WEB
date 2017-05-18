@@ -178,8 +178,7 @@
         }
 
         function onHyperLinkClick(sender) {
-            //console.log('sender', sender);
-            //window._xyz = sender.GetMainElement();
+            
             var s = sender.GetMainElement();
 
             var crewGrid = s.parentNode.parentNode;
@@ -198,8 +197,54 @@
         }
     </script>
     <script>
+        var isWebStorageSupported = false;
+
+        window.onload = function () {
+            if (typeof (Storage) !== "undefined") {
+                //your browser supports web storage.
+                isWebStorageSupported = true;
+            }
+            else {
+                //your browser doesn't support web storage.
+                isWebStorageSupported = false;
+            }
+        }
+
         var nobjectid = localStorage.getItem("nobjectid");
-        Selection.Set("nobjectid", nobjectid);
+        var objectid = localStorage.getItem("objectid");
+        var description = localStorage.getItem("description");
+        var area = localStorage.getItem("area");
+        if (area === "undefined") {
+            area = " ";
+        }
+        var locationID = localStorage.getItem("locationID");
+        if (locationID === "undefined") {
+            locationID = " ";
+        }
+        var assetNumber = localStorage.getItem("assetNumber");
+        if (assetNumber === "undefined") {
+            assetNumber = " ";
+        }
+        
+        
+        function onInit() {
+            ObjectIDCombo.SetValue(nobjectid);
+            ObjectIDCombo.SetText(nobjectid + " " + "-" + " " + objectid + " " + "-" + " " + description);
+            txtObjectDescription.SetValue(description);
+            txtObjectDescription.SetText(description);
+            txtObjectArea.SetValue(area);
+            txtObjectArea.SetText(area);
+            txtObjectLocation.SetValue(locationID);
+            txtObjectLocation.SetText(locationID);
+            txtObjectAssetNumber.SetValue(assetNumber);
+            txtObjectAssetNumber.SetText(assetNumber);
+
+            localStorage.clear();
+            
+        }
+       
+        
+       
     </script>
 
     <asp:ScriptManager ID="ScriptManger1" runat="server" EnablePartialRendering="true"></asp:ScriptManager>
@@ -252,7 +297,8 @@
                                                                 TextField="n_objectid" 
                                                                 DropDownButton-Enabled="True" 
                                                                 AutoPostBack="False" 
-                                                                ClientInstanceName="ObjectIDCombo" AutoResizeWithContainer="true">
+                                                                ClientInstanceName="ObjectIDCombo" AutoResizeWithContainer="true" >
+                                                                <ClientSideEvents Init="onInit" />
                                                                 <ClientSideEvents ValueChanged="function(s, e) {
                                                 var objectHasValue = ObjectIDCombo.GetValue();
                                                 var selectedItem = s.GetSelectedItem();
@@ -273,6 +319,7 @@
                                                 }
 
                                             }" />
+                                    
                                         <Columns>
                                             <dx:ListBoxColumn FieldName="n_objectid" Caption="N_ID" Visible="false" Width="75px" />
                                             <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
@@ -983,8 +1030,7 @@
                                                                         _myRowClickObject.s = s;
                                                                         _myRowClickObject.e = e;
                                                                         
-                                                                        console.log('s', s);
-                                                                        console.log('e vis', e.visibleIndex);
+                                                                        
                                                                     }"
                                                                                 RowDblClick="function(s, e) {
                                                                                 window._myRowBblClickObject = window._myRowBblClickObject || {};
@@ -992,9 +1038,7 @@
                                                                                 _myRowBblClickObject.e = e;
                                                                     
                                                                                 s.StartEditRow(e.visibleIndex);
-                                                                                console.log('s db', s);
                                                                                 
-                                                                                console.log('e vis db', e.visibleIndex);
                                                                         
                                                                     }" />
                                                                 <Columns>

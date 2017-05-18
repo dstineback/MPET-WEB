@@ -256,8 +256,7 @@
         }
 
         function onHyperLinkClick(sender) {
-            //console.log('sender', sender);
-            //window._xyz = sender.GetMainElement();
+            
             var s = sender.GetMainElement();
           
             var crewGrid = s.parentNode.parentNode;
@@ -392,7 +391,7 @@
                                                                                                                      ValueType="System.String" ValueField="n_costcodeid"
                                                                                                                      OnItemsRequestedByFilterCondition="ComboCostCode_OnItemsRequestedByFilterCondition_SQL"
                                                                                                                      OnItemRequestedByValue="ComboCostCode_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
-                                                                                                                     Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="CostCodeID" DropDownButton-Enabled="True" AutoPostBack="True" ClientInstanceName="ComboCostCode">
+                                                                                                                     Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="CostCodeID" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboCostCode">
                                                                                                
                                                                                                         <Columns>
                                                                                                             <dx:ListBoxColumn FieldName="n_costcodeid" Visible="False" />
@@ -617,7 +616,7 @@
                                                                 Width="90%" 
                                                                 KeyboardSupport="True" 
                                                                 ClientInstanceName="CrewGrid" 
-                                                                AutoPostBack="True" 
+                                                                AutoPostBack="false" 
                                                                 EnableCallBacks="true"  
                                                                 Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="True" SettingsBehavior-AllowFocusedRow="False" 
                                                                 SettingsBehavior-AllowSelectByRowClick="true" DataSourceID="CrewDataSource" OnDataBound="CrewGridBound" OnRowUpdating="CrewGrid_RowUpdating" Border-BorderStyle="Solid" Border-BorderColor="Gray" >
@@ -641,8 +640,7 @@
                                                                         _myRowClickObject.s = s;
                                                                         _myRowClickObject.e = e;
                                                                         
-                                                                        console.log('s', s);
-                                                                        console.log('e vis', e.visibleIndex);
+                                                                        
                                                                     }"
                                                                                 RowDblClick="function(s, e) {
                                                                                 window._myRowBblClickObject = window._myRowBblClickObject || {};
@@ -650,9 +648,7 @@
                                                                                 _myRowBblClickObject.e = e;
                                                                     
                                                                                 s.StartEditRow(e.visibleIndex);
-                                                                                console.log('s db', s);
                                                                                 
-                                                                                console.log('e vis db', e.visibleIndex);
                                                                         
                                                                     }" />
                                                                 <Columns>
@@ -769,9 +765,10 @@
                                                                 </SettingsPopup>
                                                                 <Templates>
                                                                     <FooterRow>
-                                                                    <dx:ASPxButton runat="server" 
+                                                                        
+                                                                    <dx:ASPxButton runat="server" AutoPostBack="false" 
                                                                         ID="AddNewCrewButton" 
-                                                                        OnClick="AddNewCrewButton_click" Theme="iOS" 
+                                                                        OnClick="btnAddCrew_Click" Theme="iOS" 
                                                                         Text="Add New Crew Member"></dx:ASPxButton>
                                                                     <dx:ASPxButton runat="server" 
                                                                         ID="DeleteCrewButton" 
@@ -1071,7 +1068,7 @@
                                                             <Border BorderColor="Gray" BorderStyle="Solid"></Border>
                                                             <Templates>
                                                                 <FooterRow>
-                                                                    <dx:ASPxButton runat="server" ID="AddNewCrewButton"  Theme="iOS" Text="Add New Crew Member">
+                                                                    <dx:ASPxButton runat="server" ID="AddNewCrewButton" AutoPostBack="false"  Theme="iOS" Text="Add New Crew Member">
                                                                         <ClientSideEvents Click="ShowCrewPopup" />
                                                                     </dx:ASPxButton>
                                                                     <dx:ASPxButton runat="server" ID="DeleteCrewButton" OnClick="btnDeleteCrew_Click" Theme="iOS" Text="Delete Crew Member"></dx:ASPxButton>
@@ -1220,7 +1217,7 @@
 
         </Items>
     </dx:ASPxFormLayout>
-    <dx:ASPxPopupControl ID="AddCrewPopup" ClientInstanceName="AddCrewPopup" ShowCloseButton="false" ShowHeader="false" HeaderText=""
+    <dx:ASPxPopupControl ID="AddCrewPopup" ClientInstanceName="AddCrewPopup" ShowCloseButton="true" ShowHeader="false" HeaderText=""
                                                      CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
                                                      CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" Width="600px">
                                     <ContentCollection>
@@ -1242,7 +1239,7 @@
                                                                                 Width="98%" 
                                                                                 KeyboardSupport="True" 
                                                                                 ClientInstanceName="CrewLookupGrid" 
-                                                                                AutoPostBack="True" 
+                                                                                AutoPostBack="False" 
                                                                                 EnableCallBacks="true"
                                                                                 Settings-HorizontalScrollBarMode="Auto" 
                                                                                 SettingsPager-Mode="ShowPager" 

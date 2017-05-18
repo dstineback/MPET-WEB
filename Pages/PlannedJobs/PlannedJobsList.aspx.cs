@@ -58,7 +58,7 @@ namespace Pages.PlannedJobs
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
                     Master.ShowMultiSelectButton = _userCanDelete;
                     Master.ShowPrintButton = _userCanView;
-                    Master.ShowMapDisplayButton = _userCanView;
+                    Master.ShowMapDisplayButton = _userCanEdit;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = false;
                     
@@ -264,7 +264,7 @@ namespace Pages.PlannedJobs
             Master.ShowBatchEquipmentButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowBatchPartButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowPostButton = (_userCanEdit);
-            Master.ShowMapDisplayButton = _userCanView;
+            Master.ShowMapDisplayButton = false;
             Master.ShowForcePmButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowRoutineJobButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
 

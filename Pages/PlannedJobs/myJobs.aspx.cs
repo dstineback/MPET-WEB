@@ -207,7 +207,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         if (true)
         {
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
         }
         else
         {
