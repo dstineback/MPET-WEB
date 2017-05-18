@@ -312,7 +312,7 @@
                                                                                                                     ValueField="n_objectid" 
                                                                                                                     OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" 
                                                                                                                     OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
-                                                                                                                    TextFormatString="{0}" 
+                                                                                                                    TextFormatString="{0} - {1}" 
                                                                                                                     Width="90%" 
                                                                                                                     DropDownStyle="DropDown" 
                                                                                                                     Theme="iOS" 
