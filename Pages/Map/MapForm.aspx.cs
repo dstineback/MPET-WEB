@@ -458,4 +458,9 @@ public partial class Pages_Map_MapForm : Page
     {
         Response.Redirect("~/main.aspx");
     }
+
+    protected void SearchBox_TextChanged(object sender, EventArgs e)
+    {
+        var result = SerchBox.Value;
+    }
 }

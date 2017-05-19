@@ -603,6 +603,13 @@
                     </dx:LayoutItem>     <%--Outcome Code--%>
                 </Items>
             </dx:LayoutGroup>
+            <dx:LayoutItem Caption="Procedures" Name="txtAdditionalInfo" CaptionSettings-Location="Top">
+                <LayoutItemNestedControlCollection>
+                    <dx:LayoutItemNestedControlContainer runat="server">
+                        <dx:ASPxMemo runat="server" ID="txtAdditionalInfo" Width="90%" Theme="iOS" ClientInstanceName="txtAdditionalInfo"></dx:ASPxMemo>
+                    </dx:LayoutItemNestedControlContainer>
+                </LayoutItemNestedControlCollection>
+            </dx:LayoutItem>
         
         <dx:LayoutItem Name="CrewGridViewLayoutItem" 
                 Caption="">

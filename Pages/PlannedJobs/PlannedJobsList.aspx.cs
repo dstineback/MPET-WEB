@@ -330,8 +330,11 @@ namespace Pages.PlannedJobs
 
         protected string GetUrl(GridViewDataItemTemplateContainer container)
         {
+            ResetSession();
+            var jobid = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobid" });
             var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
-            return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+           
+            return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
         }
 
         /// <summary>

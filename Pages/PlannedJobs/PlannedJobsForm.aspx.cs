@@ -115,12 +115,13 @@ namespace Pages.PlannedJobs
             //Check For Post To Setup Form
             if(!IsPostBack)
             {
-                ResetSession();
 
+                
 
-                //Check For Session Variable To Distinguish Previous Edit
-                if (HttpContext.Current.Session["editingJobStepID"] != null)
+                    //Check For Session Variable To Distinguish Previous Edit
+                    if (HttpContext.Current.Session["editingJobStepID"] != null)
                 {
+
                     BreakDownCheckBox.Enabled = false;
                     CrewGrid.Visible = true;
 
@@ -135,14 +136,23 @@ namespace Pages.PlannedJobs
                         SetupForEditing();
                         CrewGrid.Visible = false;
                     } else {
+                        if (!String.IsNullOrEmpty(Request.QueryString["n_jobstepid"]))
+                        {
+                            SetFormDataFromGridLink();
+                        }
+                        else
+                        {
+                            ResetSession();
+                            AddRequest();
+                            //Setup For Adding
+                            SetupForAdding();
 
-                        AddRequest();
-                        //Setup For Adding
-                        SetupForAdding();
+                            CrewGrid.Visible = false;
+                            ////Set Focus
+                            txtWorkDescription.Focus();
 
-                        CrewGrid.Visible = false;
-                        ////Set Focus
-                        txtWorkDescription.Focus();
+                        }
+
 
 
                     }
@@ -192,7 +202,7 @@ namespace Pages.PlannedJobs
                                 {
                                     Session.Remove("editingJobStepID");
                                 }
-                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx", true);
+                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx", true);
                                 //AddItems();
                                 break;
                             }
@@ -1236,11 +1246,11 @@ namespace Pages.PlannedJobs
                 //}
 
                 //Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtAddDetail"] != null)
-                //{
-                //    //Get Additional Info From Session
-                //    txtAdditionalInfo.Text = (HttpContext.Current.Session["txtAddDetail"].ToString());
-                //}
+                if (HttpContext.Current.Session["txtAddDetail"] != null)
+                {
+                    //Get Additional Info From Session
+                    txtAdditionalInfo.Text = (HttpContext.Current.Session["txtAddDetail"].ToString());
+                }
 
                 //Check For Previous Session Variables
                 //if (HttpContext.Current.Session["txtPostNotes"] != null)
@@ -1377,7 +1387,7 @@ namespace Pages.PlannedJobs
                 }
 
                 //Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtObjectAssetNumber"] != null)
+                if (HttpContext.Current.Session["txtObjectAssetNumber"] != null)
                 //{
                 //    //Get Info From Session
                 //    txtObjectAssetNumber.Text = (HttpContext.Current.Session["txtObjectAssetNumber"].ToString());
@@ -1767,6 +1777,503 @@ namespace Pages.PlannedJobs
             //        StepTab.TabPages[5].ClientEnabled = true;  //Other
             //        StepTab.TabPages[6].ClientEnabled = true;  //Attachments
             //    }
+        }
+        private void SetFormDataFromGridLink()
+        {
+            //Check For Editing Job ID
+            if (HttpContext.Current.Session["editingJobStepID"] == null)
+            {
+                //Check For Editing Job ID
+                if (HttpContext.Current.Session["editingJobID"] == null)
+                {
+                    //Get Step ID
+                    var jobStepIdToLoad = Convert.ToInt32(Request.QueryString["n_jobstepid"]);
+
+                    //Get Logon
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
+                    //Clear Errors
+                    _oJobStep.ClearErrors();
+
+                    //Load Job Step Data
+                    if (_oJobStep.LoadJobStepData(jobStepIdToLoad, _oLogon.UserID))
+                    {
+                        //Check Table Count 
+                        if (_oJobStep.Ds.Tables.Count > 0)
+                        {
+                            //Check Table Row Count
+                            if (_oJobStep.Ds.Tables[0].Rows.Count > 0)
+                            {
+                                //Clear Error
+                                _oJob.ClearErrors();
+
+                                //Set Job ID
+                                var nJobId = Convert.ToInt32(_oJobStep.Ds.Tables[0].Rows[0]["n_Jobid"]);
+
+                                //Load Job Data
+                                if (_oJob.LoadJobData(nJobId, _oLogon.UserID))
+                                {
+                                    //Check Table Count
+                                    if (_oJob.Ds.Tables.Count > 0)
+                                    {
+                                        //Check Row Count
+                                        if (_oJob.Ds.Tables[0].Rows.Count > 0)
+                                        {
+                                           
+
+                                            #region Setup History Flag
+
+                                            //Get History Flag
+                                            _jobIsHistory = ((_oJob.Ds.Tables[0].Rows[0]["IsHistory"].ToString().ToUpper()) == "Y");
+
+                                            #endregion
+
+                                            #region Setup Job Data
+
+                                            //Add Job ID Class
+                                            HttpContext.Current.Session.Add("oJob", _oJob);
+
+                                            //Add Editing Job ID
+                                            HttpContext.Current.Session.Add("editingJobID",
+                                                ((int)_oJob.Ds.Tables[0].Rows[0]["n_Jobid"]));
+
+                                            //Add Editing Job Step ID
+                                            HttpContext.Current.Session.Add("editingJobStepID",
+                                                ((int)_oJobStep.Ds.Tables[0].Rows[0]["n_jobstepid"]));
+
+                                            //Add Job Step 
+                                            HttpContext.Current.Session.Add("editingJobStepNum",
+                                                ((int)_oJobStep.Ds.Tables[0].Rows[0]["stepnumber"]));
+
+                                            Session.Add("BreakDownCheckBox", (JobType)_oJob.Ds.Tables[0].Rows[0]["Type"]);
+
+                                            //Check For Valid Previous Number
+                                            //if (((int)_oJobStep.Ds.Tables[0].Rows[0]["PreviousStep"]) > 0)
+                                            //{
+                                            //    //Add Job Step Previous ID
+                                            //    HttpContext.Current.Session.Add("PrevousStep",
+                                            //        ((int)_oJobStep.Ds.Tables[0].Rows[0]["PreviousStep"]));
+
+                                            //    //Enable Button
+                                            //    Master.ShowPrevStepButton = true;
+                                            //}
+                                            //else
+                                            //{
+                                            //    //Disable & Clear Nav
+                                            //    Master.ShowPrevStepButton = false;
+
+                                            //    //Check For Prior Value
+                                            //    if (HttpContext.Current.Session["PreviousStep"] != null)
+                                            //    {
+                                            //        //Remove Old One
+                                            //        HttpContext.Current.Session.Remove("PreviousStep");
+                                            //    }
+                                            //}
+
+                                            //Check For Valid Next Number
+                                            //if (((int)_oJobStep.Ds.Tables[0].Rows[0]["NextStep"]) > 0)
+                                            //{
+                                            //    //Add Job Step Next ID
+                                            //    HttpContext.Current.Session.Add("NextStep",
+                                            //        ((int)_oJobStep.Ds.Tables[0].Rows[0]["NextStep"]));
+
+                                            //    //Enable Label
+                                            //    Master.ShowNextStepButton = true;
+                                            //}
+                                            //else
+                                            //{
+
+                                            //    //Disable & Clear Nav
+                                            //    Master.ShowNextStepButton = false;
+
+                                            //    //Check For Prior Value
+                                            //    if (HttpContext.Current.Session["NextStep"] != null)
+                                            //    {
+                                            //        //Remove Old One
+                                            //        HttpContext.Current.Session.Remove("NextStep");
+                                            //    }
+                                            //}
+
+                                            HttpContext.Current.Session.Add("BreakDownCheckBox", _oJob.Ds.Tables[0].Rows[0]["TypeOfJob"]);
+
+                                            //Add Job String ID
+                                            HttpContext.Current.Session.Add("AssignedJobID",
+                                                _oJob.Ds.Tables[0].Rows[0]["Jobid"]);
+
+                                            //Add Description
+                                            HttpContext.Current.Session.Add("txtWorkDescription",
+                                                _oJob.Ds.Tables[0].Rows[0]["Title"]);
+
+                                            //Add Request Date
+                                            HttpContext.Current.Session.Add("TxtWorkRequestDate",
+                                                _oJob.Ds.Tables[0].Rows[0]["RequestDate"]);
+
+                                            //Add Start Date
+                                            if (Convert.ToDateTime(_oJobStep.Ds.Tables[0].Rows[0]["StartingDate"]) !=
+                                                _nullDate)
+                                            {
+                                                //Set Value
+                                                HttpContext.Current.Session.Add("TxtStartingDate",
+                                                    _oJobStep.Ds.Tables[0].Rows[0]["StartingDate"]);
+                                            }
+
+                                            //Add Comp Date
+                                            if (Convert.ToDateTime(_oJobStep.Ds.Tables[0].Rows[0]["DateTimeCompleted"]) !=
+                                                _nullDate)
+                                            {
+                                                //Set Value
+                                                HttpContext.Current.Session.Add("TxtCompletionDate",
+                                                    _oJobStep.Ds.Tables[0].Rows[0]["DateTimeCompleted"]);
+                                            }
+
+                                            //Add Step Number
+                                            HttpContext.Current.Session.Add("stepnumber",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["stepnumber"]);
+
+                                            //Add Concur Step Number
+                                            HttpContext.Current.Session.Add("concurwithstep",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["concurwithstep"]);
+
+                                            //Add Follow Step Number
+                                            HttpContext.Current.Session.Add("followstep",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["followstep"]);
+
+                                            #endregion
+
+                                            #region Setup Object Info
+
+                                            HttpContext.Current.Session.Add("ObjectIDCombo",
+                                                _oJob.Ds.Tables[0].Rows[0]["n_MaintObjectID"]);
+                                            HttpContext.Current.Session.Add("ObjectIDComboText",
+                                                _oJob.Ds.Tables[0].Rows[0]["ObjectID"]);
+                                            HttpContext.Current.Session.Add("txtObjectDescription",
+                                                _oJob.Ds.Tables[0].Rows[0]["ObjectDesc"]);
+                                            HttpContext.Current.Session.Add("txtObjectArea",
+                                                _oJob.Ds.Tables[0].Rows[0]["ObjectArea"]);
+                                            HttpContext.Current.Session.Add("txtObjectLocation",
+                                                _oJob.Ds.Tables[0].Rows[0]["ObjectLoc"]);
+                                            HttpContext.Current.Session.Add("txtObjectAssetNumber",
+                                                _oJob.Ds.Tables[0].Rows[0]["ObjectAsset"]);
+
+                                            #endregion
+
+                                            #region Setup Priority
+
+                                            HttpContext.Current.Session.Add("ComboPriority",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["n_priorityid"]);
+                                            HttpContext.Current.Session.Add("ComboPriorityText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["priorityid"]);
+
+                                            #endregion
+
+                                            #region Setup Reason
+
+                                            HttpContext.Current.Session.Add("comboReason",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["nJobReasonID"]);
+                                            HttpContext.Current.Session.Add("comboReasonText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["JobReasonID"]);
+
+                                            #endregion
+
+                                            #region Setup Route To
+
+                                            HttpContext.Current.Session.Add("comboRouteTo",
+                                                _oJob.Ds.Tables[0].Rows[0]["n_RouteTo"]);
+                                            HttpContext.Current.Session.Add("comboRouteToText",
+                                                _oJob.Ds.Tables[0].Rows[0]["RouteToUsername"]);
+
+                                            #endregion
+
+                                            #region Setup Hwy Route
+
+                                            HttpContext.Current.Session.Add("comboHwyRoute",
+                                                _oJob.Ds.Tables[0].Rows[0]["n_StateRouteID"]);
+                                            HttpContext.Current.Session.Add("comboHwyRouteText",
+                                                _oJob.Ds.Tables[0].Rows[0]["StateRouteID"]);
+
+                                            #endregion
+
+                                            #region Setup Milepost
+
+                                            HttpContext.Current.Session.Add("txtMilepost",
+                                                _oJob.Ds.Tables[0].Rows[0]["Milepost"]);
+                                            HttpContext.Current.Session.Add("txtMilepostTo", _oJob.Ds.Tables[0].Rows[0]["MilepostTo"]);
+                                            HttpContext.Current.Session.Add("comboMilePostDir",
+                                                _oJob.Ds.Tables[0].Rows[0]["n_MilePostDirectionID"]);
+                                            HttpContext.Current.Session.Add("comboMilePostDirText",
+                                                _oJob.Ds.Tables[0].Rows[0]["MilePostDirectionID"]);
+
+                                            #endregion
+
+                                            #region Setup Cost Code
+
+                                            HttpContext.Current.Session.Add("ComboCostCode",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["n_CostCodeID"]);
+                                            HttpContext.Current.Session.Add("ComboCostCodeText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["costcodeid"]);
+
+                                            #endregion
+
+                                            #region Setup Fund Source
+
+                                            HttpContext.Current.Session.Add("ComboFundSource",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["n_FundSrcCodeID"]);
+                                            HttpContext.Current.Session.Add("ComboFundSourceText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["FundSrcCodeID"]);
+
+                                            #endregion
+
+                                            #region Setup Work Order
+
+                                            HttpContext.Current.Session.Add("ComboWorkOrder",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["n_WorkOrderCodeID"]);
+                                            HttpContext.Current.Session.Add("ComboWorkOrderText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["WorkOrderCodeID"]);
+
+                                            #endregion
+
+                                            #region Setup Work Op
+
+                                            HttpContext.Current.Session.Add("ComboWorkOp",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["n_WorkOpID"]);
+                                            HttpContext.Current.Session.Add("ComboWorkOpText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["WorkOpID"]);
+
+                                            #endregion
+
+                                            #region Setup Org Code
+
+                                            HttpContext.Current.Session.Add("ComboOrgCode",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["n_OrganizationCodeID"]);
+                                            HttpContext.Current.Session.Add("ComboOrgCodeText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["OrganizationCodeID"]);
+
+                                            #endregion
+
+                                            #region Setup Fund Group
+
+                                            HttpContext.Current.Session.Add("ComboFundGroup",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["n_FundingGroupCodeID"]);
+                                            HttpContext.Current.Session.Add("ComboFundGroupText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["FundingGroupCodeID"]);
+
+                                            #endregion
+
+                                            #region Setup Control Section
+
+                                            HttpContext.Current.Session.Add("ComboCtlSection",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["n_ControlSectionID"]);
+                                            HttpContext.Current.Session.Add("ComboCtlSectionText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["ControlSectionID"]);
+
+                                            #endregion
+
+                                            #region Setup Equip Num
+
+                                            HttpContext.Current.Session.Add("ComboEquipNum",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["n_EquipmentNumberID"]);
+                                            HttpContext.Current.Session.Add("ComboEquipNumText",
+                                                _oJobStep.Ds.Tables[0].Rows[0]["EquipmentNumberID"]);
+
+                                            #endregion
+
+                                            #region Setup Run Units
+
+                                            //Check History Bool
+                                            if (!_jobIsHistory)
+                                            {
+                                                //Setup Run Units
+                                                //SetupRunUnits(
+                                                //    Convert.ToInt32(_oJob.Ds.Tables[0].Rows[0]["n_MaintObjectID"]));
+
+                                                ////Check Current Units 1
+                                                //HttpContext.Current.Session.Add("txtRunUnitOne",
+                                                //    Convert.ToDecimal(
+                                                //        _oJob.Ds.Tables[0].Rows[0]["CurrentUnits1"].ToString()) > 0
+                                                //        ? _oJob.Ds.Tables[0].Rows[0]["CurrentUnits1"].ToString()
+                                                //        : "0.00");
+
+                                                ////Check Current Units 2
+                                                //HttpContext.Current.Session.Add("txtRunUnitTwo",
+                                                //    Convert.ToDecimal(
+                                                //        _oJob.Ds.Tables[0].Rows[0]["CurrentUnits2"].ToString()) > 0
+                                                //        ? _oJob.Ds.Tables[0].Rows[0]["CurrentUnits2"].ToString()
+                                                //        : "0.00");
+
+                                                ////Check Current Units 3
+                                                //HttpContext.Current.Session.Add("txtRunUnitThree",
+                                                //    Convert.ToDecimal(
+                                                //        _oJob.Ds.Tables[0].Rows[0]["CurrentUnits3"].ToString()) > 0
+                                                //        ? _oJob.Ds.Tables[0].Rows[0]["CurrentUnits3"].ToString()
+                                                //        : "0.00");
+                                            }
+                                            else
+                                            {
+                                                //Get History Run Units
+
+                                                //Check For Run Unit 1
+                                                if (_oJob.Ds.Tables[0].Rows[0]["completed_units1"].ToString() != "")
+                                                {
+                                                    //Set Value
+                                                    HttpContext.Current.Session.Add("txtRunUnitOne",
+                                                        _oJob.Ds.Tables[0].Rows[0]["completed_units1"].ToString());
+                                                }
+
+                                                //Check For Run Unit 2
+                                                if (_oJob.Ds.Tables[0].Rows[0]["completed_units2"].ToString() != "")
+                                                {
+                                                    //Set Value
+                                                    HttpContext.Current.Session.Add("txtRunUnitTwo",
+                                                        _oJob.Ds.Tables[0].Rows[0]["completed_units2"].ToString());
+                                                }
+
+                                                //Check For Run Unit 3
+                                                if (_oJob.Ds.Tables[0].Rows[0]["completed_units3"].ToString() != "")
+                                                {
+                                                    //Set Value
+                                                    HttpContext.Current.Session.Add("txtRunUnitThree",
+                                                        _oJob.Ds.Tables[0].Rows[0]["completed_units3"].ToString());
+                                                }
+                                            }
+
+                                            #endregion
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["txtFN"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("txtFN");
+                                            //}
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["txtLN"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("txtLN");
+                                            //}
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["txtEmail"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("txtEmail");
+                                            //}
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["txtPhone"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("txtPhone");
+                                            //}
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["txtExt"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("txtExt");
+                                            //}
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["txtMail"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("txtMail");
+                                            //}
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["txtBuilding"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("txtBuilding");
+                                            //}
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["txtRoomNum"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("txtRoomNum");
+                                            //}
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["ComboServiceOffice"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("ComboServiceOffice");
+                                            //}
+
+                                            ////Check For Prior Value
+                                            //if (HttpContext.Current.Session["ComboServiceOfficeText"] != null)
+                                            //{
+                                            //    //Remove Old One
+                                            //    HttpContext.Current.Session.Remove("ComboServiceOfficeText");
+                                            //}
+
+                                            #region Setup Location
+
+                                            //Check X
+                                            if (Convert.ToInt32(_oJob.Ds.Tables[0].Rows[0]["GPS_X"]) != 0)
+                                            {
+                                                HttpContext.Current.Session.Add("GPSX",
+                                                    _oJob.Ds.Tables[0].Rows[0]["GPS_X"]);
+                                            }
+
+                                            //Check Y
+                                            if (Convert.ToInt32(_oJob.Ds.Tables[0].Rows[0]["GPS_Y"]) != 0)
+                                            {
+                                                HttpContext.Current.Session.Add("GPSY",
+                                                    _oJob.Ds.Tables[0].Rows[0]["GPS_Y"]);
+                                            }
+
+                                            //Check Z
+                                            if (Convert.ToInt32(_oJob.Ds.Tables[0].Rows[0]["GPS_Z"]) != 0)
+                                            {
+                                                HttpContext.Current.Session.Add("GPSZ",
+                                                    _oJob.Ds.Tables[0].Rows[0]["GPS_Z"]);
+                                            }
+
+
+                                            #endregion
+
+                                            #region Setup Additional Info
+
+                                            HttpContext.Current.Session.Add("txtAddDetail",
+                                                _oJob.Ds.Tables[0].Rows[0]["Notes"]);
+
+                                            HttpContext.Current.Session.Add("txtPostNotes",
+                                            _oJobStep.Ds.Tables[0].Rows[0]["PostNotes"]);
+
+                                            #endregion
+
+                                            //Set Tab Counts
+
+                                            //Refresh Crew
+                                            CrewGrid.DataBind();
+
+                                            //Refresh Attachments
+                                            //AttachmentGrid.DataBind();
+
+                                            ////Refresh Members
+                                            //MemberGrid.DataBind();
+
+                                            ////Refresh Other
+                                            //OtherGrid.DataBind();
+
+                                            ////Refresh Equipment
+                                            //EquipGrid.DataBind();
+
+                                            ////Refresh Parts Grid
+                                            //PartGrid.DataBind();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else
+            {
+                txtWorkDescription.Focus();
+            }
         }
 
         /// <summary>
