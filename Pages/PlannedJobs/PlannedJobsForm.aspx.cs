@@ -111,7 +111,7 @@ namespace Pages.PlannedJobs
 
             #endregion
 
-
+            //This Runs when the Page first loads
             //Check For Post To Setup Form
             if(!IsPostBack)
             {
@@ -134,6 +134,7 @@ namespace Pages.PlannedJobs
                     if (Session["editingJobID"] != null)
                     {
                         SetupForEditing();
+                        CrewGrid.Caption = "";
                         CrewGrid.Visible = false;
                     } else {
                         if (!String.IsNullOrEmpty(Request.QueryString["n_jobstepid"]))
@@ -147,6 +148,7 @@ namespace Pages.PlannedJobs
                             //Setup For Adding
                             SetupForAdding();
 
+                            CrewGrid.Caption = "";
                             CrewGrid.Visible = false;
                             ////Set Focus
                             txtWorkDescription.Focus();
@@ -446,8 +448,8 @@ namespace Pages.PlannedJobs
                     //AddPartPopup.ShowOnPageLoad = false;
                 }
             }
-        
 
+            #region Checking for job id from URL
             //Check For Query String
             if (!String.IsNullOrEmpty(Request.QueryString["n_jobstepid"]))
             {
@@ -713,6 +715,49 @@ namespace Pages.PlannedJobs
                                                 //}
 
                                                 HttpContext.Current.Session.Add("BreakDownCheckBox", _oJob.Ds.Tables[0].Rows[0]["TypeOfJob"]);
+
+                                                if (BreakDownCheckBox != null)
+                                                {
+                                                    var jobType = JobType.Corrective;
+                                                    int type = Convert.ToInt32(Session["BreakDownCheckBox"]);
+                                                    switch (type)
+                                                    {
+                                                        case 0:
+                                                            jobType = JobType.Unknown;
+                                                            Session.Remove("BreakDownCheckBox");
+
+                                                            Session.Add("BreakDownCheckBox", jobType);
+                                                            break;
+                                                        case 1:
+                                                            jobType = JobType.Preventive;
+                                                            Session.Remove("BreakDownCheckBox");
+
+                                                            Session.Add("BreakDownCheckBox", jobType);
+                                                            break;
+                                                        case 2:
+                                                            jobType = JobType.Corrective;
+                                                            Session.Remove("BreakDownCheckBox");
+
+                                                            Session.Add("BreakDownCheckBox", jobType);
+                                                            break;
+                                                        case 3:
+                                                            jobType = JobType.Routine;
+                                                            Session.Remove("BreakDownCheckBox");
+
+                                                            Session.Add("BreakDownCheckBox", jobType);
+                                                            break;
+                                                        case 4:
+                                                            jobType = JobType.Breakdown;
+                                                            Session.Remove("BreakDownCheckBox");
+                                                            BreakDownCheckBox.Checked = true;
+
+                                                            Session.Add("BreakDownCheckBox", jobType);
+                                                            break;
+                                                        default:
+                                                            Console.WriteLine("Default case");
+                                                            break;
+                                                    }
+                                                }
 
                                                 //Add Job String ID
                                                 HttpContext.Current.Session.Add("AssignedJobID",
@@ -1100,20 +1145,26 @@ namespace Pages.PlannedJobs
                 }
             }
 
+            #endregion
+
             //Setup User Defined Fields
             SetupUserDefinedFields();
-
+            #region Is not a Post back, Sets the field values from Session
+            //This runs on first page load
             if (!IsPostBack)
             {
-                if(Session["editingJobStepID"] != null)
+                if(Session["editingJobID"] != null)
                 {
-                    BreakDownCheckBox.Enabled = false;
-                    CrewGrid.Visible = true;
-
+                    lblHeader.Text = "Job ID: " + Session["editingJobID"].ToString();
                 }
 
-                
-
+                if(Session["editingJobStepID"] != null)
+                {
+                    lblStep.Text = "Job Step: " + Session["editingJobStepID"].ToString();
+                    BreakDownCheckBox.Enabled = false;
+                    CrewGrid.Visible = true;
+                }
+               
                 //Check For Previous Step
                 //if (HttpContext.Current.Session["PreviousStep"] != null)
                 //{
@@ -1137,7 +1188,6 @@ namespace Pages.PlannedJobs
                 }
 
                
-
                if(Session["BreakDownCheckBoxChecked"] != null)
                 {
                     var Checked = Session["BreakDownCheckBoxChecked"].ToString();
@@ -1156,6 +1206,14 @@ namespace Pages.PlannedJobs
                if(Session["BreakDownCheckBox"] != null)
                 {
                     BreakDownCheckBox.Value = Session["BreakDownCheckBox"];
+                    var type = BreakDownCheckBox.Value.ToString();
+                    if(type == "Breakdown")
+                    {
+                        BreakDownCheckBox.Checked = true;
+                    } else
+                    {
+                        BreakDownCheckBox.Checked = false;
+                    }
                 }
                 
 
@@ -1246,10 +1304,13 @@ namespace Pages.PlannedJobs
                 //}
 
                 //Check For Previous Session Variables
-                if (HttpContext.Current.Session["txtAddDetail"] != null)
-                {
+                if (HttpContext.Current.Session["txtAddDetail"] != null && Session["txtAddDetail"].ToString() != "")                {
                     //Get Additional Info From Session
                     txtAdditionalInfo.Text = (HttpContext.Current.Session["txtAddDetail"].ToString());
+                } else
+                {
+                    txtAdditionalInfo.Caption = "";
+                    txtAdditionalInfo.Visible = false;
                 }
 
                 //Check For Previous Session Variables
@@ -1585,6 +1646,8 @@ namespace Pages.PlannedJobs
 
             }
 
+            #endregion
+
             //Bind Grids
             //AttachmentGrid.DataBind();
 
@@ -1614,7 +1677,7 @@ namespace Pages.PlannedJobs
 
             //Enable/Disable Buttons
             Master.ShowNewButton = showButtons;
-            Master.ShowEditButton = (showButtons && (HttpContext.Current.Session[""] != null));
+            Master.ShowEditButton = false;
             Master.ShowViewButton = false;
             Master.ShowSaveButton = showButtons;
 
@@ -1629,7 +1692,7 @@ namespace Pages.PlannedJobs
             Master.ShowSetEndDateButton = (!showButtons
                                            && (HttpContext.Current.Session["TxtCompletionDate"] != null));
             //&& (MemberGrid.Columns[0].Visible));
-            Master.ShowNonStockAddButton = (!showButtons);
+            Master.ShowNonStockAddButton = false;//(!showButtons);
             //&& (PartGrid.Columns[0].Visible));
 
             //Clear Prior Selection If Edit Check Is No Longer Visible
@@ -1845,56 +1908,50 @@ namespace Pages.PlannedJobs
                                             HttpContext.Current.Session.Add("editingJobStepNum",
                                                 ((int)_oJobStep.Ds.Tables[0].Rows[0]["stepnumber"]));
 
-                                            Session.Add("BreakDownCheckBox", (JobType)_oJob.Ds.Tables[0].Rows[0]["Type"]);
+                                            Session.Add("BreakDownCheckBox", (int)_oJob.Ds.Tables[0].Rows[0]["TypeOfJob"]);
 
-                                            //Check For Valid Previous Number
-                                            //if (((int)_oJobStep.Ds.Tables[0].Rows[0]["PreviousStep"]) > 0)
-                                            //{
-                                            //    //Add Job Step Previous ID
-                                            //    HttpContext.Current.Session.Add("PrevousStep",
-                                            //        ((int)_oJobStep.Ds.Tables[0].Rows[0]["PreviousStep"]));
+                                            if(BreakDownCheckBox != null)
+                                            {
+                                                var jobType = JobType.Corrective;
+                                                int type = Convert.ToInt32(Session["BreakDownCheckBox"]);
+                                                switch (type)
+                                                {
+                                                    case 0:
+                                                        jobType = JobType.Unknown;
+                                                        Session.Remove("BreakDownCheckBox");
 
-                                            //    //Enable Button
-                                            //    Master.ShowPrevStepButton = true;
-                                            //}
-                                            //else
-                                            //{
-                                            //    //Disable & Clear Nav
-                                            //    Master.ShowPrevStepButton = false;
+                                                        Session.Add("BreakDownCheckBox", jobType);
+                                                        break;
+                                                    case 1:
+                                                        jobType = JobType.Preventive;
+                                                        Session.Remove("BreakDownCheckBox");
+                                                      
+                                                        Session.Add("BreakDownCheckBox", jobType);
+                                                        break;
+                                                    case 2:
+                                                        jobType = JobType.Corrective;
+                                                        Session.Remove("BreakDownCheckBox");
 
-                                            //    //Check For Prior Value
-                                            //    if (HttpContext.Current.Session["PreviousStep"] != null)
-                                            //    {
-                                            //        //Remove Old One
-                                            //        HttpContext.Current.Session.Remove("PreviousStep");
-                                            //    }
-                                            //}
+                                                        Session.Add("BreakDownCheckBox", jobType);
+                                                        break;
+                                                    case 3:
+                                                        jobType = JobType.Routine;
+                                                        Session.Remove("BreakDownCheckBox");
 
-                                            //Check For Valid Next Number
-                                            //if (((int)_oJobStep.Ds.Tables[0].Rows[0]["NextStep"]) > 0)
-                                            //{
-                                            //    //Add Job Step Next ID
-                                            //    HttpContext.Current.Session.Add("NextStep",
-                                            //        ((int)_oJobStep.Ds.Tables[0].Rows[0]["NextStep"]));
+                                                        Session.Add("BreakDownCheckBox", jobType);
+                                                        break;
+                                                    case 4:
+                                                        jobType = JobType.Breakdown;
+                                                        Session.Remove("BreakDownCheckBox");
+                                                        BreakDownCheckBox.Checked = true;
 
-                                            //    //Enable Label
-                                            //    Master.ShowNextStepButton = true;
-                                            //}
-                                            //else
-                                            //{
-
-                                            //    //Disable & Clear Nav
-                                            //    Master.ShowNextStepButton = false;
-
-                                            //    //Check For Prior Value
-                                            //    if (HttpContext.Current.Session["NextStep"] != null)
-                                            //    {
-                                            //        //Remove Old One
-                                            //        HttpContext.Current.Session.Remove("NextStep");
-                                            //    }
-                                            //}
-
-                                            HttpContext.Current.Session.Add("BreakDownCheckBox", _oJob.Ds.Tables[0].Rows[0]["TypeOfJob"]);
+                                                        Session.Add("BreakDownCheckBox", jobType);
+                                                        break;
+                                                    default:
+                                                        Console.WriteLine("Default case");
+                                                        break;
+                                                }
+                                            }
 
                                             //Add Job String ID
                                             HttpContext.Current.Session.Add("AssignedJobID",
@@ -2718,13 +2775,13 @@ namespace Pages.PlannedJobs
         {
             //Setup Buttons
             Master.ShowSaveButton = (_userCanAdd || _userCanEdit);
-            Master.ShowCopyJobButton = _userCanAdd;
-            Master.ShowIssueButton = _userCanEdit;
-            Master.ShowEditButton = _userCanEdit;
+            Master.ShowCopyJobButton = false;
+            Master.ShowIssueButton = false;
+            Master.ShowEditButton = false;
             Master.ShowNewButton = _userCanAdd;
-            Master.ShowDeleteButton = _userCanDelete;
+            Master.ShowDeleteButton = false;
             Master.ShowPrintButton = true;
-            Master.ShowMultiSelectButton = _userCanEdit;
+            Master.ShowMultiSelectButton = false;
 
             //Enable Tabs
             //requestTab.Enabled = true;
@@ -3870,7 +3927,7 @@ namespace Pages.PlannedJobs
 
             ASPxComboBox comboBox = (ASPxComboBox)source;
             ObjectDataSource.SelectCommand =
-                @"DECLARE @areaFilteringOn VARCHAR(1)
+                        @"DECLARE @areaFilteringOn VARCHAR(1)
                 --Setup Area Filering Variable
                 IF ( ( SELECT   COUNT(dbo.UsersAreaFilter.RecordID)
                        FROM     dbo.UsersAreaFilter WITH ( NOLOCK )
@@ -3890,54 +3947,135 @@ namespace Pages.PlannedJobs
                         [description] ,
                         [areaid] ,
                         [locationid] ,
-                        [assetnumber],
+                        [assetnumber] ,
                         CASE ISNULL(RecordID, -1)
                           WHEN -1 THEN 'N'
                           ELSE 'Y'
                         END AS [Following] ,
-                        isnull(LocationOrURL, '') AS LocationOrURL
+                        ISNULL(LocationOrURL, '') AS LocationOrURL ,
+                        OrganizationCodeID ,
+                        FundingGroupCodeID
                 FROM    ( SELECT    tblmo.[n_objectid] ,
                                     tblmo.[objectid] ,
                                     tblmo.[description] ,
                                     tblarea.[areaid] ,
                                     tbllocation.[locationid] ,
                                     tblmo.[assetnumber] ,
-                                    ROW_NUMBER() OVER ( ORDER BY tblmo.[n_objectid] ) AS [rn],
-                                    tbl_IsFlaggedRecord.RecordID,
-                                   tblFirstPhoto.LocationOrURL
+                                    ROW_NUMBER() OVER ( ORDER BY tblmo.[n_objectid] ) AS [rn] ,
+                                    tbl_IsFlaggedRecord.RecordID ,
+                                    tblFirstPhoto.LocationOrURL ,
+                                    tbl_OrgCode.OrganizationCodeID ,
+                                    tbl_FGC.FundingGroupCodeID
                           FROM      dbo.MaintenanceObjects AS tblmo
-                                    JOIN ( SELECT   tbl_Area.n_areaid ,
-                                                    tbl_Area.areaid
-                                           FROM     dbo.Areas tbl_Area
-                                           WHERE    ( ( @areaFilteringOn = 'Y'
-                                                        AND EXISTS ( SELECT recordMatches.AreaFilterID
-                                                                     FROM   dbo.UsersAreaFilter AS recordMatches
-                                                                     WHERE  tbl_Area.n_areaid = recordMatches.AreaFilterID
-                                                                            AND recordMatches.UserID = " + requestor + @"
-                                                                            AND recordMatches.FilterActive = 'Y' )
-                                                      )
-                                                      OR ( @areaFilteringOn = 'N' )
-                                                    )
-                                         ) tblarea ON tblmo.n_areaid = tblarea.n_areaid
-                                    JOIN ( SELECT   n_locationid ,
-                                                    locationid
-                                           FROM     dbo.locations
-                                         ) tbllocation ON tblmo.n_locationid = tbllocation.n_locationid
+                                    INNER JOIN ( SELECT tbl_Area.n_areaid ,
+                                                        tbl_Area.areaid
+                                                 FROM   dbo.Areas tbl_Area
+                                                 WHERE  ( ( @areaFilteringOn = 'Y'
+                                                            AND EXISTS ( SELECT recordMatches.AreaFilterID
+                                                                         FROM   dbo.UsersAreaFilter AS recordMatches
+                                                                         WHERE  tbl_Area.n_areaid = recordMatches.AreaFilterID
+                                                                                AND recordMatches.UserID = " + requestor + @"
+                                                                                AND recordMatches.FilterActive = 'Y' )
+                                                          )
+                                                          OR ( @areaFilteringOn = 'N' )
+                                                        )
+                                               ) tblarea ON tblmo.n_areaid = tblarea.n_areaid
+                                    INNER JOIN ( SELECT n_locationid ,
+                                                        locationid
+                                                 FROM   dbo.locations
+                                               ) tbllocation ON tblmo.n_locationid = tbllocation.n_locationid
+                                    INNER JOIN ( SELECT dbo.OrganizationCodes.n_OrganizationCodeID ,
+                                                        dbo.OrganizationCodes.OrganizationCodeID
+                                                 FROM   dbo.OrganizationCodes
+                                               ) tbl_OrgCode ON tbl_OrgCode.n_OrganizationCodeID = tblmo.n_OrganizationCodeID
+                                    INNER JOIN ( SELECT dbo.FundingGroupCodes.n_FundingGroupCodeID ,
+                                                        dbo.FundingGroupCodes.FundingGroupCodeID
+                                                 FROM   dbo.FundingGroupCodes
+                                               ) tbl_FGC ON tbl_FGC.n_FundingGroupCodeID = tblmo.n_FundingGroupCodeID
                                     LEFT JOIN ( SELECT  dbo.UsersFlaggedRecords.RecordID ,
                                                         dbo.UsersFlaggedRecords.n_objectid
                                                 FROM    dbo.UsersFlaggedRecords
                                                 WHERE   dbo.UsersFlaggedRecords.UserID = " + requestor + @"
                                                         AND dbo.UsersFlaggedRecords.n_objectid > 0
                                               ) tbl_IsFlaggedRecord ON tblmo.n_objectid = tbl_IsFlaggedRecord.n_objectid
-                                    LEFT JOIN ( SELECT TOP 1 dbo.Attachments.LocationOrURL ,
-                                                        dbo.Attachments.n_MaintObjectID
-                                                FROM    dbo.Attachments
-                                              ) tblFirstPhoto ON tblmo.n_objectid = tblFirstPhoto.n_MaintObjectID                                
-                          WHERE     ( ( [objectid] + ' ' + [description] + ' ' + [areaid] + ' ' + [locationid] + ' ' + [assetnumber] ) LIKE @filter )
+							                  OUTER apply ( SELECT TOP 1  tblAttach.LocationOrURL ,
+                                                        tblAttach.n_MaintObjectID
+                                                FROM    dbo.Attachments tblAttach
+								                WHERE tblAttach.n_MaintObjectID = tblmo.n_objectid 
+                                              ) tblFirstPhoto 
+                          WHERE     ( ( [objectid] + ' ' + [description] + ' ' + [areaid] + ' ' + [locationid] + ' ' + [assetnumber] + ' ' + [OrganizationCodeID] + ' ' + [FundingGroupCodeID] ) LIKE @filter )
                                     AND tblmo.b_active = 'Y'
                                     AND tblmo.n_objectid > 0
                         ) AS st
-                    WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
+		                WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
+            //@"DECLARE @areaFilteringOn VARCHAR(1)
+            //--Setup Area Filering Variable
+            //IF ( ( SELECT   COUNT(dbo.UsersAreaFilter.RecordID)
+            //       FROM     dbo.UsersAreaFilter WITH ( NOLOCK )
+            //       WHERE    UsersAreaFilter.UserID = " + requestor + @"
+            //                AND UsersAreaFilter.FilterActive = 'Y'
+            //     ) <> 0 )
+            //    BEGIN
+            //        SET @areaFilteringOn = 'Y'
+            //    END
+            //ELSE
+            //    BEGIN
+            //        SET @areaFilteringOn = 'N'
+            //    END
+
+            //SELECT  [n_objectid] ,
+            //        [objectid] ,
+            //        [description] ,
+            //        [areaid] ,
+            //        [locationid] ,
+            //        [assetnumber],
+            //        CASE ISNULL(RecordID, -1)
+            //          WHEN -1 THEN 'N'
+            //          ELSE 'Y'
+            //        END AS [Following] ,
+            //        isnull(LocationOrURL, '') AS LocationOrURL
+            //FROM    ( SELECT    tblmo.[n_objectid] ,
+            //                    tblmo.[objectid] ,
+            //                    tblmo.[description] ,
+            //                    tblarea.[areaid] ,
+            //                    tbllocation.[locationid] ,
+            //                    tblmo.[assetnumber] ,
+            //                    ROW_NUMBER() OVER ( ORDER BY tblmo.[n_objectid] ) AS [rn],
+            //                    tbl_IsFlaggedRecord.RecordID,
+            //                   tblFirstPhoto.LocationOrURL
+            //          FROM      dbo.MaintenanceObjects AS tblmo
+            //                    JOIN ( SELECT   tbl_Area.n_areaid ,
+            //                                    tbl_Area.areaid
+            //                           FROM     dbo.Areas tbl_Area
+            //                           WHERE    ( ( @areaFilteringOn = 'Y'
+            //                                        AND EXISTS ( SELECT recordMatches.AreaFilterID
+            //                                                     FROM   dbo.UsersAreaFilter AS recordMatches
+            //                                                     WHERE  tbl_Area.n_areaid = recordMatches.AreaFilterID
+            //                                                            AND recordMatches.UserID = " + requestor + @"
+            //                                                            AND recordMatches.FilterActive = 'Y' )
+            //                                      )
+            //                                      OR ( @areaFilteringOn = 'N' )
+            //                                    )
+            //                         ) tblarea ON tblmo.n_areaid = tblarea.n_areaid
+            //                    JOIN ( SELECT   n_locationid ,
+            //                                    locationid
+            //                           FROM     dbo.locations
+            //                         ) tbllocation ON tblmo.n_locationid = tbllocation.n_locationid
+            //                    LEFT JOIN ( SELECT  dbo.UsersFlaggedRecords.RecordID ,
+            //                                        dbo.UsersFlaggedRecords.n_objectid
+            //                                FROM    dbo.UsersFlaggedRecords
+            //                                WHERE   dbo.UsersFlaggedRecords.UserID = " + requestor + @"
+            //                                        AND dbo.UsersFlaggedRecords.n_objectid > 0
+            //                              ) tbl_IsFlaggedRecord ON tblmo.n_objectid = tbl_IsFlaggedRecord.n_objectid
+            //                    LEFT JOIN ( SELECT TOP 1 dbo.Attachments.LocationOrURL ,
+            //                                        dbo.Attachments.n_MaintObjectID
+            //                                FROM    dbo.Attachments
+            //                              ) tblFirstPhoto ON tblmo.n_objectid = tblFirstPhoto.n_MaintObjectID                                
+            //          WHERE     ( ( [objectid] + ' ' + [description] + ' ' + [areaid] + ' ' + [locationid] + ' ' + [assetnumber] ) LIKE @filter )
+            //                    AND tblmo.b_active = 'Y'
+            //                    AND tblmo.n_objectid > 0
+            //        ) AS st
+            //    WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
 
             ObjectDataSource.SelectParameters.Clear();
             ObjectDataSource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
@@ -6187,9 +6325,28 @@ namespace Pages.PlannedJobs
 
             #endregion
 
+            #region Additional Details
+
+            //Check For Input
+            if (txtAdditionalInfo.Text.Length > 0)
+            {
+                //Check For Prior Value
+                if (HttpContext.Current.Session["txtAddDetail"] != null)
+                {
+                    //Remove Old One
+                    HttpContext.Current.Session.Remove("txtAddDetail");
+                }
+
+                //Add New Value
+                HttpContext.Current.Session.Add("txtAddDetail", txtAdditionalInfo.Text.Trim());
+            }
+
+            #endregion
+
+
             #region Cost Code
 
-        if (ComboCostCode.Value != null)
+            if (ComboCostCode.Value != null)
         {
         #region Combo Value
             //check for prior value

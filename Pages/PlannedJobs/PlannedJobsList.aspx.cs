@@ -364,7 +364,7 @@ namespace Pages.PlannedJobs
             if (Selection.Contains("n_jobstepid"))
             {
                 //Redirect To Edit Page With Job ID
-                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + Selection.Get("n_jobstepid"), true);
+                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + Selection.Get("n_jobstepid"), true);
             }
         }
 
@@ -377,7 +377,7 @@ namespace Pages.PlannedJobs
             if (Selection.Contains("n_jobstepid"))
             {
                 //Redirect To Edit Page With Job ID
-                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + Selection.Get("n_jobstepid"), true);
+                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + Selection.Get("n_jobstepid"), true);
             }
         }
 
@@ -509,7 +509,7 @@ namespace Pages.PlannedJobs
         {
             ResetSession();
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx", true);
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx", true);
         }
 
         protected void ASPxGridView1_HtmlRowPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
@@ -2853,7 +2853,7 @@ namespace Pages.PlannedJobs
                                 ref newStandardJobId))
                             {
                                 //Forward User To Copied Work Order
-                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepId, true);
+                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepId, true);
                             }
                             else
                             {

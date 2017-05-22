@@ -197,7 +197,7 @@
                         <dx:LayoutItem Caption="Object/Asset:" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxComboBox ID="ObjectIDCombo" TextFormatString="{0}- {1}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                    <dx:ASPxComboBox ID="ObjectIDCombo" TextFormatString="{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7} - {8}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
                                         <ClientSideEvents ValueChanged="function(s, e) { 
                                             var objectHasValue = ObjectIDCombo.GetValue();
                                                                                                     var selectedItem = s.GetSelectedItem();
@@ -225,10 +225,10 @@
                                             <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
                                             <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
                                             <dx:ListBoxColumn FieldName="assetnumber" Caption="Asset #" Width="50px" ToolTip="M-PET.NET Maintenance Object Asset Number"/>
-                                            <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
-                                            <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
                                             <dx:ListBoxColumn FieldName="OrganizationCodeID" Caption="Org. Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Org. Code ID" />
                                             <dx:ListBoxColumn FieldName="FundingGroupCodeID" Caption="Fund. Group Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Funding Group Code ID" />
+                                            <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
+                                            <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
                                         </Columns>
                                     </dx:ASPxComboBox>
                                 </dx:LayoutItemNestedControlContainer>

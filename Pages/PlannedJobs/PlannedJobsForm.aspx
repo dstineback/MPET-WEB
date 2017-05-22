@@ -282,7 +282,7 @@
 
     <%-- Heading Script Manager, HyperLinks, and Hidden Fields --%>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
-    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="Mulberry" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="Mulberry" runat="server" Text="Step: "></dx:ASPxLabel> <br />
+    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="Mulberry" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> >  <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="Mulberry" runat="server" Text="Step: "></dx:ASPxLabel> <br />
     <dx:ASPxHyperLink ID="myJobsBackLink" runat="server" Font-Size="16" Theme="Mulberry" Text="MY JOBS" NavigateUrl="~/Pages/PlannedJobs/myJobs.aspx" />
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxHiddenField ID="MultiGrid" ViewStateMode="Enabled"  ClientInstanceName="MultiGrid" runat="server"></dx:ASPxHiddenField>
@@ -312,7 +312,7 @@
                                                                                                                     ValueField="n_objectid" 
                                                                                                                     OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" 
                                                                                                                     OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
-                                                                                                                    TextFormatString="{0} - {1}" 
+                                                                                                                    TextFormatString="{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7} - {8}" 
                                                                                                                     Width="90%" 
                                                                                                                     DropDownStyle="DropDown" 
                                                                                                                     Theme="iOS" 
@@ -347,6 +347,8 @@
                                         <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
                                         <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
                                         <dx:ListBoxColumn FieldName="assetnumber" Caption="Asset #" Width="50px" ToolTip="M-PET.NET Maintenance Object Asset Number"/>
+                                        <dx:ListBoxColumn FieldName="OrganizationCodeID" Caption="Org. Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Org. Code ID" />
+                                        <dx:ListBoxColumn FieldName="FundingGroupCodeID" Caption="Fund. Group Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Funding Group Code ID" />
                                         <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
                                         <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
                                     </Columns>
@@ -606,13 +608,13 @@
             <dx:LayoutItem Caption="Procedures" Name="txtAdditionalInfo" CaptionSettings-Location="Top">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
-                        <dx:ASPxMemo runat="server" ID="txtAdditionalInfo" Width="90%" Theme="iOS" ClientInstanceName="txtAdditionalInfo"></dx:ASPxMemo>
+                        <dx:ASPxMemo runat="server" ID="txtAdditionalInfo" ReadOnly="true" Height="400px" Width="90%" Theme="iOS" ClientInstanceName="txtAdditionalInfo"></dx:ASPxMemo>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
             </dx:LayoutItem>
         
         <dx:LayoutItem Name="CrewGridViewLayoutItem" 
-                Caption="">
+                Caption="Add Crew Member" CaptionSettings-Location="Top">
             <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
                          <dx:ASPxGridView 
