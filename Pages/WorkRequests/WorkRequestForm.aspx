@@ -201,6 +201,8 @@
                                         <ClientSideEvents ValueChanged="function(s, e) { 
                                             var objectHasValue = ObjectIDCombo.GetValue();
                                                                                                     var selectedItem = s.GetSelectedItem();
+                                                                                                    console.log('object', objectHasValue);
+                                                                                                    console.log('selected object', selectedItem);
                                                                                                     if(objectHasValue!=null)
                                                                                                     {
                                                                                                         txtObjectDescription.SetText(selectedItem.GetColumnText('description'));

@@ -33,16 +33,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.BonusSkins.v17.1" />
-    <Reference Include="DevExpress.Data.v17.1" />
-    <Reference Include="DevExpress.Map.v17.1.Core, Version=17.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="DevExpress.Utils.v17.1" />
-    <Reference Include="DevExpress.Sparkline.v17.1.Core" />
-    <Reference Include="DevExpress.XtraEditors.v17.1" />
-    <Reference Include="DevExpress.RichEdit.v17.1.Export" />
-    <Reference Include="DevExpress.Printing.v17.1.Core" />
-    <Reference Include="DevExpress.XtraMap.v17.1, Version=17.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraPrinting.v17.1, Version=17.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.BonusSkins.v16.1" />
+    <Reference Include="DevExpress.Data.v16.1" />
+    <Reference Include="DevExpress.Map.v16.1.Core, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v16.1" />
+    <Reference Include="DevExpress.Sparkline.v16.1.Core" />
+    <Reference Include="DevExpress.XtraEditors.v16.1" />
+    <Reference Include="DevExpress.Printing.v16.1.Core" />
+    <Reference Include="DevExpress.XtraMap.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPrinting.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
