@@ -257,10 +257,6 @@
         <dx:ASPxHyperLink runat="server" ID="PlannedJobsBack" CssClass="mapbutton" Text="Back to Planned Jobs List" ForeColor="White" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"></dx:ASPxHyperLink>
         <dx:ASPxHyperLink runat="server" ID="RequestJobsBack" CssClass="mapbutton" Text="Back to Request List" ForeColor="White" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx"></dx:ASPxHyperLink>  
     </div>
-    <div>
-        <dx:ASPxTextBox ID="SerchBox" runat="server" Width="170px" OnTextChanged="SearchBox_TextChanged" Theme="iOS" >
-        </dx:ASPxTextBox>
-    </div>
     <div runat="server" id="map" ></div>
     <script type="text/javascript">
         if (map) {

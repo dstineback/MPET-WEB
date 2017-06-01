@@ -449,18 +449,10 @@ public partial class Pages_Map_MapForm : Page
             } catch { System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, check to make sure items have the correct Coordinates.');</script>"); };
     }
 
-    protected void Page_UnLoad()
-    {
-        
-    }
-
     protected void HomeBnt_Click(object sender, EventArgs e)
     {
         Response.Redirect("~/main.aspx");
     }
 
-    protected void SearchBox_TextChanged(object sender, EventArgs e)
-    {
-        var result = SerchBox.Value;
-    }
+   
 }

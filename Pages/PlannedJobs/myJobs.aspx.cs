@@ -109,9 +109,9 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             }
         }
 
-        Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/LindtTest");
+        Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
 
-        ConnectionStringSettings strConnString = rootWebConfig.ConnectionStrings.ConnectionStrings["connection"];
+        ConnectionStringSettings strConnString = rootWebConfig.ConnectionStrings.ConnectionStrings["ClientConnectionString"];
 
         //String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
 

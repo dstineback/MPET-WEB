@@ -248,8 +248,9 @@
     </script>
 
     <asp:ScriptManager ID="ScriptManger1" runat="server" EnablePartialRendering="true"></asp:ScriptManager>
-    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="iOS" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="iOS" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="iOS" runat="server" Text="Step: "></dx:ASPxLabel> <br />
-    <dx:ASPxHyperLink ID="myJobsBackLink" runat="server" Font-Size="16" Theme="iOS" Text="MY JOBS" NavigateUrl="~/Pages/PlannedJobs/myJobs.aspx" />
+    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="16px" Theme="iOS" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="iOS" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="iOS" runat="server" Text="Step: "></dx:ASPxLabel> <br />
+    <dx:ASPxHyperLink ID="WorkRequest" runat="server" Font-Size="16px" Theme="iOS" Text="WORK REQUEST" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx" />
+    <dx:ASPxHyperLink ID="myJobsBackLink" runat="server" Font-Size="16px" Theme="iOS" Text="MY JOBS" NavigateUrl="~/Pages/PlannedJobs/myJobs.aspx" />
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxHiddenField ID="MultiGrid" ViewStateMode="Enabled"  ClientInstanceName="MultiGrid" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxFormLayout runat="server" 
