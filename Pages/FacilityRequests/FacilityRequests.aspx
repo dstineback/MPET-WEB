@@ -46,21 +46,22 @@
                                                 ClientInstanceName="txtWorkDescription"
                                                 runat="server" 
                                                 Theme="iOS" Border-BorderStyle="Solid" Border-BorderColor="#cccccc" Border-BorderWidth="1px" >
-                                    <ValidationSettings SetFocusOnError="True" Display="Dynamic" ErrorDisplayMode="Text">
+                                    <ValidationSettings SetFocusOnError="True" Display="Dynamic" ErrorDisplayMode="ImageWithText" ErrorFrameStyle-BackColor="LightCoral">
                                         <RequiredField IsRequired="True" />
                                     </ValidationSettings>
                                 </dx:ASPxMemo>
                             </dx:LayoutItemNestedControlContainer>
-                        </LayoutItemNestedControlCollection>
-                        
-
+                        </LayoutItemNestedControlCollection>                      
                     </dx:LayoutItem>
 
                     <%--Object Combo Box--%>
                     <dx:LayoutItem Caption="Object/Asset:" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox ID="ObjectIDCombo" TextFormatString="{0}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                <dx:ASPxComboBox ID="ObjectIDCombo" ValidationSettings-ErrorFrameStyle-BackColor="LightCoral" TextFormatString="{0}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                    <ValidationSettings SetFocusOnError="True" Display="Dynamic" RequiredField-IsRequired="true" ErrorDisplayMode="ImageWithText">
+                                        <RequiredField IsRequired="True" />
+                                    </ValidationSettings>
                                     <ClientSideEvents ValueChanged="function(s, e) { 
                                         var objectHasValue = ObjectIDCombo.GetValue();
                                                                                                 var selectedItem = s.GetSelectedItem();
@@ -93,6 +94,7 @@
                                         <dx:ListBoxColumn FieldName="OrganizationCodeID" Caption="Org. Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Org. Code ID" />
                                         <dx:ListBoxColumn FieldName="FundingGroupCodeID" Caption="Fund. Group Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Funding Group Code ID" />
                                     </Columns>
+                                    
                                 </dx:ASPxComboBox>
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>

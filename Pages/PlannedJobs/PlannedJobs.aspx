@@ -71,7 +71,7 @@
                 self.sizeCellStyle = sizeCellStyle;
                 self.useExtendedPopup = useExtendedPopup;
             }
-        };
+        }; 
 
         function onFileUploadComplete(s, e) {
             if (e.callbackData) {
