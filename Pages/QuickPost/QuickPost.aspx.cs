@@ -529,6 +529,57 @@ namespace Pages.QuickPost
                 Master.ShowPostButton = false;
             }
 
+
+            //Clear Prior Selection If Edit Check Is No Longer Visible
+            //if (!(CrewGrid.Columns[0].Visible))
+            //{
+            //    //Uncheck All
+            //    CrewGrid.Selection.UnselectAll();
+            //}
+            //else
+            //{
+            //    //Make Sure Settings Are Right
+            //    CrewGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            //}
+
+            ////Clear Prior Selection If Edit Check Is No Longer Visible
+            //if (!(MemberGrid.Columns[0].Visible))
+            //{
+            //    //Uncheck All
+            //    MemberGrid.Selection.UnselectAll();
+            //}
+            //else
+            //{
+            //    //Make Sure Settings Are Right
+            //    MemberGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            //}
+
+            ////Clear Prior Selection If Edit Check Is No Longer Visible
+            //if (!(PartGrid.Columns[0].Visible))
+            //{
+            //    //Uncheck All
+            //    PartGrid.Selection.UnselectAll();
+            //}
+            //else
+            //{
+            //    //Make Sure Settings Are Right
+            //    PartGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            //}
+
+            ////Clear Prior Selection If Edit Check Is No Longer Visible
+            //if (!(EquipGrid.Columns[0].Visible))
+            //{
+            //    //Uncheck All
+            //    EquipGrid.Selection.UnselectAll();
+            //}
+            //else
+            //{
+            //    //Make Sure Settings Are Right
+            //    EquipGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+            //}
+
+
+
             #endregion
             #region Check for MultiGrid
             //Check For MultiGrid
@@ -7450,12 +7501,16 @@ namespace Pages.QuickPost
 
         protected void GetJobID()
         {
-            //Set Defaults      
+            //Set Defaults
+            const bool requestOnly = true;
             const int actionPriority = -1;
+            const int mobileEquip = -1;
             const bool additionalDamage = false;
             const decimal percentOverage = 0;
-            const int subAssemblyID = -1;        
+            const int subAssemblyID = -1;
+            var newJobID = "";
             var errorFromJobIDGeneration = "";
+            var poolTypeForJob = JobPoolType.Global;
 
             //Get Requestor
             var requestor = _oLogon.UserID;
@@ -7643,8 +7698,11 @@ namespace Pages.QuickPost
 
         protected void GetJobIDStepID()
         {
+
+
             #region Setting Vars to use in Stored Procedures from Session
-           
+            var jobAgainstArea = 0;
+            const bool requestOnly = true;
             const int actionPriority = -1;
             const int mobileEquip = -1;
             const bool additionalDamage = false;
@@ -7654,10 +7712,27 @@ namespace Pages.QuickPost
             var gpsX = 0;
             var gpsY = 0;
             var gpsZ = 0;
-            
+            var jobStepConcurNumber = -1;
+            var jobStepFollowStepNumber = -1;
+            var jobStatus = -1;
+            var jobLaborClass = -1;
+            var jobGroup = -1;
+
+            var jobShift = -1;
+            var jobSupervisor = -1;
+            var jobActualDt = 0;
+            var jobEstimatedDt = 0;
+            var jobEstimatedLen = 0;
+            var jobRemainingDt = 0;
+            var jobRemainingLen = 0;
+            var jobReturnWithin = 0;
+            var jobRouteTo = -1;
             var jobCompletedBy = requestor;
             JobType jobType = JobType.Corrective;
-           
+            //Title
+            var newJobID = "";
+            var errorFromJobIDGeneration = "";
+            var poolTypeForJob = JobPoolType.Global;
             //Create ID
             var plannerdJobStepId = -1;
             //Create Class
@@ -7667,6 +7742,8 @@ namespace Pages.QuickPost
             {
                 jobType = JobType.Breakdown;
             }
+
+            var success = false;
 
             #region Get Logon Info
 
@@ -7841,6 +7918,9 @@ namespace Pages.QuickPost
 
             #endregion
 
+
+
+
             #region Post Deafaults
             var postDefaults = false;
             if (chkPostDefaults.Checked == true)
@@ -8009,7 +8089,7 @@ namespace Pages.QuickPost
             #region Update Job and Job cost codes
                     //Get Job From Session
                     
-            var jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
+                   var jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString());
 
             try
             {
@@ -8060,6 +8140,8 @@ namespace Pages.QuickPost
                     //Set Text
                     lblHeader.Text = "Job ID: " + (HttpContext.Current.Session["AssignedJobID"].ToString());
 
+
+
                     //Update Costing Information
                     if (!_oJob.UpdateJobCosting(_oJob.RecordID,
                         costCodeId,
@@ -8072,14 +8154,26 @@ namespace Pages.QuickPost
                         controlSection,
                         _oLogon.UserID))
                     {
-                        
+                        ////Return False To Prevent Navigation
+                        //return false;
                     }
-                }              
+
+
+
+                    ////Return True
+                    //return true;
+                }
+
+                ////Return False To Prevent Navigation
+                //return false;
             }
             catch (Exception ex)
             {
                 //Show Error
                 Master.ShowError(ex.Message);
+
+                ////Return False To Prevent Navigation
+                //return false;
             }
 
             #endregion
@@ -8133,6 +8227,9 @@ namespace Pages.QuickPost
                         }
                     }
                 }
+
+
+
 
                 //Add Default Step
                 if (oJobStep.InsertDefaultJobStep(recordToPlan,
@@ -8243,7 +8340,12 @@ namespace Pages.QuickPost
             Master.ShowPostButton = true;
 
             NextStepButton.Enabled = false;
-            txtWorkDescription.Enabled = false;      
+            txtWorkDescription.Enabled = false;
+            //ObjectIDCombo.Enabled = false;
+            //txtObjectDescription.Enabled = false;
+            //txtObjectArea.Enabled = false;
+            //txtObjectLocation.Enabled = false;
+            //txtObjectAssetNumber.Enabled = false;          
             txtJobLength.Enabled = false;
             comboHwyRoute.Enabled = false;
             comboMilePostDir.Enabled = false;
