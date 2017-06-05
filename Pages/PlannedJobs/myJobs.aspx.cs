@@ -150,7 +150,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         //Sql Stored Procedure connection
        // String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
 
-            using (SqlConnection con = new SqlConnection(strConnString))
+            using (SqlConnection con = new SqlConnection(strConnString.ConnectionString))
 
             {
                 SqlCommand cmd = new SqlCommand();
