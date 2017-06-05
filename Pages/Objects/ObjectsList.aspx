@@ -7,7 +7,7 @@
     <script type="text/javascript">
 
         function OnGetRowId(idValue) {
-            debugger;
+            
             Selection.Set('objectid', idValue[0].toString());
             Selection.Set('n_objectid', idValue[1].toString());
             Selection.Set('Longitude', idValue[2].toString());

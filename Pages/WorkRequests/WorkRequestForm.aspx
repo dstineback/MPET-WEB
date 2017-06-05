@@ -157,7 +157,58 @@
         }
 
     </script>
+    <script>
+        var isWebStorageSupported = false;
+
+        window.onload = function () {
+            if (typeof (Storage) !== "undefined") {
+                //your browser supports web storage.
+                isWebStorageSupported = true;
+            }
+            else {
+                //your browser doesn't support web storage.
+                isWebStorageSupported = false;
+            }
+        }
+
+        var nobjectid = localStorage.getItem("nobjectid");
+        var objectid = localStorage.getItem("objectid");
+        var description = localStorage.getItem("description");
+        var area = localStorage.getItem("area");
+        if (area === "undefined") {
+            area = " ";
+        }
+        var locationID = localStorage.getItem("locationID");
+        if (locationID === "undefined") {
+            locationID = " ";
+        }
+        var assetNumber = localStorage.getItem("assetNumber");
+        if (assetNumber === "undefined") {
+            assetNumber = " ";
+        }
+
+
+        function onInit() {
+            ObjectIDCombo.SetValue(nobjectid);
+            ObjectIDCombo.SetText(nobjectid + " " + "-" + " " + objectid + " " + "-" + " " + description);
+            txtObjectDescription.SetValue(description);
+            txtObjectDescription.SetText(description);
+
+            //txtObjectArea.SetValue(area);
+            //txtObjectArea.SetText(area);
+            //txtObjectLocation.SetValue(locationID);
+            //txtObjectLocation.SetText(locationID);
+            //txtObjectAssetNumber.SetValue(assetNumber);
+            //txtObjectAssetNumber.SetText(assetNumber);
+
+            localStorage.clear();
+
+        }
+    </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
+    <dx:ASPxHiddenField runat="server">
+        <ClientSideEvents Init="onInit" />
+    </dx:ASPxHiddenField>
     <dx:ASPxHyperLink ID="WorkRequestListBackLink" runat="server" Font-Size="20px" Theme="iOS" Text="WORK REQUEST" NavigateUrl="RequestsList.aspx" />
     <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="iOS" runat="server" Text="ADD"></dx:ASPxLabel>
     <dx:ASPxHiddenField ID="Navigation" ViewStateMode="Enabled"  ClientInstanceName="Navigation" runat="server"></dx:ASPxHiddenField>
@@ -197,10 +248,12 @@
                         <dx:LayoutItem Caption="Object/Asset:" CaptionSettings-Location="Top">
                             <LayoutItemNestedControlCollection>
                                 <dx:LayoutItemNestedControlContainer runat="server">
-                                    <dx:ASPxComboBox ID="ObjectIDCombo" TextFormatString="{0}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                    <dx:ASPxComboBox ID="ObjectIDCombo" TextFormatString="{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7} - {8}" runat="server" EnableCallbackMode="true" CallbackPageSize="10" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
                                         <ClientSideEvents ValueChanged="function(s, e) { 
                                             var objectHasValue = ObjectIDCombo.GetValue();
                                                                                                     var selectedItem = s.GetSelectedItem();
+                                                                                                    console.log('object', objectHasValue);
+                                                                                                    console.log('selected object', selectedItem);
                                                                                                     if(objectHasValue!=null)
                                                                                                     {
                                                                                                         txtObjectDescription.SetText(selectedItem.GetColumnText('description'));
@@ -225,10 +278,10 @@
                                             <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
                                             <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
                                             <dx:ListBoxColumn FieldName="assetnumber" Caption="Asset #" Width="50px" ToolTip="M-PET.NET Maintenance Object Asset Number"/>
-                                            <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
-                                            <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
                                             <dx:ListBoxColumn FieldName="OrganizationCodeID" Caption="Org. Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Org. Code ID" />
                                             <dx:ListBoxColumn FieldName="FundingGroupCodeID" Caption="Fund. Group Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Funding Group Code ID" />
+                                            <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
+                                            <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
                                         </Columns>
                                     </dx:ASPxComboBox>
                                 </dx:LayoutItemNestedControlContainer>

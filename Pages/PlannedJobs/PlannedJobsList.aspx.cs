@@ -58,7 +58,7 @@ namespace Pages.PlannedJobs
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
                     Master.ShowMultiSelectButton = _userCanDelete;
                     Master.ShowPrintButton = _userCanView;
-                    Master.ShowMapDisplayButton = _userCanView;
+                    Master.ShowMapDisplayButton = _userCanEdit;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = false;
                     
@@ -264,7 +264,7 @@ namespace Pages.PlannedJobs
             Master.ShowBatchEquipmentButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowBatchPartButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowPostButton = (_userCanEdit);
-            Master.ShowMapDisplayButton = _userCanView;
+            Master.ShowMapDisplayButton = false;
             Master.ShowForcePmButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowRoutineJobButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
 
@@ -301,11 +301,7 @@ namespace Pages.PlannedJobs
             return rightsLoaded;
         }
 
-        //protected void PlannedGrid_DataBinding(object sender, EventArgs e)
-        //{
-        //    // Assign the data source in grid_DataBinding
-        //    PlannedGrid.DataSource = GetData(PlannedGrid.FilterExpression);
-        //}
+       
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -330,8 +326,11 @@ namespace Pages.PlannedJobs
 
         protected string GetUrl(GridViewDataItemTemplateContainer container)
         {
+            ResetSession();
+            var jobid = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobid" });
             var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
-            return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+           
+            return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
         }
 
         /// <summary>

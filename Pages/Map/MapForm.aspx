@@ -53,13 +53,14 @@
 <body runat="server" >
     <script type="text/javascript">
         var markers = [];
+        
     </script>
     
   <div id="repeaters" runat="server" style="display:none;">
      <asp:Repeater ID="rptJobStepMarkers" runat="server">
         <ItemTemplate>
-                      <p>PLease work</p>            
-                jobid: <%# Eval("jobID")%>,
+                                  
+                "jobid": <%# Eval("jobID")%>,
                 "njobid": <%# Eval("njobid")%>, 
                 "jobstepid": <%# Eval("jobstepid")%>,                                                
                 "lat": <%# Eval("Latitude") %>,
@@ -89,7 +90,7 @@
                    
                      
                      window.markers = window.markers || [];
-                     markers.push({'jobid': '<%# Eval("jobID") %>','njobid': '<%# Eval("njobid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>'});
+                     markers.push({'jobid': '<%# Eval("jobID") %>','njobid': '<%# Eval("njobid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','description': '<%# Eval("description") %>'});
                     </script>
                 </ItemTemplate>
                 <SeparatorTemplate>
@@ -98,20 +99,20 @@
         </asp:Repeater>
     <asp:Repeater ID="rptObjectMarkers" runat="server"  >
         <ItemTemplate>
-            {          
+            {
                 "objectid": '<%# Eval("objectid")%>',               
                 "nobjectid": '<%# Eval("nobjectid")%>',
                 "lat": '<%# Eval("Latitude") %>',
                 "lng": '<%# Eval("Longitude") %>',
-                "objectDescription": '<%# Eval("objectDescription") %>',
-                <%--"Area": '<%# Eval("Area") %>',
+                "objectDescription": '<%# Eval("objectDescription") %>', 
+                "Area": '<%# Eval("Area") %>',
                 "AssetNumber": '<%# Eval("AssetNumber") %>',
-                "LocationID": '<%# Eval("LocationID") %>',--%>
+                "LocationID": '<%# Eval("LocationID") %>',
             }
             <script type="text/javascript" >
                 
                 window.markers = window.markers || [];
-                markers.push({'nobjectid': '<%# Eval("nobjectid") %>','objectid': '<%# Eval("objectid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','objectDescription': '<%# Eval("objectDescription") %>'});
+                markers.push({'nobjectid': '<%# Eval("nobjectid") %>','objectid': '<%# Eval("objectid") %>','lat': '<%# Eval("Latitude") %>', 'lng': '<%# Eval("Longitude") %>','objectDescription': '<%# Eval("objectDescription") %>', 'Area': '<%# Eval("Area") %>', 'AssetNumber': '<%# Eval("AssetNumber") %>', 'LocationID': '<%# Eval("LocationID") %>'});
             </script>
         </ItemTemplate>
         <SeparatorTemplate>
@@ -145,6 +146,9 @@
             var lat = String(data.lat);
             var lng = String(data.lng);
             var nobjectid = String(data.nobjectid);
+            var area = String(data.Area);
+            var assetNumber = String(data.AssetNumber);
+            var locationID = String(data.LocationID);
             
             var myLatlng = new google.maps.LatLng(lat, lng);
             var marker = new google.maps.Marker({
@@ -156,7 +160,10 @@
                 step: data.jobstepid,
                 njobid: data.njobid,
                 objectDescription: data.objectDescription,
-                nobjectid: data.nobjectid
+                nobjectid: data.nobjectid,
+                area: data.Area,
+                assetNumber: data.AssetNumber,
+                locationID: data.LocationID,
             });          
             (function (marker, data) {
                 google.maps.event.addListener(marker, "click", function (e) {
@@ -167,6 +174,14 @@
                         return;
                     } else { };
                     if(data.objectid != null && jobstepid === "undefined" && jobid === "undefined"){
+                        
+                        localStorage.setItem("nobjectid", data.nobjectid);
+                        localStorage.setItem("objectid", data.object);
+                        localStorage.setItem("description", data.objectDescription);
+                        localStorage.setItem("area", data.Area);
+                        localStorage.setItem("assetNumber", data.AssetNumber);
+                        localStorage.setItem("locationID", data.LocationID);
+
                         mInfoWindow.setContent('<h1>Objects</h1>'  + '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>'  + '<a href="../../Pages/QuickPost/QuickPost.aspx">' + 'Make a Quick Post' + '</a>' + '<br>' +'Object ID: ' +  data.objectid + 'Description: ' + data.objectDescription + '</div>')
                         mInfoWindow.open(map, marker);
                         return;
@@ -194,15 +209,20 @@
             for (var i = 0; i < markers.length; i++){
                 var marker = markers[i];
                 var id = marker.nobjectid;
-                localStorage.setItem("objectid", marker.nobjectid)
+                localStorage.setItem("nobjectid", marker.nobjectid);
+                localStorage.setItem("objectid", marker.object);
+                localStorage.setItem("description", marker.objectDescription);
+                localStorage.setItem("area", marker.area);
+                localStorage.setItem("assetNumber", marker.assetNumber);
+                localStorage.setItem("locationID", marker.locationID);
+
                 if(marker.object != null){
                     content += ('<div id="mapInfoWindow">');
                     content += ('Object ID:' +  ' '  + marker.object);
                     content += ("&nbsp");
-                    content += 'Description:' + ' ' + marker.objectDescription;
+                    content += 'Description:' + ' ' + marker.objectDescription + '<a href="../../Pages/QuickPost/QuickPost.aspx">' + 'Quick Post' + '</a>';
                     content += ("<br>"); 
-                    content += ('</div>');
-                    
+                    content += ('</div>');                                      
                 };
                 if(marker.jobid != null && marker.njobid > 0 && marker.step == null){ 
                     content += ('<div id="mapInfoWindow">');

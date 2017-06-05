@@ -109,9 +109,9 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             }
         }
 
-        Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/LindtTest");
+        Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
 
-        ConnectionStringSettings strConnString = rootWebConfig.ConnectionStrings.ConnectionStrings["connection"];
+        ConnectionStringSettings strConnString = rootWebConfig.ConnectionStrings.ConnectionStrings["ClientConnectionString"];
 
         //String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
 
@@ -178,6 +178,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
                 con.Open();
                 
                 myJobsGrid.DataSource = cmd.ExecuteReader();
+                var x = myJobsGrid.DataSource;
                 myJobsGrid.DataBind();
                 
                
@@ -207,7 +208,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         if (true)
         {
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
         }
         else
         {

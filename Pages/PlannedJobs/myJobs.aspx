@@ -4,7 +4,7 @@
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">MY Jobs</asp:Content>
 <asp:Content runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <h1>MY JOBS</h1>
-    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="1012px" AutoGenerateColumns="False" EnableTheming="True" SettingsBehavior-AllowFocusedRow="false" SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid" SettingsText-EmptyDataRow="No Data" SettingsText-EmptyHeaders="No Data">
+    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="IOS" Width="100%" AutoGenerateColumns="False" EnableTheming="True" SettingsBehavior-AllowFocusedRow="false" SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid" SettingsText-EmptyDataRow="No Data" SettingsText-EmptyHeaders="No Data">
         <SettingsAdaptivity AdaptivityMode="HideDataCells"></SettingsAdaptivity>
         <Styles>
             <Header CssClass="gridViewHeader"></Header>
@@ -283,5 +283,4 @@
 &nbsp;
     
    
-
 </asp:Content>

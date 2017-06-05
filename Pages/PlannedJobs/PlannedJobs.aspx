@@ -71,7 +71,7 @@
                 self.sizeCellStyle = sizeCellStyle;
                 self.useExtendedPopup = useExtendedPopup;
             }
-        };
+        }; 
 
         function onFileUploadComplete(s, e) {
             if (e.callbackData) {
@@ -281,8 +281,7 @@
         }
 
         function onHyperLinkClick(sender) {
-            //console.log('sender', sender);
-            //window._xyz = sender.GetMainElement();
+            
             var s = sender.GetMainElement();
           
             var crewGrid = s.parentNode.parentNode;
@@ -300,10 +299,59 @@
             crewGrid.dispatchEvent(dblClick);
         }
 
-      
+    </script>
+    <script>
+        var isWebStorageSupported = false;
 
+        window.onload = function () {
+            if (typeof (Storage) !== "undefined") {
+                //your browser supports web storage.
+                isWebStorageSupported = true;
+            }
+            else {
+                //your browser doesn't support web storage.
+                isWebStorageSupported = false;
+            }
+        }
+
+        var nobjectid = localStorage.getItem("nobjectid");
+        var objectid = localStorage.getItem("objectid");
+        var description = localStorage.getItem("description");
+        var area = localStorage.getItem("area");
+        if (area === "undefined") {
+            area = " ";
+        }
+        var locationID = localStorage.getItem("locationID");
+        if (locationID === "undefined") {
+            locationID = " ";
+        }
+        var assetNumber = localStorage.getItem("assetNumber");
+        if (assetNumber === "undefined") {
+            assetNumber = " ";
+        }
+
+
+        function onInit() {
+            //ObjectIDCombo.SetValue(nobjectid);
+            //ObjectIDCombo.SetText(nobjectid + " " + "-" + " " + objectid + " " + "-" + " " + description);
+            //txtObjectDescription.SetValue(description);
+            //txtObjectDescription.SetText(description);
+
+            //txtObjectArea.SetValue(area);
+            //txtObjectArea.SetText(area);
+            //txtObjectLocation.SetValue(locationID);
+            //txtObjectLocation.SetText(locationID);
+            //txtObjectAssetNumber.SetValue(assetNumber);
+            //txtObjectAssetNumber.SetText(assetNumber);
+
+            localStorage.clear();
+
+        }
     </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
+    <dx:ASPxHiddenField runat="server" >
+        <ClientSideEvents Init="onInit" />
+    </dx:ASPxHiddenField>
     <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="Mulberry" Text="PLANNED JOBS" NavigateUrl="~/Pages/PlannedJobs/PlannedJobsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel> > <dx:ASPxLabel ID="lblStep" Font-size="20px" Theme="Mulberry" runat="server" Text="Step: "></dx:ASPxLabel> <br />
     <dx:ASPxHyperLink ID="myJobsBackLink" runat="server" Font-Size="16" Theme="Mulberry" Text="MY JOBS" NavigateUrl="~/Pages/PlannedJobs/myJobs.aspx" />
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField>
@@ -1868,8 +1916,7 @@
                                                                         _myRowClickObject.s = s;
                                                                         _myRowClickObject.e = e;
                                                                         
-                                                                        console.log('s', s);
-                                                                        console.log('e vis', e.visibleIndex);
+                                                                       
                                                                     }"
                                                                                 RowDblClick="function(s, e) {
                                                                                 window._myRowBblClickObject = window._myRowBblClickObject || {};
@@ -1877,9 +1924,7 @@
                                                                                 _myRowBblClickObject.e = e;
                                                                     
                                                                                 s.StartEditRow(e.visibleIndex);
-                                                                                console.log('s db', s);
-                                                                                
-                                                                                console.log('e vis db', e.visibleIndex);
+                                                                               
                                                                         
                                                                     }" />
                                                                 <Columns>

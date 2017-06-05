@@ -2863,21 +2863,46 @@ namespace Pages.FacilityRequests
 
         protected void submitButton_Click(object sender, EventArgs e)
         {
-            //Save Session Data
-            SaveSessionData();
+            if(txtWorkDescription.Text.Length < 1)
+            {
+                txtWorkDescription.Focus();
+                txtWorkDescription.BackColor = System.Drawing.Color.LightCoral;
+            }
 
-            //Update Job
-            AddRequest();
+            if(ObjectIDCombo.Text.Length < 1)
+            {
+                if(txtWorkDescription.Text.Length < 1)
+                {
+                    txtWorkDescription.Focus();
+                    txtWorkDescription.BackColor = System.Drawing.Color.LightCoral;
+                } else
+                {
+                    ObjectIDCombo.Focus();
+                    ObjectIDCombo.BackColor = System.Drawing.Color.LightCoral;
 
-            var savedID = Session["AssignedJobID"];
+                }
 
-            //System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Work Request Created. "+ savedID + "');</script>");
+            }
 
-            Response.Write("<script language='javascript'>window.alert('Work Request Created. " + savedID + "');window.location='./../../main.aspx';</script>");
+            if(txtWorkDescription.Text.Length > 0 && ObjectIDCombo.Text.Length > 0)
+            {
+                //Save Session Data
+                SaveSessionData();
 
-            //Response.Write("<script language='javascript'>window.alert('Work Request Created. "+ savedID + "');window.location='/main.aspx';</script>");
+                //Update Job
+                AddRequest();
 
-            //Response.Redirect("~/main.aspx");
+                var savedID = Session["AssignedJobID"];
+
+                //System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Work Request Created. "+ savedID + "');</script>");
+
+                Response.Write("<script language='javascript'>window.alert('Work Request Created. " + savedID + "');window.location='./../../main.aspx';</script>");
+
+                //Response.Write("<script language='javascript'>window.alert('Work Request Created. "+ savedID + "');window.location='/main.aspx';</script>");
+
+                //Response.Redirect("~/main.aspx");
+
+            }
         }
     }
 }

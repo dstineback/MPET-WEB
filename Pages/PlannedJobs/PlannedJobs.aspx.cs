@@ -143,7 +143,7 @@ namespace Pages.PlannedJobs
                 {
                     //Setup For Adding
                     SetupForAdding();
-                    StepTab.ActiveTabIndex = 0;
+                    StepTab.ActiveTabIndex = 0;  
 
                     //Check Tab
                     if (requestTab.ActiveTabIndex == 1)
