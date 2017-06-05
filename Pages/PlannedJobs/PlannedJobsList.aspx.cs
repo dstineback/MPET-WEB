@@ -40,12 +40,14 @@ namespace Pages.PlannedJobs
             {
                 //Get Logon Info From Session
                 _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+                this.Session["UserID"] = _oLogon.UserID;
 
                 //Load Form Permissions
                 if (FormSetup(_oLogon.UserID))
                 {
                     //Setup Buttons
                     Master.ShowSaveButton = false;
+                    Master.ShowPostButton = _userCanEdit;
                     Master.ShowNewButton = _userCanAdd;
                     Master.ShowEditButton = _userCanEdit;
                     Master.ShowDeleteButton = _userCanDelete;
@@ -55,9 +57,11 @@ namespace Pages.PlannedJobs
                     Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd);
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
                     Master.ShowMultiSelectButton = _userCanDelete;
-                    Master.ShowPrintButton = true;
+                    Master.ShowPrintButton = _userCanView;
+                    Master.ShowMapDisplayButton = _userCanEdit;
                     Master.ShowPdfButton = false;
-                    Master.ShowXlsButton = true;
+                    Master.ShowXlsButton = false;
+                    
                 }
             }
 
@@ -108,16 +112,23 @@ namespace Pages.PlannedJobs
                             PrintSelectedRow();
                             break;
                         }
-                        case "ExportPDF":
+                        case "MapDisplay":
                         {
-                            //Call Export PDF Option
-                            ExportPdf();
-                            break;
+                                //Call Map Display
+                                MapItem();
+                                //break
+                                break;
                         }
                         case "ExportXLS":
                         {
                             //Call Export XLS Option
                             ExportXls();
+                            break;
+                        }
+                        case "ExportPDF":
+                        {
+                            //Call Export PDF Option
+                            ExportPdf();
                             break;
                         }
                         case "MultiSelect":
@@ -142,6 +153,7 @@ namespace Pages.PlannedJobs
                             //break
                             break;
                         }
+                        
                         case"BatchCrewAdd":
                         {
                             //Bind Grid
@@ -251,7 +263,8 @@ namespace Pages.PlannedJobs
             Master.ShowBatchSupervisorAddButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowBatchEquipmentButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowBatchPartButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
-            Master.ShowPostButton = ((PlannedGrid.Columns[0].Visible) && _userCanEdit);
+            Master.ShowPostButton = (_userCanEdit);
+            Master.ShowMapDisplayButton = false;
             Master.ShowForcePmButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
             Master.ShowRoutineJobButton = !((PlannedGrid.Columns[0].Visible) && _userCanEdit);
 
@@ -288,11 +301,7 @@ namespace Pages.PlannedJobs
             return rightsLoaded;
         }
 
-        //protected void PlannedGrid_DataBinding(object sender, EventArgs e)
-        //{
-        //    // Assign the data source in grid_DataBinding
-        //    PlannedGrid.DataSource = GetData(PlannedGrid.FilterExpression);
-        //}
+       
 
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -317,8 +326,11 @@ namespace Pages.PlannedJobs
 
         protected string GetUrl(GridViewDataItemTemplateContainer container)
         {
+            ResetSession();
+            var jobid = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobid" });
             var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
-            return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+           
+            return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
         }
 
         /// <summary>
@@ -458,7 +470,7 @@ namespace Pages.PlannedJobs
         private void PrintSelectedRow()
         {
             //Check For Row Value In Hidden Field (Set Via JS)
-            if (Selection.Contains("n_Jobid"))
+            if (Selection.Contains("n_jobstepid"))
             {
                 //Check For Previous Session Report Parm ID
                 if (HttpContext.Current.Session["ReportParm"] != null)
@@ -468,7 +480,7 @@ namespace Pages.PlannedJobs
                 }
 
                 //Add Session Report Parm ID
-                HttpContext.Current.Session.Add("ReportParm", Selection.Get("n_Jobid"));
+                HttpContext.Current.Session.Add("ReportParm", Selection.Get("n_jobstepid"));
 
                 //Check For Previous Report Name
                 if (HttpContext.Current.Session["ReportToDisplay"] != null)
@@ -478,17 +490,22 @@ namespace Pages.PlannedJobs
                 }
 
                 //Add Report To Display
-                HttpContext.Current.Session.Add("ReportToDisplay", "mltstpwo.rpt");
+                HttpContext.Current.Session.Add("ReportToDisplay","mltstpwo.rpt");
+
+                
 
                 //Redirect To Report Page
-                Response.Redirect("~/Reports/ViewReport.aspx", true);
+                Response.Redirect("~/Reports/ReportViewer.aspx", true);
+
+                
             }
         }
 
         private void AddNewRow()
         {
+            ResetSession();
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx", true);
         }
 
         protected void ASPxGridView1_HtmlRowPrepared(object sender, ASPxGridViewTableDataCellEventArgs e)
@@ -624,6 +641,569 @@ namespace Pages.PlannedJobs
             {
                 //Show Error
                 Master.ShowError(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Maps selected items on a Map display
+        /// </summary>
+        protected void MapItem()
+        {
+            var sel = Selection.Count;
+            var MapSelected = PlannedGrid.GetSelectedFieldValues("Jobid","n_jobid","n_jobstepid","Step Title","step","Object ID", "Latitude", "Longitude");
+
+        if(sel > 0 || MapSelected.Count > 0) { 
+
+                if (MapSelected.Count > 0)
+                {
+                    if (HttpContext.Current.Session["MapSelected"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("MapSelected");
+                    }
+                    HttpContext.Current.Session.Add("MapSelected", MapSelected);
+                }
+                //Check For Row Value In Hidden Field (Set Via JS)
+                if (Selection.Contains("n_jobstepid") )
+                {
+                    //Check For Previous Session Report Parm ID
+                    if (HttpContext.Current.Session["jobstepid"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("jobstepid");
+                        //Add Session Report Parm ID
+                    }
+                    HttpContext.Current.Session.Add("jobstepid", Selection.Get("n_jobstepid"));
+
+
+                    //Check For Previous Session Report Parm ID
+                    if (HttpContext.Current.Session["Latitude"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("Latitude");
+                    }
+                    //Add Session Report Parm ID
+                    HttpContext.Current.Session.Add("Latitude", Selection.Get("Latitude"));
+
+
+                    //Check For Previous Session Report Parm ID
+                    if (HttpContext.Current.Session["Longitude"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("Longitude");
+                    }
+                    //Add Session Report Parm ID
+                    HttpContext.Current.Session.Add("Longitude", Selection.Get("Longitude"));
+
+                    if (HttpContext.Current.Session["description"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("description");
+                    }
+
+                    HttpContext.Current.Session.Add("description", Selection.Get("Step Title"));
+
+                    if(HttpContext.Current.Session["jobid"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("jobid");
+                    }
+                    HttpContext.Current.Session.Add("jobid", Selection.Get("Jobid"));
+
+                    if(HttpContext.Current.Session["n_jobid"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("n_jobid");
+                    }
+                    HttpContext.Current.Session.Add("njobid", Selection.Get("n_jobid"));
+
+                    if (HttpContext.Current.Session["step"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("step");
+                    }
+                    HttpContext.Current.Session.Add("step", Selection.Get("step"));
+
+                    if (HttpContext.Current.Session["objectid"] != null)
+                    {
+                        HttpContext.Current.Session.Remove("objectid");
+                    }
+                    HttpContext.Current.Session.Add("objectid", Selection.Get("Object ID"));
+
+                }
+                //Redirect To Report Page
+                Response.Redirect("~/Pages/Map/MapForm.aspx", true);
+            }
+            else { HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, No rows were selected.');</script>"); };
+        }
+
+        /// <summary>
+        /// Resets Session Variables
+        /// </summary>
+        protected void ResetSession()
+        {
+            //Clear Session & Fields
+            if (HttpContext.Current.Session["navObject"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("navObject");
+            }
+
+            //Clear Session & Fields
+            if (HttpContext.Current.Session["RunUnit"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("RunUnit");
+            }
+
+            //Check For Prior Job Step ID
+            if (HttpContext.Current.Session["editingJobStepID"] != null)
+            {
+                //Remove Old ONe
+                HttpContext.Current.Session.Remove("editingJobStepID");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["editingJobID"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("editingJobID");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["HasAttachments"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("HasAttachments");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["AssignedJobID"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("AssignedJobID");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtWorkDescription"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtWorkDescription");
+            }
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ObjectIDCombo"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ObjectIDCombo");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ObjectIDComboText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ObjectIDComboText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtObjectDescription"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtObjectDescription");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtObjectArea"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtObjectArea");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtObjectLocation"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtObjectLocation");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtObjectAssetNumber"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtObjectAssetNumber");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["TxtWorkRequestDate"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("TxtWorkRequestDate");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboRequestor"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboRequestor");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboRequestorText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboRequestorText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboPriority"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboPriority");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboPriorityText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboPriorityText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["comboReason"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("comboReason");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["comboReasonText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("comboReasonText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["comboRouteTo"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("comboRouteTo");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["comboRouteToText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("comboRouteToText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["comboHwyRoute"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("comboHwyRoute");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["comboHwyRouteText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("comboHwyRouteText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtMilepost"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtMilepost");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtMilepostTo"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtMilepostTo");
+            }
+
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["comboMilePostDir"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("comboMilePostDir");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["comboMilePostDirText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("comboMilePostDirText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboCostCode"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboCostCode");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboCostCodeText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboCostCodeText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboFundSource"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboFundSource");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboFundSourceText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboFundSourceText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboWorkOrder"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboWorkOrder");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboWorkOrderText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboWorkOrderText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboWorkOp"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboWorkOp");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboWorkOpText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboWorkOpText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboOrgCode"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboOrgCode");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboOrgCodeText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboOrgCodeText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboFundGroup"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboFundGroup");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboFundGroupText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboFundGroupText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboCtlSection"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboCtlSection");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboCtlSectionText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboCtlSectionText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboEquipNum"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboEquipNum");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboEquipNumText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboEquipNumText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtFN"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtFN");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtLN"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtLN");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtEmail"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtEmail");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtPhone"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtPhone");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtExt"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtExt");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtMail"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtMail");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtBuilding"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtBuilding");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtRoomNum"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtRoomNum");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboServiceOffice"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboServiceOffice");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["ComboServiceOfficeText"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("ComboServiceOfficeText");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["GPSX"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("GPSX");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["GPSY"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("GPSY");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["GPSZ"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("GPSZ");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtAddDetail"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtAddDetail");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtPostNotes"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtPostNotes");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["PreviousStep"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("PreviousStep");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["NextStep"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("NextStep");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtRunUnitOne"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtRunUnitOne");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtRunUnitTwo"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtRunUnitTwo");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["txtRunUnitThree"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("txtRunUnitThree");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["stepnumber"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("stepnumber");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["concurwithstep"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("concurwithstep");
+            }
+
+            //Check For Prior Value
+            if (HttpContext.Current.Session["followstep"] != null)
+            {
+                //Remove Old One
+                HttpContext.Current.Session.Remove("followstep");
             }
         }
 
@@ -1170,7 +1750,7 @@ namespace Pages.PlannedJobs
                 {
                     //Get Job Selections
                     var jobSelections =
-                        PlannedGrid.GetSelectedFieldValues(new[] {"n_jobid", "n_jobstepid"});
+                        PlannedGrid.GetSelectedFieldValues(new[] { "n_jobid", "n_jobstepid" });
 
                     //Process Multi Selection
                     foreach (object[] selected in jobSelections)
@@ -1275,6 +1855,105 @@ namespace Pages.PlannedJobs
                                 @"Error Loading Job & Job Step Keys For Batch Post");
                         }
                     }
+                }
+                else
+                {
+                    if (!(PlannedGrid.Columns[0].Visible)  && Selection.Contains("n_Jobid")  && Selection.Contains("n_jobstepid") && Selection.Contains("step"))
+                    {                       
+                                    //Get Values
+                                    var jobKey = Convert.ToInt32(Selection.Get("n_Jobid"));
+                                    var jobStepKey = Convert.ToInt32(Selection.Get("n_jobstepid"));
+                             
+                                    //Check Keys
+                                    if ((jobKey > 0) && (jobStepKey > 0))
+                                    {
+                                        //Get Post Date
+                                        if ((txtPostDate.Value != null) && (txtPostDate.Value.ToString() != "") && ComboOutcomeCode.Value != null)
+                                        {
+                                            //Check Outcome Code
+                                            
+                                                //Get Post Date
+                                                var postDate = Convert.ToDateTime(txtPostDate.Value.ToString());
+
+                                                //Get Outcome Code
+                                                var outcomeId = Convert.ToInt32(ComboOutcomeCode.Value.ToString());
+
+                                                //Clear Errors
+                                                _oJob.ClearErrors();
+
+                                                //Load Job Data
+                                                if (_oJob.LoadData(jobKey) && _oJob.Ds.Tables.Count > 0)
+                                                {
+                                                        //Check Table Row Count
+                                                        if (_oJob.Ds.Tables[0].Rows.Count == 1)
+                                                        {
+                                                            //Set History Flag
+                                                            var isHist = (_oJob.Ds.Tables[0].Rows[0][30].ToString().ToUpper() == "Y");
+
+                                                            //Check Flag
+                                                            if (isHist == false)
+                                                            {
+                                                                //Update Job Step Information
+                                                                if (_oJob.UpdateJobstepCompletionInfo(jobStepKey,
+                                                                    outcomeId,
+                                                                    postDate,
+                                                                    Convert.ToInt32(chkPostDefaults.Checked),
+                                                                    _oLogon.UserID))
+                                                                {
+                                                                    //Set Flag
+                                                                    var hasPostingPblm = false;
+
+                                                                    //Post To History
+                                                                    if (!_oJob.PostWorkOrderToHistory(jobKey,
+                                                                        true,
+                                                                        _oLogon.UserID,
+                                                                        ref hasPostingPblm))
+                                                                    {
+                                                                        //Check Flag
+                                                                        if (hasPostingPblm)
+                                                                        {
+                                                                            //Throw Error
+                                                                            throw new SystemException(
+                                                                                @"Error Posting Job - " + _oJob.LastError);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    //Throw Error
+                                                                    throw new SystemException(
+                                                                        @"Error Updating Job For Batch Post");
+                                                                }
+                                                            }
+                                                        }                                                    
+                                                }
+                                                else
+                                                {
+                                                    //Throw Error
+                                                    throw new SystemException(
+                                                        @"Error Posting Job - " + _oJob.LastError);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                //Throw Error
+                                                throw new SystemException(
+                                                    @"Valid Outcome Code Required For Batch Post");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //Throw Error
+                                            throw new SystemException(
+                                                @"Valid Completion Date Required For Batch Post");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //Throw Error
+                                        throw new SystemException(
+                                            @"Error Loading Job & Job Step Keys For Batch Post");
+                                    }                               
                 }
             }
             catch (Exception ex)

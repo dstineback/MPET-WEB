@@ -1,7 +1,15 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ServiceRequests.aspx.cs" MasterPageFile="~/SiteBase.master" Inherits="Pages.ServiceRequests.ServiceRequest"%>
-
+﻿<%--<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ServiceRequests.aspx.cs" MasterPageFile="~/SiteBase.master" Inherits="Pages.ServiceRequests.ServiceRequest"%>
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
-<asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Service Request</asp:Content>
+<asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Service Request</asp:Content>--%>
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ServiceRequests.aspx.cs" MasterPageFile="~/SiteBase.master" Inherits="Pages.ServiceRequests.ServiceRequests"%>
+<%@ MasterType VirtualPath="~/SiteBase.master" %>
+
+<asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Requests</asp:Content>
+
+
+
+
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
     <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-Size="20px" Theme="Mulberry" Text="Service Requests" NavigateUrl="~/Pages/ServiceRequests/ServiceRequests.aspx" />

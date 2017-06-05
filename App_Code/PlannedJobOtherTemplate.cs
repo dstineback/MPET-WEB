@@ -60,5 +60,6 @@ public class PlannedJobOtherTemplate : ITemplate
         can.ReplacementType = GridViewTemplateReplacementType.EditFormCancelButton;
         can.ID = "Cancel";
         container.Controls.Add(can);
+
     }
 }

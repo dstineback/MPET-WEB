@@ -1,12 +1,27 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeFile="Footer.ascx.cs" Inherits="UserControls.Common.Footer" %>
+<style>
+    .button {
+        padding: 1px 1px !important;
+    }
+</style>
 <div class="trialInfo">
-    <dx:ASPxButton ID="SaveButton" UseSubmitBehavior="false" AutoPostBack="True" runat="server" CssClass="button" ToolTip="Save" >
+    <dx:ASPxButton ID="SaveButton" 
+        UseSubmitBehavior="False" runat="server" 
+        CssClass="button" ToolTip="Save" >
         <HoverStyle CssClass="hover"></HoverStyle>
         <Image Url="~/Content/Images/save-26.png"></Image> 
     </dx:ASPxButton>    
     <dx:ASPxButton ID="NewButton" UseSubmitBehavior="false" AutoPostBack="True" runat="server"  CssClass="button" ToolTip="New"  >
         <HoverStyle CssClass="hover"></HoverStyle>
         <Image Url="~/Content/Images/add_file-26.png"></Image> 
+    </dx:ASPxButton>
+     <dx:ASPxButton ID="NewWRButton" UseSubmitBehavior="false" AutoPostBack="True" runat="server"  CssClass="button" ToolTip="Create a new Work Request"  >
+        <HoverStyle CssClass="hover"></HoverStyle>
+        <Image Url="~/Content/Images/add_file-26.png"></Image> 
+    </dx:ASPxButton>
+    <dx:ASPxButton ID="QuickPostButton" UseSubmitBehavior="false" AutoPostBack="true" runat="server" CssClass="button" ToolTip="Create a Quick Post" >
+        <HoverStyle CssClass="hover"></HoverStyle>
+        <Image Url="../../Content/Images/QuickPosticon.png" ></Image>
     </dx:ASPxButton>
     <dx:ASPxButton ID="NewNonStockPart" UseSubmitBehavior="false" AutoPostBack="True" runat="server"  CssClass="button" ToolTip="New Non-Stock Part"  >
         <HoverStyle CssClass="hover"></HoverStyle>
@@ -23,6 +38,10 @@
         <dx:ASPxButton ID="ViewButton" UseSubmitBehavior="false" AutoPostBack="True" runat="server" CssClass="button" ToolTip="View Selected Record"  >
         <HoverStyle CssClass="hover"></HoverStyle>
         <Image Url="~/Content/Images/view_file-26.png"></Image> 
+    </dx:ASPxButton>
+    <dx:ASPxButton ID="MapDisplay" UseSubmitBehavior="false" AutoPostBack="true" runat="server" CssClass="button" ToolTip="Map selected Items with GPS values">
+        <HoverStyle CssClass="hover"></HoverStyle>
+            <Image Url="~/Content/Images/map-icon-small.png"></Image>
     </dx:ASPxButton>
         
     <%-- WORK ORDER & REQUEST BUTTONS SPECIFIC --%>
@@ -118,8 +137,9 @@
         <HoverStyle CssClass="hover"></HoverStyle>
             <Image Url="~/Content/Images/excel_logo-26.png"></Image> 
     </dx:ASPxButton>
-        <dx:ASPxButton ID="MultiSelect" UseSubmitBehavior="false" AutoPostBack="True" runat="server" CssClass="button" ToolTip="Enable/Disable Grid Multi-Select"  >
+    <dx:ASPxButton ID="MultiSelect" UseSubmitBehavior="false" AutoPostBack="True" runat="server" CssClass="button" ToolTip="Enable/Disable Grid Multi-Select"  >
         <HoverStyle CssClass="hover"></HoverStyle>
             <Image Url="~/Content/Images/layers-26.png"></Image> 
     </dx:ASPxButton>
+    
 </div>

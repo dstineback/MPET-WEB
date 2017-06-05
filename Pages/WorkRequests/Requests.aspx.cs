@@ -28,6 +28,10 @@ namespace Pages.WorkRequests
         private const int AssignedFormId = 3;
         private string _connectionString = "";
         private bool _useWeb;
+        private string userFirstName = "";
+        private string userLastName = "";
+        private int requestorValue = -1;
+        private string requestorText = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -38,6 +42,10 @@ namespace Pages.WorkRequests
             {
                 //Get Logon Info From Session
                 _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
+                userFirstName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FirstName.ToString();
+                userLastName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).LastName.ToString();
+               
+
 
                 //Load Form Permissions
                 if (FormSetup(_oLogon.UserID))
@@ -140,7 +148,7 @@ namespace Pages.WorkRequests
                             }
                             else
                             {
-                                //Save Session Data
+                                //Save Session Data 
                                 SaveSessionData();
 
                                 //Update Job
@@ -164,8 +172,15 @@ namespace Pages.WorkRequests
                         }
                         case "PlanJob":
                         {
-                            //Call Plan Event
-                            PlanJobRoutine();
+                                //Call Plan Event
+                                if (HttpContext.Current.Session["editingJobID"] != null)
+                                {
+                                    AddRequest();
+                                    PlanJobRoutine();
+                                } else
+                                {
+                                    PlanJobRoutine();
+                                }
 
                             //Break
                             break;
@@ -330,6 +345,10 @@ namespace Pages.WorkRequests
 
                             HttpContext.Current.Session.Add("ComboRequestor", _oJob.Ds.Tables[0].Rows[0]["UserID"]);
                             HttpContext.Current.Session.Add("ComboRequestorText", _oJob.Ds.Tables[0].Rows[0]["Username"]);
+                            requestorValue = Convert.ToInt32(HttpContext.Current.Session["ComboRequestor"]);
+                            requestorText = HttpContext.Current.Session["ComboRequestorText"].ToString();
+
+
 
                             #endregion
 
@@ -620,7 +639,7 @@ namespace Pages.WorkRequests
             //Setup User Defined Fields
             SetupUserDefinedFields();
 
-            if (!IsPostBack)
+          if (!IsPostBack)
             {
                 //Check For Previous Session Variables
                 if (HttpContext.Current.Session["txtWorkDescription"] != null)
@@ -729,14 +748,20 @@ namespace Pages.WorkRequests
                 if (HttpContext.Current.Session["txtFN"] != null)
                 {
                     //Get Info From Session
-                    txtFN.Value = (HttpContext.Current.Session["txtFN"].ToString());
+                    txtFN.Value = userFirstName;
+                } else
+                {
+                    txtFN.Value = userFirstName;
                 }
 
                 //Check For Previous Session Variables
                 if (HttpContext.Current.Session["txtLN"] != null)
                 {
                     //Get Info From Session
-                    txtLN.Value = (HttpContext.Current.Session["txtLN"].ToString());
+                    txtLN.Value = userLastName;
+                } else
+                {
+                    txtLN.Value = userLastName;
                 }
 
                 //Check For Previous Session Variables
@@ -855,26 +880,53 @@ namespace Pages.WorkRequests
                     : DateTime.Now;
 
                 //Check For Previous Session Variables
-                if ((HttpContext.Current.Session["ComboRequestor"] != null) &&
-                    (HttpContext.Current.Session["ComboRequestorText"] != null))
+                if (requestorValue > -1 && requestorText != null)
                 {
-                    //Get Info From Session
-                    ComboRequestor.Value = Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()));
-                    ComboRequestor.Text = (HttpContext.Current.Session["ComboRequestorText"].ToString());
+                    ComboRequestor.Value = requestorValue;
+                    ComboRequestor.Text = requestorText;
+
+                    HttpContext.Current.Session.Add("ComboRequestor", requestorValue);
+                    HttpContext.Current.Session.Add("ComboRequestorText", requestorText);
                 }
                 else if (HttpContext.Current.Session["LogonInfo"] != null)
                 {
-                    //Get Logon Info
-                    _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
+                    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
 
                     //Set Requestor
                     ComboRequestor.Value = _oLogon.UserID;
-                    ComboRequestor.Text = _oLogon.Username;
+                    ComboRequestor.Text = _oLogon.Username + "-" + _oLogon.FullName;
 
-                    //Add Session Variables
                     HttpContext.Current.Session.Add("ComboRequestor", _oLogon.UserID);
                     HttpContext.Current.Session.Add("ComboRequestorText", _oLogon.Username);
                 }
+
+                //if ((HttpContext.Current.Session["ComboRequestor"] != null) &&
+                //    (HttpContext.Current.Session["ComboRequestorText"] != null))
+                //{
+                //    _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
+
+                //    //Set Requestor
+                //    ComboRequestor.Value = HttpContext.Current.Session["ComboRequestor"];
+                //    ComboRequestor.Text = HttpContext.Current.Session["ComboRequestorText"].ToString();
+
+                //    //HttpContext.Current.Session.Add("ComboRequestor", _oLogon.UserID);
+                //    //HttpContext.Current.Session.Add("ComboRequestorText", _oLogon.Username);
+
+                //}
+                //else if (HttpContext.Current.Session["LogonInfo"] != null)
+                //{
+                //    //Get Logon Info
+                //    _oLogon = ((LogonObject) HttpContext.Current.Session["LogonInfo"]);
+
+                //    //Set Requestor
+                //    ComboRequestor.Value = _oLogon.UserID;
+                //    ComboRequestor.Text = _oLogon.Username + "-" + _oLogon.FullName;
+
+
+                //    //Add Session Variables
+                //    HttpContext.Current.Session.Add("ComboRequestor", _oLogon.UserID);
+                //    HttpContext.Current.Session.Add("ComboRequestorText", _oLogon.Username);
+                //}
 
                 //Check For Previous Session Variables
                 if ((HttpContext.Current.Session["ComboPriority"] != null) &&
@@ -953,11 +1005,29 @@ namespace Pages.WorkRequests
             ResetSession();
 
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
         }
-
-        private void DeleteSelectedRow()
+        
+        public void DeleteGridViewAttachment()
         {
+            
+            
+
+            for (int i = 0; i < AttachmentGrid.VisibleRowCount; i++)
+            {
+                if (AttachmentGrid.GetRowLevel(i) == AttachmentGrid.GroupCount)
+                {
+                    object keyValue = AttachmentGrid.GetRowValues(i, new string[] { "ID" });
+                    var id = Convert.ToInt32(keyValue.ToString());
+                    if (keyValue != null)
+                                                
+                         _oAttachments.Delete(id);   
+                                       
+                }
+            }
+        }
+        private void DeleteSelectedRow()
+        { 
             //Check Permissions
             if (_userCanDelete)
             {
@@ -968,7 +1038,7 @@ namespace Pages.WorkRequests
 
                 //Create Deletion Key
                 var recordToDelete = -1;
-
+                DeleteGridViewAttachment();
 
                 //Check For Job ID
                 if (HttpContext.Current.Session["editingJobID"] != null)
@@ -986,6 +1056,8 @@ namespace Pages.WorkRequests
                     //Clear Errors
                     _oJob.ClearErrors();
 
+                    
+                    
                     //Delete Jobstep
                     if (_oJob.Delete(recordToDelete))
                     {
@@ -1208,7 +1280,7 @@ namespace Pages.WorkRequests
             e.CallbackData = name + "|" + url + "|" + sizeText;
 
             //INSERT JOB ATTACHMENT ROUTINE HERE!!!!
-
+          
             //Check For Job ID
             if (HttpContext.Current.Session["editingJobID"] != null)
             {
@@ -1481,13 +1553,24 @@ namespace Pages.WorkRequests
             RequestorSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString(CultureInfo.InvariantCulture));
             RequestorSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString(CultureInfo.InvariantCulture));
             comboBox.DataSource = RequestorSqlDatasource;
+            if(requestorValue > 0)
+            { }else
+            {
+                comboBox.Value = _oLogon.UserID;
+                comboBox.Text = _oLogon.Username;
+            }
+
             comboBox.DataBind();
+
+     
         }
+        
 
         protected void ComboRequestor_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
         {
+
             long value;
-            if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
+             if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
                 return;
             var comboBox = (ASPxComboBox)source;
             RequestorSqlDatasource.SelectCommand = @"SELECT  tblUsers.[UserID] ,
@@ -1501,7 +1584,7 @@ namespace Pages.WorkRequests
             RequestorSqlDatasource.SelectParameters.Clear();
             RequestorSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
             comboBox.DataSource = RequestorSqlDatasource;
-            comboBox.DataBind();
+            comboBox.DataBind();          
         }
 
         protected void ComboPriority_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
@@ -1528,6 +1611,7 @@ namespace Pages.WorkRequests
             PrioritySqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString(CultureInfo.InvariantCulture));
             comboBox.DataSource = PrioritySqlDatasource;
             comboBox.DataBind();
+            
         }
 
         protected void ComboPriority_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
@@ -2319,6 +2403,7 @@ namespace Pages.WorkRequests
             AreaSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
             comboBox.DataSource = AreaSqlDatasource;
             comboBox.DataBind();
+            comboBox.Text = HttpContext.Current.Session["ComboRequestorText"].ToString();
         }
 
         #endregion 
@@ -2634,7 +2719,7 @@ namespace Pages.WorkRequests
         protected bool AddRequest()
         {
             //Set Defaults
-            const int actionPriority = -1;
+            const int actionPriority = -1;  
             const int mobileEquip = -1;
             const bool additionalDamage = false;
             const decimal percentOverage = 0;
@@ -2647,7 +2732,7 @@ namespace Pages.WorkRequests
             if ((HttpContext.Current.Session["ComboRequestor"] != null))
             {
                 //Get Info From Session
-                requestor = Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()));
+                 requestor = Convert.ToInt32((HttpContext.Current.Session["ComboRequestor"].ToString()));
             }
             else if (HttpContext.Current.Session["LogonInfo"] != null)
             {
@@ -4752,6 +4837,13 @@ namespace Pages.WorkRequests
             }
         }
 
+     public void OnClickButtonDel(object sender, ClientSideEvents e)
+        {
+
+            DeleteGridViewAttachment();
+            
+        }
+
         /// <summary>
         /// Copies Current Job
         /// </summary>
@@ -4807,7 +4899,7 @@ namespace Pages.WorkRequests
                         ResetSession();
 
                         //Forward User To New Job
-                        Response.Redirect("~/Pages/WorkRequests/Requests.aspx?jobid=" + newCloneJobId, true);
+                        Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + newCloneJobId, true);
                     }
                 }
             }

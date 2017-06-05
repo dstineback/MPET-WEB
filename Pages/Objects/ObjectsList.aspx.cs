@@ -24,6 +24,7 @@ namespace Pages.Objects
         private const int AssignedFormId = 40;
         private string _connectionString = "";
         private bool _useWeb;
+        private object _MapSelected;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -36,19 +37,24 @@ namespace Pages.Objects
                 //Add Use ID TO Session
                 HttpContext.Current.Session.Add("UserID", _oLogon.UserID);
 
+                RestSession();
                 //Load Form Permissions
                 if (FormSetup(_oLogon.UserID))
                 {
+                    
                     //Setup Buttons
                     Master.ShowSaveButton = false;
-                    Master.ShowNewButton = _userCanAdd;
-                    Master.ShowEditButton = _userCanEdit;
-                    Master.ShowDeleteButton = _userCanDelete;
-                    Master.ShowViewButton = _userCanView;
-                    Master.ShowPrintButton = true;
+                    Master.ShowNewWRButton = _userCanAdd;
+                    Master.ShowQuickPostButton = _userCanAdd;
+                    
+                    Master.ShowEditButton = false;/*_userCanEdit;*/
+                    Master.ShowDeleteButton = false; /*_userCanDelete;*/
+                    Master.ShowViewButton = false;  /*_userCanView;*/
+                    Master.ShowPrintButton = false;
                     Master.ShowPdfButton = false;
-                    Master.ShowXlsButton = true;
-                    Master.ShowMultiSelectButton = _userCanDelete;
+                    Master.ShowXlsButton = false;
+                    Master.ShowMultiSelectButton = _userCanView; /*_userCanDelete;*/
+                    Master.ShowMapDisplayButton = _userCanEdit;
                 }
             }
 
@@ -57,6 +63,11 @@ namespace Pages.Objects
             {
                 //Bind Grid
                 ObjectGrid.DataBind();
+                ObjectGrid.Focus();
+                MaintainScrollPositionOnPostBack = true;
+
+                
+                
             }
             else
             {
@@ -75,10 +86,15 @@ namespace Pages.Objects
                     //Determing What To Do
                     switch (controlName.Replace("ctl00$Footer$", ""))
                     {
-                        case "NewButton":
-                        {
+                        case "NewWRButton":
+                        {                            
                             //Call View Routine
                             AddNewRow();
+                            break;
+                        }
+                        case "QuickPostButton":
+                        {
+                                QuickPost();
                             break;
                         }
                         case "EditButton":
@@ -101,9 +117,10 @@ namespace Pages.Objects
                         }
                         case "PrintButton":
                         {
-                            //Call Print Routine
-                            PrintSelectedRow();
-                            break;
+
+                                //Call Print Routine
+                                PrintSelectedRow();
+                                break;
                         }
                         case "ExportPDF":
                         {
@@ -123,6 +140,12 @@ namespace Pages.Objects
                             EnableMultiSelect(!(ObjectGrid.Columns[0].Visible));
                             break;
                         }
+                        case "MapDisplay":
+                        {
+                                MapItem();
+                                break;
+                        }
+                      
 
                         default:
                         {
@@ -134,10 +157,11 @@ namespace Pages.Objects
             }
 
             //Enable/Disable Buttons
-            Master.ShowNewButton = !(ObjectGrid.Columns[0].Visible);
-            Master.ShowEditButton = !(ObjectGrid.Columns[0].Visible);
-            Master.ShowViewButton = !(ObjectGrid.Columns[0].Visible);
-            Master.ShowPrintButton = !(ObjectGrid.Columns[0].Visible);
+            Master.ShowNewWRButton = !(ObjectGrid.Columns[0].Visible);
+            Master.ShowQuickPostButton = !(ObjectGrid.Columns[0].Visible);
+            //Master.ShowEditButton = !(ObjectGrid.Columns[0].Visible);
+            //Master.ShowViewButton = !(ObjectGrid.Columns[0].Visible);
+            //Master.ShowPrintButton = !(ObjectGrid.Columns[0].Visible);
 
             //Clear Prior Selection If Edit Check Is No Longer Visible
             if (!(ObjectGrid.Columns[0].Visible))
@@ -201,8 +225,77 @@ namespace Pages.Objects
         /// </summary>
         private void AddNewRow()
         {
+
+            if (Selection.Contains("objectid"))
+            {
+                Session.Remove("objectid");
+                Session.Add("objectid", Selection.Get("objectid"));
+
+                if (Selection.Contains("description"))
+                {
+                    Session.Remove("description");
+                    Session.Add("description", Selection.Get("description"));
+                }
+
+                if (Selection.Contains("n_object"))
+                {
+                    Session.Remove("n_object");
+                    Session.Add("n_object", Selection.Get("n_object"));
+                }
+
             //Redirect To Task Page
-            Response.Redirect("~/Pages/Objects/Objects.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
+            } else
+            {
+                Response.Write("<script language='javascript'>alert('No Item was selected from Grid. Please choose one item to make a new work request.');</script>");
+            }
+        }
+
+        private void QuickPost()
+        {
+            
+            if (Selection.Contains("objectid"))
+            {
+                Session.Remove("objectid");
+                Session.Add("objectid", Selection.Get("objectid"));
+
+                if (Selection.Contains("description"))
+                {
+                    Session.Remove("description");
+                    Session.Add("description", Selection.Get("description"));
+                }
+
+                if (Selection.Contains("n_objectid"))
+                {
+                    Session.Remove("n_objectid");
+                    Session.Add("nobjectid", Selection.Get("n_objectid"));
+                }
+
+                if (Selection.Contains("Area"))
+                {
+                    Session.Remove("Area");
+                    Session.Add("Area", Selection.Get("Area"));
+                }
+
+                if (Selection.Contains("Location"))
+                {
+                    Session.Remove("LocationID");
+                    Session.Add("LocationID", Selection.Get("LocationID"));
+                }
+                
+                if (Selection.Contains("AssetNumber"))
+                {
+                    Session.Remove("AssetNumber");
+                    Session.Add("AssetNumber", Selection.Get("AssetNumber"));
+                }
+
+                //Redirect To Task Page
+                Response.Redirect("~/Pages/QuickPost/QuickPost.aspx", true);
+            }
+            else
+            {
+                Response.Write("<script language='javascript'>alert('No Item was selected from Grid. Please choose one item to make a new work request.');</script>");
+            }
         }
 
         /// <summary>
@@ -352,6 +445,125 @@ namespace Pages.Objects
                 //Redirect To Report Page
                 Response.Redirect("~/Reports/ViewReport.aspx", true);
             }
+        }
+
+        private void RestSession()
+        {
+            if (HttpContext.Current.Session["MapSelected"] != null)
+            {
+                //Remove Value
+                HttpContext.Current.Session.Remove("MapSelected");
+            }
+
+            //Check For Previous Session n_objectid
+            if (HttpContext.Current.Session["n_objectid"] != null)
+            {
+                //Remove Value
+                HttpContext.Current.Session.Remove("n_objectid");
+            }
+
+            //Check for previous session object ID
+            if (HttpContext.Current.Session["objectid"] != null)
+            {
+                //Remove Value
+                HttpContext.Current.Session.Remove("objectid");
+            }
+
+        }
+
+        private void MapItem()
+        {
+            var sel = Selection.Count;
+            var MapSelected = ObjectGrid.GetSelectedFieldValues("objectid","n_objectid", "Latitude", "Longitude", "description", "Area", "AssetNumber", "LocationID");
+
+            if (sel > 0 || MapSelected.Count > 0) { 
+                if(HttpContext.Current.Session["MapSelected"] != null)
+                {
+                    //Remove Value
+                    HttpContext.Current.Session.Remove("MapSelected");
+                }
+
+                if(MapSelected.Count > 0)
+                {
+
+                    HttpContext.Current.Session.Add("MapSelected", MapSelected);
+                }
+            
+                //Check For Row Value In Hidden Field (Set Via JS)
+                if (Selection.Contains("n_objectid") && MapSelected.Count < 1)
+                {
+                    //Check For Previous Session n_objectid
+                    if (HttpContext.Current.Session["n_objectid"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("n_objectid");
+                    }
+                    //Add Session N_objectid
+                    HttpContext.Current.Session.Add("n_objectid", Selection.Get("n_objectid"));
+
+                    //Check for previous session object ID
+                    if(HttpContext.Current.Session["objectid"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("objectid");
+                    }
+                    //Add session object ID
+                    HttpContext.Current.Session.Add("objectid", Selection.Get("objectid"));
+
+
+                    //Check For Previous Session Latitude
+                    if (HttpContext.Current.Session["Latitude"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("Latitude");
+                    }
+                    //Add Session Latitude
+                    HttpContext.Current.Session.Add("Latitude", Selection.Get("Latitude"));
+
+
+                    //Check For Previous Session Longitude
+                    if (HttpContext.Current.Session["Longitude"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("Longitude");
+                    }
+                    //Add Session Longitude
+                    HttpContext.Current.Session.Add("Longitude", Selection.Get("Longitude"));
+
+                    //Check for previous session object description
+                    if(HttpContext.Current.Session["description"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("description");
+                    }
+                    //Add session object description
+                    HttpContext.Current.Session.Add("objectDescription", Selection.Get("description")); 
+                    
+                    //Check for Previous Session Object Area
+                    if(Session["Area"] != null)
+                    {
+                        Session.Remove("Area");
+                    }
+                    Session.Add("Area", Selection.Get("Area"));
+
+                    //Check for previous Session Object Asset number
+                    if(Session["AssetNumber"] != null)
+                    {
+                        Session.Remove("AssetNumber");
+                    }
+                    Session.Add("AssetNumber", Selection.Get("AssetNumber"));
+
+                    //Check for previous Session Object Location
+                    if(Session["LocationID"] != null)
+                    {
+                        Session.Remove("LocationID");
+                    }
+                    Session.Add("LocationID", Selection.Get("LocationID"));
+                }
+                    //Redirect To Report Page
+                    Response.Redirect("~/Pages/Map/MapForm.aspx", true);
+            }
+            else { HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, No rows were selected.');</script>"); };
         }
 
         /// <summary>

@@ -28,7 +28,7 @@
                 SettingsBehavior-ProcessFocusedRowChangedOnServer="True"
                 SettingsBehavior-AllowFocusedRow="True"
                 SelectionMode="Multiple"
-                DataSourceID="PMTaskDataSource">
+                DataSourceID="PMTaskDataSource" AutoGenerateColumns="False">
                 <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused"
                     RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow">
                     <Header CssClass="gridViewHeader"></Header>
@@ -41,8 +41,7 @@
                         PMTaskGrid.GetRowValues(e.visibleIndex, 'taskid;n_taskid', OnGetRowId);
                     }" />
                 <Columns>
-                    <dx:GridViewCommandColumn FixedStyle="Left" ShowSelectCheckbox="True" Visible="false" VisibleIndex="0">
-                    </dx:GridViewCommandColumn>
+                    <dx:GridViewCommandColumn FixedStyle="Left" ShowSelectCheckbox="True" Visible="false" VisibleIndex="0" />
                     <dx:GridViewDataTextColumn FieldName="n_taskid" ReadOnly="True" Visible="false" VisibleIndex="2">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
@@ -86,10 +85,13 @@
                     AllowFocusedRow="True" 
                     AllowClientEventsOnLoad="false" 
                     ColumnResizeMode="NextColumn" />
-                <SettingsDataSecurity 
-                    AllowDelete="False" 
-                    AllowInsert="False" />
+                <SettingsDataSecurity
+                    AllowDelete="False" />
                 <SettingsPopup HeaderFilter-Width="360" HeaderFilter-Height="360"></SettingsPopup>
+                <Columns>
+                    <dx:GridViewCommandColumn ShowEditButton="True" ShowSelectCheckbox="True" ShowInCustomizationForm="True" FixedStyle="Left" Visible="False" VisibleIndex="0" ShowNewButtonInHeader="True"></dx:GridViewCommandColumn>
+                </Columns>
+
                 <Settings 
                     ShowFilterBar="Visible"
                     VerticalScrollBarMode="Visible" 
@@ -99,7 +101,8 @@
                     <PageSizeItemSettings Visible="true" />
                 </SettingsPager>
             </dx:ASPxGridView>
-    <asp:SqlDataSource ID="PMTaskDataSource" 
+            <%--TODO: Set up SQL Datasource--%>
+            <asp:SqlDataSource ID="PMTaskDataSource" 
                                runat="server" 
                                ConnectionString="<%$ ConnectionStrings:connection %>"  
                                SelectCommand="--Create/Set Null Date

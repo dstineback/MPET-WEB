@@ -21,6 +21,7 @@ namespace Pages.WorkRequests
     {
         private LogonObject _oLogon;
         private WorkOrder _oJob;
+        private AttachmentObject _oAttachments;
         private bool _userCanDelete;
         private bool _userCanAdd;
         private bool _userCanEdit;
@@ -56,6 +57,7 @@ namespace Pages.WorkRequests
                     Master.ShowRoutineJobButton = (_userCanEdit && _userCanAdd); 
                     Master.ShowForcePmButton = (_userCanEdit && _userCanAdd);
                     Master.ShowPrintButton = true;
+                    Master.ShowMapDisplayButton = _userCanEdit;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = true;
                     Master.ShowMultiSelectButton = _userCanDelete;
@@ -118,6 +120,12 @@ namespace Pages.WorkRequests
                             PrintSelectedRow();
                             break;
                         }
+                        case "MapDisplay":
+                            {
+                                //Map Request Items
+                                MapRequestItem();
+                                break;
+                            }
                         case "ExportPDF":
                         {
                             //Call Export PDF Option
@@ -240,7 +248,7 @@ namespace Pages.WorkRequests
         private void AddNewRow()
         {
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx",true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx",true);
         }
 
         private void EditSelectedRow()
@@ -249,7 +257,7 @@ namespace Pages.WorkRequests
             if (Selection.Contains("Jobid"))
             {
                 //Redirect To Edit Page With Job ID
-                Response.Redirect("~/Pages/WorkRequests/Requests.aspx?jobid=" + Selection.Get("Jobid"), true);
+                Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + Selection.Get("Jobid"), true);
             }
         }
 
@@ -272,6 +280,8 @@ namespace Pages.WorkRequests
             return rightsLoaded;
         }
 
+       
+
         private void DeleteSelectedRow()
         {
             //Check Permissions
@@ -286,11 +296,14 @@ namespace Pages.WorkRequests
                 //Create Deletion Key
                 var recordToDelete = -1;
 
+              
                 //Check For Multi Selection
                 if ((ReqGrid.Columns[0].Visible))
                 {
                     //Get Selections
                     var recordIdSelection = ReqGrid.GetSelectedFieldValues("n_Jobid");
+
+                    
 
                     //Process Multi Selection
                     foreach (var record in recordIdSelection)
@@ -368,7 +381,7 @@ namespace Pages.WorkRequests
             if (Selection.Contains("Jobid"))
             {
                 //Redirect To Edit Page With Job ID
-                Response.Redirect("~/Pages/WorkRequests/Requests.aspx?jobid=" + Selection.Get("Jobid"), true);
+                Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + Selection.Get("Jobid"), true);
             }
         }
 
@@ -387,6 +400,9 @@ namespace Pages.WorkRequests
                 //Add Session Report Parm ID
                 HttpContext.Current.Session.Add("ReportParm", Selection.Get("n_Jobid"));
 
+                 var param = Convert.ToInt32(HttpContext.Current.Session["ReportParm"]);
+                
+
                 //Check For Previous Report Name
                 if (HttpContext.Current.Session["ReportToDisplay"] != null)
                 {
@@ -398,10 +414,73 @@ namespace Pages.WorkRequests
                 HttpContext.Current.Session.Add("ReportToDisplay", "simplewo.rpt");
 
                 //Redirect To Report Page
-                Response.Redirect("~/Reports/ViewReport.aspx", true);
+                Response.Redirect("~/Reports/ReportViewer.aspx", true);
             }
         }
 
+        private void MapRequestItem()
+        {
+            var sel = Selection.Count;
+            var MapSelected = ReqGrid.GetSelectedFieldValues("Jobid", "n_Jobid", "Object ID", "Title", "Latitude", "Longitude");
+
+            if(sel > 0 || MapSelected != null) {  
+            
+                if (HttpContext.Current.Session["MapSelected"] != null)
+                {
+                    HttpContext.Current.Session.Remove("MapSelected");
+                }
+                if (MapSelected.Count > 0)
+                {
+                    HttpContext.Current.Session.Add("MapSelected", MapSelected);
+                }
+            
+
+                //Check For Row Value In Hidden Field (Set Via JS)
+                if (Selection.Contains("n_Jobid"))
+                {
+                    //Check For Previous Session Report Parm ID
+                    if (HttpContext.Current.Session["n_Jobid"] != null)
+                    {
+                        //Remove Value
+                        HttpContext.Current.Session.Remove("n_Jobid");
+                    }
+
+                    //Add Session Report Parm ID
+                    HttpContext.Current.Session.Add("n_Jobid", Selection.Get("n_Jobid"));
+                
+                    if(Session["n_objectid"] != null)
+                    {
+                        Session.Remove("n_objectid");
+                    }
+                    Session.Add("objectid", Selection.Get("Object ID"));
+
+                    if(Session["Latitude"] != null)
+                    {
+                        Session.Remove("Latitude");
+                    }
+                    Session.Add("Latitude", Selection.Get("Latitude"));
+                    if(Session["Longitude"] != null)
+                    {
+                        Session.Remove("Longitude");
+                    }
+                    Session.Add("Longitude", Selection.Get("Longitude"));
+                    if(Session["description"] != null)
+                    {
+                        Session.Remove("description");
+                    }
+                    Session.Add("description", Selection.Get("Title"));
+                    if(Session["Jobid"] != null)
+                    {
+                        Session.Remove("Jobid");
+                    }
+                    Session.Add("jobID", Selection.Get("Jobid"));
+
+                }
+                    //Redirect To Report Page
+                    Response.Redirect("~/Pages/Map/MapForm.aspx", true);
+            }
+            else { System.Web.HttpContext.Current.Response.Write("<script language='javascript'>alert('Error trying to Map Items, No rows were selected.');</script>"); }
+        }
         /// <summary>
         /// Export Grid To PDF
         /// </summary>
@@ -448,7 +527,7 @@ namespace Pages.WorkRequests
         protected void ReqGrid_StartRowEditing(object sender, DevExpress.Web.Data.ASPxStartRowEditingEventArgs e)
         {
             //Redirect To Edit Page With Job ID
-            ASPxWebControl.RedirectOnCallback("~/Pages/WorkRequests/Requests.aspx?jobid=" + e.EditingKeyValue);
+            ASPxWebControl.RedirectOnCallback("~/Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + e.EditingKeyValue);
         }
 
         protected void UpdatePanel_Unload(object sender, EventArgs e)
@@ -738,7 +817,7 @@ namespace Pages.WorkRequests
                             }
 
                             //Forward User To New Job
-                            Response.Redirect("~//Pages/WorkRequests/Requests.aspx?jobid=" + newCloneJobId, true);
+                            Response.Redirect("~//Pages/WorkRequests/WorkRequestForm.aspx?jobid=" + newCloneJobId, true);
                         }
                     }
                 }

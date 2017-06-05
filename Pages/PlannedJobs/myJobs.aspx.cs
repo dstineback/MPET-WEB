@@ -8,7 +8,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using DevExpress.Web;
+
 using MPETDSFactory;
+
+
+using System.Diagnostics;
 
 
 public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
@@ -84,6 +88,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
             //Check For Logon Class
             if (HttpContext.Current.Session["LogonInfo"] != null)
             {
@@ -100,37 +105,53 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             Master.ShowNewButton = true;
             Master.ShowEditButton = true;
 
+        
+
+       
+
+
         //Get Control That Caused Post Back
         var controlName = Request.Params.Get("__EVENTTARGET");
 
         if (!string.IsNullOrEmpty(controlName))
+
         {
             switch (controlName.Replace("ctl00$Footer$", ""))
             {
                 case "NewButton":
-                {
+                    {   //Call Add Row
                         AddNewRow();
                         break;
-                }
+                    }
                 case "EditButton":
                     {
-                        //Call View Routine
+                        //Call Edit on Selection
                         EditSelectedRow();
                         break;
                     }
                 default:
-                {
+                    {
                         //Do Nothing
                         break;
-                }
+                    }
             }
         }
 
+        Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+
+        ConnectionStringSettings strConnString = rootWebConfig.ConnectionStrings.ConnectionStrings["ClientConnectionString"];
+
+        //String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
+
+
+        
+
 
         //Sql Stored Procedure connection
-        String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
+       // String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
 
             using (SqlConnection con = new SqlConnection(strConnString))
+
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -214,19 +235,24 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         }
     }
 
+
+   
+
     //Add new logic for Add button
     private void AddNewRow()
     {
         if (true)
         {
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/WorkRequests/Requests.aspx", true);
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
         }
         else
         {
             throw new NotImplementedException();
         }
     }
+
+   
 
     //hyperlink the Jobs ID on GridView to actual Job
 

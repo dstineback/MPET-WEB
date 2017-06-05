@@ -2,6 +2,7 @@
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
 <%@ Register Src="~/UserControls/UploadedFilesContainer.ascx" TagName="UploadedFilesContainer" TagPrefix="dx" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Requests</asp:Content>
+
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <script src="http://maps.google.com/maps/api/js?sensor=false"></script>  
     <script type="text/javascript">
@@ -153,9 +154,14 @@
             }
         }
 
+        function OnClickButtonDel(s, e) {
+            DeleteGridViewAttachment()
+        }
+       
+
     </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
-    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-size="20px" Theme="Mulberry" Text="REQUESTS" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx"/> > <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel>
+      <dx:ASPxLabel ID="lblHeader" Font-size="20px" Theme="Mulberry" runat="server" Text="ADD"></dx:ASPxLabel>
     <dx:ASPxHiddenField ID="Navigation" ViewStateMode="Enabled"  ClientInstanceName="Navigation" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxFormLayout ID="WorkRequestDescLayout" runat="server" Width="98%" Paddings="0,0" RequiredMarkDisplayMode="RequiredOnly" RequiredMark="" EnableViewState="True" >
         <Items>
@@ -185,7 +191,12 @@
                     <dx:LayoutItem Name="DescLabel" Caption="" HelpText="">
                         <LayoutItemNestedControlCollection >
                             <dx:LayoutItemNestedControlContainer>
-                                <dx:ASPxPageControl ID="requestTab" Height="500px" Width="98%" ClientInstanceName="requestTab" TabPosition="Right" Theme="Mulberry" runat="server" ActiveTabIndex="0" EnableHierarchyRecreation="True">
+                                <dx:ASPxPageControl ID="requestTab" 
+                                    Height="500px" Width="98%" 
+                                    ClientInstanceName="requestTab" 
+                                    TabPosition="Right" Theme="Mulberry" 
+                                    runat="server" ActiveTabIndex="5" 
+                                    EnableHierarchyRecreation="True">
                                     <ClientSideEvents
                                         ActiveTabChanged="function(s, e) { ActiveTabChanged(e); }"
                                         Init='function(s, e) {
@@ -354,7 +365,7 @@
                                                     </dx:ASPxFormLayout>
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Object/Assets--%>
                                         <dx:TabPage Text="ORIGINATOR">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl2" runat="server">
@@ -381,7 +392,7 @@
                                                                         <LayoutItemNestedControlCollection>
                                                                             <dx:LayoutItemNestedControlContainer>
                                                                                 <dx:ASPxComboBox ID="ComboRequestor" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
-                                                                                                 ValueType="System.String" ValueField="UserID"
+                                                                                                 ValueType="System.String" ValueField="UserID" 
                                                                                                  OnItemsRequestedByFilterCondition="ComboRequestor_OnItemsRequestedByFilterCondition_SQL"
                                                                                                  OnItemRequestedByValue="ComboRequestor_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
                                                                                                  Width="400px" DropDownStyle="DropDown" Theme="Mulberry" TextField="Username" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="ComboRequestor">
@@ -447,7 +458,7 @@
                                                                         <LayoutItemNestedControlCollection>
                                                                             <dx:LayoutItemNestedControlContainer>
                                                                                 <dx:ASPxComboBox ID="comboRouteTo" runat="server" EnableCallbackMode="true" CallbackPageSize="10"
-                                                                                                 ValueType="System.String" ValueField="UserID"
+                                                                                                 ValueType="System.String" ValueField="UserID" 
                                                                                                  OnItemsRequestedByFilterCondition="comboRouteTo_OnItemsRequestedByFilterCondition_SQL"
                                                                                                  OnItemRequestedByValue="comboRouteTo_OnItemRequestedByValue_SQL" TextFormatString="{0} - {1}"
                                                                                                  Width="400px" DropDownStyle="DropDown" Theme="Mulberry" TextField="Username" DropDownButton-Enabled="True" AutoPostBack="False" ClientInstanceName="comboRouteTo">
@@ -469,7 +480,7 @@
                                                     </dx:ASPxFormLayout>                            
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Originator--%>
                                         <dx:TabPage Text="GPS">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl3" runat="server">
@@ -598,7 +609,7 @@
                                                     </dx:ASPxFormLayout>                           
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--GPS does not show up--%>
                                         <dx:TabPage Text="COSTING">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl4" runat="server">
@@ -767,7 +778,7 @@
                                                     </dx:ASPxFormLayout>                            
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Costing Tab--%>
                 
                                         <dx:TabPage Text="FACILITY">
                                             <ContentCollection>
@@ -891,7 +902,7 @@
                                                     </dx:ASPxFormLayout>                              
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Facility Tab--%>
                 
                                         <dx:TabPage Text="ATTACHMENTS">
                                             <ContentCollection>
@@ -950,7 +961,7 @@
                                                                             <dx:LayoutItemNestedControlContainer>
                                                                                 <asp:UpdatePanel ID="UpdatePanel1" runat="server" OnUnload="UpdatePanel_Unload">
                                                                                     <ContentTemplate>
-                                                                                        <dx:ASPxGridView 
+                                                                                        <dx:ASPxGridView SettingsDataSecurity-AllowDelete="true" SettingsCommandButton-DeleteButton-Styles-Native="true"
                                                                                             ID="AttachmentGrid" 
                                                                                             runat="server" 
                                                                                             Theme="Mulberry" 
@@ -958,7 +969,7 @@
                                                                                             Width="98%" 
                                                                                             KeyboardSupport="True" 
                                                                                             ClientInstanceName="AttachmentGrid" 
-                                                                                            AutoPostBack="true" 
+                                                                                            AutoPostBack="true"  
                                                     
                                                                                             Settings-HorizontalScrollBarMode="Auto" 
                                                                                             SettingsPager-Mode="ShowPager" 
@@ -978,6 +989,13 @@
                                                                                                 <FilterRow CssClass="gridViewFilterRow"></FilterRow>
                                                                                             </Styles>
                                                                                             <Columns>
+                                                                                                <dx:GridViewCommandColumn VisibleIndex="0" ShowDeleteButton="true" ShowSelectCheckbox="true">
+                                                                                                    <FooterTemplate>
+                                                                                                        <dx:ASPxButton ID="buttonDel" AutoPostBack="false" runat="server" Text="Delete">
+                                                                                                            <ClientSideEvents Click="OnClickButtonDel()" />
+                                                                                                        </dx:ASPxButton>
+                                                                                                    </FooterTemplate>
+                                                                                                    </dx:GridViewCommandColumn>
                                                                                                 <dx:GridViewDataTextColumn FieldName="ID" ReadOnly="True" Visible="false" VisibleIndex="0">
                                                                                                     <CellStyle Wrap="False"></CellStyle>
                                                                                                 </dx:GridViewDataTextColumn>
@@ -1000,13 +1018,15 @@
                                                                                                     <CellStyle Wrap="False"></CellStyle>
                                                                                                     <PropertiesHyperLinkEdit ></PropertiesHyperLinkEdit>
                                                                                                 </dx:GridViewDataHyperLinkColumn>
+                                                                                                <dx:GridViewCommandColumn ShowDeleteButton="true" />
                                                                                             </Columns>
                                                                                             <SettingsBehavior EnableRowHotTrack="True" AllowFocusedRow="True" AllowClientEventsOnLoad="false" ColumnResizeMode="NextColumn" />
                                                                                             <SettingsDataSecurity AllowDelete="False" AllowInsert="False" />
-                                                                                            <Settings VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" />
+                                                                                            <Settings ShowFooter="true" VerticalScrollBarMode="Visible" VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" />
                                                                                             <SettingsPager PageSize="10">
                                                                                                 <PageSizeItemSettings Visible="true" />
                                                                                             </SettingsPager>
+                                                                                            
                                                                                         </dx:ASPxGridView>      
                                                                                         <asp:SqlDataSource ID="AttachmentDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:connection %>" SelectCommand="SELECT [ID], [nJobID], [nJobstepID], [DocType], [Description], [LocationOrURL], [ShortName] FROM [Attachments] WHERE (([nJobID] = @nJobID) AND ([nJobstepID] = @nJobstepID))">
                                                                                             <SelectParameters>
@@ -1031,7 +1051,7 @@
                                                         
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>
+                                        </dx:TabPage> <%--Attachment--%>
                                         <dx:TabPage Text="NOTES">
                                             <ContentCollection>
                                                 <dx:ContentControl ID="ContentControl7" runat="server">
@@ -1058,7 +1078,7 @@
                                                     </dx:ASPxFormLayout>  
                                                 </dx:ContentControl>
                                             </ContentCollection>
-                                        </dx:TabPage>                                                                                                
+                                        </dx:TabPage> <%--Notes --%>                                                                                             
 
                                     </TabPages>
                                 </dx:ASPxPageControl>     

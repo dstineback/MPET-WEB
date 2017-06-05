@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="ObjectTasks.aspx.cs" MasterPageFile="~/SiteBase.master" Inherits="Pages.Tasks.ObjectTasks" %>
-<%@ Register TagPrefix="dxe" Namespace="DevExpress.Web" Assembly="DevExpress.Web.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" %>
+<%@ Register TagPrefix="dxe" Namespace="DevExpress.Web" Assembly="DevExpress.Web.v17.1, Version=17.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" %>
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Task Schedules</asp:Content>
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">  
@@ -116,7 +116,8 @@
                     <PageSizeItemSettings Visible="true" />
                 </SettingsPager>
     </dx:ASPxGridView>
-    <asp:SqlDataSource ID="PMTaskDataSource" 
+           <%-- TODO: Set Up SQL dataSource--%>
+            <asp:SqlDataSource ID="PMTaskDataSource" 
                                runat="server" 
                                ConnectionString="<%$ ConnectionStrings:connection %>"  
                        SelectCommand="--Create/Set Null Date

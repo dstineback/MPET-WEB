@@ -6,7 +6,7 @@
             <asp:ContentPlaceHolder ID="PageTitlePartPlaceHolder" runat="server"></asp:ContentPlaceHolder><%= " | Maintenance Productivity Enhancement Tool" %>
         </title>
         <link href="~/Content/Css/MpetWebStyle.css" rel="stylesheet" />
-        <script src="~/Content/Scripts/Helper.js"></script>
+        <%--<script src="~/Content/Scripts/Helper.js"></script>--%>
         <script type="text/javascript">
             function HidePopup() {
                 window.HelpMenuPopup.Hide();
@@ -15,9 +15,14 @@
         </script>
         <style type="text/css">
             .auto-style1 {
-                left: -10px;
-                top: 110px;
+                
+                top: 10px;
             }
+            .footerHolder {
+                height: 65px;
+            }
+           
+            
         </style>
     </head>
     <body>

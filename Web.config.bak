@@ -21,21 +21,22 @@
 		<add key="DatabaseVersion" value="2.0.4.8"/>
 		<add key="UsingWebService" value="N"/>
 		<add key="CssVersionNumber" value="1.5"/>
-		<add key="ServiceRequestEmailTo" value="ludwigi@fwginc.com,thecrazyludwig@gmail.com"/>
-		<add key="EmailFrom" value="support@fwginc.com"/>
-		<add key="EmailHost" value="smtp.gmail.com"/>
-		<add key="EmailPort" value="587"/>
-		<add key="EmailUsername" value="fourwindsgroup@gmail.com"/>
-		<add key="EmailPassword" value="&gt;rOE;dYfSp]KDN2ztBh&gt;KWqZ0"/>
-		<add key="EmailSSL" value="true"/>
+		
 	</appSettings>
 	<connectionStrings>
-		<!--<add name="SalesViewerConnectionString" connectionString="Data Source=.\SQLEXPRESS;AttachDbFilename=|DataDirectory|\Sales.mdf;Integrated Security=True;Connect Timeout=120;User Instance=True" providerName="System.Data.SqlClient" />-->
-		<!--<add name="ClientConnectionString" connectionString="Data Source=m-petsql.net;Initial Catalog=MPETNET_DEV_HWY_K;Integrated Security=False;User ID=DevUser;password=[%D3vU$3r%];Asynchronous Processing=True" providerName="System.Data.SqlClient"/>
+		<!--<add name="SalesViewerConnectionString" connectionString="Data Source=.\SQLEXPRESS;AttachDbFilename=|DataDirectory|\Sales.mdf;Integrated Security=True;Connect Timeout=120;User Instance=True" providerName="System.Data.SqlClient" />
+		<add name="ClientConnectionString" connectionString="Data Source=m-petsql.net;Initial Catalog=MPETNET_DEV_HWY_K;Integrated Security=False;User ID=DevUser;password=[%D3vU$3r%];Asynchronous Processing=True" providerName="System.Data.SqlClient"/>
 		<add name="connection" connectionString="Data Source=m-petsql.net;Initial Catalog=MPETNET_DEV_HWY_K;Integrated Security=False;User ID=DevUser;password=[%D3vU$3r%];Asynchronous Processing=True" providerName="System.Data.SqlClient"/>-->
 		<add name="ClientConnectionString" connectionString="Data Source=ROOT5773;Initial Catalog=MPETNET_Lindt;Integrated Security=True;Asynchronous Processing=True" providerName="System.Data.SqlClient"/>
 		<add name="connection" connectionString="Data Source=ROOT5773;Initial Catalog=MPETNET_Lindt;Integrated Security=True;Asynchronous Processing=True" providerName="System.Data.SqlClient"/>
+		<!--<add name="ClientConnectionString" connectionString="Data Source=ROOT5773;Initial Catalog=MPETNET_COUNTY_Washington_Yakima;Integrated Security=True;Asynchronous Processing=True" providerName="System.Data.SqlClient"   />
+    <add name="connection" connectionString="Data Source=ROOT5773;Initial Catalog=MPETNET_COUNTY_Washington_Yakima; Integrated Security=True;Asynchronous Processing=True" providerName="System.Data.SqlClient" />-->
+    <!--<add name="connection" connectionString="Data Source=ROOT5773;Initial Catalog=MPETNET_COUNTY_Washington_Yakima;User ID=COYUser;Password=[%C0yU$3r%];Encrypt=True;TrustServerCertificate=True"  />-->
 	</connectionStrings>
+	<!--<connectionStrings>
+		<add name="ClientConnectionString" connectionString="Data Source=m-petsql.net;Initial Catalog=MPETNET_LINDT;Integrated Security=False;User ID=LindtUser;Password=[%LiNdTu$3r%];Asynchronous Processing=True" providerName="System.Data.SqlClient" />
+		<add name="connection" connectionString="Data Source=m-petsql.net;Initial Catalog=MPETNET_LINDT;Integrated Security=False;User ID=LindtUser;Password=[%LiNdTu$3r%];Asynchronous Processing=True" providerName="System.Data.SqlClient" />
+	</connectionStrings>-->
 	<system.web>
 		<compilation debug="true" targetFramework="4.0">
 			<assemblies>
@@ -44,7 +45,7 @@
 				<add assembly="DevExpress.PivotGrid.v16.1.Core, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
 				<add assembly="DevExpress.Data.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
 				<add assembly="DevExpress.Web.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
-				<add assembly="DevExpress.Web.ASPxThemes.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
+				
 				<add assembly="DevExpress.Charts.v16.1.Core, Version=16.1.8.0, Culture=Neutral, PublicKeyToken=b88d1754d700e49a"/>
 				<add assembly="DevExpress.XtraCharts.v16.1, Version=16.1.8.0, Culture=Neutral, PublicKeyToken=b88d1754d700e49a"/>
 				<add assembly="DevExpress.XtraCharts.v16.1.Web, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
@@ -56,18 +57,22 @@
 				<add assembly="DevExpress.Dashboard.v16.1.Web, Version=16.1.8.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
 				<add assembly="DevExpress.Office.v16.1.Core, Version=16.1.8.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
 				<add assembly="DevExpress.RichEdit.v16.1.Core, Version=16.1.8.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
-				<!--<add assembly="DevExpress.Xpo.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
-				<add assembly="DevExpress.Xpo.v16.1.Web, Version=16.1.8.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>-->
-				<add assembly="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>
+				<!--<add assembly="DevExpress.Xpo.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>-->
+				<!--<add assembly="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>
 				<add assembly="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>
-				<!--<add assembly="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>-->
 				<add assembly="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>
-				<!--<add assembly="CrystalDecisions.ReportAppServer.Controllers, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304" />-->
-				<!--<add assembly="CrystalDecisions.ReportAppServer.DataDefModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304" />-->
-				<add assembly="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>
+				<add assembly="CrystalDecisions.ReportAppServer.Controllers, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>
+				<add assembly="CrystalDecisions.ReportAppServer.DataDefModel, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>
+				<add assembly="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>-->
+				<!--<add assembly="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=692FBEA5521E1304"/>-->
 				<add assembly="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>
 				<add assembly="DevExpress.Web.Resources.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/>
-				<add assembly="Infragistics4.WebUI.WebResizingExtender.v15.1, Version=15.1.20151.2400, Culture=neutral, PublicKeyToken=7DD5C3163F2CD0CB"/></assemblies>
+				<add assembly="DevExpress.Pdf.v16.1.Core, Version=16.1.8.0, Culture=Neutral, PublicKeyToken=b88d1754d700e49a"/>
+				<add assembly="DevExpress.Sparkline.v16.1.Core, Version=16.1.8.0, Culture=Neutral, PublicKeyToken=b88d1754d700e49a"/>
+				<add assembly="DevExpress.XtraGauges.v16.1.Core, Version=16.1.8.0, Culture=Neutral, PublicKeyToken=b88d1754d700e49a"/>
+				<add assembly="DevExpress.XtraReports.v16.1, Version=16.1.8.0, Culture=Neutral, PublicKeyToken=b88d1754d700e49a"/>
+				<add assembly="DevExpress.Xpo.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"/>
+				<add assembly="DevExpress.XtraReports.v16.1.Web, Version=16.1.8.0, Culture=neutral, PublicKeyToken=B88D1754D700E49A"/></assemblies>
 		</compilation>
 		<globalization culture="en-US" uiCulture="en-US"/>
 		<pages validateRequest="false" clientIDMode="Static">
