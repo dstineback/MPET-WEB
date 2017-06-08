@@ -160,10 +160,6 @@
                                         </dx:ListBoxColumn>
                                     </Columns>
                                 </dx:ASPxComboBox>
-
-
-
-
                             </dx:LayoutItemNestedControlContainer>
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top"></CaptionSettings>
