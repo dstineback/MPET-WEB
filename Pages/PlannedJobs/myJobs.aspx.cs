@@ -100,6 +100,12 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
 
             }
 
+        if (!IsPostBack)
+        {
+
+           
+        }
+
            
                 //Enable/Disable Buttons
             Master.ShowNewButton = true;
@@ -226,12 +232,21 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
      //Edit select logic for Edit button 
     private void EditSelectedRow()
     {
-        var i = myJobsGrid.FocusedRowIndex;
-        var v = myJobsGrid.GetRowValues(i, new[] { "n_jobstepid" });
 
-        if (v != null)
+        var x = myJobsGrid.GetSelectedFieldValues("n_jobstepid");
+        var tempurl = x[0].ToString();
+        
+
+       if (tempurl != null)
         {
-            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + v);
+            //Redirect To Edit Page With Job ID
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + tempurl, true);
+        } 
+        
+        if (Selection.Contains("n_jobstepid"))
+        {
+            //Redirect To Edit Page With Job ID
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + Selection.Get("n_jobstepid"), true);
         }
     }
 

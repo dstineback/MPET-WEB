@@ -7,14 +7,18 @@
     <h1>My Jobs</h1>
     <script type="text/javascript">
         function OnGetRowID(idValue) {
+              
             Selection.Set('Jobid', idValue[0].toString());
-            Selection.Set('n_Jobid', idValue[1].toString());
+            Selection.Set('n_jobid', idValue[1].toString());
             Selection.Set('n_jobstepid', idValue[2].toString());
-            Selection.Set('step', idValue[3].toString());
+            Selection.Set('step', idValue[3].toString());         
         }
     </script>
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField> 
-    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="IOS" Width="100%" AutoGenerateColumns="False" EnableTheming="True" SettingsBehavior-AllowFocusedRow="false" SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid" SettingsText-EmptyDataRow="No Data" SettingsText-EmptyHeaders="No Data">
+    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="IOS" Width="100%" 
+        AutoGenerateColumns="False" EnableTheming="True" SettingsBehavior-AllowFocusedRow="false" 
+        SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid" SettingsText-EmptyDataRow="No Data" 
+        SettingsText-EmptyHeaders="No Data">
         <SettingsAdaptivity AdaptivityMode="HideDataCells"></SettingsAdaptivity>
 
         <Styles>
@@ -27,6 +31,9 @@
                 <InlineEditCell BackColor="#FFFFCC"></InlineEditCell>
                 <SearchPanel Border-BorderColor="Black" Border-BorderStyle="Solid"></SearchPanel>
         </Styles>
+        <ClientSideEvents RowClick="function(s, e) {                       
+                        myJobsGrid.GetRowValues(e.visibleIndex, 'Jobid;n_jobid;n_jobstepid;step', OnGetRowID);                                           
+                    }" />   
         <StylesContextMenu>
             <Row>
                 <Link HoverColor="#66FFFF"></Link>
@@ -40,7 +47,7 @@
 
         <Settings AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Visible" ShowFooter="True" VerticalScrollableHeight="450" VerticalScrollBarMode="Visible"></Settings>
 
-        <SettingsBehavior AllowSelectByRowClick="True" AllowSelectSingleRowOnly="True"></SettingsBehavior>
+        
 
 
         <SettingsCommandButton>
