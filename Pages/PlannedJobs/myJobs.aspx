@@ -15,7 +15,7 @@
         }
     </script>
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField> 
-    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="IOS" Width="100%" 
+    <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="100%" 
         AutoGenerateColumns="False" EnableTheming="True" SettingsBehavior-AllowFocusedRow="false" 
         SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid" SettingsText-EmptyDataRow="No Data" 
         SettingsText-EmptyHeaders="No Data">

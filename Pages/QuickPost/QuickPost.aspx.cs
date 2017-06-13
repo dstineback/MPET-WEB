@@ -144,14 +144,14 @@ namespace Pages.QuickPost
                 txtWorkDescription.Focus();
                 #region Check for Object field population from another source
                 
-                if (Selection.Contains("nobjectid"))
-                {
-                    Session.Remove("nobjectid");
-                    Session.Add("nobjectid", Selection.Get("nobjectid"));
-                }
-                {
+                //if (Selection.Contains("nobjectid"))
+                //{
+                //    Session.Remove("nobjectid");
+                //    Session.Add("nobjectid", Selection.Get("nobjectid"));
+                //}
+                //{
                     
-                }
+                //}
                 if (Session["nobjectid"] != null)
                 {
                     ObjectIDCombo.Value = Convert.ToInt32(HttpContext.Current.Session["nobjectId"]).ToString();
