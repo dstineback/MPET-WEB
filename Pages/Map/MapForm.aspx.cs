@@ -127,7 +127,7 @@ public partial class Pages_Map_MapForm : Page
         ///finds location of which page sent request to map items
         if (myUrl.AbsolutePath != currentURL && query.Length > 2)
         {
-            var page = query[3];
+            var page = query[4];
 
             if (page == "ObjectsList.aspx")
             {
