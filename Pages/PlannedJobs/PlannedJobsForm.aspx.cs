@@ -213,13 +213,23 @@ namespace Pages.PlannedJobs
                                 //Check For Job ID
                                 if (HttpContext.Current.Session["editingJobStepID"] != null)
                                 {
+                                   try {
+
                                     //Save Session Data
                                     BreakDownCheckBox.Enabled = false;
                                     SaveSessionData();
                                     UpdateJobStep();
+                                    }
+                                    catch
+                                    {
+                                        Response.Write("<script language='javascript'>alert('Could not Update Planned Job')</script>");
+                                    } 
                                 }
                                 else
                                 {
+                                    try
+                                    {
+
                                     if (HttpContext.Current.Session["editingJobID"] != null)
                                     {
                                         SaveSessionData();
@@ -238,6 +248,8 @@ namespace Pages.PlannedJobs
                                         BreakDownCheckBox.Enabled = false;
 
                                     }
+                                    }
+                                    catch { Response.Write("<script language='javascript'>alert('Could not Plan Job')</script>"); }
                                 }
 
                                 //Break
@@ -3286,7 +3298,9 @@ namespace Pages.PlannedJobs
                                                                                       WHEN -1 THEN 'N'
                                                                                       ELSE 'Y'
                                                                                     END AS [Following],
-                                                            isnull(LocationOrURL, '') AS LocationOrURL
+                                                            isnull(LocationOrURL, '') AS LocationOrURL,
+                                                            OrganizationCodeID ,
+                                                            FundingGroupCodeID                                                       
                                                   FROM      dbo.MaintenanceObjects AS tblmo
 			                                        JOIN ( SELECT   n_areaid ,
 							                                        areaid
@@ -3302,6 +3316,14 @@ namespace Pages.PlannedJobs
                                                     WHERE   dbo.UsersFlaggedRecords.UserID = " + requestor + @"
                                                             AND dbo.UsersFlaggedRecords.n_objectid > 0
                                                   ) tbl_IsFlaggedRecord ON tblmo.n_objectid = tbl_IsFlaggedRecord.n_objectid
+                                                    INNER JOIN ( SELECT dbo.OrganizationCodes.n_OrganizationCodeID ,
+                                                        dbo.OrganizationCodes.OrganizationCodeID
+                                                 FROM   dbo.OrganizationCodes
+                                               ) tbl_OrgCode ON tbl_OrgCode.n_OrganizationCodeID = tblmo.n_OrganizationCodeID
+                                                    INNER JOIN ( SELECT dbo.FundingGroupCodes.n_FundingGroupCodeID ,
+                                                        dbo.FundingGroupCodes.FundingGroupCodeID
+                                                 FROM   dbo.FundingGroupCodes
+                                               ) tbl_FGC ON tbl_FGC.n_FundingGroupCodeID = tblmo.n_FundingGroupCodeID
                                                     LEFT JOIN ( SELECT TOP 1 dbo.Attachments.LocationOrURL ,
                                                             dbo.Attachments.n_MaintObjectID
                                                     FROM    dbo.Attachments
