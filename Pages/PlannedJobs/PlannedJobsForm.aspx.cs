@@ -46,6 +46,8 @@ namespace Pages.PlannedJobs
         private bool _useWeb;
         private const int EditingTimeBachId = -1;
         private const int EditingTiemBatchItemId = -1;
+        public int editingJobStepId;
+        public int editingJobID;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -62,29 +64,6 @@ namespace Pages.PlannedJobs
                 //Add Use ID TO Session
                 HttpContext.Current.Session.Add("UserID", _oLogon.UserID);
 
-                //Load Form Permissions
-                if (FormSetup(_oLogon.UserID))
-                {
-                    //Setup Buttons
-                }
-
-                //Enable/Disable DOT Specific Tab
-                //requestTab.TabPages[2].ClientVisible = _oLogon.IsDotIndustry;
-                //Master.ShowLocationButton = true;
-
-                //Enable/Disable Facility Specific Tab
-                //requestTab.TabPages[4].ClientVisible = _oLogon.IsFacIndustry;
-
-                //Show Job Step Specific Buttons
-                //Master.ShowPostButton = true;
-                //Master.ShowUnPostButton = true;
-                //Master.EnableUnPostButton = false;
-                //Master.ShowIssueButton = _userCanEdit;
-                //Master.ShowSetDefaultsButton = _userCanEdit;
-                //Master.ShowSetStartDateButton = _userCanEdit;
-                //Master.ShowSetEndDateButton = _userCanEdit;
-                //Master.ShowAddCrewGroupButton = _userCanEdit;
-                //Master.ShowAddCrewLaborButton = _userCanEdit;
             }
 
             #endregion
@@ -111,13 +90,22 @@ namespace Pages.PlannedJobs
 
             #endregion
 
+           if (IsPostBack)
+            {
+                //Checking when the post back hits
+                editingJobID = Convert.ToInt32(Session["editingJobID"]);
+                editingJobStepId = Convert.ToInt32(Session["editingJobStepID"]);
+
+            }
+
             //This Runs when the Page first loads
             //Check For Post To Setup Form
             if(!IsPostBack)
             {
-
-                
-
+                if(editingJobStepId > 0)
+                {
+                    var test = editingJobStepId;
+                }
                     //Check For Session Variable To Distinguish Previous Edit
                     if (HttpContext.Current.Session["editingJobStepID"] != null)
                 {
@@ -177,6 +165,11 @@ namespace Pages.PlannedJobs
                 #endregion
             } else
             {
+                if (!String.IsNullOrEmpty(Request.QueryString["n_jobstepid"]))
+                {
+                    SetFormDataFromGridLink();
+                }
+
                 if (ScriptManager.GetCurrent(Page).IsInAsyncPostBack)
                 {
 
@@ -208,12 +201,6 @@ namespace Pages.PlannedJobs
                                 //AddItems();
                                 break;
                             }
-                        case "EditButton":
-                            {
-                                //Call Edit Routine
-                                EditItems();
-                                break;
-                            }
                         case "DeleteButton":
                             {
                                 //Call Delete Routine
@@ -221,7 +208,8 @@ namespace Pages.PlannedJobs
                                 break;
                             }
                         case "SaveButton":
-                            {
+                            {                                                            
+                                
                                 //Check For Job ID
                                 if (HttpContext.Current.Session["editingJobStepID"] != null)
                                 {
@@ -229,13 +217,11 @@ namespace Pages.PlannedJobs
                                     BreakDownCheckBox.Enabled = false;
                                     SaveSessionData();
                                     UpdateJobStep();
-
                                 }
                                 else
                                 {
                                     if (HttpContext.Current.Session["editingJobID"] != null)
                                     {
-
                                         SaveSessionData();
                                         UpdateRequest();
                                         PlanJobRoutine();
@@ -262,67 +248,7 @@ namespace Pages.PlannedJobs
                                 //Call Print Routine
                                 PrintSelectedRow();
                                 break;
-                            }
-                        //case "MultiSelect":
-                        //    {
-                        //        //Determine Grid
-                        //        //switch (StepTab.ActiveTabIndex)
-                        //        //{
-                        //        //    case 0:
-                        //        //        {
-                        //        //            //Steps
-                        //        //            break;
-                        //        //        }
-                        //        //case 1:
-                        //        //    {
-                        //        //        //Enable/Disable Member MultiSelect
-                        //        //        EnableMemberMultiSelect(!((MemberGrid.Columns[0] as GridViewColumn).Visible));
-                        //        //        break;
-                        //        //    }
-                        //        //case 2:
-                        //        //    {
-                        //        //        //Enable/Disable Crew MultiSelect
-                        //        //        EnableCrewMultiSelect(!((CrewGrid.Columns[0] as GridViewColumn).Visible));
-                        //        //        break;
-                        //        //    }
-                        //        //case 3:
-                        //        //    {
-                        //        //        //Enable/Disable Part MultiSelect
-                        //        //        EnablePartMultiSelect(!((PartGrid.Columns[0] as GridViewColumn).Visible));
-                        //        //        break;
-                        //        //    }
-                        //        //case 4:
-                        //        //    {
-                        //        //        //Enable/Disable Part MultiSelect
-                        //        //        EnableEquipMultiSelect(!((EquipGrid.Columns[0] as GridViewColumn).Visible));
-                        //        //        break;
-                        //        //    }
-                        //        //case 5:
-                        //        //    {
-                        //        //        //Enable/Disable Other MultiSelect
-                        //        //        EnableOtherMultiSelect(!((OtherGrid.Columns[0] as GridViewColumn).Visible));
-                        //        //        break;
-                        //        //    }
-                        //        default:
-                        //                {
-                        //            //Do Nothing
-                        //            break;
-                        //        }
-                        //    }
-
-                        //        //Break
-                        //        break;
-                        //    }
-                        case "SetToStartDate":
-                            {
-                                //SetMembersToStartDate();
-                                break;
-                            }
-                        case "SetToEndDate":
-                            {
-                                //SetMembersToEndDate();
-                                break;
-                            }
+                            }                       
                         case "CopyJob":
                             {
                                 //Call Copy Routine
@@ -361,48 +287,7 @@ namespace Pages.PlannedJobs
                                 //break
                                 break;
                             }
-                        case "NewNonStockPart":
-                            {
-                                //Call NS Part Routine
-                                //NonStockPartRoutine();
-
-                                //break
-                                break;
-                            }
-                        case "PreviousStep":
-                            {
-                                //Check For Previous Step
-                                if (HttpContext.Current.Session["PreviousStep"] != null)
-                                {
-                                    //Reset Variables
-                                    ResetSession();
-
-                                    //Go To Previous Step
-                                    Response.Redirect(
-                                        "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" +
-                                        Convert.ToInt32(HttpContext.Current.Session["PreviousStep"].ToString()), true);
-                                }
-
-                                //break
-                                break;
-                            }
-                        case "NextStep":
-                            {
-                                //Check For Next Step
-                                if (HttpContext.Current.Session["NextStep"] != null)
-                                {
-                                    //Reset Variables
-                                    ResetSession();
-
-                                    //Go To Next Step
-                                    Response.Redirect(
-                                        "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" +
-                                        Convert.ToInt32(HttpContext.Current.Session["NextStep"].ToString()), true);
-                                }
-
-                                //break
-                                break;
-                            }
+                       
                         default:
                             {
                                 //Do Nothing
@@ -441,11 +326,7 @@ namespace Pages.PlannedJobs
                     BreakDownCheckBox.Enabled = false;
                     //Hide Popups
                     AddCrewPopup.ShowOnPageLoad = false;
-                    //AddEquipPopup.ShowOnPageLoad = false;
-                    //AddMemberPopup.ShowOnPageLoad = false;
-                    //CrewLaborClassPopup.ShowOnPageLoad = false;
-                    //CrewGroupPopup.ShowOnPageLoad = false;
-                    //AddPartPopup.ShowOnPageLoad = false;
+                    
                 }
             }
 
@@ -464,6 +345,7 @@ namespace Pages.PlannedJobs
                     {
                         //Get Step ID
                         var jobStepIdToLoad = Convert.ToInt32(Request.QueryString["n_jobstepid"]);
+                        editingJobStepId = jobStepIdToLoad;
 
                         //Get Logon
                         _oLogon = ((LogonObject)HttpContext.Current.Session["LogonInfo"]);
@@ -658,6 +540,7 @@ namespace Pages.PlannedJobs
                                                 //Add Editing Job ID
                                                 HttpContext.Current.Session.Add("editingJobID",
                                                     ((int)_oJob.Ds.Tables[0].Rows[0]["n_Jobid"]));
+                                                editingJobID = Convert.ToInt32(Session["editingJobID"]);
 
                                                 //Add Editing Job Step ID
                                                 HttpContext.Current.Session.Add("editingJobStepID",
@@ -1001,75 +884,7 @@ namespace Pages.PlannedJobs
 
                                                 #endregion
 
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtFN"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtFN");
-                                                //}
-
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtLN"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtLN");
-                                                //}
-
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtEmail"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtEmail");
-                                                //}
-
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtPhone"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtPhone");
-                                                //}
-
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtExt"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtExt");
-                                                //}
-
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtMail"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtMail");
-                                                //}
-
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtBuilding"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtBuilding");
-                                                //}
-
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["txtRoomNum"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("txtRoomNum");
-                                                //}
-
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["ComboServiceOffice"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("ComboServiceOffice");
-                                                //}
-
-                                                ////Check For Prior Value
-                                                //if (HttpContext.Current.Session["ComboServiceOfficeText"] != null)
-                                                //{
-                                                //    //Remove Old One
-                                                //    HttpContext.Current.Session.Remove("ComboServiceOfficeText");
-                                                //}
+                                               
 
                                                 #region Setup Location
 
@@ -1112,20 +927,7 @@ namespace Pages.PlannedJobs
                                                 //Refresh Crew
                                                 CrewGrid.DataBind();
 
-                                                //Refresh Attachments
-                                                //AttachmentGrid.DataBind();
-
-                                                ////Refresh Members
-                                                //MemberGrid.DataBind();
-
-                                                ////Refresh Other
-                                                //OtherGrid.DataBind();
-
-                                                ////Refresh Equipment
-                                                //EquipGrid.DataBind();
-
-                                                ////Refresh Parts Grid
-                                                //PartGrid.DataBind();
+                                                
                                             }
                                         }
                                     }
@@ -1164,22 +966,7 @@ namespace Pages.PlannedJobs
                     BreakDownCheckBox.Enabled = false;
                     CrewGrid.Visible = true;
                 }
-               
-                //Check For Previous Step
-                //if (HttpContext.Current.Session["PreviousStep"] != null)
-                //{
-                //    //Show Button
-                //    Master.ShowPrevStepButton = true;
-                //}
-
-
-                ////Check For Next Step
-                //if (HttpContext.Current.Session["NextStep"] != null)
-                //{
-                //    //Show Button
-                //    Master.ShowNextStepButton = true;
-                //}
-
+                           
                 //Check For Previous Session Variables
                 if (HttpContext.Current.Session["txtWorkDescription"] != null)
                 {
@@ -1217,12 +1004,7 @@ namespace Pages.PlannedJobs
                 }
                 
 
-                //Job ID
-                //if (HttpContext.Current.Session["editingJobStepNum"] != null)
-                //{
-                //    //Get Additional Info From Session
-                //    lblStep.Text = @"STEP #" + (HttpContext.Current.Session["editingJobStepNum"]);
-                //}
+                
 
                 //Step Number
                 if (HttpContext.Current.Session["AssignedJobID"] != null)
@@ -1231,50 +1013,7 @@ namespace Pages.PlannedJobs
                     lblHeader.Text = (HttpContext.Current.Session["AssignedJobID"].ToString());
                 }
 
-                //Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["ComboCostCode"] != null) &&
-                //    (HttpContext.Current.Session["ComboCostCodeText"] != null))
-                //{
-                //    //Get Info From Session
-                //    ComboCostCode.Value = Convert.ToInt32((HttpContext.Current.Session["ComboCostCode"].ToString()));
-                //    ComboCostCode.Text = (HttpContext.Current.Session["ComboCostCodeText"].ToString());
-                //}
-
-                //Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["ComboFundSource"] != null) &&
-                //    (HttpContext.Current.Session["ComboFundSourceText"] != null))
-                //{
-                //    //Get Info From Session
-                //    ComboFundSource.Value = Convert.ToInt32((HttpContext.Current.Session["ComboFundSource"].ToString()));
-                //    ComboFundSource.Text = (HttpContext.Current.Session["ComboFundSourceText"].ToString());
-                //}
-
-                //Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["ComboWorkOrder"] != null) &&
-                //    (HttpContext.Current.Session["ComboWorkOrderText"] != null))
-                //{
-                //    //Get Info From Session
-                //    ComboWorkOrder.Value = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOrder"].ToString()));
-                //    ComboWorkOrder.Text = (HttpContext.Current.Session["ComboWorkOrderText"].ToString());
-                //}
-
-                //Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["ComboWorkOp"] != null) &&
-                //    (HttpContext.Current.Session["ComboWorkOpText"] != null))
-                //{
-                //    //Get Info From Session
-                //    ComboWorkOp.Value = Convert.ToInt32((HttpContext.Current.Session["ComboWorkOp"].ToString()));
-                //    ComboWorkOp.Text = (HttpContext.Current.Session["ComboWorkOpText"].ToString());
-                //}
-
-                //Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["ComboOrgCode"] != null) &&
-                //    (HttpContext.Current.Session["ComboOrgCodeText"] != null))
-                //{
-                //    //Get Info From Session
-                //    ComboOrgCode.Value = Convert.ToInt32((HttpContext.Current.Session["ComboOrgCode"].ToString()));
-                //    ComboOrgCode.Text = (HttpContext.Current.Session["ComboOrgCodeText"].ToString());
-                //}
+               
 
                 //Check For Previous Session Variables
                 if ((HttpContext.Current.Session["ComboFundGroup"] != null) &&
@@ -1285,23 +1024,7 @@ namespace Pages.PlannedJobs
                     ComboFundGroup.Text = (HttpContext.Current.Session["ComboFundGroupText"].ToString());
                 }
 
-                //Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["ComboCtlSection"] != null) &&
-                //    (HttpContext.Current.Session["ComboCtlSectionText"] != null))
-                //{
-                //    //Get Info From Session
-                //    ComboCtlSection.Value = Convert.ToInt32((HttpContext.Current.Session["ComboCtlSection"].ToString()));
-                //    ComboCtlSection.Text = (HttpContext.Current.Session["ComboCtlSectionText"].ToString());
-                //}
-
-                //Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["ComboEquipNum"] != null) &&
-                //    (HttpContext.Current.Session["ComboEquipNumText"] != null))
-                //{
-                //    //Get Info From Session
-                //    ComboEquipNum.Value = Convert.ToInt32((HttpContext.Current.Session["ComboEquipNum"].ToString()));
-                //    ComboEquipNum.Text = (HttpContext.Current.Session["ComboEquipNumText"].ToString());
-                //}
+               
 
                 //Check For Previous Session Variables
                 if (HttpContext.Current.Session["txtAddDetail"] != null && Session["txtAddDetail"].ToString() != "")                {
@@ -1313,104 +1036,7 @@ namespace Pages.PlannedJobs
                     txtAdditionalInfo.Visible = false;
                 }
 
-                //Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtPostNotes"] != null)
-                //{
-                //    //Get Additional Info From Session
-                //    txtPostNotes.Text = (HttpContext.Current.Session["txtPostNotes"].ToString());
-                //}
-
-                //Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["ComboServiceOffice"] != null) &&
-                //    (HttpContext.Current.Session["ComboServiceOfficeText"] != null))
-                //{
-                //    //Get Info From Session
-                //    ComboServiceOffice.Value =
-                //        Convert.ToInt32((HttpContext.Current.Session["ComboServiceOffice"].ToString()));
-                //    ComboServiceOffice.Text = (HttpContext.Current.Session["ComboServiceOfficeText"].ToString());
-                //}
-
-                //Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtFN"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtFN.Value = (HttpContext.Current.Session["txtFN"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtLN"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtLN.Value = (HttpContext.Current.Session["txtLN"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtEmail"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtEmail.Value = (HttpContext.Current.Session["txtEmail"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtPhone"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtPhone.Value = (HttpContext.Current.Session["txtPhone"].ToString());
-                //}
-                //else
-                //{
-                //    //Set Default
-                //    txtPhone.Value = 1111111111;
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtExt"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtExt.Value = (HttpContext.Current.Session["txtExt"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtMail"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtMail.Value = (HttpContext.Current.Session["txtMail"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtBuilding"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtBuilding.Value = (HttpContext.Current.Session["txtBuilding"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtRoomNum"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtRoomNum.Value = (HttpContext.Current.Session["txtRoomNum"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["GPSX"] != null)
-                //{
-                //    //Get Info From Session
-                //    GPSX.Value = (HttpContext.Current.Session["GPSX"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["GPSY"] != null)
-                //{
-                //    //Get Info From Session
-                //    GPSY.Value = (HttpContext.Current.Session["GPSY"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["GPSZ"] != null)
-                //{
-                //    //Get Info From Session
-                //    GPSZ.Value = (HttpContext.Current.Session["GPSZ"].ToString());
-                //}
+                
 
                 //Check For Previous Session Variables
                 if (HttpContext.Current.Session["ObjectIDCombo"] != null)
@@ -1499,140 +1125,7 @@ namespace Pages.PlannedJobs
                     comboReason.Text = (HttpContext.Current.Session["comboReasonText"].ToString());
                 }
 
-                //Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["comboRouteTo"] != null) &&
-                //    (HttpContext.Current.Session["comboRouteToText"] != null))
-                //{
-                //    //Get Info From Session
-                //    comboRouteTo.Value = Convert.ToInt32((HttpContext.Current.Session["comboRouteTo"].ToString()));
-                //    comboRouteTo.Text = (HttpContext.Current.Session["comboRouteToText"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["comboHwyRoute"] != null) &&
-                //    (HttpContext.Current.Session["comboHwyRouteText"] != null))
-                //{
-                //    //Get Info From Session
-                //    comboHwyRoute.Value = Convert.ToInt32((HttpContext.Current.Session["comboHwyRoute"].ToString()));
-                //    comboHwyRoute.Text = (HttpContext.Current.Session["comboHwyRouteText"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtMilepost"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtMilepost.Value = (HttpContext.Current.Session["txtMilepost"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if (HttpContext.Current.Session["txtMilepostTo"] != null)
-                //{
-                //    //Get Info From Session
-                //    txtMilepostTo.Value = (HttpContext.Current.Session["txtMilepostTo"].ToString());
-                //}
-
-                ////Check For Previous Session Variables
-                //if ((HttpContext.Current.Session["comboMilePostDir"] != null) &&
-                //    (HttpContext.Current.Session["comboMilePostDirText"] != null))
-                //{
-                //    //Get Info From Session
-                //    comboMilePostDir.Value =
-                //        Convert.ToInt32((HttpContext.Current.Session["comboMilePostDir"].ToString()));
-                //    comboMilePostDir.Text = (HttpContext.Current.Session["comboMilePostDirText"].ToString());
-                //}
-
-                //#region Process Unit One
-
-                ////Check For Value
-                //if (HttpContext.Current.Session["txtRunUnitOne"] != null)
-                //{
-                //    //Check Value
-                //    if (Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitOne"]) > 0)
-                //    {
-                //        //Set Value
-                //        txtRunUnitOne.Value =
-                //            Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitOne"]);
-
-                //        //Enable Fields
-                //        txtRunUnitOne.ReadOnly = _jobIsHistory;
-                //    }
-                //    else
-                //    {
-                //        ///Disable Fields & Put Defaults In Them
-                //        txtRunUnitOne.Value = 0.00;
-                //        txtRunUnitOne.ReadOnly = true;
-                //    }
-                //}
-                //else
-                //{
-                //    ///Disable Fields & Put Defaults In Them
-                //    txtRunUnitOne.Value = 0.00;
-                //    txtRunUnitOne.ReadOnly = true;
-                //}
-
-                //#endregion
-
-                //#region Process Unit Two
-
-                ////Check For Value
-                //if (HttpContext.Current.Session["txtRunUnitTwo"] != null)
-                //{
-                //    //Check Value
-                //    if (Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitTwo"]) > 0)
-                //    {
-                //        //Set Value
-                //        txtRunUnitTwo.Value =
-                //            Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitTwo"]);
-
-                //        //Enable Fields
-                //        txtRunUnitTwo.ReadOnly = _jobIsHistory;
-                //    }
-                //    else
-                //    {
-                //        ///Disable Fields & Put Defaults In Them
-                //        txtRunUnitTwo.Value = 0.00;
-                //        txtRunUnitTwo.ReadOnly = true;
-                //    }
-                //}
-                //else
-                //{
-                //    ///Disable Fields & Put Defaults In Them
-                //    txtRunUnitTwo.Value = 0.00;
-                //    txtRunUnitTwo.ReadOnly = true;
-                //}
-
-                //#endregion
-
-                //#region Process Unit Three
-
-                ////Check For Value
-                //if (HttpContext.Current.Session["txtRunUnitThree"] != null)
-                //{
-                //    //Check Value
-                //    if (Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitThree"]) > 0)
-                //    {
-                //        //Set Value
-                //        txtRunUnitThree.Value =
-                //            Convert.ToDecimal(HttpContext.Current.Session["txtRunUnitThree"]);
-
-                //        //Enable Fields
-                //        txtRunUnitThree.ReadOnly = _jobIsHistory;
-                //    }
-                //    else
-                //    {
-                //        ///Disable Fields & Put Defaults In Them
-                //        txtRunUnitThree.Value = 0.00;
-                //        txtRunUnitThree.ReadOnly = true;
-                //    }
-                //}
-                //else
-                //{
-                //    ///Disable Fields & Put Defaults In Them
-                //    txtRunUnitThree.Value = 0.00;
-                //    txtRunUnitThree.ReadOnly = true;
-                //}
-
-                //#endregion
+               
 
                 #region Process Run Unit Class
 
@@ -1648,198 +1141,28 @@ namespace Pages.PlannedJobs
 
             #endregion
 
-            //Bind Grids
-            //AttachmentGrid.DataBind();
-
-            ////Refresh Crew
-            //CrewGrid.DataBind();
-
-            ////Refresh Members
-            //MemberGrid.DataBind();
-
-            ////Refresh Other
-            //OtherGrid.DataBind();
-
-            ////Refresh Equipment
-            //EquipGrid.DataBind();
-
-            ////Refresh Parts Grid
-            //PartGrid.DataBind();
-
-            //Get Button Status
-            //var showButtons = !((CrewGrid.Columns[0].Visible)
-            //                    || (MemberGrid.Columns[0].Visible)
-            //                    || (PartGrid.Columns[0].Visible)
-            //                    || (EquipGrid.Columns[0].Visible)
-            //                    || (OtherGrid.Columns[0].Visible));
-
             var showButtons = _userCanEdit;
 
             //Enable/Disable Buttons
-            Master.ShowNewButton = showButtons;
+            Master.ShowNewButton = true;
             Master.ShowEditButton = false;
             Master.ShowViewButton = false;
-            Master.ShowSaveButton = showButtons;
+            Master.ShowSaveButton = true;
 
             Master.ShowPrintButton = false;
             Master.ShowIssueButton = false;
             Master.ShowCopyJobButton = false;
-            Master.ShowAddCrewGroupButton = (!showButtons && (CrewGrid.Columns[0].Visible));
-            Master.ShowAddCrewLaborButton = (!showButtons && (CrewGrid.Columns[0].Visible));
-            Master.ShowSetStartDateButton = (!showButtons
-                                             && (HttpContext.Current.Session["TxtStartingDate"] != null));
-                                             //&& (MemberGrid.Columns[0].Visible));
-            Master.ShowSetEndDateButton = (!showButtons
-                                           && (HttpContext.Current.Session["TxtCompletionDate"] != null));
-            //&& (MemberGrid.Columns[0].Visible));
-            Master.ShowNonStockAddButton = false;//(!showButtons);
-            //&& (PartGrid.Columns[0].Visible));
+            //Master.ShowAddCrewGroupButton = (!showButtons && (CrewGrid.Columns[0].Visible));
+            //Master.ShowAddCrewLaborButton = (!showButtons && (CrewGrid.Columns[0].Visible));
+            //Master.ShowSetStartDateButton = (!showButtons
+            //                                 && (HttpContext.Current.Session["TxtStartingDate"] != null));
+                                             
+            //Master.ShowSetEndDateButton = (!showButtons
+            //                               && (HttpContext.Current.Session["TxtCompletionDate"] != null));
+            
+            //Master.ShowNonStockAddButton = false;
 
-            //Clear Prior Selection If Edit Check Is No Longer Visible
-            //if (!(CrewGrid.Columns[0].Visible))
-            //{
-            //    //uncheck all
-            //    CrewGrid.Selection.UnselectAll();
-            //}
-            //else
-            //{
-            //    //make sure settings are right
-            //    CrewGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
-            //}
-
-            ////Clear Prior Selection If Edit Check Is No Longer Visible
-            //if (!(MemberGrid.Columns[0].Visible))
-            //{
-            //    //Uncheck All
-            //    MemberGrid.Selection.UnselectAll();
-            //}
-            //else
-            //{
-            //    //Make Sure Settings Are Right
-            //    MemberGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
-            //}
-
-            ////Clear Prior Selection If Edit Check Is No Longer Visible
-            //if (!(PartGrid.Columns[0].Visible))
-            //{
-            //    //Uncheck All
-            //    PartGrid.Selection.UnselectAll();
-            //}
-            //else
-            //{
-            //    //Make Sure Settings Are Right
-            //    PartGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
-            //}
-
-            ////Clear Prior Selection If Edit Check Is No Longer Visible
-            //if (!(EquipGrid.Columns[0].Visible))
-            //{
-            //    //Uncheck All
-            //    EquipGrid.Selection.UnselectAll();
-            //}
-            //else
-            //{
-            //    //Make Sure Settings Are Right
-            //    EquipGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
-            //}
-
-            ////Clear Prior Selection If Edit Check Is No Longer Visible
-            //if (!(OtherGrid.Columns[0].Visible))
-            //{
-            //    //Uncheck All
-            //    OtherGrid.Selection.UnselectAll();
-            //}
-            //else
-            //{
-            //    //Make Sure Settings Are Right
-            //    OtherGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
-            //}
-
-            //    //Check For MultiGrid
-            //    if (MultiGrid.Contains("Grid"))
-            //    {
-            //        //Determine Current Grid In Multi Mode
-            //        switch (MultiGrid.Get("Grid").ToString())
-            //        {
-            //            case "MemberGrid":
-            //                {
-            //                    //Disable Other Tabs
-            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-            //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
-            //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
-            //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
-            //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
-            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-            //                    break;
-            //                }
-            //            case "CrewGrid":
-            //                {
-            //                    //Disable Other Tabs
-            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-            //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
-            //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
-            //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
-            //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
-            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-            //                    break;
-            //                }
-            //            case "PartGrid":
-            //                {
-            //                    //Disable Other Tabs
-            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-            //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
-            //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
-            //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
-            //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
-            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-            //                    break;
-            //                }
-            //            case "EquipGrid":
-            //                {
-            //                    //Disable Other Tabs
-            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-            //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
-            //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
-            //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
-            //                    StepTab.TabPages[5].ClientEnabled = false;  //Other
-            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-            //                    break;
-            //                }
-            //            case "OtherGrid":
-            //                {
-            //                    StepTab.TabPages[0].ClientEnabled = false;  //Step
-            //                    StepTab.TabPages[1].ClientEnabled = false;  //Members
-            //                    StepTab.TabPages[2].ClientEnabled = false;  //Crew
-            //                    StepTab.TabPages[3].ClientEnabled = false;  //Parts
-            //                    StepTab.TabPages[4].ClientEnabled = false;  //Equip
-            //                    StepTab.TabPages[6].ClientEnabled = false;  //Attachments
-            //                    break;
-            //                }
-            //            default:
-            //                {
-            //                    //Make Sure All Tabs Are Client Enabled
-            //                    StepTab.TabPages[0].ClientEnabled = true;  //Step
-            //                    StepTab.TabPages[1].ClientEnabled = true;  //Members
-            //                    StepTab.TabPages[2].ClientEnabled = true;  //Crew
-            //                    StepTab.TabPages[3].ClientEnabled = true;  //Parts
-            //                    StepTab.TabPages[4].ClientEnabled = true;  //Equip
-            //                    StepTab.TabPages[5].ClientEnabled = true;  //Other
-            //                    StepTab.TabPages[6].ClientEnabled = true;  //Attachments
-            //                    break;
-            //                }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        //Make Sure All Tabs Are Client Enabled
-            //        StepTab.TabPages[0].ClientEnabled = true;  //Step
-            //        StepTab.TabPages[1].ClientEnabled = true;  //Members
-            //        StepTab.TabPages[2].ClientEnabled = true;  //Crew
-            //        StepTab.TabPages[3].ClientEnabled = true;  //Parts
-            //        StepTab.TabPages[4].ClientEnabled = true;  //Equip
-            //        StepTab.TabPages[5].ClientEnabled = true;  //Other
-            //        StepTab.TabPages[6].ClientEnabled = true;  //Attachments
-            //    }
+            
         }
         private void SetFormDataFromGridLink()
         {
@@ -1899,10 +1222,12 @@ namespace Pages.PlannedJobs
                                             //Add Editing Job ID
                                             HttpContext.Current.Session.Add("editingJobID",
                                                 ((int)_oJob.Ds.Tables[0].Rows[0]["n_Jobid"]));
+                                            var a = Session["editingJobID"];
 
                                             //Add Editing Job Step ID
                                             HttpContext.Current.Session.Add("editingJobStepID",
                                                 ((int)_oJobStep.Ds.Tables[0].Rows[0]["n_jobstepid"]));
+                                            var b = Session["editingJobStepID"];
 
                                             //Add Job Step 
                                             HttpContext.Current.Session.Add("editingJobStepNum",
@@ -2195,76 +1520,6 @@ namespace Pages.PlannedJobs
 
                                             #endregion
 
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["txtFN"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("txtFN");
-                                            //}
-
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["txtLN"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("txtLN");
-                                            //}
-
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["txtEmail"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("txtEmail");
-                                            //}
-
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["txtPhone"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("txtPhone");
-                                            //}
-
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["txtExt"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("txtExt");
-                                            //}
-
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["txtMail"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("txtMail");
-                                            //}
-
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["txtBuilding"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("txtBuilding");
-                                            //}
-
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["txtRoomNum"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("txtRoomNum");
-                                            //}
-
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["ComboServiceOffice"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("ComboServiceOffice");
-                                            //}
-
-                                            ////Check For Prior Value
-                                            //if (HttpContext.Current.Session["ComboServiceOfficeText"] != null)
-                                            //{
-                                            //    //Remove Old One
-                                            //    HttpContext.Current.Session.Remove("ComboServiceOfficeText");
-                                            //}
-
                                             #region Setup Location
 
                                             //Check X
@@ -2305,21 +1560,7 @@ namespace Pages.PlannedJobs
 
                                             //Refresh Crew
                                             CrewGrid.DataBind();
-
-                                            //Refresh Attachments
-                                            //AttachmentGrid.DataBind();
-
-                                            ////Refresh Members
-                                            //MemberGrid.DataBind();
-
-                                            ////Refresh Other
-                                            //OtherGrid.DataBind();
-
-                                            ////Refresh Equipment
-                                            //EquipGrid.DataBind();
-
-                                            ////Refresh Parts Grid
-                                            //PartGrid.DataBind();
+                                          
                                         }
                                     }
                                 }
@@ -2773,14 +2014,14 @@ namespace Pages.PlannedJobs
         /// </summary>
         private void SetupForEditing()
         {
-            //Setup Buttons
-            Master.ShowSaveButton = (_userCanAdd || _userCanEdit);
+            //Setup Buttonse
+            Master.ShowSaveButton = true;
             Master.ShowCopyJobButton = false;
             Master.ShowIssueButton = false;
             Master.ShowEditButton = false;
-            Master.ShowNewButton = _userCanAdd;
+            Master.ShowNewButton = true;
             Master.ShowDeleteButton = false;
-            Master.ShowPrintButton = true;
+            Master.ShowPrintButton = false;
             Master.ShowMultiSelectButton = false;
 
             //Enable Tabs
@@ -3638,97 +2879,97 @@ namespace Pages.PlannedJobs
             comboBox.DataBind();
         }
 
-        //protected void ComboWorkOrder_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
-        //{
-        //    ASPxComboBox comboBox = (ASPxComboBox)source;
-        //    WorkOrderSqlDatasource.SelectCommand =
-        //        @"SELECT  n_WorkOrderCodeID ,
-        //                    WorkOrderCodeID ,
-        //                    [Description]
-        //            FROM    ( SELECT    tblWoC.n_WorkOrderCodeID ,
-        //                                tblWoC.WorkOrderCodeID ,
-        //                                tblWoC.[Description] ,
-        //                                ROW_NUMBER() OVER ( ORDER BY tblWoC.n_WorkOrderCodeID ) AS [rn]
-        //                      FROM      dbo.WorkOrderCodes AS tblWoC
-        //                      WHERE     ( ( WorkOrderCodeID + ' ' + [Description] ) LIKE @filter )
-        //                                AND tblWoC.b_IsActive = 'Y'
-        //                                AND tblWoC.n_WorkOrderCodeID > 0
-        //                    ) AS st
-        //            WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
+        protected void ComboWorkOrder_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
+        {
+            ASPxComboBox comboBox = (ASPxComboBox)source;
+            WorkOrderSqlDatasource.SelectCommand =
+                @"SELECT  n_WorkOrderCodeID ,
+                            WorkOrderCodeID ,
+                            [Description]
+                    FROM    ( SELECT    tblWoC.n_WorkOrderCodeID ,
+                                        tblWoC.WorkOrderCodeID ,
+                                        tblWoC.[Description] ,
+                                        ROW_NUMBER() OVER ( ORDER BY tblWoC.n_WorkOrderCodeID ) AS [rn]
+                              FROM      dbo.WorkOrderCodes AS tblWoC
+                              WHERE     ( ( WorkOrderCodeID + ' ' + [Description] ) LIKE @filter )
+                                        AND tblWoC.b_IsActive = 'Y'
+                                        AND tblWoC.n_WorkOrderCodeID > 0
+                            ) AS st
+                    WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
 
-        //    WorkOrderSqlDatasource.SelectParameters.Clear();
-        //    WorkOrderSqlDatasource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
-        //    WorkOrderSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
-        //    WorkOrderSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString());
-        //    comboBox.DataSource = WorkOrderSqlDatasource;
-        //    comboBox.DataBind();
-        //}
+            WorkOrderSqlDatasource.SelectParameters.Clear();
+            WorkOrderSqlDatasource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
+            WorkOrderSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
+            WorkOrderSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString());
+            comboBox.DataSource = WorkOrderSqlDatasource;
+            comboBox.DataBind();
+        }
 
-        //protected void ComboWorkOrder_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
-        //{
-        //    long value = 0;
-        //    if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
-        //        return;
-        //    ASPxComboBox comboBox = (ASPxComboBox)source;
-        //    WorkOrderSqlDatasource.SelectCommand = @"SELECT  tblWoC.n_WorkOrderCodeID ,
-        //                                                    tblWoC.WorkOrderCodeID ,
-        //                                                    tblWoC.[Description] ,
-        //                                                    ROW_NUMBER() OVER ( ORDER BY tblWoC.n_WorkOrderCodeID ) AS [rn]
-        //                                            FROM    dbo.WorkOrderCodes AS tblWoC
-        //                                            WHERE   ( n_WorkOrderCodeID = @ID )
-        //                                            ORDER BY WorkOrderCodeID";
+        protected void ComboWorkOrder_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
+        {
+            long value = 0;
+            if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
+                return;
+            ASPxComboBox comboBox = (ASPxComboBox)source;
+            WorkOrderSqlDatasource.SelectCommand = @"SELECT  tblWoC.n_WorkOrderCodeID ,
+                                                            tblWoC.WorkOrderCodeID ,
+                                                            tblWoC.[Description] ,
+                                                            ROW_NUMBER() OVER ( ORDER BY tblWoC.n_WorkOrderCodeID ) AS [rn]
+                                                    FROM    dbo.WorkOrderCodes AS tblWoC
+                                                    WHERE   ( n_WorkOrderCodeID = @ID )
+                                                    ORDER BY WorkOrderCodeID";
 
-        //    WorkOrderSqlDatasource.SelectParameters.Clear();
-        //    WorkOrderSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
-        //    comboBox.DataSource = WorkOrderSqlDatasource;
-        //    comboBox.DataBind();
-        //}
+            WorkOrderSqlDatasource.SelectParameters.Clear();
+            WorkOrderSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
+            comboBox.DataSource = WorkOrderSqlDatasource;
+            comboBox.DataBind();
+        }
 
-        //protected void ComboWorkOp_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
-        //{
-        //    ASPxComboBox comboBox = (ASPxComboBox)source;
-        //    WorkOpSqlDatasource.SelectCommand =
-        //        @"SELECT  n_WorkOpID ,
-        //                    WorkOpID ,
-        //                    [Description]
-        //            FROM    ( SELECT    tblWorkOp.n_WorkOpID ,
-        //                                tblWorkOp.WorkOpID ,
-        //                                tblWorkOp.[Description] ,
-        //                                ROW_NUMBER() OVER ( ORDER BY tblWorkOp.n_WorkOpID ) AS [rn]
-        //                      FROM      dbo.WorkOperations AS tblWorkOp
-        //                      WHERE     ( ( WorkOpID + ' ' + [Description] ) LIKE @filter )
-        //                                AND tblWorkOp.b_IsActive = 'Y'
-        //                                AND tblWorkOp.n_WorkOpID > 0
-        //                    ) AS st
-        //            WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
+        protected void ComboWorkOp_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
+        {
+            ASPxComboBox comboBox = (ASPxComboBox)source;
+            WorkOpSqlDatasource.SelectCommand =
+                @"SELECT  n_WorkOpID ,
+                            WorkOpID ,
+                            [Description]
+                    FROM    ( SELECT    tblWorkOp.n_WorkOpID ,
+                                        tblWorkOp.WorkOpID ,
+                                        tblWorkOp.[Description] ,
+                                        ROW_NUMBER() OVER ( ORDER BY tblWorkOp.n_WorkOpID ) AS [rn]
+                              FROM      dbo.WorkOperations AS tblWorkOp
+                              WHERE     ( ( WorkOpID + ' ' + [Description] ) LIKE @filter )
+                                        AND tblWorkOp.b_IsActive = 'Y'
+                                        AND tblWorkOp.n_WorkOpID > 0
+                            ) AS st
+                    WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
 
-        //    WorkOpSqlDatasource.SelectParameters.Clear();
-        //    WorkOpSqlDatasource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
-        //    WorkOpSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
-        //    WorkOpSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString());
-        //    comboBox.DataSource = WorkOpSqlDatasource;
-        //    comboBox.DataBind();
-        //}
+            WorkOpSqlDatasource.SelectParameters.Clear();
+            WorkOpSqlDatasource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
+            WorkOpSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
+            WorkOpSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString());
+            comboBox.DataSource = WorkOpSqlDatasource;
+            comboBox.DataBind();
+        }
 
-        //protected void ComboWorkOp_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
-        //{
-        //    long value = 0;
-        //    if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
-        //        return;
-        //    ASPxComboBox comboBox = (ASPxComboBox)source;
-        //    WorkOpSqlDatasource.SelectCommand = @"SELECT  tblWorkOp.n_WorkOpID ,
-        //                                                    tblWorkOp.WorkOpID ,
-        //                                                    tblWorkOp.[Description] ,
-        //                                                    ROW_NUMBER() OVER ( ORDER BY tblWorkOp.n_WorkOpID ) AS [rn]
-        //                                            FROM    dbo.WorkOperations AS tblWorkOp
-        //                                            WHERE   ( n_WorkOpID = @ID )
-        //                                            ORDER BY WorkOpID";
+        protected void ComboWorkOp_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
+        {
+            long value = 0;
+            if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
+                return;
+            ASPxComboBox comboBox = (ASPxComboBox)source;
+            WorkOpSqlDatasource.SelectCommand = @"SELECT  tblWorkOp.n_WorkOpID ,
+                                                            tblWorkOp.WorkOpID ,
+                                                            tblWorkOp.[Description] ,
+                                                            ROW_NUMBER() OVER ( ORDER BY tblWorkOp.n_WorkOpID ) AS [rn]
+                                                    FROM    dbo.WorkOperations AS tblWorkOp
+                                                    WHERE   ( n_WorkOpID = @ID )
+                                                    ORDER BY WorkOpID";
 
-        //    WorkOpSqlDatasource.SelectParameters.Clear();
-        //    WorkOpSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
-        //    comboBox.DataSource = WorkOpSqlDatasource;
-        //    comboBox.DataBind();
-        //}
+            WorkOpSqlDatasource.SelectParameters.Clear();
+            WorkOpSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
+            comboBox.DataSource = WorkOpSqlDatasource;
+            comboBox.DataBind();
+        }
 
         //protected void ComboOrgCode_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
         //{
@@ -4008,74 +3249,7 @@ namespace Pages.PlannedJobs
                                     AND tblmo.n_objectid > 0
                         ) AS st
 		                WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
-            //@"DECLARE @areaFilteringOn VARCHAR(1)
-            //--Setup Area Filering Variable
-            //IF ( ( SELECT   COUNT(dbo.UsersAreaFilter.RecordID)
-            //       FROM     dbo.UsersAreaFilter WITH ( NOLOCK )
-            //       WHERE    UsersAreaFilter.UserID = " + requestor + @"
-            //                AND UsersAreaFilter.FilterActive = 'Y'
-            //     ) <> 0 )
-            //    BEGIN
-            //        SET @areaFilteringOn = 'Y'
-            //    END
-            //ELSE
-            //    BEGIN
-            //        SET @areaFilteringOn = 'N'
-            //    END
-
-            //SELECT  [n_objectid] ,
-            //        [objectid] ,
-            //        [description] ,
-            //        [areaid] ,
-            //        [locationid] ,
-            //        [assetnumber],
-            //        CASE ISNULL(RecordID, -1)
-            //          WHEN -1 THEN 'N'
-            //          ELSE 'Y'
-            //        END AS [Following] ,
-            //        isnull(LocationOrURL, '') AS LocationOrURL
-            //FROM    ( SELECT    tblmo.[n_objectid] ,
-            //                    tblmo.[objectid] ,
-            //                    tblmo.[description] ,
-            //                    tblarea.[areaid] ,
-            //                    tbllocation.[locationid] ,
-            //                    tblmo.[assetnumber] ,
-            //                    ROW_NUMBER() OVER ( ORDER BY tblmo.[n_objectid] ) AS [rn],
-            //                    tbl_IsFlaggedRecord.RecordID,
-            //                   tblFirstPhoto.LocationOrURL
-            //          FROM      dbo.MaintenanceObjects AS tblmo
-            //                    JOIN ( SELECT   tbl_Area.n_areaid ,
-            //                                    tbl_Area.areaid
-            //                           FROM     dbo.Areas tbl_Area
-            //                           WHERE    ( ( @areaFilteringOn = 'Y'
-            //                                        AND EXISTS ( SELECT recordMatches.AreaFilterID
-            //                                                     FROM   dbo.UsersAreaFilter AS recordMatches
-            //                                                     WHERE  tbl_Area.n_areaid = recordMatches.AreaFilterID
-            //                                                            AND recordMatches.UserID = " + requestor + @"
-            //                                                            AND recordMatches.FilterActive = 'Y' )
-            //                                      )
-            //                                      OR ( @areaFilteringOn = 'N' )
-            //                                    )
-            //                         ) tblarea ON tblmo.n_areaid = tblarea.n_areaid
-            //                    JOIN ( SELECT   n_locationid ,
-            //                                    locationid
-            //                           FROM     dbo.locations
-            //                         ) tbllocation ON tblmo.n_locationid = tbllocation.n_locationid
-            //                    LEFT JOIN ( SELECT  dbo.UsersFlaggedRecords.RecordID ,
-            //                                        dbo.UsersFlaggedRecords.n_objectid
-            //                                FROM    dbo.UsersFlaggedRecords
-            //                                WHERE   dbo.UsersFlaggedRecords.UserID = " + requestor + @"
-            //                                        AND dbo.UsersFlaggedRecords.n_objectid > 0
-            //                              ) tbl_IsFlaggedRecord ON tblmo.n_objectid = tbl_IsFlaggedRecord.n_objectid
-            //                    LEFT JOIN ( SELECT TOP 1 dbo.Attachments.LocationOrURL ,
-            //                                        dbo.Attachments.n_MaintObjectID
-            //                                FROM    dbo.Attachments
-            //                              ) tblFirstPhoto ON tblmo.n_objectid = tblFirstPhoto.n_MaintObjectID                                
-            //          WHERE     ( ( [objectid] + ' ' + [description] + ' ' + [areaid] + ' ' + [locationid] + ' ' + [assetnumber] ) LIKE @filter )
-            //                    AND tblmo.b_active = 'Y'
-            //                    AND tblmo.n_objectid > 0
-            //        ) AS st
-            //    WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
+           
 
             ObjectDataSource.SelectParameters.Clear();
             ObjectDataSource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
@@ -7685,993 +6859,6 @@ namespace Pages.PlannedJobs
         }
 
         /// <summary>
-        /// Adds Selected Equipment For Job Step
-        /// </summary>
-        /// <param name="sender">Sending Object</param>
-        /// <param name="e">Event Args</param>
-        //protected void btnAddEquip_Click(object sender, EventArgs e)
-        //{
-        //    //Add Selected Crew For Job Step
-        //    var recordIdSelection = EquipLookupGrid.GetSelectedFieldValues("n_objectid");
-
-        //    //Check Count
-        //    if (recordIdSelection.Count > 0)
-        //    {
-        //        //Check Permissions
-        //        if (_userCanEdit)
-        //        {
-        //            //Get Job Step ID
-        //            var jobStepId = -1;
-        //            if ((HttpContext.Current.Session["editingJobStepID"] != null))
-        //            {
-        //                //Get Info From Session
-        //                jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-        //            }
-
-        //            //Get Job ID
-        //            var jobId = -1;
-        //            if ((HttpContext.Current.Session["editingJobID"] != null))
-        //            {
-        //                //Get Info From Session
-        //                jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-        //            }
-
-        //            //Check IDs
-        //            if ((jobStepId > 0) && (jobId > 0))
-        //            {
-        //                //Create Control Variable
-        //                var addedEquipment = false;
-
-        //                //Loop Selections
-        //                for (var rowIndex = 0; rowIndex < recordIdSelection.Count; rowIndex++)
-        //                {
-        //                    //Get ID
-        //                    var maintId = Convert.ToInt32(recordIdSelection[rowIndex].ToString());
-
-        //                    //Set Temp Date
-        //                    var tmpJobEquipDate = DateTime.Now;
-
-        //                    //Get Cost
-        //                    var equipmentCost =
-        //                        Convert.ToDecimal(
-        //                            EquipLookupGrid.GetFilteredSelectedValues("ChargeRate")[rowIndex].ToString());
-
-        //                    //Get Description
-        //                    var equipDesc =
-        //                        EquipLookupGrid.GetFilteredSelectedValues("description")[rowIndex].ToString();
-
-        //                    //Create Date Worked
-        //                    var dateWorked = _nullDate;
-
-        //                    //If Completion Date Is Set Use It Instead
-        //                    //if ((txtJobstepDateCompleted.Value != null) &&
-        //                    //    (txtJobstepDateCompleted.Value.ToString() != ""))
-        //                    //{
-        //                    //    tmpJobEquipDate = Convert.ToDateTime(txtJobstepDateCompleted.Value.ToString());
-        //                    //}
-
-        //                    //Clear Errors
-        //                    _oJobEquipment.ClearErrors();
-
-        //                    //Add Item
-        //                    if (_oJobEquipment.Add(jobId,
-        //                        jobStepId,
-        //                        maintId,
-        //                        equipmentCost,
-        //                        equipDesc,
-        //                        "",
-        //                        0,
-        //                        0,
-        //                        tmpJobEquipDate,
-        //                        -1,
-        //                        _oLogon.UserID,
-        //                        -1,
-        //                        -1))
-        //                    {
-        //                        //Equipment Added Set Flag
-        //                        addedEquipment = true;
-        //                    }
-        //                }
-
-        //                //Check Flag
-        //                if (addedEquipment)
-        //                {
-        //                    //Refresh Crew Grid
-        //                    EquipGrid.DataBind();
-
-        //                    //Clear Selection
-        //                    EquipLookupGrid.Selection.UnselectAll();
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// Adds Selected Members For Job Step
-        /// </summary>
-        /// <param name="sender">Sending Object</param>
-        /// <param name="e">Event Args</param>
-        //protected void btnAddMember_Click(object sender, EventArgs e)
-        //{
-        //    //Add Selected Crew For Job Step
-        //    var recordIdSelection = MemberLookupGrid.GetSelectedFieldValues("n_objectid");
-
-        //    //Check Count
-        //    if (recordIdSelection.Count > 0)
-        //    {
-        //        //Check Permissions
-        //        if (_userCanEdit)
-        //        {
-        //            //Get Job Step ID
-        //            var jobStepId = -1;
-        //            if ((HttpContext.Current.Session["editingJobStepID"] != null))
-        //            {
-        //                //Get Info From Session
-        //                jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-        //            }
-
-        //            //Get Job ID
-        //            var jobId = -1;
-        //            if ((HttpContext.Current.Session["editingJobID"] != null))
-        //            {
-        //                //Get Info From Session
-        //                jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-        //            }
-
-        //            //Check IDs
-        //            if ((jobStepId > 0) && (jobId > 0))
-        //            {
-        //                //Create Control Variable
-        //                var addedMember = false;
-
-        //                //Loop Selections
-        //                for (var rowIndex = 0; rowIndex < recordIdSelection.Count; rowIndex++)
-        //                {
-        //                    //Get ID
-        //                    var tmpObjectId = Convert.ToInt32(recordIdSelection[rowIndex].ToString());
-
-        //                    //Set Temp Date
-        //                    var tmpWorkDate = DateTime.Now;
-
-        //                    //Check If Job Completion Date
-        //                    //if ((txtJobstepDateCompleted.Value != null) &&
-        //                    //    (txtJobstepDateCompleted.Value.ToString() != ""))
-        //                    //{
-        //                    //    //Set Date
-        //                    //    tmpWorkDate = Convert.ToDateTime(txtJobstepDateCompleted.Value.ToString());
-        //                    //}
-        //                    //else if ((txtJSStartDate.Value != null) && (txtJSStartDate.Value.ToString() != ""))
-        //                    //{
-        //                    //    //Check If Job Start Date Exists
-        //                    //    tmpWorkDate = Convert.ToDateTime(txtJSStartDate.Value.ToString());
-        //                    //}
-
-
-        //                    //Clear Errors
-        //                    _oJobMembers.ClearErrors();
-
-        //                    //Add Record
-        //                    if (
-        //                        _oJobMembers.Add(jobId, -1, tmpObjectId, true, tmpWorkDate,
-        //                            _oLogon.UserID))
-        //                    {
-        //                        //Member Added Set Flag
-        //                        addedMember = true;
-        //                    }
-        //                }
-
-        //                //Check Flag
-        //                if (addedMember)
-        //                {
-        //                    //Refresh Member Grid
-        //                    MemberGrid.DataBind();
-
-        //                    //Clear Selection
-        //                    MemberLookupGrid.Selection.UnselectAll();
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// Adds Selected Parts For Job Step
-        /// </summary>
-        /// <param name="sender">Sending Object</param>
-        /// <param name="e">Event Args</param>
-        //protected void btnAddPart_Click(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        //Check Permissions
-        //        if (_userCanEdit)
-        //        {
-        //            //Get Job Step ID
-        //            var jobStepId = -1;
-        //            if ((HttpContext.Current.Session["editingJobStepID"] != null))
-        //            {
-        //                //Get Info From Session
-        //                jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-        //            }
-
-        //            //Get Job ID
-        //            var jobId = -1;
-        //            if ((HttpContext.Current.Session["editingJobID"] != null))
-        //            {
-        //                //Get Info From Session
-        //                jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-        //            }
-
-        //            //Check IDs
-        //            if ((jobStepId > 0) && (jobId > 0))
-        //            {
-        //                //Get Equipment Selection
-        //                var recordIdSelection = PartLookupGrid.GetSelectedFieldValues(new[] { "n_masterpartid", "masterpartid", "Description", "listcost", "cPrefMfg", "n_PrefMFGPartID" });
-
-        //                //Set Job ID/Step
-        //                _oJobParts.SetJobstepInfo(jobId, jobStepId);
-
-        //                //Process Multi Selection
-        //                if ((from object[] partSelections in recordIdSelection
-        //                     let partId = Convert.ToInt32(partSelections[0].ToString())
-        //                     let editingJpnsPartId = partSelections[1].ToString()
-        //                     let editingJpnsPartDesc = partSelections[2].ToString()
-        //                     let editingJpnsPartCost = Convert.ToDecimal(partSelections[3].ToString())
-        //                     let cPreferedMfgPartId = partSelections[4].ToString()
-        //                     let editingJpMfgPartId = Convert.ToInt32(partSelections[5].ToString())
-        //                     where !_oJobParts.Add(partId,
-        //                                             -1,
-        //                                             false,
-        //                                             false,
-        //                                             "",
-        //                                             editingJpnsPartId,
-        //                                             editingJpnsPartCost,
-        //                                             cPreferedMfgPartId,
-        //                                             editingJpnsPartDesc,
-        //                                             0,
-        //                                             0,
-        //                                             DateTime.Now.Date,
-        //                                             editingJpMfgPartId,
-        //                                             -1,
-        //                                             _oLogon.UserID,
-        //                                             -1,
-        //                                             -1)
-        //                     select partId).Any())
-        //                {
-        //                    //Throw Error
-        //                    throw new SystemException(@"Error Adding Stock Master Part  - " + _oJobParts.LastError);
-        //                }
-
-        //                //Perform Refresh
-        //                PartGrid.DataBind();
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //Show Error
-        //        Master.ShowError(ex.Message);
-        //    }
-        //}
-
-        /// <summary>
-        /// Saves Other Job Record Changes From Row Edit Template
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        //protected void OtherGrid_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
-        //{
-        //    //Check Permissions
-        //    if (_userCanEdit)
-        //    {
-        //        //Get Job Step ID
-        //        var jobStepId = -1;
-        //        if ((HttpContext.Current.Session["editingJobStepID"] != null))
-        //        {
-        //            //Get Info From Session
-        //            jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-        //        }
-
-        //        //Get Job ID
-        //        var jobId = -1;
-        //        if ((HttpContext.Current.Session["editingJobID"] != null))
-        //        {
-        //            //Get Info From Session
-        //            jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-        //        }
-
-        //        //Make Sure We Have A Selection
-        //        if (OtherGrid.EditingRowVisibleIndex >= 0)
-        //        {
-        //            //Set Cancel Flag
-        //            e.Cancel = true;
-
-        //            //Get Editing Record ID
-        //            var recordId = -1;
-        //            recordId = Convert.ToInt32(OtherGrid.GetRowValues(OtherGrid.EditingRowVisibleIndex, "n_JobOtherID"));
-
-        //            //Check IDs
-        //            if ((jobStepId > 0) && (jobId > 0))
-        //            {
-        //                //Check Editing Mode
-        //                if (OtherGrid.SettingsEditing.Mode == GridViewEditingMode.PopupEditForm)
-        //                {
-        //                    //Check For Valid Description
-        //                    if (
-        //                        (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liOtherDesc")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxButtonEdit).Text != null)
-        //                        &&
-        //                        (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liOtherDesc")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxButtonEdit).Text != ""))
-        //                    {
-        //                        //Get Description
-        //                        var descToEdit =
-        //                            ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherDesc")
-        //                                as LayoutItem).GetNestedControl() as ASPxButtonEdit).Text;
-
-        //                        //Check/Get Est Units
-        //                        decimal estToEdit = 0;
-        //                        if (
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherEstUnits")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != null)
-        //                            &&
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherEstUnits")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != ""))
-        //                        {
-
-        //                            estToEdit = Convert.ToDecimal(
-        //                                ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                    ASPxFormLayout)
-        //                                    .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                        "liOtherEstUnits")
-        //                                    as
-        //                                    LayoutItem).GetNestedControl() as ASPxSpinEdit).Text);
-        //                        }
-
-        //                        //Check/Get Act Units
-        //                        decimal actToEdit = 0;
-        //                        if (
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherActUnits")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != null)
-        //                            &&
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherActUnits")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != ""))
-        //                        {
-
-        //                            actToEdit = Convert.ToDecimal(
-        //                                ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                    ASPxFormLayout)
-        //                                    .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                        "liOtherActUnits")
-        //                                    as
-        //                                    LayoutItem).GetNestedControl() as ASPxSpinEdit).Text);
-        //                        }
-
-        //                        //Get Cost
-        //                        decimal costToEdit = 0;
-        //                        if (
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherCost")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != null)
-        //                            &&
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherCost")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != ""))
-        //                        {
-
-        //                            costToEdit = Convert.ToDecimal(
-        //                                ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                    ASPxFormLayout)
-        //                                    .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                        "liOtherCost")
-        //                                    as
-        //                                    LayoutItem).GetNestedControl() as ASPxSpinEdit).Text);
-        //                        }
-
-        //                        //Get Date Worked
-        //                        var dateWorkedToEdit = _nullDate;
-        //                        if (
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherDate")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxDateEdit).Text != null)
-        //                            &&
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherDate")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxDateEdit).Text != ""))
-        //                        {
-
-        //                            dateWorkedToEdit = Convert.ToDateTime(
-        //                                ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                    ASPxFormLayout)
-        //                                    .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                        "liOtherDate")
-        //                                    as
-        //                                    LayoutItem).GetNestedControl() as ASPxDateEdit).Text);
-        //                        }
-
-        //                        //Get Misc Ref
-        //                        var miscRefToEdit = "";
-        //                        if (
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherMisc")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxButtonEdit).Text != null)
-        //                            &&
-        //                            (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liOtherMisc")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxButtonEdit).Text != ""))
-        //                        {
-
-        //                            miscRefToEdit =
-        //                                ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                                    ASPxFormLayout)
-        //                                    .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                        "liOtherMisc")
-        //                                    as
-        //                                    LayoutItem).GetNestedControl() as ASPxButtonEdit).Text;
-        //                        }
-
-        //                        //Save Changes
-        //                        _oJobOther.ClearErrors();
-
-        //                        //Add Other Record
-        //                        if (_oJobOther.Update(recordId,
-        //                            jobId,
-        //                            jobStepId,
-        //                            descToEdit,
-        //                            costToEdit,
-        //                            miscRefToEdit,
-        //                            actToEdit,
-        //                            estToEdit,
-        //                            dateWorkedToEdit,
-        //                            _oLogon.UserID))
-        //                        {
-        //                            //Cacnel Edit (Hides Template)
-        //                            OtherGrid.CancelEdit();
-
-        //                            //Refresh Part Grid                        
-        //                            OtherGrid.DataBind();
-        //                        }
-        //                    }
-        //                }
-        //                else
-        //                {
-
-        //                    //Get Description
-        //                    var descToEdit = e.NewValues["OtherDescr"].ToString();
-
-        //                    //Get Est Units
-        //                    var estToEdit = Convert.ToDecimal(e.NewValues["qtyplanned"]);
-
-        //                    //Get Act Units
-        //                    var actToEdit = Convert.ToDecimal(e.NewValues["qtyused"]);
-
-        //                    //Get Cost
-        //                    var costToEdit = Convert.ToDecimal(e.NewValues["OtherCost"]);
-
-        //                    //Get Work Date
-        //                    var dateWorkedToEdit = _nullDate;
-        //                    if (e.NewValues["WorkDate"].ToString() != "")
-        //                    {
-        //                        //Get Date
-        //                        dateWorkedToEdit = Convert.ToDateTime(e.NewValues["WorkDate"]);
-        //                    }
-
-        //                    //Get Misc Ref
-        //                    var miscRefToEdit = e.NewValues["MiscellaneousReference"].ToString();
-
-        //                    //Save Changes
-        //                    _oJobOther.ClearErrors();
-
-        //                    //Add Other Record
-        //                    if (_oJobOther.Update(recordId,
-        //                        jobId,
-        //                        jobStepId,
-        //                        descToEdit,
-        //                        costToEdit,
-        //                        miscRefToEdit,
-        //                        actToEdit,
-        //                        estToEdit,
-        //                        dateWorkedToEdit,
-        //                        _oLogon.UserID))
-        //                    {
-        //                        //Cacnel Edit (Hides Template)
-        //                        OtherGrid.CancelEdit();
-
-        //                        //Refresh Part Grid                        
-        //                        OtherGrid.DataBind();
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Saves Other Job Record Changes From Row Edit Template
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //protected void OtherGrid_BatchUpdate(object sender, ASPxDataBatchUpdateEventArgs e)
-        //{
-        //    //Check Permissions
-        //    if (_userCanEdit)
-        //    {
-        //        //Set Handled Flag
-        //        e.Handled = true;
-
-        //        //Get Job Step ID
-        //        var jobStepId = -1;
-        //        if ((HttpContext.Current.Session["editingJobStepID"] != null))
-        //        {
-        //            //Get Info From Session
-        //            jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-        //        }
-
-        //        //Get Job ID
-        //        var jobId = -1;
-        //        if ((HttpContext.Current.Session["editingJobID"] != null))
-        //        {
-        //            //Get Info From Session
-        //            jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-        //        }
-
-        //        //Check IDs
-        //        if ((jobStepId > 0) && (jobId > 0))
-        //        {
-        //            //Make Sure We Have Updated Values
-        //            if (e.UpdateValues.Count > 0)
-        //            {
-        //                //Loop Items
-        //                foreach (ASPxDataUpdateValues item in e.UpdateValues)
-        //                {
-        //                    //Get Record ID
-        //                    var recordId = Convert.ToInt32(item.Keys["n_JobOtherID"]);
-
-        //                    //Get Description
-        //                    var descToEdit = item.NewValues["OtherDescr"].ToString();
-
-        //                    //Get Est Units
-        //                    var estToEdit  = Convert.ToDecimal(item.NewValues["qtyplanned"]);
-
-        //                    //Get Act Units
-        //                    var actToEdit  = Convert.ToDecimal(item.NewValues["qtyused"]);
-
-        //                    //Get Cost
-        //                    var costToEdit  = Convert.ToDecimal(item.NewValues["OtherCost"]);
-
-        //                    //Get Work Date
-        //                    var dateWorkedToEdit  = Convert.ToDateTime(item.NewValues["WorkDate"]);
-
-        //                    //Get Misc Ref
-        //                    var miscRefToEdit = item.NewValues["MiscellaneousReference"].ToString();
-
-        //                    //Save Changes
-        //                    _oJobOther.ClearErrors();
-
-        //                        //Add Other Record
-        //                    if (_oJobOther.Update(recordId,
-        //                        jobId,
-        //                        jobStepId,
-        //                        descToEdit,
-        //                        costToEdit,
-        //                        miscRefToEdit,
-        //                        actToEdit,
-        //                        estToEdit,
-        //                        dateWorkedToEdit,
-        //                        _oLogon.UserID))
-        //                    {
-        //                        //Cacnel Edit (Hides Template)
-        //                        OtherGrid.CancelEdit();
-
-        //                        //Refresh Part Grid                        
-        //                        OtherGrid.DataBind();
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// Adds New Jobstep Other Record From Row Edit Template
-        /// </summary>
-        /// <param name="sender">Sending Object</param>
-        /// <param name="e">Event Args</param>
-        //protected void OtherGrid_RowInserting(object sender, DevExpress.Web.Data.ASPxDataInsertingEventArgs e)
-        //{
-        //    //Check Permissions
-        //    if (_userCanEdit)
-        //    {
-        //        //Set Cancel Flag
-        //        e.Cancel = true;
-
-
-        //        //Get Job Step ID
-        //        var jobStepId = -1;
-        //        if ((HttpContext.Current.Session["editingJobStepID"] != null))
-        //        {
-        //            //Get Info From Session
-        //            jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-        //        }
-
-        //        //Get Job ID
-        //        var jobId = -1;
-        //        if ((HttpContext.Current.Session["editingJobID"] != null))
-        //        {
-        //            //Get Info From Session
-        //            jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-        //        }
-
-        //        //Check IDs
-        //        if ((jobStepId > 0) && (jobId > 0))
-        //        {
-        //            //Check For Valid Description
-        //            if (
-        //                (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                    .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName("liOtherDesc") as
-        //                    LayoutItem).GetNestedControl() as ASPxButtonEdit).Text != null)
-        //                &&
-        //                (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                    .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName("liOtherDesc") as
-        //                    LayoutItem).GetNestedControl() as ASPxButtonEdit).Text != ""))
-        //            {
-        //                //Get Description
-        //                var descToAdd =
-        //                    ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName("liOtherDesc")
-        //                        as LayoutItem).GetNestedControl() as ASPxButtonEdit).Text;
-
-        //                //Check/Get Est Units
-        //                decimal estToAdd = 0;
-        //                if (
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName("liOtherEstUnits")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != null)
-        //                    &&
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName("liOtherEstUnits")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != ""))
-        //                {
-
-        //                    estToAdd = Convert.ToDecimal(
-        //                        ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liOtherEstUnits")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxSpinEdit).Text);
-        //                }
-
-        //                //Check/Get Act Units
-        //                decimal actToAdd = 0;
-        //                if (
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                            "liOtherActUnits")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != null)
-        //                    &&
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                            "liOtherActUnits")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != ""))
-        //                {
-
-        //                    actToAdd = Convert.ToDecimal(
-        //                        ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liOtherActUnits")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxSpinEdit).Text);
-        //                }
-
-        //                //Get Cost
-        //                decimal costToAdd = 0;
-        //                if (
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                            "liOtherCost")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != null)
-        //                    &&
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                            "liOtherCost")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxSpinEdit).Text != ""))
-        //                {
-
-        //                    costToAdd = Convert.ToDecimal(
-        //                        ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liOtherCost")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxSpinEdit).Text);
-        //                }
-
-        //                //Get Date Worked
-        //                var dateWorkedToAdd = _nullDate;
-        //                if (
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                            "liOtherDate")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxDateEdit).Text != null)
-        //                    &&
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                            "liOtherDate")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxDateEdit).Text != ""))
-        //                {
-
-        //                    dateWorkedToAdd = Convert.ToDateTime(
-        //                        ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liOtherDate")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxDateEdit).Text);
-        //                }
-
-        //                //Get Misc Ref
-        //                var miscRefToAdd = "";
-        //                if (
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                            "liOtherMisc")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxButtonEdit).Text != null)
-        //                    &&
-        //                    (((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as ASPxFormLayout)
-        //                        .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                            "liOtherMisc")
-        //                        as
-        //                        LayoutItem).GetNestedControl() as ASPxButtonEdit).Text != ""))
-        //                {
-
-        //                    miscRefToAdd =
-        //                        ((((((ASPxGridView)sender).FindEditFormTemplateControl("OtherEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("OtherEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liOtherMisc")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxButtonEdit).Text;
-        //                }
-
-        //                //Save Changes
-        //                _oJobOther.ClearErrors();
-
-        //                //Add Other Record
-        //                if (_oJobOther.Add(jobId,
-        //                    jobStepId,
-        //                    descToAdd,
-        //                    costToAdd,
-        //                    miscRefToAdd,
-        //                    actToAdd,
-        //                    estToAdd,
-        //                    dateWorkedToAdd,
-        //                    -1,
-        //                    _oLogon.UserID,
-        //                    -1,
-        //                    -1))
-        //                {
-        //                    //Cacnel Edit (Hides Template)
-        //                    OtherGrid.CancelEdit();
-
-        //                    //Refresh Part Grid                        
-        //                    OtherGrid.DataBind();
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// Saves Member Job Record Changes From Row Edit Template
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        //protected void MemberGrid_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
-        //{
-        //    //Check Permissions
-        //    if (_userCanEdit)
-        //    {
-        //        //Get Job Step ID
-        //        var jobStepId = -1;
-        //        if ((HttpContext.Current.Session["editingJobStepID"] != null))
-        //        {
-        //            //Get Info From Session
-        //            jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
-        //        }
-
-        //        //Get Job ID
-        //        var jobId = -1;
-        //        if ((HttpContext.Current.Session["editingJobID"] != null))
-        //        {
-        //            //Get Info From Session
-        //            jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
-        //        }
-
-        //        //Make Sure We Have A Selection
-        //        if (MemberGrid.EditingRowVisibleIndex >= 0)
-        //        {
-        //            //Set Cancel Flag
-        //            e.Cancel = true;
-
-        //            //Get Editing Record ID
-        //            var recordId = -1;
-        //            recordId = Convert.ToInt32(MemberGrid.GetRowValues(MemberGrid.EditingRowVisibleIndex, "n_JobOtherID"));
-
-        //            //Check IDs
-        //            if ((jobStepId > 0) && (jobId > 0))
-        //            {
-        //                //Check Editing Mode
-        //                if (MemberGrid.SettingsEditing.Mode == GridViewEditingMode.PopupEditForm)
-        //                {
-        //                    var objectId = Convert.ToInt32(MemberGrid.GetRowValues(MemberGrid.EditingRowVisibleIndex, "n_MaintenanceObjectID"));
-
-        //                    //Get Completed
-        //                    var isCompleted = false;
-        //                    if (
-        //                        (((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liMemberCompleted")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxCheckBox) != null))
-        //                    {
-
-        //                        isCompleted =
-        //                            ((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liMemberCompleted")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxCheckBox).Checked;
-        //                    }
-
-        //                    //Get Date Worked
-        //                    var dateWorkedToEdit = _nullDate;
-        //                    if (
-        //                        (((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liMemberDate")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxDateEdit).Text != null)
-        //                        &&
-        //                        (((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
-        //                            ASPxFormLayout)
-        //                            .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                "liMemberDate")
-        //                            as
-        //                            LayoutItem).GetNestedControl() as ASPxDateEdit).Text != ""))
-        //                    {
-
-        //                        dateWorkedToEdit = Convert.ToDateTime(
-        //                            ((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
-        //                                ASPxFormLayout)
-        //                                .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
-        //                                    "liMemberDate")
-        //                                as
-        //                                LayoutItem).GetNestedControl() as ASPxDateEdit).Text);
-        //                    }
-
-        //                    //Save Changes
-        //                    _oJobMembers.ClearErrors();
-
-        //                    //Add Other Record
-        //                    if (_oJobMembers.Update(recordId,
-        //                        jobId,
-        //                        -1,
-        //                        objectId,
-        //                        isCompleted,
-        //                        dateWorkedToEdit,
-        //                        _oLogon.UserID))
-        //                    {
-        //                        //Cacnel Edit (Hides Template)
-        //                        MemberGrid.CancelEdit();
-
-        //                        //Refresh Member Grid                        
-        //                        MemberGrid.DataBind();
-        //                    }
-        //                }
-        //                else
-        //                {
-
-        //                    //Get Completed
-        //                    var isCompleted = Convert.ToBoolean(e.NewValues["b_Completed"]);
-
-        //                    //Get Object ID
-        //                    var objectId = Convert.ToInt32(MemberGrid.GetRowValues(MemberGrid.EditingRowVisibleIndex, "n_MaintenanceObjectID"));
-
-        //                    var dateWorkedToEdit = _nullDate;
-        //                    if ((e.NewValues["WorkDate"] != null)
-        //                        && (e.NewValues["WorkDate"].ToString() != ""))
-        //                    {
-        //                        //Get Date
-        //                        dateWorkedToEdit = Convert.ToDateTime(e.NewValues["WorkDate"]);
-        //                    }
-
-        //                    //Save Changes
-        //                    _oJobMembers.ClearErrors();
-
-        //                    //Add Other Record
-        //                    if (_oJobMembers.Update(recordId,
-        //                        jobId,
-        //                        -1,
-        //                        objectId,
-        //                        isCompleted,
-        //                        dateWorkedToEdit,
-        //                        _oLogon.UserID))
-        //                    {
-        //                        //Cacnel Edit (Hides Template)
-        //                        MemberGrid.CancelEdit();
-
-        //                        //Refresh Member Grid                        
-        //                        MemberGrid.DataBind();
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-       
-
-        /// <summary>
         /// Hides Default Edit Button
         /// </summary>
         /// <param name="sender">Sending Object</param>
@@ -8684,8 +6871,7 @@ namespace Pages.PlannedJobs
             //Set Visibility
             link.Visible = false;
         }
-
-       
+      
         /// <summary>
         /// Saves Crew Job Record Changes From Row Edit Template
         /// </summary>
@@ -9194,10 +7380,7 @@ namespace Pages.PlannedJobs
             //Return Rate
             return rateUsed;
         }
-
-       
-       
-
+    
         /// <summary>
         /// Sets Tab Row Count
         /// </summary>
@@ -9208,11 +7391,7 @@ namespace Pages.PlannedJobs
             //Show Row Count On Tab 
             //StepTab.TabPages[2].Text = @"CREW (" + CrewGrid.VisibleRowCount + @")";
         }
-
-        
-
-       
-
+     
         /// <summary>
         /// Sets Tab Row Count
         /// </summary>

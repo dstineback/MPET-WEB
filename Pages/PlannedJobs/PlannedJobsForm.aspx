@@ -312,7 +312,7 @@
                                                                                                                     ValueField="n_objectid" 
                                                                                                                     OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" 
                                                                                                                     OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
-                                                                                                                    TextFormatString="{0} - {1} - {2} - {3} - {4} - {5} - {6} - {7} - {8}" 
+                                                                                                                    TextFormatString="{0} - {1} - {2} - {3}" 
                                                                                                                     Width="90%" 
                                                                                                                     DropDownStyle="DropDown" 
                                                                                                                     Theme="iOS" 
@@ -345,11 +345,11 @@
                                         <dx:ListBoxColumn FieldName="objectid" Caption="Object ID" Width="150px" ToolTip="M-PET.NET Maintenance Object ID"/>
                                         <dx:ListBoxColumn FieldName="description" Caption="Description" Width="250px" ToolTip="M-PET.NET Maintenance Object Description"/>
                                         <dx:ListBoxColumn FieldName="areaid" Caption="Area ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Area ID" />
-                                        <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
+                                       <%-- <dx:ListBoxColumn FieldName="locationid" Caption="Location ID" Width="75px" ToolTip="M-PET.NET Maintenance Object Assigned Location ID" />
                                         <dx:ListBoxColumn FieldName="assetnumber" Caption="Asset #" Width="50px" ToolTip="M-PET.NET Maintenance Object Asset Number"/>
-                                        <dx:ListBoxColumn FieldName="OrganizationCodeID" Caption="Org. Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Org. Code ID" />
-                                        <dx:ListBoxColumn FieldName="FundingGroupCodeID" Caption="Fund. Group Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Funding Group Code ID" />
-                                        <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>
+                                   <%-- <dx:ListBoxColumn FieldName="OrganizationCodeID" Caption="Org. Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Org. Code ID" />--%>
+                                       <%-- <dx:ListBoxColumn FieldName="FundingGroupCodeID" Caption="Fund. Group Code ID" Width="100px" ToolTip="M-PET.NET Maintenance Object Assigned Funding Group Code ID" />
+                                        <dx:ListBoxColumn FieldName="Following" Caption="Following" Width="50px" ToolTip="M-PET.NET Maintenance Object Following Yes/No?"/>--%>
                                         <dx:ListBoxColumn FieldName="LocationOrURL" Caption="Photo" Width="50px" ToolTip="M-PET.NET Maintenance Object Photo"/>
                                     </Columns>
                                 </dx:ASPxComboBox>
@@ -613,8 +613,7 @@
                 </LayoutItemNestedControlCollection>
             </dx:LayoutItem>
         
-        <dx:LayoutItem Name="CrewGridViewLayoutItem" 
-                Caption="Add Crew Member" CaptionSettings-Location="Top">
+        <dx:LayoutItem Name="CrewGridViewLayoutItem" Caption="Add Crew Member" CaptionSettings-Location="Top">
             <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
                          <dx:ASPxGridView 
