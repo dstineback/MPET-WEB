@@ -45,7 +45,7 @@ namespace Pages.Objects
                     //Setup Buttons
                     Master.ShowSaveButton = false;
                     Master.ShowNewWRButton = _userCanAdd;
-                    Master.ShowQuickPostButton = _userCanAdd;
+                    Master.ShowQuickPostButton = false;
                     
                     Master.ShowEditButton = false;/*_userCanEdit;*/
                     Master.ShowDeleteButton = false; /*_userCanDelete;*/
@@ -53,7 +53,7 @@ namespace Pages.Objects
                     Master.ShowPrintButton = false;
                     Master.ShowPdfButton = false;
                     Master.ShowXlsButton = false;
-                    Master.ShowMultiSelectButton = _userCanView; /*_userCanDelete;*/
+                    Master.ShowMultiSelectButton = false; /*_userCanDelete;*/
                     Master.ShowMapDisplayButton = _userCanEdit;
                 }
             }

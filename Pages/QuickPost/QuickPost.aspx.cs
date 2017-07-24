@@ -155,8 +155,18 @@ namespace Pages.QuickPost
                 if (Session["nobjectid"] != null)
                 {
                     ObjectIDCombo.Value = Convert.ToInt32(HttpContext.Current.Session["nobjectId"]).ToString();
-                    
-                    
+
+                    if(Session["ObjectIDCombo"] != null)
+                    {
+                        Session.Remove("ObjectIDCombo");
+                    }
+                    Session.Add("ObjectIDCombo", ObjectIDCombo.Value);
+
+                    if(Session["objectid"] != null)
+                    {
+                        ObjectIDCombo.Text = Session["objectid"].ToString();
+                    }
+                                        
                     if (Session["description"] != null)
                     {
                         txtObjectDescription.Value = Session["description"];

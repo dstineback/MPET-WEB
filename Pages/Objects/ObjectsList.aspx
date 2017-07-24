@@ -60,7 +60,8 @@
                     <dx:GridViewDataTextColumn FieldName="n_objectid" ReadOnly="True" Visible="false" VisibleIndex="1">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataHyperLinkColumn FixedStyle="Left"
+                    <dx:GridViewDataTextColumn FieldName="objectid" SortOrder="Ascending" Caption="Object" Width="150px" HeaderStyle-Font-Bold="true" VisibleIndex="4"></dx:GridViewDataTextColumn>
+                    <%--<dx:GridViewDataHyperLinkColumn FixedStyle="Left"
                         FieldName="objectid"
                         SortOrder="Ascending"
                         Caption="Object"
@@ -69,11 +70,11 @@
                         VisibleIndex="4">
                         <CellStyle Wrap="False"></CellStyle>
                         <PropertiesHyperLinkEdit NavigateUrlFormatString="~/Pages/Objects/Objects.aspx?objectid={0}"></PropertiesHyperLinkEdit>
-                    </dx:GridViewDataHyperLinkColumn>
+                    </dx:GridViewDataHyperLinkColumn>--%>
                     <dx:GridViewDataTextColumn FieldName="description" Caption="Description" Width="300px" VisibleIndex="5">
                         <CellStyle Wrap="False"></CellStyle>
                     </dx:GridViewDataTextColumn>
-                    <dx:GridViewDataTextColumn FixedStyle="Left" FieldName="b_active" Caption="Active" Width="100px" VisibleIndex="2">
+                    <dx:GridViewDataTextColumn FixedStyle="Left" FieldName="b_active" Caption="Active" SortOrder="Descending" Width="100px" VisibleIndex="2">
                         <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
                         <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
                     </dx:GridViewDataTextColumn>
