@@ -391,7 +391,7 @@ namespace Pages.QuickPost
                 #region OutCome
                 if (Session["ComboOutcome"] != null)
                 {
-                    ComboOutcomeCode.Value = Session["outcomeCode"].ToString();
+                    ComboOutcomeCode.Value = Session["ComboOutcome"].ToString();
                 }
                 #endregion
 
