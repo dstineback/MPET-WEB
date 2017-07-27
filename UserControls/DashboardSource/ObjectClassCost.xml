@@ -4,10 +4,10 @@
   <DataSources>
     <SqlDataSource ComponentName="dashboardSqlDataSource1">
       <Name>SQL Data Source 1</Name>
-      <Connection Name="ROOT5773_MPETNET_LINDT_Connection" ProviderKey="MSSqlServer">
+      <Connection Name="MPO-SQL\DynamicsMPETNETPOA" ProviderKey="MSSqlServer">
         <Parameters>
-          <Parameter Name="server" Value="ROOT5773" />
-          <Parameter Name="database" Value="MPETNET_LINDT" />
+          <Parameter Name="server" Value="MPO-SQL\Dynamics" />
+          <Parameter Name="database" Value="MPETNETPOA" />
           <Parameter Name="useIntegratedSecurity" Value="True" />
           <Parameter Name="read only" Value="1" />
           <Parameter Name="generateConnectionHelper" Value="false" />
