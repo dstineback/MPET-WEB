@@ -46,7 +46,7 @@
                 SettingsBehavior-AllowSelectByRowClick="true"
                 SettingsPager-Mode="ShowPager" 
                 SettingsBehavior-ProcessFocusedRowChangedOnServer="False"
-                SettingsBehavior-AllowFocusedRow="False" 
+                SettingsBehavior-AllowFocusedRow="False"   
                 SelectionMode="Multiple"
                 DataSourceID="ObjectGridDataSource"
                 OnHtmlDataCellPrepared="ASPxGridView1_HtmlRowPrepared" AutoGenerateColumns="False">
@@ -91,7 +91,7 @@
                     </dx:GridViewDataTextColumn>
                     <dx:GridViewDataTextColumn FieldName="Jobid" FixedStyle="Left"
                         HeaderStyle-Font-Bold="True" Caption="Job ID" Width="120px"
-                        VisibleIndex="3">
+                        VisibleIndex="3" Settings-AllowFilterBySearchPanel="True">
                         <CellStyle Wrap="False"></CellStyle>
                         <%--<PropertiesHyperLinkEdit NavigateUrl="<%# GetUrl(Container) %>"></PropertiesHyperLinkEdit>--%>
                         <DataItemTemplate>
