@@ -58,7 +58,13 @@
                     <dx:LayoutItem Caption="Object/Asset:" CaptionSettings-Location="Top">
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer runat="server">
-                                <dx:ASPxComboBox ID="ObjectIDCombo" ValidationSettings-ErrorFrameStyle-BackColor="LightCoral" TextFormatString="{0} - {1} - {2} - {3}" runat="server" EnableCallbackMode="true" CallbackPageSize="20" ValueType="System.String" ValueField="n_objectid" OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
+                                <dx:ASPxComboBox ID="ObjectIDCombo" ValidationSettings-ErrorFrameStyle-BackColor="LightCoral" 
+                                    TextFormatString="{0} - {1} - {2} - {3}" DisplayFormatString="{0}" runat="server" EnableCallbackMode="true" 
+                                    CallbackPageSize="20" ValueType="System.String" ValueField="n_objectid" 
+                                    OnItemRequestedByValue="ASPxComboBox_OnItemRequestedByValue_SQL" 
+                                    OnItemsRequestedByFilterCondition="ASPxComboBox_OnItemsRequestedByFilterCondition_SQL" Width="90%" 
+                                    DropDownStyle="DropDown" Theme="iOS" TextField="objectid" DropDownButton-Enabled="true" 
+                                    AutoPostBack="false" ClientInstanceName="ObjectIDCombo">
                                     <ValidationSettings SetFocusOnError="True" Display="Dynamic" RequiredField-IsRequired="true" ErrorDisplayMode="ImageWithText">
                                         <RequiredField IsRequired="True" />
                                     </ValidationSettings>
