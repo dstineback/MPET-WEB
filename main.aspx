@@ -4,7 +4,7 @@
 
     <div id="mainPageDiv" runat="server">Welcome to M-PET <div id="divUser" runat="server"></div> <br />What would you like to do? </div>
     <div id="quickLinkButton">
-        <%--<asp:LinkButton runat="server" class="mainButton" ID="myJobButton" href="Pages/PlannedJobs/myJobs.aspx">My Jobs</asp:LinkButton>--%>
+      <asp:LinkButton runat="server" class="mainButton" ID="myJobButton" href="Pages/PlannedJobs/myJobs.aspx">My Jobs</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="QuickPost" href="Pages/QuickPost/QuickPost.aspx">Quick Post</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="workRequestButton" href="Pages/WorkRequests/WorkRequestform.aspx">Add Work Request</asp:LinkButton>
         <asp:LinkButton runat="server" class="mainButton" ID="PlanJobBtn" href="Pages/PlannedJobs/PlannedJobs.aspx" >Add Planned Job</asp:LinkButton>
