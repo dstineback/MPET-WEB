@@ -170,7 +170,31 @@
                         </LayoutItemNestedControlCollection>
                         <CaptionSettings Location="Top"></CaptionSettings>
                     </dx:LayoutItem>
+                    <dx:LayoutItem Caption="Maint Responsibility" CaptionSettings-Location="Top">
+                        <LayoutItemNestedControlCollection>
+                            <dx:LayoutItemNestedControlContainer>
+                                <dx:ASPxComboBox ID="ComboFundSource" runat="server" DropDownStyle="DropDown"
+                                    CallbackPageSize="10" EnableCallbackMode="true" ValidationSettings-ErrorFrameStyle-BackColor="LightCoral" 
+                                    TextField="FundSrcCodeID" ValueField="n_FundSrcCodeID" 
+                                    OnItemsRequestedByFilterCondition="ComboFundSource_OnItemsRequestedByFilterCondition_SQL" 
+                                    OnItemRequestedByValue="ComboFundSource_OnItemRequestedByValue_SQL" 
+                                    ValueType="System.String" TextFormatString="{0} - {1}"
+                                    DropDownButton-Enabled="true" AutoPostBack="false" 
+                                    ClientInstanceName="CombofundSource" Width="100%" Theme="iOS">
+                                    <ValidationSettings SetFocusOnError="True" Display="Dynamic" RequiredField-IsRequired="true" ErrorDisplayMode="ImageWithText">
+                                        
+                                    </ValidationSettings>
+                                    <Columns>
+                                           <dx:ListBoxColumn FieldName="n_FundSrcCodeID" Visible="False" />
+                                           <dx:ListBoxColumn FieldName="FundSrcCodeID" Caption="Cost Code ID" Width="75px" ToolTip="M-PET.NET Fund Source ID"/>
+                                           <dx:ListBoxColumn FieldName="Description" Caption="Description" Width="150px" ToolTip="M-PET.NET Fund Source Description"/>
+                                    </Columns>
+                                </dx:ASPxComboBox>
+                            </dx:LayoutItemNestedControlContainer>
 
+                        </LayoutItemNestedControlCollection>
+
+                    </dx:LayoutItem>
                     <dx:LayoutItem Caption="Service Office:" CaptionSettings-Location="Top"
                         ColSpan="1" Name="fldHwyRoute">
                         <LayoutItemNestedControlCollection>
@@ -316,7 +340,7 @@
                         <LayoutItemNestedControlCollection>
                             <dx:LayoutItemNestedControlContainer>
                                 <dx:ASPxTextBox ID="txtPhone"
-                                    Width="100%"
+                                    Width="100%" ValidationSettings-ErrorFrameStyle-BackColor="LightCoral"
                                     ClientInstanceName="txtPhone"
                                     runat="server"
                                     Theme="iOS" HorizontalAlign="Right">
@@ -362,4 +386,5 @@
     <asp:SqlDataSource ID="ObjectDataSource" runat="server" />
     <asp:SqlDataSource ID="HwyRouteSqlDatasource" runat="server" />
     <asp:SqlDataSource ID="MilePostDirSqlDatasource" runat="server" />
+    <asp:SqlDataSource ID="FundSourceSqlDatasource" runat="server" />
 </asp:Content>

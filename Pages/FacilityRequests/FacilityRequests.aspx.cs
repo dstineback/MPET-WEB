@@ -848,6 +848,7 @@ namespace Pages.FacilityRequests
                 ObjectDataSource.ConnectionString = _connectionString;
                 HwyRouteSqlDatasource.ConnectionString = _connectionString;
                 MilePostDirSqlDatasource.ConnectionString = _connectionString;
+                FundSourceSqlDatasource.ConnectionString = _connectionString;
             }
             catch (Exception ex)
             {
@@ -924,6 +925,105 @@ namespace Pages.FacilityRequests
         #endregion
 
         #region Combo Loading Events
+
+        protected void ComboFundSource_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
+        {
+            //Check For Simple Costing
+            //if (_oLogon.UseSimpleCostLinking)
+            //{
+            //    //Create Cost Code ID Var
+            //    var costCodeId = -1;
+
+            //    //Get Current Cost Code (If Applicable)
+            //    if (ComboCostCode.Value != null)
+            //    {
+            //        //Enable Combo
+            //        ComboFundSource.Enabled = true;
+
+            //        //Get ID
+            //        costCodeId = Convert.ToInt32(ComboCostCode.Value.ToString());
+
+            //        //Get Combo
+            //        var comboBox = (ASPxComboBox)source;
+            //        FundSourceSqlDatasource.SelectCommand =
+            //            string.Format(@"SELECT  n_FundSrcCodeID ,
+            //                FundSrcCodeID ,
+            //                [Description]
+            //        FROM    ( SELECT    tblFundSrc.n_FundSrcCodeID ,
+            //                            tblFundSrc.FundSrcCodeID ,
+            //                            tblFundSrc.[Description] ,
+            //                            ROW_NUMBER() OVER ( ORDER BY tblFundSrc.n_FundSrcCodeID ) AS [rn]
+            //                  FROM      dbo.FundSrcCodes AS tblFundSrc
+		          //            INNER JOIN ( SELECT dbo.CostCodeLinks.n_FundSrcCodeID
+            //                     FROM   dbo.CostCodeLinks
+            //                     WHERE  dbo.CostCodeLinks.n_CostCodeID = {0}
+            //                   ) tbl_CostCodeLinks ON tblFundSrc.n_FundSrcCodeID = tbl_CostCodeLinks.n_FundSrcCodeID
+            //                  WHERE     ( ( FundSrcCodeID + ' ' + [Description] ) LIKE @filter )
+            //                            AND tblFundSrc.b_IsActive = 'Y'
+            //                            AND tblFundSrc.n_FundSrcCodeID > 0
+            //                ) AS st
+            //        WHERE   st.[rn] BETWEEN @startIndex AND @endIndex", costCodeId);
+
+            //        FundSourceSqlDatasource.SelectParameters.Clear();
+            //        FundSourceSqlDatasource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
+            //        FundSourceSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
+            //        FundSourceSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString());
+            //        comboBox.DataSource = FundSourceSqlDatasource;
+            //        comboBox.DataBind();
+            //    }
+            //    else
+            //    {
+            //        //Disable Combo
+            //        ComboFundSource.Enabled = false;
+            //    }
+            //}
+            //else
+            //{
+                //Get Combo
+                var comboBox = (ASPxComboBox)source;
+                FundSourceSqlDatasource.SelectCommand =
+                    @"SELECT  n_FundSrcCodeID ,
+                            FundSrcCodeID ,
+                            [Description]
+                    FROM    ( SELECT    tblFundSrc.n_FundSrcCodeID ,
+                                        tblFundSrc.FundSrcCodeID ,
+                                        tblFundSrc.[Description] ,
+                                        ROW_NUMBER() OVER ( ORDER BY tblFundSrc.n_FundSrcCodeID ) AS [rn]
+                              FROM      dbo.FundSrcCodes AS tblFundSrc
+                              WHERE     ( ( FundSrcCodeID + ' ' + [Description] ) LIKE @filter )
+                                        AND tblFundSrc.b_IsActive = 'Y'
+                                        AND tblFundSrc.n_FundSrcCodeID > 0
+                            ) AS st
+                    WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
+
+                FundSourceSqlDatasource.SelectParameters.Clear();
+                FundSourceSqlDatasource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
+                FundSourceSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
+                FundSourceSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString());
+                comboBox.DataSource = FundSourceSqlDatasource;
+                comboBox.DataBind();
+            //}
+        }
+
+        protected void ComboFundSource_OnItemRequestedByValue_SQL(object source, ListEditItemRequestedByValueEventArgs e)
+        {
+            long value = 0;
+            if (e.Value == null || !Int64.TryParse(e.Value.ToString(), out value))
+                return;
+            ASPxComboBox comboBox = (ASPxComboBox)source;
+            FundSourceSqlDatasource.SelectCommand = @"SELECT  tblFundSrc.n_FundSrcCodeID ,
+                                                            tblFundSrc.FundSrcCodeID ,
+                                                            tblFundSrc.[Description] ,
+                                                            ROW_NUMBER() OVER ( ORDER BY tblFundSrc.n_FundSrcCodeID ) AS [rn]
+                                                    FROM    dbo.FundSrcCodes AS tblFundSrc
+                                                    WHERE   ( n_FundSrcCodeID = @ID )
+                                                    ORDER BY FundSrcCodeID";
+
+            FundSourceSqlDatasource.SelectParameters.Clear();
+            FundSourceSqlDatasource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
+            comboBox.DataSource = FundSourceSqlDatasource;
+            comboBox.DataBind();
+        }
 
         protected void ASPxComboBox_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
         {
@@ -1922,15 +2022,15 @@ namespace Pages.FacilityRequests
                     }
 
                     //Update Origin
-                    if (!_oJob.UpdateOriginType(_oJob.RecordID,
-                        "W",
-                        requestor))
-                    {
-                        //Throw Error
-                        throw new SystemException(
-                            @"Error Adding Facility Request - " +
-                            _oJob.LastError);
-                    }
+                    //if (!_oJob.UpdateOriginType(_oJob.RecordID,
+                    //    "W",
+                    //    requestor))
+                    //{
+                    //    //Throw Error
+                    //    throw new SystemException(
+                    //        @"Error Adding Facility Request - " +
+                    //        _oJob.LastError);
+                    //}
 
                     //Update Costing Information
                     if (!_oJob.UpdateJobCosting(_oJob.RecordID,
@@ -1949,6 +2049,8 @@ namespace Pages.FacilityRequests
                             @"Error Adding Facility Request - " +
                             _oJob.LastError);
                     }
+
+                    
 
                     //Setup For Editing
                     SetupForEditing();
@@ -2463,12 +2565,30 @@ namespace Pages.FacilityRequests
 
                     #endregion
                 }
-                    #endregion
+                #endregion
+                #region Fund Source
+                if (ComboFundSource.Value != null)
+                {
+                    if (Session["ComboFundSource"] != null)
+                    {
+                        Session.Remove("ComboFundSource");
+                    }
+                    Session.Add("ComboFundSource", ComboFundSource.Value);
+                } 
 
-                    #region Additional Details
+                if (ComboFundSource.Text != null)
+                {
+                    if (Session["ComboFundSourceText"] != null)
+                    {
+                        Session.Remove("ComboFundSourceText");
+                    }
+                    Session.Add("ComboFundSourceText", ComboFundSource.Text);
+                }
+                #endregion
+                #region Additional Details
 
-                    //Check For Input
-                    if (txtAdditionalInfo.Text.Length > 0)
+                //Check For Input
+                if (txtAdditionalInfo.Text.Length > 0)
                 {
                     //Check For Prior Value
                     if (HttpContext.Current.Session["txtAddDetailForEmail"] != null)
@@ -2883,6 +3003,8 @@ namespace Pages.FacilityRequests
                 }
 
             }
+
+            
 
             if(txtWorkDescription.Text.Length > 0 && ObjectIDCombo.Text.Length > 0)
             {
