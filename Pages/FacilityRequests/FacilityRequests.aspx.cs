@@ -2987,6 +2987,7 @@ namespace Pages.FacilityRequests
             {
                 txtWorkDescription.Focus();
                 txtWorkDescription.BackColor = System.Drawing.Color.LightCoral;
+                return;
             }
 
             if(ObjectIDCombo.Text.Length < 1)
@@ -2995,17 +2996,34 @@ namespace Pages.FacilityRequests
                 {
                     txtWorkDescription.Focus();
                     txtWorkDescription.BackColor = System.Drawing.Color.LightCoral;
+                    return;
                 } else
                 {
                     ObjectIDCombo.Focus();
                     ObjectIDCombo.BackColor = System.Drawing.Color.LightCoral;
+                    return;
 
                 }
 
             }
 
-            
+            if (ComboFundSource.Text.Length < 1)
+            {
+                if(txtWorkDescription.Text.Length > 0 && ObjectIDCombo.Text.Length > 0)
+                {
+                    ComboFundSource.Focus();
+                    ComboFundSource.BackColor = System.Drawing.Color.LightCoral;
+                    return;
+                }
+            }
 
+            if(txtPhone.Text.Length < 1)
+            {
+                txtPhone.Focus();
+                txtPhone.BackColor = System.Drawing.Color.LightCoral;
+                return;
+            }
+           
             if(txtWorkDescription.Text.Length > 0 && ObjectIDCombo.Text.Length > 0)
             {
                 //Save Session Data

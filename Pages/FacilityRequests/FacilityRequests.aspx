@@ -4,7 +4,7 @@
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Service Request</asp:Content>
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
-    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-Size="20px" Theme="Mulberry" Text="Facility Requests List" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx" />
+    <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-Size="20px" Theme="Mulberry" Text="Jobs Requests List" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx" />
     >
     <dx:ASPxLabel ID="lblHeader" Font-Size="20px" Theme="Mulberry" runat="server" Text="ADD">
         
@@ -178,7 +178,7 @@
                                     TextField="FundSrcCodeID" ValueField="n_FundSrcCodeID" 
                                     OnItemsRequestedByFilterCondition="ComboFundSource_OnItemsRequestedByFilterCondition_SQL" 
                                     OnItemRequestedByValue="ComboFundSource_OnItemRequestedByValue_SQL" 
-                                    ValueType="System.String" TextFormatString="{0} - {1}"
+                                    ValueType="System.String" TextFormatString="{0} - {1}" DisplayFormatString="{0}"
                                     DropDownButton-Enabled="true" AutoPostBack="false" 
                                     ClientInstanceName="CombofundSource" Width="100%" Theme="iOS">
                                     <ValidationSettings SetFocusOnError="True" Display="Dynamic" RequiredField-IsRequired="true" ErrorDisplayMode="ImageWithText">
