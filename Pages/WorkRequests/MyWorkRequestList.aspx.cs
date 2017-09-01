@@ -118,8 +118,6 @@ public partial class Pages_WorkRequests_MyWorkRequestList : System.Web.UI.Page
                         break;
                     }
             }
-        
-
     }
 
     Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");

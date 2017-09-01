@@ -18,7 +18,7 @@
         Settings-HorizontalScrollBarMode="Visible" Settings-VerticalScrollBarMode="Visible" Settings-VerticalScrollBarStyle="Standard" 
         SettingsPager-Mode="ShowPager" SettingsAdaptivity-AdaptivityMode="HideDataCells" 
         SettingsBehavior-AllowSelectByRowClick="false" KeyFieldName="JobID" SettingsText-EmptyDataRow="No Data" 
-        SettingsText-EmptyHeaders="No Data" SettingsPager-PageSize="30" SettingsBehavior-AllowEllipsisInText="true" SettingsResizing-ColumnResizeMode="Control">
+        SettingsText-EmptyHeaders="No Data" SettingsPager-PageSize="30" SettingsBehavior-AllowEllipsisInText="true" SettingsResizing-ColumnResizeMode="NextColumn">
         <SettingsAdaptivity AdaptivityMode="HideDataCells"></SettingsAdaptivity>
 
         <Styles>
@@ -69,7 +69,7 @@
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="PostedDate" Caption="Date Posted" VisibleIndex="7"  Width="150">
             </dx:GridViewDataTextColumn>
-            <dx:GridViewDataTextColumn FieldName="Notes" Caption="Notes" VisibleIndex="6" Width="600" AllowTextTruncationInAdaptiveMode="true" CellStyle-Wrap="True">
+            <dx:GridViewDataTextColumn FieldName="Notes" Caption="Notes" VisibleIndex="6" Width="600" Settings-AllowEllipsisInText="True" AllowTextTruncationInAdaptiveMode="true" CellStyle-Wrap="True">
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataTextColumn FieldName="JobReasonID" Caption="Reason" VisibleIndex="4" Width="100">
             </dx:GridViewDataTextColumn>
