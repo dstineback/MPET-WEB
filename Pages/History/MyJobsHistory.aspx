@@ -1,7 +1,8 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/SiteBase.master" CodeFile="MyWorkRequestList.aspx.cs" Inherits="Pages_WorkRequests_MyWorkRequestList" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/SiteBase.master" CodeFile="MyJobsHistory.aspx.cs" Inherits="Pages_History_MyJobsHistory" %>
+
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
 
-<asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">My Jobs Request</asp:Content>
+<asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">My Jobs History</asp:Content>
 <asp:Content runat="server" ContentPlaceHolderID="ContentPlaceHolder">
     <h1>My Jobs</h1>
     <script type="text/javascript">
@@ -75,7 +76,9 @@
             <dx:GridViewDataTextColumn FieldName="priorityid" Caption="Priority" VisibleIndex="5" Width="100">
             </dx:GridViewDataTextColumn>
 
-        </Columns>  
+
+        </Columns>
+      
         <TotalSummary>
             <dx:ASPxSummaryItem ShowInColumn="n_jobid" SummaryType="Sum" />
         </TotalSummary>
@@ -99,3 +102,4 @@
     </dx:ASPxGridView>
 
 </asp:Content>
+

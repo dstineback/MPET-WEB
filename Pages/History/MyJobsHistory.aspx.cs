@@ -11,7 +11,7 @@ using DevExpress.Web;
 
 using MPETDSFactory;
 
-public partial class Pages_WorkRequests_MyWorkRequestList : System.Web.UI.Page
+public partial class Pages_History_MyJobsHistory : System.Web.UI.Page
 {
 
     //settings for buttons
@@ -88,7 +88,8 @@ public partial class Pages_WorkRequests_MyWorkRequestList : System.Web.UI.Page
             UserName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).Username;
             UserID = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).UserID;
 
-        }else
+        }
+        else
         {
             Response.Redirect("~/main.aspx", true);
         }
@@ -118,11 +119,11 @@ public partial class Pages_WorkRequests_MyWorkRequestList : System.Web.UI.Page
                         break;
                     }
             }
-    }
+        }
 
-    Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+        Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
 
-    ConnectionStringSettings strConnString = rootWebConfig.ConnectionStrings.ConnectionStrings["ClientConnectionString"];
+        ConnectionStringSettings strConnString = rootWebConfig.ConnectionStrings.ConnectionStrings["ClientConnectionString"];
 
         //String strConnString = ConfigurationManager.ConnectionStrings["ClientConnectionString"].ConnectionString;
 
@@ -141,7 +142,7 @@ public partial class Pages_WorkRequests_MyWorkRequestList : System.Web.UI.Page
                     " FROM    dbo.Jobs" +
                     " INNER JOIN dbo.JobReasons ON JobReasons.nJobReasonID = n_jobreasonid" +
                     " INNER JOIN dbo.Priorities ON Priorities.n_priorityid = n_ActionPriority" +
-                    " WHERE IsRequestOnly = " + "'Y'" + " AND n_requestor = @User AND IsHistory = " + "'N'" + " AND JobOpen = " + "'Y'" +
+                    " WHERE IsRequestOnly = " + "'Y'" + " AND n_requestor = @User AND IsHistory = " + "'Y'" +
                     " UNION ALL " +
                     " SELECT JobID, JobstepTitle, StartingDate, StatusID, " + "'N'" + " AS IsHistory, PostedDate, PostNotes, JobReasons.JobReasonID, Priorities.priorityid" +
                     " FROM    dbo.Jobsteps" +
@@ -149,7 +150,7 @@ public partial class Pages_WorkRequests_MyWorkRequestList : System.Web.UI.Page
                     " INNER JOIN dbo.Priorities ON Priorities.n_priorityid = Jobsteps.PriorityID" +
                     " INNER JOIN dbo.Statuses ON Statuses.nStatusID = Jobsteps.n_statusid" +
                     " JOIN dbo.Jobs ON Jobsteps.n_jobid = Jobs.n_Jobid " +
-                    " WHERE Jobs.n_requestor = @User ";
+                    " WHERE Jobs.n_requestor = @User AND Jobs.IsHistory = " + "'Y'";
 
                 cmd.CommandText = sql;
             }
@@ -157,13 +158,13 @@ public partial class Pages_WorkRequests_MyWorkRequestList : System.Web.UI.Page
             {
                 throw ex;
             }
-         
+
             cmd.Connection = con;
             try
             {
                 con.Open();
                 //reader = cmd.ExecuteReader();
-               // myWorkRequestGrid.DataSource = reader;
+                // myWorkRequestGrid.DataSource = reader;
                 //MUST have to bind Sql SP to GridView
                 myWorkRequestGrid.DataSource = cmd.ExecuteReader();
                 myWorkRequestGrid.DataBind();
@@ -232,51 +233,51 @@ public partial class Pages_WorkRequests_MyWorkRequestList : System.Web.UI.Page
         //}
     }
 
-     //Edit select logic for Edit button 
+    //Edit select logic for Edit button 
     private void EditSelectedRow()
-{
-
-    var x = myWorkRequestGrid.GetSelectedFieldValues("n_Jobid");
-    var tempurl = x[0].ToString();
-
-
-    if (tempurl != null)
     {
-        //Redirect To Edit Page With Job ID
-        Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + tempurl, true);
+
+        var x = myWorkRequestGrid.GetSelectedFieldValues("n_Jobid");
+        var tempurl = x[0].ToString();
+
+
+        if (tempurl != null)
+        {
+            //Redirect To Edit Page With Job ID
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + tempurl, true);
+        }
+
+        if (Selection.Contains("n_Jobid"))
+        {
+            //Redirect To Edit Page With Job ID
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobid=" + Selection.Get("n_Jobid"), true);
+        }
     }
 
-    if (Selection.Contains("n_Jobid"))
+
+
+
+    //Add new logic for Add button
+    private void AddNewRow()
     {
-        //Redirect To Edit Page With Job ID
-        Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobid=" + Selection.Get("n_Jobid"), true);
+        if (true)
+        {
+            //Redirect To Edit Page With Job ID
+            Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
     }
-}
 
 
 
+    //hyperlink the Jobs ID on GridView to actual Job
 
-//Add new logic for Add button
-private void AddNewRow()
-{
-    if (true)
+    public string GetUrl(GridViewDataItemTemplateContainer container)
     {
-        //Redirect To Edit Page With Job ID
-        Response.Redirect("~/Pages/WorkRequests/WorkRequestForm.aspx", true);
+        var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_Jobid" });
+        return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobid=" + values;
     }
-    else
-    {
-        throw new NotImplementedException();
-    }
-}
-
-
-
-//hyperlink the Jobs ID on GridView to actual Job
-
-public string GetUrl(GridViewDataItemTemplateContainer container)
-{
-    var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_Jobid" });
-    return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobid=" + values;
-}
 }
