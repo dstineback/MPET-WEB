@@ -41,7 +41,7 @@
         </StylesContextMenu>
         <SettingsPager Position="Top"></SettingsPager>
         <Settings ShowFilterRow="True" ShowGroupPanel="True" AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Visible" ShowFooter="True" VerticalScrollableHeight="500" VerticalScrollBarMode="Visible"></Settings>
-
+        <SettingsBehavior ColumnResizeMode="NextColumn" />
 
         <SettingsPager Position="Top"></SettingsPager>
 

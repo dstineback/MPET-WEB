@@ -136,8 +136,9 @@ public partial class Pages_WorkRequests_MyWorkRequestList : System.Web.UI.Page
             try
             {
                 cmd.Parameters.AddWithValue("@User", _oLogon.UserID);
+                cmd.Parameters.AddWithValue("@NullDate", "1960-01-01 23:59:59");
 
-                string sql = "SELECT    JobID ,Title ,CreationDate AS StartingDate ," + "'PENDING'" + " AS StatusID ,IsHistory ,null AS PostedDate ,Notes ,JobReasonID ,Priorities.priorityid" +
+                string sql = "SELECT    JobID ,Title , null AS StartingDate ," + "'PENDING'" + " AS StatusID ,IsHistory ,null AS PostedDate ,Notes ,JobReasonID ,Priorities.priorityid" +
                     " FROM    dbo.Jobs" +
                     " INNER JOIN dbo.JobReasons ON JobReasons.nJobReasonID = n_jobreasonid" +
                     " INNER JOIN dbo.Priorities ON Priorities.n_priorityid = n_ActionPriority" +

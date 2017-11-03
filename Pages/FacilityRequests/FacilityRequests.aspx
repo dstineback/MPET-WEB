@@ -3,6 +3,29 @@
 
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Service Request</asp:Content>
 <asp:Content ID="ContentHolder" runat="server" ContentPlaceHolderID="ContentPlaceHolder">
+    <script type="text/javascript">
+        function onFileUploadComplete(s, e) {
+            FileUploaded(s, e);
+        }
+
+        var fieldSeparator = "|";
+        function FileUploadStart() {
+            document.getElementById("uploadedListFiles").innerHTML = "";
+        }
+
+        function FileUploaded(s, e) {
+            if (e.isValid) {
+                var linkFile = document.createElement("a");
+                var indexSeparator = e.callbackData.indexOf(fieldSeparator);
+                var fileName = e.callbackData.substring(0, indexSeparator);
+                var pictureUrl = e.callbackData.substring(indexSeparator + fieldSeparator.length);
+                linkFile.innerHTML = fileName;
+                var container = document.getElementById("uploadedListFiles");
+                container.appendChild(linkFile);
+                container.appendChild(document.createElement("br"));
+            }
+        }
+    </script>
     <asp:ScriptManager ID="ScriptManager1" runat="server" EnablePartialRendering="true" />
     <dx:ASPxHyperLink ID="PlannedJobBackLink" runat="server" Font-Size="20px" Theme="Mulberry" Text="Jobs Requests List" NavigateUrl="~/Pages/WorkRequests/RequestsList.aspx" />
     >
@@ -381,6 +404,33 @@
                     </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup>
+            <dx:LayoutItem>
+                <LayoutItemNestedControlCollection>
+                    <dx:LayoutItemNestedControlContainer>
+                        <dx:ASPxUploadControl ID="UploadControl" runat="server" ClientInstanceName="UploadControl" Width="320" NullText="Select Multiple files.."
+                            UploadMode="auto" ShowUploadButton="true" ShowProgressPanel="true" UploadStorage="Azure" FileUploadMode="OnPageLoad" OnFileUploadComplete="UploadControl_FileUploadComplete">
+                            <AdvancedModeSettings EnableMultiSelect="true" EnableFileList="true" EnableDragAndDrop="true"></AdvancedModeSettings>
+                            <ValidationSettings MaxFileSize="4194304" AllowedFileExtensions=".jpg, .jpeg, .gif, .png"></ValidationSettings>
+                            <ClientSideEvents FilesUploadStart="function(s,e){ FileUploadStart();}"
+                                              fileUploadComplete="function(s, e){onFileUploadComplete(s,e)}" />
+                        </dx:ASPxUploadControl>
+                    </dx:LayoutItemNestedControlContainer>
+                </LayoutItemNestedControlCollection>
+            </dx:LayoutItem>
+            <dx:LayoutItem>
+                <LayoutItemNestedControlCollection>
+                    <dx:LayoutItemNestedControlContainer>
+                        <dx:ASPxRoundPanel runat="server" ID="DXUploadedFileContainer" ClientInstanceName="DXUploadedFileContainer" 
+                            Width="380" Height="380" HeaderText="Uploaded Files">
+                            <PanelCollection>
+                                <dx:PanelContent>
+                                    <div id="uploadedListFiles"></div>
+                                </dx:PanelContent>
+                            </PanelCollection>
+                        </dx:ASPxRoundPanel>
+                    </dx:LayoutItemNestedControlContainer>
+                </LayoutItemNestedControlCollection>
+            </dx:LayoutItem>
         </Items>
     </dx:ASPxFormLayout>
     <asp:SqlDataSource ID="ObjectDataSource" runat="server" />

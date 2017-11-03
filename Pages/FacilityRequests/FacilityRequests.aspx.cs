@@ -10,6 +10,8 @@ using DevExpress.Web;
 using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Data;
+using System.IO;
 using MPETDSFactory;
 
 namespace Pages.FacilityRequests
@@ -53,6 +55,9 @@ namespace Pages.FacilityRequests
         private JobRequestInfo _oJobRequestInfo;
 
         private EmailAddresses _oEmail;
+
+        private AttachmentObject _oAttachments;
+        
 
         #endregion
 
@@ -1189,7 +1194,7 @@ namespace Pages.FacilityRequests
                                                   FROM      dbo.Attachments tblAttach
                                                   WHERE     tblAttach.n_MaintObjectID = tblmo.n_objectid
                                                 ) tblFirstPhoto                                                   
-                                        WHERE (tblmo.n_objectid = @ID) ORDER BY objectid";
+                                        WHERE (tblmo.n_objectid = @ID AND tblmo.b_active = 'Y') ORDER BY objectid";
 
             ObjectDataSource.SelectParameters.Clear();
             ObjectDataSource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
@@ -2326,6 +2331,105 @@ namespace Pages.FacilityRequests
 
         #endregion
 
+        #region Upload Image
+        protected void UploadControl_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
+        {
+            
+            if (UploadControl.FileInputCount > 1)
+            {
+                foreach(UploadedFile file in UploadControl.UploadedFiles)
+                {
+                    string name = e.UploadedFile.FileName;
+                    string url = e.UploadedFile.FileNameInStorage.ToString();
+                    long size = e.UploadedFile.ContentLength / 1024;
+                    string sizeText = size.ToString() + "KB";
+                    e.CallbackData = name + "|" + url + "|" + sizeText;
+                }
+
+            } else
+            {
+
+                string name = e.UploadedFile.FileName;
+                string url = GetImageUrl(e.UploadedFile.FileNameInStorage);
+                long size = e.UploadedFile.ContentLength / 1024;
+                string sizeText = size.ToString() + "KB";
+                e.CallbackData = name + "|" + url + "|" + sizeText;
+
+                if(Session["url"] != null)
+                {
+                    Session.Remove("url");
+                }
+                Session.Add("url", url);
+            }
+
+            
+        }
+
+        string GetImageUrl(string fileName)
+        {
+            AzureFileSystemProvider provider = new AzureFileSystemProvider("");
+
+            if (WebConfigurationManager.AppSettings["StorageAccount"] != null)
+            {
+                provider.StorageAccountName = UploadControl.AzureSettings.StorageAccountName;
+                provider.AccessKey = UploadControl.AzureSettings.AccessKey;
+                provider.ContainerName = UploadControl.AzureSettings.ContainerName;
+            }
+            else
+            {
+
+            }
+            FileManagerFile file = new FileManagerFile(provider, fileName);
+            FileManagerFile[] filesWithNoWRID = new FileManagerFile[] { file };
+            return provider.GetDownloadUrl(filesWithNoWRID);
+           
+        }
+
+        string MoveFile(string url)
+        {
+            AzureFileSystemProvider provider = new AzureFileSystemProvider("");
+            provider.StorageAccountName = UploadControl.AzureSettings.StorageAccountName;
+            provider.AccessKey = UploadControl.AzureSettings.AccessKey;
+            provider.ContainerName = UploadControl.AzureSettings.ContainerName;
+            FileManagerFile originalUrl = new FileManagerFile(provider, url);
+            FileManagerFolder folder = new FileManagerFolder(provider, "Work Request Attachments");
+            var newFolderName = Session["AssignedJobID"].ToString();
+            var folderPath = Path.Combine(folder.Name.ToString(), newFolderName);
+
+            FileManagerFolder newFolder = new FileManagerFolder(provider, folderPath);
+            try
+            {
+                provider.MoveFile(originalUrl, newFolder);
+            }
+            catch { }
+
+            var path = Path.Combine("https://" + UploadControl.AzureSettings.StorageAccountName + ".blob.core.windows.net", provider.ContainerName, folderPath.ToString(), originalUrl.ToString()).Replace("\\", "/");
+           
+            
+            return path;
+            
+        }
+
+        protected bool AddAttachments(string newUrl, string name)
+        {
+            try
+            {
+                var jobStepID = -1;                                 
+                
+                if (_oAttachments.Add(Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
+                                jobStepID,
+                                _oLogon.UserID,
+                                newUrl,
+                                "JPG",
+                                "Mobile Web Attachment",
+                                name.Trim()))
+                    return true;
+            }
+            catch { return false; }
+            return true;
+        }
+        #endregion
+
         #region Session Events
 
         /// <summary>
@@ -3031,6 +3135,16 @@ namespace Pages.FacilityRequests
 
                 //Update Job
                 AddRequest();
+
+                if (UploadControl.FileInputCount > 0)
+                {
+                    foreach (UploadedFile file in UploadControl.UploadedFiles)
+                    {
+                        var name = file.FileName.ToString();
+                        var newUrl = MoveFile(file.FileNameInStorage.ToString());
+                        AddAttachments(newUrl, name);
+                    }
+                }
 
                 var savedID = Session["AssignedJobID"];
 

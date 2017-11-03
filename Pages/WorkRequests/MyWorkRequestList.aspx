@@ -45,7 +45,7 @@
         <SettingsPager Position="Top"></SettingsPager>
 
         <Settings AutoFilterCondition="Equals" EnableFilterControlPopupMenuScrolling="True" HorizontalScrollBarMode="Visible" ShowFooter="True" VerticalScrollableHeight="450" VerticalScrollBarMode="Visible"></Settings>
-
+        <SettingsBehavior ColumnResizeMode="NextColumn" />
 
         <SettingsCommandButton>
             <ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>

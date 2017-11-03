@@ -13,12 +13,14 @@
             Selection.Set('n_jobstepid', idValue[2].toString());
             Selection.Set('step', idValue[3].toString());         
         }
+
+        
     </script>
     <dx:ASPxHiddenField ID="Selection" ViewStateMode="Enabled"  ClientInstanceName="Selection" runat="server"></dx:ASPxHiddenField> 
     <dx:ASPxGridView ID="myJobsGrid" runat="server" Theme="Mulberry" Width="100%" 
         AutoGenerateColumns="False" EnableTheming="True" SettingsBehavior-AllowFocusedRow="false" 
         SettingsBehavior-AllowSelectByRowClick="true" KeyFieldName="n_jobstepid" SettingsText-EmptyDataRow="No Data" 
-        SettingsText-EmptyHeaders="No Data">
+        SettingsText-EmptyHeaders="No Data" OnLoad="myJobsGrid_Load">
         <SettingsAdaptivity AdaptivityMode="HideDataCells"></SettingsAdaptivity>
 
         <Styles>
@@ -50,10 +52,10 @@
         
 
 
-        <SettingsCommandButton>
+        <%--<SettingsCommandButton>
             <ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
             <HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
-        </SettingsCommandButton>
+        </SettingsCommandButton>--%>
 
 
         <SettingsDataSecurity AllowDelete="False" AllowEdit="False" AllowInsert="False"></SettingsDataSecurity>
@@ -92,12 +94,13 @@
             <dx:GridViewDataTextColumn FieldName="Status" VisibleIndex="11" Caption="Status" Settings-AllowSort="True" Settings-AllowFilterBySearchPanel="True">
                 <CellStyle HorizontalAlign="Center" VerticalAlign="Middle" Wrap="False"></CellStyle>
                 <Settings AllowSort="True" AllowFilterBySearchPanel="True"></Settings>
+                
             </dx:GridViewDataTextColumn>
             <dx:GridViewDataDateColumn FieldName="Requested" 
                 ReadOnly="True" VisibleIndex="12" 
                 Caption="Requested" Visible="False">
             </dx:GridViewDataDateColumn>
-            <dx:GridViewDataDateColumn FieldName="Starting Date" ReadOnly="True" VisibleIndex="1" FixedStyle="Left" Caption="Starting" Width="75px" Settings-AllowSort="True" Settings-AllowFilterBySearchPanel="True">
+            <dx:GridViewDataDateColumn PropertiesDateEdit-NullDisplayText="NA"  FieldName="Starting Date" ReadOnly="True" VisibleIndex="1" FixedStyle="Left" Caption="Starting" Width="75px" Settings-AllowSort="True" Settings-AllowFilterBySearchPanel="True">
                 <HeaderStyle HorizontalAlign="Center" VerticalAlign="Middle"></HeaderStyle>
             <Settings AllowSort="True" AllowFilterBySearchPanel="True"></Settings>
                 <CellStyle HorizontalAlign="Center" VerticalAlign="Middle">

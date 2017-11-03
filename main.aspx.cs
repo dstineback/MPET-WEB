@@ -20,7 +20,9 @@ public partial class main : System.Web.UI.Page
                 {
                     var userName = ((LogonObject)HttpContext.Current.Session["LogonInfo"]).FullName;
                     divUser.Controls.Add(new LiteralControl(userName));
-
+                var logonInfo = Session["LogonInfo"];
+                Session.Clear();
+                Session.Add("LogonInfo", logonInfo);
                 }
             }
 

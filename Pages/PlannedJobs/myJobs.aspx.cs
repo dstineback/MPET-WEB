@@ -8,6 +8,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using DevExpress.Web;
+using DevExpress.XtraGrid.Views.Base;
+using DevExpress.Web.Data;
 
 using MPETDSFactory;
 
@@ -221,9 +223,12 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
                 {
                     con.Open();
 
+                   
+
                     //MUST have to bind Sql SP to GridView
                     myJobsGrid.DataSource = cmd.ExecuteReader();
                     myJobsGrid.DataBind();
+               
 
                 }
                 catch (Exception ex)
@@ -233,7 +238,9 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             }
         }
 
-     //Edit select logic for Edit button 
+
+    //Edit select logic for Edit button 
+
     private void EditSelectedRow()
     {
 
@@ -280,6 +287,25 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
             var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
             return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
         }
+
+    protected void myJobsGrid_Load(object sender, EventArgs e)
+    {
+        var count = myJobsGrid.VisibleRowCount;
+       
+        for (int i = 0; i < count; i++)
+        {
+            object cellValue = myJobsGrid.GetRowValues(i, "Starting Date");
+            var newValue = cellValue.ToString();
+            if(newValue == "1/1/17 11:59:59 AM")
+            {
+               
+                
+            }
+
+        }
+    }
+
+    
 }
 
     

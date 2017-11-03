@@ -749,7 +749,7 @@ namespace Pages.PlannedJobs
                                                     //Set Value
                                                     HttpContext.Current.Session.Add("TxtWorkStartDate",
                                                         _oJobStep.Ds.Tables[0].Rows[0]["StartingDate"]);
-                                                }
+                                                } 
 
                                                 //Add Comp Date
                                                 if (Convert.ToDateTime(_oJobStep.Ds.Tables[0].Rows[0]["DateTimeCompleted"]) !=
@@ -8130,6 +8130,11 @@ namespace Pages.PlannedJobs
                 //Remove Old One
                 HttpContext.Current.Session.Remove("followstep");
             }
+
+            if (Session["TxtWorkStartDate"] != null)
+            {
+                Session.Remove("TxtWorkStartDate");
+            }
         }
 
         /// <summary>
@@ -10433,17 +10438,22 @@ namespace Pages.PlannedJobs
 
             #endregion
 
+
             if (HttpContext.Current.Session["ComboOutcome"] != null)
             {
                 HttpContext.Current.Session.Add("ComboOutcome", ComboOutcome.Value);
             }
 
             #region Start and Completion Dates
-            if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
+            if (TxtWorkStartDate.Text.Length > 0)
             {
-                //Set Value
-                HttpContext.Current.Session.Add("TxtWorkStartDate", TxtWorkStartDate.Value.ToString());
+                if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
+                {
+                    Session.Remove("TxtWorkStartDate");
 
+                }
+                    //Set Value
+                    HttpContext.Current.Session.Add("TxtWorkStartDate", TxtWorkStartDate.Value.ToString());
             }
 
             //Add Comp Date
@@ -10929,7 +10939,7 @@ namespace Pages.PlannedJobs
 
             #region Get Start Date
 
-            var startDate = DateTime.Now;
+            var startDate = _nullDate;
             if (HttpContext.Current.Session["TxtWorkStartDate"] != null)
             {
                 //Get Info From Session
