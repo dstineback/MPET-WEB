@@ -9,6 +9,10 @@ using System.Web.UI;
 using DevExpress.Web;
 using System.Data.Sql;
 using System.Data.SqlClient;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
+
 using System.Data.Common;
 using System.Data;
 using System.IO;
@@ -2332,102 +2336,123 @@ namespace Pages.FacilityRequests
         #endregion
 
         #region Upload Image
-        protected void UploadControl_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
-        {
+        //protected void UploadControl_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
+        //{
             
-            if (UploadControl.FileInputCount > 1)
-            {
-                foreach(UploadedFile file in UploadControl.UploadedFiles)
-                {
-                    string name = e.UploadedFile.FileName;
-                    string url = e.UploadedFile.FileNameInStorage.ToString();
-                    long size = e.UploadedFile.ContentLength / 1024;
-                    string sizeText = size.ToString() + "KB";
-                    e.CallbackData = name + "|" + url + "|" + sizeText;
-                }
+        //    if (UploadControl.FileInputCount > 1)
+        //    {
+        //        foreach(UploadedFile file in UploadControl.UploadedFiles)
+        //        {
+        //            string name = e.UploadedFile.FileName;
+        //            string url = e.UploadedFile.FileNameInStorage.ToString();
+        //            long size = e.UploadedFile.ContentLength / 1024;
+        //            string sizeText = size.ToString() + "KB";
+        //            e.CallbackData = name + "|" + url + "|" + sizeText;
+        //        }
 
-            } else
-            {
+        //    } else
+        //    {
 
-                string name = e.UploadedFile.FileName;
-                string url = GetImageUrl(e.UploadedFile.FileNameInStorage);
-                long size = e.UploadedFile.ContentLength / 1024;
-                string sizeText = size.ToString() + "KB";
-                e.CallbackData = name + "|" + url + "|" + sizeText;
+        //        string name = e.UploadedFile.FileName;
+        //        string url = GetImageUrl(e.UploadedFile.FileNameInStorage);
+        //        long size = e.UploadedFile.ContentLength / 1024;
+        //        string sizeText = size.ToString() + "KB";
+        //        e.CallbackData = name + "|" + url + "|" + sizeText;
 
-                if(Session["url"] != null)
-                {
-                    Session.Remove("url");
-                }
-                Session.Add("url", url);
-            }
+        //        if(Session["url"] != null)
+        //        {
+        //            Session.Remove("url");
+        //        }
+        //        Session.Add("url", url);
+        //    }
 
             
-        }
+        //}
 
-        string GetImageUrl(string fileName)
-        {
-            AzureFileSystemProvider provider = new AzureFileSystemProvider("");
-
-            if (WebConfigurationManager.AppSettings["StorageAccount"] != null)
-            {
-                provider.StorageAccountName = UploadControl.AzureSettings.StorageAccountName;
-                provider.AccessKey = UploadControl.AzureSettings.AccessKey;
-                provider.ContainerName = UploadControl.AzureSettings.ContainerName;
-            }
-            else
-            {
-
-            }
-            FileManagerFile file = new FileManagerFile(provider, fileName);
-            FileManagerFile[] filesWithNoWRID = new FileManagerFile[] { file };
-            return provider.GetDownloadUrl(filesWithNoWRID);
+        //string GetImageUrl(string fileName)
+        //{
+        //    AzureFileSystemProvider provider = new AzureFileSystemProvider("");
            
-        }
 
-        string MoveFile(string url)
-        {
-            AzureFileSystemProvider provider = new AzureFileSystemProvider("");
-            provider.StorageAccountName = UploadControl.AzureSettings.StorageAccountName;
-            provider.AccessKey = UploadControl.AzureSettings.AccessKey;
-            provider.ContainerName = UploadControl.AzureSettings.ContainerName;
-            FileManagerFile originalUrl = new FileManagerFile(provider, url);
-            FileManagerFolder folder = new FileManagerFolder(provider, "Work Request Attachments");
-            var newFolderName = Session["AssignedJobID"].ToString();
-            var folderPath = Path.Combine(folder.Name.ToString(), newFolderName);
+        //    if (WebConfigurationManager.AppSettings["StorageAccount"] != null)
+        //    {
+        //        provider.StorageAccountName = WebConfigurationManager.AppSettings["StorageAccount"];
+        //        provider.AccessKey = WebConfigurationManager.AppSettings["StorageKey"];
+        //        provider.ContainerName = WebConfigurationManager.AppSettings["StorageContainer"];
 
-            FileManagerFolder newFolder = new FileManagerFolder(provider, folderPath);
-            try
-            {
-                provider.MoveFile(originalUrl, newFolder);
-            }
-            catch { }
+        //        //FileManagerFile newfile = new FileManagerFile(provider, fileName);
+        //        //FileManagerFolder newFolder = new FileManagerFolder(provider, "attachments");
+        //        var stream = new FileStream(fileName.ToString(), FileMode.Create);
+        //        var x = CloudConfigurationManager.GetSetting("DefaultEndpointsProtocol=https;AccountName=mpetnetdev;AccountKey=aw4WWrVYIT9KUr4gfNChW98yIXhgS5/fKvNK9dO3tpv7stUHfSKi5dDcyI1luvvbOF2eCoa2d0dbhrTQ2crzOA==");
+        //        CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+        //        CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+        //        CloudBlobContainer container = blobClient.GetContainerReference("attachments");
+        //        CloudBlockBlob blockBlob = container.GetBlockBlobReference("blobClient");
+        //        using (var fileStream = System.IO.File.OpenRead(fileName))
+        //        {
+        //            blockBlob.UploadFromStream(fileStream);
+        //        }
 
-            var path = Path.Combine("https://" + UploadControl.AzureSettings.StorageAccountName + ".blob.core.windows.net", provider.ContainerName, folderPath.ToString(), originalUrl.ToString()).Replace("\\", "/");
+        //        //provider.UploadFile(newFolder, fileName, stream);
+               
+        //    }
+        //    else
+        //    {
+
+        //    }
+
+
+        //    FileManagerFile file = new FileManagerFile(provider, fileName);
+        //    FileManagerFile[] filesWithNoWRID = new FileManagerFile[] { file };
+
+            
+        //    return provider.GetDownloadUrl(filesWithNoWRID);
+           
+        //}
+
+        //string MoveFile(string url)
+        //{
+        //    AzureFileSystemProvider provider = new AzureFileSystemProvider("");
+        //    provider.StorageAccountName = UploadControl.AzureSettings.StorageAccountName;
+        //    provider.AccessKey = UploadControl.AzureSettings.AccessKey;
+        //    provider.ContainerName = UploadControl.AzureSettings.ContainerName;
+        //    FileManagerFile originalUrl = new FileManagerFile(provider, url);
+        //    FileManagerFolder folder = new FileManagerFolder(provider, "Work Request Attachments");
+        //    var newFolderName = Session["AssignedJobID"].ToString();
+        //    var folderPath = Path.Combine(folder.Name.ToString(), newFolderName);
+
+        //    FileManagerFolder newFolder = new FileManagerFolder(provider, folderPath);
+        //    try
+        //    {
+        //        provider.MoveFile(originalUrl, newFolder);
+        //    }
+        //    catch { }
+
+        //    var path = Path.Combine("https://" + UploadControl.AzureSettings.StorageAccountName + ".blob.core.windows.net", provider.ContainerName, folderPath.ToString(), originalUrl.ToString()).Replace("\\", "/");
            
             
-            return path;
+        //    return path;
             
-        }
+        //}
 
-        protected bool AddAttachments(string newUrl, string name)
-        {
-            try
-            {
-                var jobStepID = -1;                                 
+        //protected bool AddAttachments(string newUrl, string name)
+        //{
+        //    try
+        //    {
+        //        var jobStepID = -1;                                 
                 
-                if (_oAttachments.Add(Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
-                                jobStepID,
-                                _oLogon.UserID,
-                                newUrl,
-                                "JPG",
-                                "Mobile Web Attachment",
-                                name.Trim()))
-                    return true;
-            }
-            catch { return false; }
-            return true;
-        }
+        //        if (_oAttachments.Add(Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
+        //                        jobStepID,
+        //                        _oLogon.UserID,
+        //                        newUrl,
+        //                        "JPG",
+        //                        "Mobile Web Attachment",
+        //                        name.Trim()))
+        //            return true;
+        //    }
+        //    catch { return false; }
+        //    return true;
+        //}
         #endregion
 
         #region Session Events

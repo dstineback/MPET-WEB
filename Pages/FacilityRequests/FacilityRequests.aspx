@@ -407,20 +407,29 @@
             <dx:LayoutItem>
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer>
-                        <dx:ASPxUploadControl ID="UploadControl" runat="server" ClientInstanceName="UploadControl" Width="320" NullText="Select Multiple files.."
-                            UploadMode="auto" ShowUploadButton="true" ShowProgressPanel="true" UploadStorage="Azure" FileUploadMode="OnPageLoad" OnFileUploadComplete="UploadControl_FileUploadComplete">
+                        <div id="PhotoContainer" runat="server">                         
+                        <dx:ASPxUploadControl ID="UploadControl" runat="server" 
+                            ClientInstanceName="UploadControl" Width="320" 
+                            NullText="Select Multiple files.."
+                            UploadMode="Auto" 
+                            ShowUploadButton="true" ShowProgressPanel="true" 
+                            FileUploadMode="OnPageLoad" 
+                            OnFileUploadComplete="UploadControl_FileUploadComplete">                        
                             <AdvancedModeSettings EnableMultiSelect="true" EnableFileList="true" EnableDragAndDrop="true"></AdvancedModeSettings>
                             <ValidationSettings MaxFileSize="4194304" AllowedFileExtensions=".jpg, .jpeg, .gif, .png"></ValidationSettings>
                             <ClientSideEvents FilesUploadStart="function(s,e){ FileUploadStart();}"
                                               fileUploadComplete="function(s, e){onFileUploadComplete(s,e)}" />
                         </dx:ASPxUploadControl>
+                        </div>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
             </dx:LayoutItem>
+           
+                       
             <dx:LayoutItem>
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer>
-                        <dx:ASPxRoundPanel runat="server" ID="DXUploadedFileContainer" ClientInstanceName="DXUploadedFileContainer" 
+                        <dx:ASPxRoundPanel runat="server" ID="ASPxRoundPanel1" ClientInstanceName="RoundPanel" 
                             Width="380" Height="380" HeaderText="Uploaded Files">
                             <PanelCollection>
                                 <dx:PanelContent>
@@ -433,6 +442,7 @@
             </dx:LayoutItem>
         </Items>
     </dx:ASPxFormLayout>
+    
     <asp:SqlDataSource ID="ObjectDataSource" runat="server" />
     <asp:SqlDataSource ID="HwyRouteSqlDatasource" runat="server" />
     <asp:SqlDataSource ID="MilePostDirSqlDatasource" runat="server" />
