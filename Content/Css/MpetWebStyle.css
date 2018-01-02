@@ -509,6 +509,11 @@ div.mainMenu {
     font-size: 10px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+.btnFloat {
+    display: inline-table;
+    padding-left: 200px;
+    
+}
 
 
 

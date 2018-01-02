@@ -9,7 +9,13 @@ using System.Web.UI;
 using DevExpress.Web;
 using System.Data.Sql;
 using System.Data.SqlClient;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
+
 using System.Data.Common;
+using System.Data;
+using System.IO;
 using MPETDSFactory;
 
 namespace Pages.FacilityRequests
@@ -53,6 +59,9 @@ namespace Pages.FacilityRequests
         private JobRequestInfo _oJobRequestInfo;
 
         private EmailAddresses _oEmail;
+
+        private AttachmentObject _oAttachments;
+        
 
         #endregion
 
@@ -848,6 +857,7 @@ namespace Pages.FacilityRequests
                 ObjectDataSource.ConnectionString = _connectionString;
                 HwyRouteSqlDatasource.ConnectionString = _connectionString;
                 MilePostDirSqlDatasource.ConnectionString = _connectionString;
+               // FundSourceSqlDatasource.ConnectionString = _connectionString;
             }
             catch (Exception ex)
             {
@@ -924,6 +934,87 @@ namespace Pages.FacilityRequests
         #endregion
 
         #region Combo Loading Events
+
+        //protected void ComboFundSource_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
+        //{
+        //    //Check For Simple Costing
+        //    //if (_oLogon.UseSimpleCostLinking)
+        //    //{
+        //    //    //Create Cost Code ID Var
+        //    //    var costCodeId = -1;
+
+        //    //    //Get Current Cost Code (If Applicable)
+        //    //    if (ComboCostCode.Value != null)
+        //    //    {
+        //    //        //Enable Combo
+        //    //        ComboFundSource.Enabled = true;
+
+        //    //        //Get ID
+        //    //        costCodeId = Convert.ToInt32(ComboCostCode.Value.ToString());
+
+        //    //        //Get Combo
+        //    //        var comboBox = (ASPxComboBox)source;
+        //    //        FundSourceSqlDatasource.SelectCommand =
+        //    //            string.Format(@"SELECT  n_FundSrcCodeID ,
+        //    //                FundSrcCodeID ,
+        //    //                [Description]
+        //    //        FROM    ( SELECT    tblFundSrc.n_FundSrcCodeID ,
+        //    //                            tblFundSrc.FundSrcCodeID ,
+        //    //                            tblFundSrc.[Description] ,
+        //    //                            ROW_NUMBER() OVER ( ORDER BY tblFundSrc.n_FundSrcCodeID ) AS [rn]
+        //    //                  FROM      dbo.FundSrcCodes AS tblFundSrc
+		      //    //            INNER JOIN ( SELECT dbo.CostCodeLinks.n_FundSrcCodeID
+        //    //                     FROM   dbo.CostCodeLinks
+        //    //                     WHERE  dbo.CostCodeLinks.n_CostCodeID = {0}
+        //    //                   ) tbl_CostCodeLinks ON tblFundSrc.n_FundSrcCodeID = tbl_CostCodeLinks.n_FundSrcCodeID
+        //    //                  WHERE     ( ( FundSrcCodeID + ' ' + [Description] ) LIKE @filter )
+        //    //                            AND tblFundSrc.b_IsActive = 'Y'
+        //    //                            AND tblFundSrc.n_FundSrcCodeID > 0
+        //    //                ) AS st
+        //    //        WHERE   st.[rn] BETWEEN @startIndex AND @endIndex", costCodeId);
+
+        //    //        FundSourceSqlDatasource.SelectParameters.Clear();
+        //    //        FundSourceSqlDatasource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
+        //    //        FundSourceSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
+        //    //        FundSourceSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString());
+        //    //        comboBox.DataSource = FundSourceSqlDatasource;
+        //    //        comboBox.DataBind();
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        //Disable Combo
+        //    //        ComboFundSource.Enabled = false;
+        //    //    }
+        //    //}
+        //    //else
+        //    //{
+        //        //Get Combo
+        //        var comboBox = (ASPxComboBox)source;
+        //        FundSourceSqlDatasource.SelectCommand =
+        //            @"SELECT  n_FundSrcCodeID ,
+        //                    FundSrcCodeID ,
+        //                    [Description]
+        //            FROM    ( SELECT    tblFundSrc.n_FundSrcCodeID ,
+        //                                tblFundSrc.FundSrcCodeID ,
+        //                                tblFundSrc.[Description] ,
+        //                                ROW_NUMBER() OVER ( ORDER BY tblFundSrc.n_FundSrcCodeID ) AS [rn]
+        //                      FROM      dbo.FundSrcCodes AS tblFundSrc
+        //                      WHERE     ( ( FundSrcCodeID + ' ' + [Description] ) LIKE @filter )
+        //                                AND tblFundSrc.b_IsActive = 'Y'
+        //                                AND tblFundSrc.n_FundSrcCodeID > 0
+        //                    ) AS st
+        //            WHERE   st.[rn] BETWEEN @startIndex AND @endIndex";
+
+        //        FundSourceSqlDatasource.SelectParameters.Clear();
+        //        FundSourceSqlDatasource.SelectParameters.Add("filter", TypeCode.String, string.Format("%{0}%", e.Filter));
+        //        FundSourceSqlDatasource.SelectParameters.Add("startIndex", TypeCode.Int64, (e.BeginIndex + 1).ToString());
+        //        FundSourceSqlDatasource.SelectParameters.Add("endIndex", TypeCode.Int64, (e.EndIndex + 1).ToString());
+        //        comboBox.DataSource = FundSourceSqlDatasource;
+        //        comboBox.DataBind();
+        //    //}
+        //}
+
+      
 
         protected void ASPxComboBox_OnItemsRequestedByFilterCondition_SQL(object source, ListEditItemsRequestedByFilterConditionEventArgs e)
         {
@@ -1089,7 +1180,7 @@ namespace Pages.FacilityRequests
                                                   FROM      dbo.Attachments tblAttach
                                                   WHERE     tblAttach.n_MaintObjectID = tblmo.n_objectid
                                                 ) tblFirstPhoto                                                   
-                                        WHERE (tblmo.n_objectid = @ID) ORDER BY objectid";
+                                        WHERE (tblmo.n_objectid = @ID AND tblmo.b_active = 'Y') ORDER BY objectid";
 
             ObjectDataSource.SelectParameters.Clear();
             ObjectDataSource.SelectParameters.Add("ID", TypeCode.Int32, e.Value.ToString());
@@ -1922,15 +2013,15 @@ namespace Pages.FacilityRequests
                     }
 
                     //Update Origin
-                    if (!_oJob.UpdateOriginType(_oJob.RecordID,
-                        "W",
-                        requestor))
-                    {
-                        //Throw Error
-                        throw new SystemException(
-                            @"Error Adding Facility Request - " +
-                            _oJob.LastError);
-                    }
+                    //if (!_oJob.UpdateOriginType(_oJob.RecordID,
+                    //    "W",
+                    //    requestor))
+                    //{
+                    //    //Throw Error
+                    //    throw new SystemException(
+                    //        @"Error Adding Facility Request - " +
+                    //        _oJob.LastError);
+                    //}
 
                     //Update Costing Information
                     if (!_oJob.UpdateJobCosting(_oJob.RecordID,
@@ -1949,6 +2040,8 @@ namespace Pages.FacilityRequests
                             @"Error Adding Facility Request - " +
                             _oJob.LastError);
                     }
+
+                    
 
                     //Setup For Editing
                     SetupForEditing();
@@ -2224,6 +2317,126 @@ namespace Pages.FacilityRequests
 
         #endregion
 
+        #region Upload Image
+        //protected void UploadControl_FileUploadComplete(object sender, FileUploadCompleteEventArgs e)
+        //{
+            
+        //    if (UploadControl.FileInputCount > 1)
+        //    {
+        //        foreach(UploadedFile file in UploadControl.UploadedFiles)
+        //        {
+        //            string name = e.UploadedFile.FileName;
+        //            string url = e.UploadedFile.FileNameInStorage.ToString();
+        //            long size = e.UploadedFile.ContentLength / 1024;
+        //            string sizeText = size.ToString() + "KB";
+        //            e.CallbackData = name + "|" + url + "|" + sizeText;
+        //        }
+
+        //    } else
+        //    {
+
+        //        string name = e.UploadedFile.FileName;
+        //        string url = GetImageUrl(e.UploadedFile.FileNameInStorage);
+        //        long size = e.UploadedFile.ContentLength / 1024;
+        //        string sizeText = size.ToString() + "KB";
+        //        e.CallbackData = name + "|" + url + "|" + sizeText;
+
+        //        if(Session["url"] != null)
+        //        {
+        //            Session.Remove("url");
+        //        }
+        //        Session.Add("url", url);
+        //    }
+
+            
+        //}
+
+        //string GetImageUrl(string fileName)
+        //{
+        //    AzureFileSystemProvider provider = new AzureFileSystemProvider("");
+           
+
+        //    if (WebConfigurationManager.AppSettings["StorageAccount"] != null)
+        //    {
+        //        provider.StorageAccountName = WebConfigurationManager.AppSettings["StorageAccount"];
+        //        provider.AccessKey = WebConfigurationManager.AppSettings["StorageKey"];
+        //        provider.ContainerName = WebConfigurationManager.AppSettings["StorageContainer"];
+
+        //        //FileManagerFile newfile = new FileManagerFile(provider, fileName);
+        //        //FileManagerFolder newFolder = new FileManagerFolder(provider, "attachments");
+        //        var stream = new FileStream(fileName.ToString(), FileMode.Create);
+        //        var x = CloudConfigurationManager.GetSetting("DefaultEndpointsProtocol=https;AccountName=mpetnetdev;AccountKey=aw4WWrVYIT9KUr4gfNChW98yIXhgS5/fKvNK9dO3tpv7stUHfSKi5dDcyI1luvvbOF2eCoa2d0dbhrTQ2crzOA==");
+        //        CloudStorageAccount storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+        //        CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+        //        CloudBlobContainer container = blobClient.GetContainerReference("attachments");
+        //        CloudBlockBlob blockBlob = container.GetBlockBlobReference("blobClient");
+        //        using (var fileStream = System.IO.File.OpenRead(fileName))
+        //        {
+        //            blockBlob.UploadFromStream(fileStream);
+        //        }
+
+        //        //provider.UploadFile(newFolder, fileName, stream);
+               
+        //    }
+        //    else
+        //    {
+
+        //    }
+
+
+        //    FileManagerFile file = new FileManagerFile(provider, fileName);
+        //    FileManagerFile[] filesWithNoWRID = new FileManagerFile[] { file };
+
+            
+        //    return provider.GetDownloadUrl(filesWithNoWRID);
+           
+        //}
+
+        //string MoveFile(string url)
+        //{
+        //    AzureFileSystemProvider provider = new AzureFileSystemProvider("");
+        //    provider.StorageAccountName = UploadControl.AzureSettings.StorageAccountName;
+        //    provider.AccessKey = UploadControl.AzureSettings.AccessKey;
+        //    provider.ContainerName = UploadControl.AzureSettings.ContainerName;
+        //    FileManagerFile originalUrl = new FileManagerFile(provider, url);
+        //    FileManagerFolder folder = new FileManagerFolder(provider, "Work Request Attachments");
+        //    var newFolderName = Session["AssignedJobID"].ToString();
+        //    var folderPath = Path.Combine(folder.Name.ToString(), newFolderName);
+
+        //    FileManagerFolder newFolder = new FileManagerFolder(provider, folderPath);
+        //    try
+        //    {
+        //        provider.MoveFile(originalUrl, newFolder);
+        //    }
+        //    catch { }
+
+        //    var path = Path.Combine("https://" + UploadControl.AzureSettings.StorageAccountName + ".blob.core.windows.net", provider.ContainerName, folderPath.ToString(), originalUrl.ToString()).Replace("\\", "/");
+           
+            
+        //    return path;
+            
+        //}
+
+        //protected bool AddAttachments(string newUrl, string name)
+        //{
+        //    try
+        //    {
+        //        var jobStepID = -1;                                 
+                
+        //        if (_oAttachments.Add(Convert.ToInt32(HttpContext.Current.Session["editingJobID"].ToString()),
+        //                        jobStepID,
+        //                        _oLogon.UserID,
+        //                        newUrl,
+        //                        "JPG",
+        //                        "Mobile Web Attachment",
+        //                        name.Trim()))
+        //            return true;
+        //    }
+        //    catch { return false; }
+        //    return true;
+        //}
+        #endregion
+
         #region Session Events
 
         /// <summary>
@@ -2463,12 +2676,12 @@ namespace Pages.FacilityRequests
 
                     #endregion
                 }
-                    #endregion
+                #endregion
+                
+                #region Additional Details
 
-                    #region Additional Details
-
-                    //Check For Input
-                    if (txtAdditionalInfo.Text.Length > 0)
+                //Check For Input
+                if (txtAdditionalInfo.Text.Length > 0)
                 {
                     //Check For Prior Value
                     if (HttpContext.Current.Session["txtAddDetailForEmail"] != null)
@@ -2863,34 +3076,60 @@ namespace Pages.FacilityRequests
 
         protected void submitButton_Click(object sender, EventArgs e)
         {
-            if(txtWorkDescription.Text.Length < 1)
-            {
-                txtWorkDescription.Focus();
-                txtWorkDescription.BackColor = System.Drawing.Color.LightCoral;
-            }
+            //if(txtWorkDescription.Text.Length < 1)
+            //{
+            //    txtWorkDescription.Focus();
+            //    txtWorkDescription.BackColor = System.Drawing.Color.LightCoral;
+            //    return;
+            //}
 
-            if(ObjectIDCombo.Text.Length < 1)
-            {
-                if(txtWorkDescription.Text.Length < 1)
-                {
-                    txtWorkDescription.Focus();
-                    txtWorkDescription.BackColor = System.Drawing.Color.LightCoral;
-                } else
-                {
-                    ObjectIDCombo.Focus();
-                    ObjectIDCombo.BackColor = System.Drawing.Color.LightCoral;
+            //if(ObjectIDCombo.Text.Length < 1)
+            //{
+            //    if(txtWorkDescription.Text.Length < 1)
+            //    {
+            //        txtWorkDescription.Focus();
+            //        txtWorkDescription.BackColor = System.Drawing.Color.LightCoral;
+            //        return;
+            //    } else
+            //    {
+            //        ObjectIDCombo.Focus();
+            //        ObjectIDCombo.BackColor = System.Drawing.Color.LightCoral;
+            //        return;
 
-                }
+            //    }
 
-            }
+            //}
 
-            if(txtWorkDescription.Text.Length > 0 && ObjectIDCombo.Text.Length > 0)
-            {
+            
+
+            //if(txtPhone.Text.Length < 1)
+            //{
+            //    txtPhone.Focus();
+            //    txtPhone.BackColor = System.Drawing.Color.LightCoral;
+            //    return;
+            //}
+
+           
+
+            //if(txtWorkDescription.Text.Length > 0 && ObjectIDCombo.Text.Length > 0)
+            //{
                 //Save Session Data
                 SaveSessionData();
 
                 //Update Job
                 AddRequest();
+
+                //if (UploadControl.FileInputCount > 0)
+                //{
+                //    foreach (UploadedFile file in UploadControl.UploadedFiles)
+                //    {
+                //        var name = file.FileName.ToString();
+                //        var newUrl = MoveFile(file.FileNameInStorage.ToString());
+                //        AddAttachments(newUrl, name);
+                //    }
+                //}
+
+
 
                 var savedID = Session["AssignedJobID"];
 
@@ -2902,7 +3141,7 @@ namespace Pages.FacilityRequests
 
                 //Response.Redirect("~/main.aspx");
 
-            }
+            //}
         }
     }
 }

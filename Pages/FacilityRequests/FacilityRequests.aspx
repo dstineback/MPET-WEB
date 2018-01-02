@@ -9,26 +9,13 @@
     <dx:ASPxLabel ID="lblHeader" Font-Size="20px" Theme="Mulberry" runat="server" Text="ADD">
         
     </dx:ASPxLabel>
-    
-    <asp:LinkButton Width="35px" ID="submitButton" runat="server" Text="Submit" OnClick="submitButton_Click">Submit
-        <style>
-           
-            #submitButton {
-    padding: 5px 20px;
-    color: white;
-    align-items:center;
-    margin-left: 200px;
-    border-radius: 5px;
-    border: solid 1px black;
-    background-color: #f55656;
+    <div class="btnFloat">
+    <dx:ASPxButton runat="server" ID="submitButton" AutoPostBack="true" Text="Submit" OnClick="submitButton_Click" Paddings-Padding="5" ForeColor="White" BackColor="#f55656" Border-BorderColor="Black" Border-BorderStyle="Solid" Border-BorderWidth="1" > 
+        <DisabledStyle BackColor="#f55656" Border-BorderColor="Black" Border-BorderStyle="Solid" Border-BorderWidth="1"></DisabledStyle>
+        <HoverStyle Border-BorderColor="Black" Border-BorderWidth="1" Border-BorderStyle="Solid" BackColor="Crimson"></HoverStyle>
+    </dx:ASPxButton>
+    </div>
    
-}
-#submitButton:hover {
-    border: solid 1px Black;
-    background-color: crimson;
-}
-        </style>
-    </asp:LinkButton>
        
     <dx:ASPxHiddenField ID="Navigation" ViewStateMode="Enabled" ClientInstanceName="Navigation" runat="server"></dx:ASPxHiddenField>
     <dx:ASPxFormLayout ID="WorkRequestDescLayout" runat="server"
