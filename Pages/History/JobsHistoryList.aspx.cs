@@ -169,7 +169,7 @@ namespace Pages.History
             if (Selection.Contains("n_jobstepid"))
             {
                 //Redirect To Edit Page With Job ID
-                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + Selection.Get("n_jobstepid"), true);
+                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + Selection.Get("n_jobstepid"), true);
             }
         }
 
@@ -229,7 +229,7 @@ namespace Pages.History
         protected void HistoryGrid_StartRowEditing(object sender, ASPxStartRowEditingEventArgs e)
         {
             //Redirect To Edit Page With Job ID
-            ASPxWebControl.RedirectOnCallback("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + e.EditingKeyValue);
+            ASPxWebControl.RedirectOnCallback("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + e.EditingKeyValue);
         }
 
         protected void UpdatePanel_Unload(object sender, EventArgs e)
@@ -248,7 +248,7 @@ namespace Pages.History
         protected string GetUrl(GridViewDataItemTemplateContainer container)
         {
             var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
-            return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+            return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace Pages.History
                                                 }
 
                                                 //Forward User To Copied Work Order
-                                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + newJobStep, true);
+                                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + newJobStep, true);
                                             }
                                             else
                                             {

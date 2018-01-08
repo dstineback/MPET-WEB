@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0">
   <siteMapNode url="" title="Root">
-    <siteMapNode url="" title="Dashboard">
+    <!--<siteMapNode url="" title="Dashboard">
       <siteMapNode url="~/Pages/Dashboards/RequestDashboard.aspx" title="Work Requests" description="Work Request Statistics Dashboard" />
       <siteMapNode url="~/Pages/Dashboards/PlannedDashboard.aspx" title="Planned Jobs" description="Planned Jobs Statistics Dashboard" />
       <siteMapNode url="~/Pages/Dashboards/ObjectDashboard.aspx" title="Objects/Assets" description="Object/Asset Statistics Dashboard" />
       <siteMapNode url="~/Pages/Dashboards/TaskDashboard.aspx" title="PM Tasks" description="Task Statistics Dashboard" />
-    </siteMapNode>
+    </siteMapNode>-->
     <siteMapNode url="" title="Objects" description="Add/Edit/List Objects and Assets">
       <siteMapNode url="~/Pages/Objects/ObjectsList.aspx" title="Objects/Asset List" description="Edit/List Objects and Assets" />
     </siteMapNode>
@@ -18,7 +18,7 @@
         <!--<siteMapNode url="~/Pages/ServiceRequests/ServiceRequests.aspx" title="Add Service Requests" description="Add New Service Request" />-->
       </siteMapNode>
       <siteMapNode url="~/Pages/PlannedJobs/PlannedJobsList.aspx" title="Planned Jobs" description="Add/Edit/List Planned Jobs">
-        <siteMapNode url="~/Pages/PlannedJobs/PlannedJobs.aspx" title="Add Planned Jobs" description="Add New Planned Job" />       
+        <siteMapNode url="~/Pages/PlannedJobs/PlannedJobsForm.aspx" title="Add Planned Jobs" description="Add New Planned Job" />       
       </siteMapNode>     
       <siteMapNode url="~/Pages/QuickPost/QuickPost.aspx" title="Quick Post" description="Post a Job to History" />
       <siteMapNode url="~/Pages/History/JobsHistoryList.aspx" title="Job History" description="Job History List" />

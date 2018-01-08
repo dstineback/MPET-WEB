@@ -4820,7 +4820,7 @@ namespace Pages.WorkRequests
                         #endregion
 
                         //Forward User To Planned Job
-                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
                     }
                     else
                     {

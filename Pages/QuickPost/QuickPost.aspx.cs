@@ -956,7 +956,7 @@ namespace Pages.QuickPost
         protected string GetUrl(GridViewDataItemTemplateContainer container)
         {
             var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
-            return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+            return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
         }
         #endregion
 
@@ -3655,8 +3655,11 @@ namespace Pages.QuickPost
                     @"Error Loading Job & Job Step Keys For Batch Post");
             }
 
-
-            Response.Redirect("~/main.aspx");
+            if (Session["nobjectid"] != null)
+            {
+                Session.Remove("nobjectid");
+            }
+                Response.Redirect("~/main.aspx");
             Response.Write("<script language='javascript'>alert('You have sussefully created a Quick Post.');</script>");
 
         }

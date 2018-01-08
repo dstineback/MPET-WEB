@@ -246,7 +246,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
         if (Selection.Contains("n_jobstepid"))
         {
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + Selection.Get("n_jobstepid"), true);
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + Selection.Get("n_jobstepid"), true);
         }
     }
 
@@ -274,7 +274,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
     public string GetUrl(GridViewDataItemTemplateContainer container)
         {
             var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
-            return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+            return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
         }
 }
 

@@ -744,7 +744,7 @@ namespace Pages.WorkRequests
                             #endregion
 
                             //Forward User To Planned Job
-                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
                         }
                         else
                         {
@@ -1715,7 +1715,7 @@ namespace Pages.WorkRequests
                                 ref newStandardJobId))
                             {
                                 //Forward User To Copied Work Order
-                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepId, true);
+                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepId, true);
                             }
                             else
                             {
@@ -2925,7 +2925,7 @@ namespace Pages.WorkRequests
                             }
 
                             //Forward User To Copied Work Order
-                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepId, true);
+                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepId, true);
                         }
                         else
                         {

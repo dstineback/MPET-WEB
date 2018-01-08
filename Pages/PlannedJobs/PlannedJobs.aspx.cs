@@ -247,7 +247,7 @@ namespace Pages.PlannedJobs
                                         editJobStepID = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
                                         if (editJobStepID > 0)
                                         {
-                                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString()), true);
+                                            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString()), true);
                                         }
                                     }
                                     else
@@ -390,7 +390,7 @@ namespace Pages.PlannedJobs
 
                                     //Go To Previous Step
                                     Response.Redirect(
-                                        "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" +
+                                        "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" +
                                         Convert.ToInt32(HttpContext.Current.Session["PreviousStep"].ToString()), true);
                                 }
 
@@ -407,7 +407,7 @@ namespace Pages.PlannedJobs
 
                                     //Go To Next Step
                                     Response.Redirect(
-                                        "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" +
+                                        "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" +
                                         Convert.ToInt32(HttpContext.Current.Session["NextStep"].ToString()), true);
                                 }
 
@@ -2176,7 +2176,7 @@ namespace Pages.PlannedJobs
         protected string GetUrl(GridViewDataItemTemplateContainer container)
         {
             var values = (int)container.Grid.GetRowValues(container.VisibleIndex, new[] { "n_jobstepid" });
-            return "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + values;
+            return "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + values;
         }
         #endregion
 
@@ -7647,7 +7647,7 @@ namespace Pages.PlannedJobs
         {
             DeleteItems();
             var jobStepKey = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
-            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobStepKey);
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobStepKey);
         }
 
         protected void DeleteAttachmentButton_Click(object sender, EventArgs e)
@@ -10570,7 +10570,7 @@ namespace Pages.PlannedJobs
 
                                             //Forward User To Copied Work Order
                                             Response.Redirect(
-                                                "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + newJobStep, true);
+                                                "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + newJobStep, true);
                                         }
                                         else
                                         {
@@ -10663,7 +10663,7 @@ namespace Pages.PlannedJobs
 
                                                 //Redirect Page To Reload Data
                                                 Response.Redirect(
-                                                    "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepKey, true);
+                                                    "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepKey, true);
                                             }
                                         }
                                     }
@@ -10902,7 +10902,7 @@ namespace Pages.PlannedJobs
                         #endregion
 
                         //Forward User To Planned Job
-                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + plannerdJobStepId, true);
+                        Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + plannerdJobStepId, true);
                     }
                     else
                     {
@@ -12084,7 +12084,7 @@ namespace Pages.PlannedJobs
                         var jobStepKey = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
                         ;
                         Response.Redirect(
-                                                    "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobStepId, true);
+                                                    "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobStepId, true);
                     }
 
                     //Success Return True

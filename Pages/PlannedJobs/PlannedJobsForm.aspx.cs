@@ -197,7 +197,7 @@ namespace Pages.PlannedJobs
                                 {
                                     Session.Remove("editingJobStepID");
                                 }
-                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx", true);
+                                Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx", true);
                                 //AddItems();
                                 break;
                             }
@@ -7489,7 +7489,7 @@ namespace Pages.PlannedJobs
 
                                             //Forward User To Copied Work Order
                                             Response.Redirect(
-                                                "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + newJobStep, true);
+                                                "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + newJobStep, true);
                                         }
                                         else
                                         {
@@ -7582,7 +7582,7 @@ namespace Pages.PlannedJobs
 
                                                 //Redirect Page To Reload Data
                                                 Response.Redirect(
-                                                    "~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + jobstepKey, true);
+                                                    "~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobstepKey, true);
                                             }
                                         }
                                     }
