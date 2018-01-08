@@ -243,6 +243,10 @@
             window.MemberGrid.UpdateEdit();
         }
 
+        function ShowMemberPopup() {
+            window.AddMemberPopup.Show();
+        }
+
         function OnMemberCancelClick() {
             window.MemberGrid.CancelEdit();
         }
@@ -1222,6 +1226,174 @@
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
         </dx:LayoutItem> <%--Gridview for Crew--%>
+        <dx:LayoutItem >
+            <LayoutItemNestedControlCollection>
+                <dx:LayoutItemNestedControlContainer>
+                    <asp:UpdatePanel runat="server" ID="UpdatePanelMembers" OnUnload="UpdatePanel_Unload">
+                        <ContentTemplate>
+                            <dx:ASPxGridView runat="server" ID="MemberGrid" Theme="iOS" KeyFieldName="n_JobOtherID" 
+                                ClientInstanceName="MemberGrid" AutoPostBack="true" EnableCallBacks="true" 
+                                Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" 
+                                SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" 
+                                DataSourceID="MemberDataSource" OnRowUpdating="MembersGrid_RowUpdating" OnDataBound="MemberGridBound">
+
+                                <ClientSideEvents RowClick="function(s, e) {
+                                                                        MemberGrid.GetRowValues(e.visibleIndex, 'n_JobOtherID', OnGetMemberRowId);
+                                                                    }"
+                                                                                  RowDblClick="function(s, e) {
+                                                                    s.StartEditRow(e.visibleIndex);
+                                                                }" />
+
+                                <Columns>
+                                        <dx:GridViewCommandColumn ShowSelectCheckbox="True" ShowEditButton="True" Visible="false" VisibleIndex="0" />
+                                        <dx:GridViewDataTextColumn FieldName="n_JobOtherID" ReadOnly="True" Visible="false" VisibleIndex="1">
+                                            <CellStyle Wrap="False"></CellStyle>
+                                        </dx:GridViewDataTextColumn>
+                                        <dx:GridViewDataTextColumn FieldName="n_JobID" ReadOnly="True" Visible="false" VisibleIndex="2">
+                                            <CellStyle Wrap="False"></CellStyle>
+                                        </dx:GridViewDataTextColumn>
+                                        <dx:GridViewDataTextColumn FieldName="n_JobStepID" ReadOnly="True" Visible="false" VisibleIndex="3">
+                                            <CellStyle Wrap="False"></CellStyle>
+                                        </dx:GridViewDataTextColumn>
+                                        <dx:GridViewDataTextColumn FieldName="n_MaintenanceObjectID" ReadOnly="True" Visible="false" VisibleIndex="4">
+                                            <CellStyle Wrap="False"></CellStyle>
+                                        </dx:GridViewDataTextColumn>
+                                        <dx:GridViewDataTextColumn FieldName="ObjectID" ReadOnly="True" Caption="Object ID" SortOrder="Ascending" Width="250px" VisibleIndex="5">
+                                            <CellStyle Wrap="False"></CellStyle>
+                                            <DataItemTemplate>
+                                                <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="javascript:void(0)"
+                                                    Text='<%# Eval("ObjectID") %>' Width="100%" Theme="Mulberry"> 
+                                                    <ClientSideEvents Click="onHyperLinkClick" />
+                                                </dx:ASPxHyperLink>
+                                            </DataItemTemplate>
+                                        </dx:GridViewDataTextColumn>
+                                        <dx:GridViewDataTextColumn FieldName="ObjectDescription" ReadOnly="True" Caption="Description" Width="450px" VisibleIndex="6">
+                                            <CellStyle Wrap="False"></CellStyle>
+                                        </dx:GridViewDataTextColumn>
+                                        <dx:GridViewDataCheckColumn FieldName="b_Completed" Caption="Completed" Width="100px" VisibleIndex="7">
+                                            <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                                            <HeaderStyle HorizontalAlign="Center"></HeaderStyle>
+                                        </dx:GridViewDataCheckColumn>
+                                        <dx:GridViewDataDateColumn FieldName="WorkDate" Caption="Work Date" VisibleIndex="8"  Width="200px">
+                                            <CellStyle HorizontalAlign="Center" Wrap="False"></CellStyle>
+                                            <HeaderStyle HorizontalAlign="Center"></HeaderStyle>                                                                                                                                                                     
+                                        </dx:GridViewDataDateColumn>
+                               </Columns>
+                               <SettingsEditing Mode="PopupEditForm" PopupEditFormHorizontalAlign="WindowCenter" 
+                                   PopupEditFormVerticalAlign="WindowCenter" PopupEditFormModal="true" PopupEditFormWidth="600px" ></SettingsEditing>
+                                <Settings VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" ShowFooter="true" />
+                                <SettingsPager Pagesize="10" >
+                                    <PageSizeItemSettings Visible="true"></PageSizeItemSettings>
+                                </SettingsPager>
+                                <SettingsPopup>
+                                    <EditForm Width="600px" Modal="true" />
+                                </SettingsPopup>
+                                <Templates>
+                                    <EditForm>
+                                        <div>
+                                            <dx:ASPxFormLayout runat="server" Theme="iOS">
+                                                <Items>
+                                                   <dx:LayoutGroup Name="MemberEditGroup" Caption="Item Edit" ColCount="3">
+                                                       <Items>
+                                                           <dx:LayoutItem Name="liMemberid" Caption="Object ID:" ColSpan="1" CaptionSettings-Location="Top">
+                                                               <LayoutItemNestedControlCollection>
+                                                                   <dx:LayoutItemNestedControlContainer>
+                                                                       <dx:ASPxButtonEdit ID="txtMemberID" runat="server" Theme="iOS" TextField="ObjectID" ValueField="ObjectID" Value='<%# Bind("ObjectID") %>' ValueType="System.String" ReadOnly="true">
+                                                                       </dx:ASPxButtonEdit>
+                                                                   </dx:LayoutItemNestedControlContainer>
+                                                               </LayoutItemNestedControlCollection>
+                                                           </dx:LayoutItem>
+                                                           <dx:LayoutItem Name="liMemberCompleted" Caption="Complted:" ColSpan="1" CaptionSettings-Location="Top">
+                                                               <LayoutItemNestedControlCollection>
+                                                                   <dx:LayoutItemNestedControlContainer>
+                                                                       <dx:ASPxCheckBox ID="txtMemberCompletedEdit" runat="server" ClientInstanceName="txtMembercompletedEdit" Theme="iOS" Checked='<%# Convert.ToBoolean(Eval("b_Complted")) %>'></dx:ASPxCheckBox>
+                                                                   </dx:LayoutItemNestedControlContainer>
+                                                               </LayoutItemNestedControlCollection>
+                                                           </dx:LayoutItem>
+                                                           <dx:LayoutItem Name="liMemberDate" Caption="Work Date:" ColSpan="1" CaptionSettings-Location="Top">
+                                                               <LayoutItemNestedControlCollection>
+                                                                   <dx:LayoutItemNestedControlContainer>
+                                                                       <dx:ASPxDateEdit runat="server" ID="txtMemberDateUsedEdit" ClientInstanceName="txtMemberDateUsedEdit" Theme="iOS" TextField="WorkDate" ValueFiled="WorkDate" Value='<%# Bind("WorkDate") %>' ValueType="System.DateTime" NullText="MM/DD/YYYY" EditFormat="Custom" EditFormatString="MM/dd/yyyy">
+                                                                           <ClearButton Visibility="true"></ClearButton>
+                                                                       </dx:ASPxDateEdit>
+                                                                   </dx:LayoutItemNestedControlContainer>
+                                                               </LayoutItemNestedControlCollection>
+                                                           </dx:LayoutItem>
+                                                           <dx:LayoutItem>
+                                                               <LayoutItemNestedControlCollection>
+                                                                   <dx:LayoutItemNestedControlContainer>
+                                                                       <dx:ASPxButtonEdit runat="server" ID="txtMemberDesc" ClientInstanceName="txtMemberDesc" Theme="iOS" TextField="ObjectDescription" ValueField="ObjectDescription" Value='<%# Bind("ObjectDescription") %>' ValueType="System.String" ReadOnly="true" Height="50px" Width="100%" MaxLength="254">
+                                                                       </dx:ASPxButtonEdit>
+                                                                   </dx:LayoutItemNestedControlContainer>
+                                                               </LayoutItemNestedControlCollection>
+                                                           </dx:LayoutItem>
+                                                           
+                                                       </Items>
+                                                       
+                                                   </dx:LayoutGroup>
+                                                </Items>
+                                            </dx:ASPxFormLayout>
+                                        </div>
+                                        <div>
+                                            <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" OnInit="HideDefaultEditButtons" ReplacementType="EditFormUpdateButton" runat="server" />
+                                            <dx:ASPxGridViewTemplateReplacement ID="CancelButton" OnInit="HideDefaultEditButtons" ReplacementType="EditFormCancelButton" runat="server"/>
+                                            <dx:ASPxButton ID="btnUpdateMember" AutoPostBack="false" runat="server" Text="Update">
+                                                <ClientSideEvents Click="function (s, e) { OnMemberUpdateClick(s, e);}" />
+                                            </dx:ASPxButton>
+                                            <dx:ASPxButton ID="btnCancelMember" AutoPostBack="false" runat="server" Text="Cancel">
+                                                <ClientSideEvents Click="function (s, e) { OnMemberCancelClick(s, e); }" />
+
+                                            </dx:ASPxButton>
+                                        </div>
+                                    </EditForm>
+                                </Templates>
+                                <Templates>
+                                    <FooterRow>
+                                        <dx:ASPxButton runat="server" ID="AddNewMemberButton" Theme="iOS" Text=" Add New Member">
+                                            <ClientSideEvents Click="ShowMemberPopup" />
+                                        </dx:ASPxButton>
+                                        <dx:ASPxButton runat="server" ID="DeleteMemberButton" OnClick="DeleteMemberButton_Click" Theme="iOS" Text="Delete Member"></dx:ASPxButton>
+                                    </FooterRow>
+                                </Templates>
+                            </dx:ASPxGridView>
+                            <asp:SqlDataSource runat="server" ID="MemberDataSource" ConnectionString="<%$ ConnectionStrings:connection %>" 
+                                SelectCommand="DECLARE @NullDate DATETIME
+                                                            SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
+
+                                                        --Return Jobstep Member Records For Specified Job/Jobstep IDs
+                                                            SELECT  tbl_JobMember.n_JobMembersID AS 'n_JobOtherID',
+                                                                    tbl_JobMember.n_JobID AS 'n_JobID',
+                                                                    tbl_JobMember.n_JobStepID AS 'n_JobStepID',
+                                                                    tbl_JobMember.n_MaintenanceObjectID AS 'n_MaintenanceObjectID',
+                                                                    CASE tbl_JobMember.b_Completed 
+			                                                        WHEN 'Y' THEN 1
+			                                                        ELSE 0
+			                                                        END AS 'b_Completed',
+			                                                        tbl_Objects.objectid AS 'ObjectID',
+			                                                        tbl_Objects.DESCRIPTION AS 'ObjectDescription',
+                                                                    CASE tbl_JobMember.WorkDate
+                                                                      WHEN @NullDate THEN NULL
+                                                                      ELSE tbl_JobMember.WorkDate
+                                                                    END AS 'WorkDate'
+                                                            FROM    dbo.JobMembers tbl_JobMember
+	                                                        INNER JOIN (SELECT tblObjects.n_objectid,
+					                                                           tblObjects.objectid,
+					                                                           tblObjects.description
+				                                                        FROM dbo.MaintenanceObjects tblObjects) tbl_Objects ON tbl_JobMember.n_MaintenanceObjectID = tbl_Objects.n_objectid
+                                                            WHERE   ( tbl_JobMember.n_JobID = @JobID )
+                                                                    AND ( tbl_JobMember.n_jobstepid = -1 )">
+                                <SelectParameters>
+                                    <asp:SessionParameter DefaultValue="-1" Name="JobID" SessionField="editingJobID" />
+                                </SelectParameters>
+
+                            </asp:SqlDataSource>
+                            
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </dx:LayoutItemNestedControlContainer>
+           </LayoutItemNestedControlCollection>
+
+        </dx:LayoutItem>
 
         </Items>
     </dx:ASPxFormLayout>
@@ -1639,6 +1811,136 @@
         <FooterTemplate>
         </FooterTemplate>
     </dx:ASPxPopupControl>  
+
+    <dx:ASPxPopupControl ID="AddMemberPopup" runat="server" Theme="IOS" Modal="true" 
+        PopupAnimationType="Fade" CloseAnimationType="Fade" ClientInstanceName="AddMemberPopup" 
+        ShowCloseButton="true" ShowHeader="false" ShowFooter="true" CloseAction="None"
+        PopupHorizontalAlign="WindowCenter" PopupVerticalAlig="WindowCenter" Width="600px">
+        <ContentCollection>
+            <dx:PopupControlContentControl>
+                <dx:ASPxFormLayout runat="server">
+                    <Items>
+                        <dx:LayoutGroup>
+                            <Items>
+                                <dx:LayoutItem>
+                                    <LayoutItemNestedControlCollection>
+                                        <dx:LayoutItemNestedControlContainer>
+                                            <dx:ASPxGridView runat="server" ID="MemberLookupGrid" Theme="iOS" KeyFieldName="n_objectid" 
+                                                Width="500px" ClientInstanceName="MemberLookupGrid" 
+                                                AutoPostBack="true" EnableCallBacks="true" Settings-HorizontalScrollBarMode="Auto" 
+                                                SettingsPager-Mode="ShowPager" DataSourceID="MemberLookupDataSource" SelectionMode="Multiple" SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-ProcessFocusedRowChangedOnServer="true"  >
+                                                <Columns>
+                                                    <dx:GridViewCommandColumn ShowSelectCheckbox="True" VisibleIndex="0" />
+                                                        <dx:GridViewDataTextColumn FieldName="n_objectid" ReadOnly="True" Visible="false" VisibleIndex="1">
+                                                            <CellStyle Wrap="False"></CellStyle>
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn FieldName="objectid" Caption="Object" Width="150px" VisibleIndex="2">
+                                                            <CellStyle Wrap="False"></CellStyle>
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn FieldName="description" Caption="Description" Width="200px" VisibleIndex="3">
+                                                            <CellStyle Wrap="False"></CellStyle>
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn FieldName="Area" Caption="Area" Width="100px" VisibleIndex="4">
+                                                            <CellStyle Wrap="False"></CellStyle>
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn FieldName="ObjectType" Caption="Obj. Type" Width="100px" ReadOnly="True" VisibleIndex="5">
+                                                            <CellStyle Wrap="False"></CellStyle>
+                                                        </dx:GridViewDataTextColumn>
+                                                        <dx:GridViewDataTextColumn FieldName="ObjectClass" Caption="Obj. Class" Width="100px" ReadOnly="True" VisibleIndex="6">
+                                                            <CellStyle Wrap="False"></CellStyle>
+                                                        </dx:GridViewDataTextColumn>
+                                                </Columns>
+                                                <SettingsSearchPanel Visible="true" />
+                                                <SettingsBehavior EnableRowHotTrack="true" AllowFocusedRow="true" AllowClientEventsOnLoad="false" />
+                                            </dx:ASPxGridView>
+                                            <asp:SqlDataSource ID="MemberLookupDataSource" runat="server" ConnectionString="<%$ ConnectionStrings: connection %>" 
+                                                SelectCommand=" DECLARE @NullDate DATETIME
+                                                                            SET @NullDate = CAST('1/1/1960 23:59:59' AS DATETIME)
+                            
+                                                                        --Create Area Filering On Variable
+                                                                            DECLARE @areaFilteringOn VARCHAR(1)
+                            
+                                                                        --Setup Area Filering Variable
+                                                                            IF ( ( SELECT   COUNT(dbo.UsersAreaFilter.RecordID)
+                                                                                   FROM     dbo.UsersAreaFilter WITH ( NOLOCK )
+                                                                                   WHERE    UsersAreaFilter.UserID = @UserID
+                                                                                            AND UsersAreaFilter.FilterActive = 'Y'
+                                                                                 ) <> 0 )
+                                                                                BEGIN
+                                                                                    SET @areaFilteringOn = 'Y'
+                                                                                END
+                                                                            ELSE
+                                                                                BEGIN
+                                                                                    SET @areaFilteringOn = 'N'
+                                                                                END
+                            
+                                                                        ;
+                                                                            WITH    cte_MaintenanceObjects
+                                                          AS ( SELECT   tbl_MaintObj.n_objectid ,
+                                                                        tbl_MaintObj.objectid ,
+                                                                        tbl_MaintObj.description ,
+                                                                        tbl_Areas.areaid ,
+                                                                        tbl_ObjectTypes.objtypeid ,
+                                                                        tbl_ObjectClasses.objclassid 
+                                                               FROM     dbo.MaintenanceObjects tbl_MaintObj
+                                                                        INNER JOIN ( SELECT tblAreas.n_areaid ,
+                                                                                            tblAreas.areaid
+                                                                                     FROM   dbo.Areas tblAreas
+                                                                                     WHERE  ( ( @areaFilteringOn = 'Y'
+                                                                                                    AND EXISTS ( SELECT recordMatches.AreaFilterID
+                                                                                                                 FROM   dbo.UsersAreaFilter AS recordMatches
+                                                                                                                 WHERE  tblAreas.n_areaid = recordMatches.AreaFilterID
+                                                                                                                        AND recordMatches.UserID = @UserID
+                                                                                                                        AND recordMatches.FilterActive = 'Y' )
+                                                                                                  )
+                                                                                                  OR ( @areaFilteringOn = 'N' )
+                                                                                                )
+                                                                                   ) tbl_Areas ON tbl_MaintObj.n_areaid = tbl_Areas.n_areaid
+                                                                        INNER JOIN ( SELECT tblObjectTypes.n_objtypeid ,
+                                                                                            tblObjectTypes.objtypeid
+                                                                                     FROM   dbo.objecttypes tblObjectTypes
+                                                                                   ) tbl_ObjectTypes ON tbl_MaintObj.n_objtypeid = tbl_ObjectTypes.n_objtypeid
+                                                                        INNER JOIN ( SELECT tblObjectClasses.n_objclassid ,
+                                                                                            tblObjectClasses.objclassid
+                                                                                     FROM   dbo.objectclasses tblObjectClasses
+                                                                                   ) tbl_ObjectClasses ON tbl_MaintObj.n_objclassid = tbl_ObjectClasses.n_objclassid
+                                                               WHERE    tbl_MaintObj.n_objectid > 0
+							                                            AND tbl_MaintObj.b_active = 'Y'
+                                                             )
+                                                    SELECT  cte_MaintenanceObjects.n_objectid AS 'n_objectid' ,
+                                                            cte_MaintenanceObjects.objectid AS 'objectid' ,
+                                                            cte_MaintenanceObjects.description AS 'description' ,
+                                                            cte_MaintenanceObjects.areaid AS 'Area' ,
+                                                            cte_MaintenanceObjects.objtypeid AS 'ObjectType' ,
+                                                            cte_MaintenanceObjects.objclassid AS 'ObjectClass' 
+                                                    FROM    cte_MaintenanceObjects">
+                                                <SelectParameters>
+                                                    <asp:SessionParameter DefaultValue="-1" Name="UserID" SessionField="UserID" Type="Int32" />
+                                                </SelectParameters>
+                                            </asp:SqlDataSource>
+                                            <div>
+                                                <dx:ASPxButton runat="server" ID="btnAddMember" AutoPostBack="true" Text="Add" OnClick="btnAddMember_Click"></dx:ASPxButton>
+                                                <dx:ASPxButton runat="server" ID="btnCancelMemberAdd" AutoPostBack="true" Text="Cancel">
+                                                    <ClientSideEvents Click="HidePopup" />
+                                                </dx:ASPxButton>
+                                                <dx:ASPxButton runat="server" ID="btnCloseMemberAdd" AutoPostBack="true" Text="Close">
+                                                    <ClientSideEvents Click="function(s, e) { top.AddMemberPopup.Hide(); }" />
+                                                </dx:ASPxButton>
+                                                <dx:ASPxButton runat="server" ID="ASPxButton2" AutoPostBack="true" Text="Close2">
+                                                    <ClientSideEvents Click="function(s, e) { AddMemberPopup.Hide(); }" />
+                                                </dx:ASPxButton>
+                                            </div>
+                                        </dx:LayoutItemNestedControlContainer>
+                                    </LayoutItemNestedControlCollection>
+                                </dx:LayoutItem>
+                            </Items>
+
+                        </dx:LayoutGroup>
+                    </Items>
+                </dx:ASPxFormLayout>
+            </dx:PopupControlContentControl>
+        </ContentCollection>
+    </dx:ASPxPopupControl>
 
 
    <asp:SqlDataSource ID="StoreroomPartDS" runat="server" />

@@ -240,7 +240,7 @@ public partial class Pages_PlannedJobs_myJobs : System.Web.UI.Page
        if (tempurl != null)
         {
             //Redirect To Edit Page With Job ID
-            Response.Redirect("~/Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=" + tempurl, true);
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + tempurl, true);
         } 
         
         if (Selection.Contains("n_jobstepid"))

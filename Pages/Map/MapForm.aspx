@@ -169,7 +169,7 @@
                 google.maps.event.addListener(marker, "click", function (e) {
 
                     if(data.njobid != null && data.njobid > 0 && jobstepid === "undefined"){
-                        mInfoWindow.setContent('<h1>Jobs</h1>' +  '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>' + 'Job ID: ' + '<a id="link" href="../../Pages/WorkRequests/WorkRequestForm.aspx?n_jobid=' + data.njobid +'">'  + data.jobid + '</a>' + 'Description: ' + data.description + '</div>')
+                        mInfoWindow.setContent('<h1>Jobs</h1>' +  '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobsForm.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>' + 'Job ID: ' + '<a id="link" href="../../Pages/WorkRequests/WorkRequestForm.aspx?n_jobid=' + data.njobid +'">'  + data.jobid + '</a>' + 'Description: ' + data.description + '</div>')
                         mInfoWindow.open(map, marker);
                         return;
                     } else { };
@@ -182,12 +182,12 @@
                         localStorage.setItem("assetNumber", data.AssetNumber);
                         localStorage.setItem("locationID", data.LocationID);
 
-                        mInfoWindow.setContent('<h1>Objects</h1>'  + '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>'  + '<a href="../../Pages/QuickPost/QuickPost.aspx">' + 'Make a Quick Post' + '</a>' + '<br>' +'Object ID: ' +  data.objectid + 'Description: ' + data.objectDescription + '</div>')
+                        mInfoWindow.setContent('<h1>Objects</h1>'  + '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobsForm.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>'  + '<a href="../../Pages/QuickPost/QuickPost.aspx">' + 'Make a Quick Post' + '</a>' + '<br>' +'Object ID: ' +  data.objectid + 'Description: ' + data.objectDescription + '</div>')
                         mInfoWindow.open(map, marker);
                         return;
                     }else{};
                     if(data.jobstepid > 0 && data.jobstepid != null){
-                        mInfoWindow.setContent('<h1>Planned Jobs</h1>' +  '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>' + 'Job ID: ' + '<a id="link" href="../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=' + data.jobstepid +'">' + data.jobid + '</a>' + 'Description: ' + data.description + '</div>')
+                        mInfoWindow.setContent('<h1>Planned Jobs</h1>' +  '<br>' + '<hr>' + '<div id="mapInfoWindow">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobsForm.aspx">' + 'Make a New Planned Job' + '</a>' + '<br>' + 'Job ID: ' + '<a id="link" href="../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=' + data.jobstepid +'">' + data.jobid + '</a>' + 'Description: ' + data.description + '</div>')
                         mInfoWindow.open(map, marker);
                         return
                     }else{};
@@ -204,7 +204,7 @@
         google.maps.event.addListener(markerCluster, 'clusterclick', function(cluster) {   
             var markers = cluster.getMarkers();            
             
-            var content = '<h1>Jobs/Objects</h1>' + '<br>' + '<hr>' + '<div id="windowHeading">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx">' + 'Make a New Planned Job' + '</a>' + '</div>' ;
+            var content = '<h1>Jobs/Objects</h1>' + '<br>' + '<hr>' + '<div id="windowHeading">' + '<a href="../../Pages/WorkRequests/WorkRequestForm.aspx">' + 'Make a New Work Request' + '</a>' + '<br>' + '<a href="../../Pages/PlannedJobs/PlannedJobsForm.aspx">' + 'Make a New Planned Job' + '</a>' + '</div>' ;
             
             for (var i = 0; i < markers.length; i++){
                 var marker = markers[i];
@@ -234,7 +234,7 @@
                 };
                 if(marker.step > 0 && marker.step != null){
                     content += ('<div id="mapInfoWindow">');
-                    content += ('Job ID:' + ' ' + '<a href="../../Pages/PlannedJobs/PlannedJobs.aspx?n_jobstepid=' + marker.step +'">' + marker.jobid + "</a>");
+                    content += ('Job ID:' + ' ' + '<a href="../../Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=' + marker.step +'">' + marker.jobid + "</a>");
                     content += ("&nbsp");
                     content += 'Description:' + ' ' + marker.title;
                     content += ("<br>"); 

@@ -9,6 +9,8 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 using DevExpress.Web;
+using System.Data.SqlClient;
+using System.Data.Sql;
 using MPETDSFactory;
 
 namespace Pages.PlannedJobs
@@ -1168,13 +1170,13 @@ namespace Pages.PlannedJobs
             //Master.ShowAddCrewLaborButton = (!showButtons && (CrewGrid.Columns[0].Visible));
             //Master.ShowSetStartDateButton = (!showButtons
             //                                 && (HttpContext.Current.Session["TxtStartingDate"] != null));
-                                             
+
             //Master.ShowSetEndDateButton = (!showButtons
             //                               && (HttpContext.Current.Session["TxtCompletionDate"] != null));
-            
+
             //Master.ShowNonStockAddButton = false;
 
-            
+           
         }
         private void SetFormDataFromGridLink()
         {
@@ -1603,11 +1605,11 @@ namespace Pages.PlannedJobs
             //    case 1:
             //        {
             //            //Members
-            //            DeleteSelectedMembers();
+            DeleteSelectedMembers();
             //            break;
             //        }
             //    case 2:
-                    {
+            {
                         //Crew
                         DeleteSelectedCrew();
                         //break;
@@ -6614,77 +6616,77 @@ namespace Pages.PlannedJobs
         private void DeleteSelectedMembers()
         {
             //Check For Multi Select Option
-            //if (((MemberGrid.Columns[0] as GridViewColumn).Visible))
-            //{
-            //    //Get Selections
-            //    var recordIdSelection = MemberGrid.GetSelectedFieldValues("n_JobOtherID");
+            if (((MemberGrid.Columns[0] as GridViewColumn).Visible))
+            {
+                //Get Selections
+                var recordIdSelection = MemberGrid.GetSelectedFieldValues("n_JobOtherID");
 
-            //    //Create Deletion Key
-            //    var recordToDelete = -1;
+                //Create Deletion Key
+                var recordToDelete = -1;
 
-            //    //Create Control Flags
-            //    var continueDeletion = true;
-            //    var deletionDone = false;
+                //Create Control Flags
+                var continueDeletion = true;
+                var deletionDone = false;
 
-            //    //Process Multi Selection
-            //    foreach (var selection in recordIdSelection)
-            //    {
-            //        //Get ID
-            //        recordToDelete = Convert.ToInt32(selection.ToString());
+                //Process Multi Selection
+                foreach (var selection in recordIdSelection)
+                {
+                    //Get ID
+                    recordToDelete = Convert.ToInt32(selection.ToString());
 
-            //        //Set Continue Bool
-            //        continueDeletion = (recordToDelete > 0);
+                    //Set Continue Bool
+                    continueDeletion = (recordToDelete > 0);
 
-            //        //Check Continue Bool
-            //        if (continueDeletion)
-            //        {
-            //            //Clear Errors
-            //            _oJobMembers.ClearErrors();
+                    //Check Continue Bool
+                    if (continueDeletion)
+                    {
+                        //Clear Errors
+                        _oJobMembers.ClearErrors();
 
-            //            //Delete Jobstep
-            //            if (_oJobMembers.Delete(recordToDelete))
-            //            {
-            //                //Set Deletion Done
-            //                deletionDone = true;
-            //            }
-            //            else
-            //            {
-            //                //Set Flag
-            //                continueDeletion = false;
-            //            }
-            //        }
+                        //Delete Jobstep
+                        if (_oJobMembers.Delete(recordToDelete))
+                        {
+                            //Set Deletion Done
+                            deletionDone = true;
+                        }
+                        else
+                        {
+                            //Set Flag
+                            continueDeletion = false;
+                        }
+                    }
 
-            //        //Check Deletion Done
-            //        if (deletionDone)
-            //        {
-            //            //Perform Refresh
-            //            MemberGrid.DataBind();
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    //Check Selection
-            //    if (Selection.Contains("n_JobOtherID"))
-            //    {
-            //        //Get Selected Row
-            //        var recordIdSelection = Convert.ToInt32(Selection.Get("n_JobOtherID"));
+                    //Check Deletion Done
+                    if (deletionDone)
+                    {
+                        //Perform Refresh
+                        MemberGrid.DataBind();
+                    }
+                }
+            }
+            else
+            {
+                //Check Selection
+                if (Selection.Contains("n_JobOtherID"))
+                {
+                    //Get Selected Row
+                    var recordIdSelection = Convert.ToInt32(Selection.Get("n_JobOtherID"));
 
-            //        //Check Permissions
-            //        if (_userCanEdit)
-            //        {
-            //            //Clear Errors
-            //            _oJobMembers.ClearErrors();
+                    //Check Permissions
+                    if (_userCanEdit)
+                    {
+                        //Clear Errors
+                        _oJobMembers.ClearErrors();
 
-            //            //Delete Crew
-            //            if (_oJobMembers.Delete(recordIdSelection))
-            //            {
-            //                //Refresh Grid
-            //                MemberGrid.DataBind();
-            //            }
-            //        }
-            //    }
-            //}
+                        //Delete Crew
+                        if (_oJobMembers.Delete(recordIdSelection))
+                        {
+                            //Refresh Grid
+                            MemberGrid.DataBind();
+                        }
+                    }
+                }
+            }
         }
 
         protected void btnDeleteCrew_Click(object sender, EventArgs e)
@@ -8235,6 +8237,249 @@ namespace Pages.PlannedJobs
 
         #endregion
 
-     
+       
+
+        protected void btnAddMember_Click(object sender, EventArgs e)
+        {
+            //Add logic here to add a member to a job.
+            //Add Selected Crew For Job Step
+            var recordIdSelection = MemberLookupGrid.GetSelectedFieldValues("n_objectid");
+
+            //Check Count
+            if (recordIdSelection.Count > 0)
+            {
+                //Check Permissions
+                if (_userCanEdit)
+                {
+                    //Get Job Step ID
+                    var jobStepId = -1;
+                    if ((HttpContext.Current.Session["editingJobStepID"] != null))
+                    {
+                        //Get Info From Session
+                        jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
+                    }
+
+                    //Get Job ID
+                    var jobId = -1;
+                    if ((HttpContext.Current.Session["editingJobID"] != null))
+                    {
+                        //Get Info From Session
+                        jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
+                    }
+
+                    //Check IDs
+                    if ((jobStepId > 0) && (jobId > 0))
+                    {
+                        //Create Control Variable
+                        var addedMember = false;
+
+                        //Loop Selections
+                        for (var rowIndex = 0; rowIndex < recordIdSelection.Count; rowIndex++)
+                        {
+                            //Get ID
+                            var tmpObjectId = Convert.ToInt32(recordIdSelection[rowIndex].ToString());
+
+                            //Set Temp Date
+                            var tmpWorkDate = DateTime.Now;
+
+                            //Check If Job Completion Date
+                            //if ((txtJobstepDateCompleted.Value != null) &&
+                            //    (txtJobstepDateCompleted.Value.ToString() != ""))
+                            //{
+                            //    //Set Date
+                            //    tmpWorkDate = Convert.ToDateTime(txtJobstepDateCompleted.Value.ToString());
+                            //}
+                            //else if ((txtJSStartDate.Value != null) && (txtJSStartDate.Value.ToString() != ""))
+                            //{
+                            //    //Check If Job Start Date Exists
+                            //    tmpWorkDate = Convert.ToDateTime(txtJSStartDate.Value.ToString());
+                            //}
+
+
+                            //Clear Errors
+                            _oJobMembers.ClearErrors();
+
+                            //Add Record
+                            if (
+                                _oJobMembers.Add(jobId, -1, tmpObjectId, true, tmpWorkDate,
+                                    _oLogon.UserID))
+                            {
+                                //Member Added Set Flag
+                                addedMember = true;
+                            }
+                        }
+
+                        //Check Flag
+                        if (addedMember)
+                        {
+                            //Refresh Member Grid
+                            MemberGrid.DataBind();
+
+                            //Clear Selection
+                            MemberLookupGrid.Selection.UnselectAll();
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void MembersGrid_RowUpdating(object sender, DevExpress.Web.Data.ASPxDataUpdatingEventArgs e)
+        {
+            //Check Permissions
+            if (_userCanEdit)
+            {
+                //Get Job Step ID
+                var jobStepId = -1;
+                if ((HttpContext.Current.Session["editingJobStepID"] != null))
+                {
+                    //Get Info From Session
+                    jobStepId = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"]);
+                }
+
+                //Get Job ID
+                var jobId = -1;
+                if ((HttpContext.Current.Session["editingJobID"] != null))
+                {
+                    //Get Info From Session
+                    jobId = Convert.ToInt32(HttpContext.Current.Session["editingJobID"]);
+                }
+
+                //Make Sure We Have A Selection
+                if (MemberGrid.EditingRowVisibleIndex >= 0)
+                {
+                    //Set Cancel Flag
+                    e.Cancel = true;
+
+                    //Get Editing Record ID
+                    var recordId = -1;
+                    recordId = Convert.ToInt32(MemberGrid.GetRowValues(MemberGrid.EditingRowVisibleIndex, "n_JobOtherID"));
+
+                    //Check IDs
+                    if ((jobStepId > 0) && (jobId > 0))
+                    {
+                        //Check Editing Mode
+                        if (MemberGrid.SettingsEditing.Mode == GridViewEditingMode.PopupEditForm)
+                        {
+                            var objectId = Convert.ToInt32(MemberGrid.GetRowValues(MemberGrid.EditingRowVisibleIndex, "n_MaintenanceObjectID"));
+
+                            //Get Completed
+                            var isCompleted = false;
+                            if (
+                                (((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
+                                    ASPxFormLayout)
+                                    .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
+                                        "liMemberCompleted")
+                                    as
+                                    LayoutItem).GetNestedControl() as ASPxCheckBox) != null))
+                            {
+
+                                isCompleted =
+                                    ((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
+                                        ASPxFormLayout)
+                                        .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
+                                            "liMemberCompleted")
+                                        as
+                                        LayoutItem).GetNestedControl() as ASPxCheckBox).Checked;
+                            }
+
+                            //Get Date Worked
+                            var dateWorkedToEdit = _nullDate;
+                            if (
+                                (((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
+                                    ASPxFormLayout)
+                                    .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
+                                        "liMemberDate")
+                                    as
+                                    LayoutItem).GetNestedControl() as ASPxDateEdit).Text != null)
+                                &&
+                                (((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
+                                    ASPxFormLayout)
+                                    .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
+                                        "liMemberDate")
+                                    as
+                                    LayoutItem).GetNestedControl() as ASPxDateEdit).Text != ""))
+                            {
+
+                                dateWorkedToEdit = Convert.ToDateTime(
+                                    ((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
+                                        ASPxFormLayout)
+                                        .FindItemOrGroupByName("MemberEditGroup") as LayoutGroup).FindItemOrGroupByName(
+                                            "liMemberDate")
+                                        as
+                                        LayoutItem).GetNestedControl() as ASPxDateEdit).Text);
+                            }
+
+                            //Save Changes
+                            _oJobMembers.ClearErrors();
+
+                            //Add Other Record
+                            if (_oJobMembers.Update(recordId,
+                                jobId,
+                                -1,
+                                objectId,
+                                isCompleted,
+                                dateWorkedToEdit,
+                                _oLogon.UserID))
+                            {
+                                //Cacnel Edit (Hides Template)
+                                MemberGrid.CancelEdit();
+
+                                //Refresh Member Grid                        
+                                MemberGrid.DataBind();
+                            }
+                        }
+                        else
+                        {
+
+                            //Get Completed
+                            var isCompleted = Convert.ToBoolean(e.NewValues["b_Completed"]);
+
+                            //Get Object ID
+                            var objectId = Convert.ToInt32(MemberGrid.GetRowValues(MemberGrid.EditingRowVisibleIndex, "n_MaintenanceObjectID"));
+
+                            var dateWorkedToEdit = _nullDate;
+                            if ((e.NewValues["WorkDate"] != null)
+                                && (e.NewValues["WorkDate"].ToString() != ""))
+                            {
+                                //Get Date
+                                dateWorkedToEdit = Convert.ToDateTime(e.NewValues["WorkDate"]);
+                            }
+
+                            //Save Changes
+                            _oJobMembers.ClearErrors();
+
+                            //Add Other Record
+                            if (_oJobMembers.Update(recordId,
+                                jobId,
+                                -1,
+                                objectId,
+                                isCompleted,
+                                dateWorkedToEdit,
+                                _oLogon.UserID))
+                            {
+                                //Cacnel Edit (Hides Template)
+                                MemberGrid.CancelEdit();
+
+                                //Refresh Member Grid                        
+                                MemberGrid.DataBind();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void MemberGridBound(object sender, EventArgs e)
+        {
+            ///add logic to show the visible count of the total members in the tab
+            ///may or may not use this.
+        }
+
+        protected void DeleteMemberButton_Click(object sender, EventArgs e)
+        {
+            DeleteSelectedMembers();
+            var jobStepKey = Convert.ToInt32(HttpContext.Current.Session["editingJobStepID"].ToString());
+            Response.Redirect("~/Pages/PlannedJobs/PlannedJobsForm.aspx?n_jobstepid=" + jobStepKey);
+        }
     }
 }
