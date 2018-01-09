@@ -66,7 +66,15 @@ namespace Pages.PlannedJobs
                 //Add Use ID TO Session
                 HttpContext.Current.Session.Add("UserID", _oLogon.UserID);
 
+                if(_oLogon.UserID > -1)
+                {
+                    FormSetup(_oLogon.UserID);
+                }
+            } else
+            {
+                Response.Redirect("~", true);
             }
+
 
             #endregion
 
@@ -114,6 +122,7 @@ namespace Pages.PlannedJobs
 
                     BreakDownCheckBox.Enabled = false;
                     CrewGrid.Visible = true;
+                    MemberGrid.Visible = true;
 
 
                     //Setup For Editing -> Checks Later For Viewing Only 
@@ -126,6 +135,8 @@ namespace Pages.PlannedJobs
                         SetupForEditing();
                         CrewGrid.Caption = "";
                         CrewGrid.Visible = false;
+                        MemberGrid.Visible = false;
+                        
                     } else {
                         if (!String.IsNullOrEmpty(Request.QueryString["n_jobstepid"]))
                         {
@@ -140,6 +151,7 @@ namespace Pages.PlannedJobs
 
                             CrewGrid.Caption = "";
                             CrewGrid.Visible = false;
+                            MemberGrid.Visible = false;
                             ////Set Focus
                             txtWorkDescription.Focus();
 
@@ -979,6 +991,7 @@ namespace Pages.PlannedJobs
                     lblStep.Text = "Job Step: " + Session["editingJobStepID"].ToString();
                     BreakDownCheckBox.Enabled = false;
                     CrewGrid.Visible = true;
+                    MemberGrid.Visible = true;
                 }
                            
                 //Check For Previous Session Variables
@@ -1574,6 +1587,7 @@ namespace Pages.PlannedJobs
 
                                             //Refresh Crew
                                             CrewGrid.DataBind();
+                                            MemberGrid.DataBind();
                                           
                                         }
                                     }
@@ -8318,6 +8332,10 @@ namespace Pages.PlannedJobs
                             //Clear Selection
                             MemberLookupGrid.Selection.UnselectAll();
                         }
+                    } else
+                    {
+                        ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('Must have a Job ID to add Members.');", true);
+
                     }
                 }
             }
@@ -8462,6 +8480,7 @@ namespace Pages.PlannedJobs
 
                                 //Refresh Member Grid                        
                                 MemberGrid.DataBind();
+                                
                             }
                         }
                     }

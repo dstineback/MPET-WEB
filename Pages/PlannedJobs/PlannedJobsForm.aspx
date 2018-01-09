@@ -609,15 +609,15 @@
                     </dx:LayoutItem>     <%--Outcome Code--%>
                 </Items>
             </dx:LayoutGroup>
-            <dx:LayoutItem Caption="Procedures" Name="txtAdditionalInfo" CaptionSettings-Location="Top">
+            <dx:LayoutItem Caption="" Name="txtAdditionalInfo" CaptionSettings-Location="Top">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
-                        <dx:ASPxMemo runat="server" ID="txtAdditionalInfo" ReadOnly="true" Height="400px" Width="90%" Theme="iOS" ClientInstanceName="txtAdditionalInfo"></dx:ASPxMemo>
+                        <dx:ASPxMemo runat="server" ID="txtAdditionalInfo" Caption="Procedures" ReadOnly="true" Height="400px" Width="90%" Theme="iOS" ClientInstanceName="txtAdditionalInfo"></dx:ASPxMemo>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
             </dx:LayoutItem>
         
-        <dx:LayoutItem Name="CrewGridViewLayoutItem" Caption="Add Crew Member" CaptionSettings-Location="Top">
+        <dx:LayoutItem Name="CrewGridViewLayoutItem" Caption="" CaptionSettings-Location="Top">
             <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
                          <dx:ASPxGridView 
@@ -625,7 +625,7 @@
                                                                 runat="server" 
                                                                 Theme="iOS" 
                                                                 KeyFieldName="RecordID" 
-                                                                Width="90%" 
+                                                                Width="90%" Caption="Add Crew Member" 
                                                                 KeyboardSupport="True" 
                                                                 ClientInstanceName="CrewGrid" 
                                                                 AutoPostBack="false" 
@@ -1226,14 +1226,14 @@
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
         </dx:LayoutItem> <%--Gridview for Crew--%>
-        <dx:LayoutItem >
+        <dx:LayoutItem Caption="" >
             <LayoutItemNestedControlCollection>
                 <dx:LayoutItemNestedControlContainer>
                     <asp:UpdatePanel runat="server" ID="UpdatePanelMembers" OnUnload="UpdatePanel_Unload">
                         <ContentTemplate>
                             <dx:ASPxGridView runat="server" ID="MemberGrid" Theme="iOS" KeyFieldName="n_JobOtherID" 
-                                ClientInstanceName="MemberGrid" AutoPostBack="true" EnableCallBacks="true" 
-                                Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" 
+                                ClientInstanceName="MemberGrid" AutoPostBack="true" EnableCallBacks="true" Width="95%" Settings-VerticalScrollableHeight="400" 
+                                Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" Caption="Add Member"
                                 SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" 
                                 DataSourceID="MemberDataSource" OnRowUpdating="MembersGrid_RowUpdating" OnDataBound="MemberGridBound">
 
@@ -1261,10 +1261,10 @@
                                         <dx:GridViewDataTextColumn FieldName="ObjectID" ReadOnly="True" Caption="Object ID" SortOrder="Ascending" Width="250px" VisibleIndex="5">
                                             <CellStyle Wrap="False"></CellStyle>
                                             <DataItemTemplate>
-                                                <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="javascript:void(0)"
+                                                <%--<dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="javascript:void(0)"
                                                     Text='<%# Eval("ObjectID") %>' Width="100%" Theme="Mulberry"> 
                                                     <ClientSideEvents Click="onHyperLinkClick" />
-                                                </dx:ASPxHyperLink>
+                                                </dx:ASPxHyperLink>--%>
                                             </DataItemTemplate>
                                         </dx:GridViewDataTextColumn>
                                         <dx:GridViewDataTextColumn FieldName="ObjectDescription" ReadOnly="True" Caption="Description" Width="450px" VisibleIndex="6">
@@ -1279,7 +1279,7 @@
                                             <HeaderStyle HorizontalAlign="Center"></HeaderStyle>                                                                                                                                                                     
                                         </dx:GridViewDataDateColumn>
                                </Columns>
-                               <SettingsEditing Mode="PopupEditForm" PopupEditFormHorizontalAlign="WindowCenter" 
+                               <SettingsEditing Mode="PopupEditForm" PopupEditFormHorizontalAlign="WindowCenter"  
                                    PopupEditFormVerticalAlign="WindowCenter" PopupEditFormModal="true" PopupEditFormWidth="600px" ></SettingsEditing>
                                 <Settings VerticalScrollBarStyle="Virtual" VerticalScrollableHeight="350" ShowFooter="true" />
                                 <SettingsPager Pagesize="10" >
@@ -1355,6 +1355,7 @@
                                         <dx:ASPxButton runat="server" ID="DeleteMemberButton" OnClick="DeleteMemberButton_Click" Theme="iOS" Text="Delete Member"></dx:ASPxButton>
                                     </FooterRow>
                                 </Templates>
+                                
                             </dx:ASPxGridView>
                             <asp:SqlDataSource runat="server" ID="MemberDataSource" ConnectionString="<%$ ConnectionStrings:connection %>" 
                                 SelectCommand="DECLARE @NullDate DATETIME
@@ -1397,9 +1398,9 @@
 
         </Items>
     </dx:ASPxFormLayout>
-    <dx:ASPxPopupControl ID="AddCrewPopup" ClientInstanceName="AddCrewPopup" ShowCloseButton="true" ShowHeader="false" HeaderText=""
+    <dx:ASPxPopupControl ID="AddCrewPopup" ClientInstanceName="AddCrewPopup" Theme="iOS" ShowCloseButton="true" ShowHeader="false" HeaderText=""
                                                      CloseAnimationType="Fade" PopupAnimationType="Fade" runat="server" ShowShadow="true" ShowFooter="true"
-                                                     CloseAction="None" Modal="True" PopupHorizontalAlign="WindowCenter" PopupVerticalAlign="WindowCenter" Width="600px">
+                                                     CloseAction="CloseButton" AllowDragging="true" AllowResize="true" Modal="True" PopupHorizontalAlign="NotSet" PopupVerticalAlign="Above" Width="600px">
                                     <ContentCollection>
                                         <dx:PopupControlContentControl>
                                             <div class="popup-text">
@@ -1414,7 +1415,7 @@
                                                                             <dx:ASPxGridView 
                                                                                 ID="CrewLookupGrid" 
                                                                                 runat="server" 
-                                                                                Theme="Mulberry" 
+                                                                                Theme="iOS" 
                                                                                 KeyFieldName="nUserID" 
                                                                                 Width="98%" 
                                                                                 KeyboardSupport="True" 
@@ -1924,7 +1925,7 @@
                                                     <ClientSideEvents Click="HidePopup" />
                                                 </dx:ASPxButton>
                                                 <dx:ASPxButton runat="server" ID="btnCloseMemberAdd" AutoPostBack="true" Text="Close">
-                                                    <ClientSideEvents Click="function(s, e) { top.AddMemberPopup.Hide(); }" />
+                                                    <ClientSideEvents Click="function(s, e) { top.AddMemberPopup.Hide(); window.MemberGrid.Refresh(); }" />
                                                 </dx:ASPxButton>
                                                 <dx:ASPxButton runat="server" ID="ASPxButton2" AutoPostBack="true" Text="Close2">
                                                     <ClientSideEvents Click="function(s, e) { AddMemberPopup.Hide(); }" />
