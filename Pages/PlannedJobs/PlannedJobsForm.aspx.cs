@@ -332,7 +332,7 @@ namespace Pages.PlannedJobs
                     else
                     {
                         //make sure settings are right
-                        CrewGrid.SettingsEditing.Mode = GridViewEditingMode.Inline;
+                        CrewGrid.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
                     }
 
                     if (Session["BreakDownCheckBoxChecked"] != null)
@@ -8382,6 +8382,9 @@ namespace Pages.PlannedJobs
 
                             //Get Completed
                             var isCompleted = false;
+                            
+                            
+
                             if (
                                 (((((((ASPxGridView)sender).FindEditFormTemplateControl("MemberEditLayout") as
                                     ASPxFormLayout)

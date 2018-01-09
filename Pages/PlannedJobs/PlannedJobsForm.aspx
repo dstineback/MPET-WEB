@@ -625,15 +625,17 @@
                                                                 runat="server" 
                                                                 Theme="iOS" 
                                                                 KeyFieldName="RecordID" 
-                                                                Width="90%" Caption="Add Crew Member" 
+                                                                Width="100%" Caption="Add Crew Member" 
                                                                 KeyboardSupport="True" 
-                                                                ClientInstanceName="CrewGrid" 
-                                                                AutoPostBack="false" 
-                                                                EnableCallBacks="true"  
-                                                                Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" SettingsBehavior-ProcessFocusedRowChangedOnServer="True" SettingsBehavior-AllowFocusedRow="False" 
-                                                                SettingsBehavior-AllowSelectByRowClick="true" DataSourceID="CrewDataSource" OnDataBound="CrewGridBound" OnRowUpdating="CrewGrid_RowUpdating" Border-BorderStyle="Solid" Border-BorderColor="Gray" >
+                                                                ClientInstanceName="CrewGrid"
+                                                                AutoPostBack="false"
+                                                                EnableCallBacks="true" SettingsEditing-Mode="PopupEditForm"
+                                                                Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager"  
+                                                                SettingsBehavior-ProcessFocusedRowChangedOnServer="True" SettingsBehavior-AllowFocusedRow="False" 
+                                                                SettingsBehavior-AllowSelectByRowClick="true" DataSourceID="CrewDataSource" Styles-Cell-Wrap="False" 
+                                                                OnDataBound="CrewGridBound" OnRowUpdating="CrewGrid_RowUpdating" Border-BorderStyle="Solid" Border-BorderColor="Gray" >
                                                                
-                                                                 <Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
+                                                                 <%--<Styles Header-CssClass="gridViewHeader" Row-CssClass="gridViewRow" FocusedRow-CssClass="gridViewRowFocused" 
                                                                         RowHotTrack-CssClass="gridViewRow" FilterRow-CssClass="gridViewFilterRow" >
                                                                     <Header CssClass="gridViewHeader"></Header>
 
@@ -644,7 +646,7 @@
                                                                     <FocusedRow CssClass="gridViewRowFocused"></FocusedRow>
 
                                                                     <FilterRow CssClass="gridViewFilterRow"></FilterRow>
-                                                                </Styles>
+                                                                </Styles>--%>
                                                                 <ClientSideEvents RowClick="function(s, e) {
                                                                         CrewGrid.GetRowValues(e.visibleIndex, 'RecordID;DMRKEY', OnGetCrewRowId);
                                                                         
@@ -663,27 +665,34 @@
                                                                                 
                                                                         
                                                                     }" />
+
+                                                                <%-- <ClientSideEvents RowClick="function(s, e) {
+                                                                        CrewGrid.GetRowValues(e.visibleIndex, 'RecordID; DMRKEY', OnGetMemberRowId);
+                                                                    }"
+                                                                                  RowDblClick="function(s, e) {
+                                                                    s.StartEditRow(e.visibleIndex);
+                                                                }" />--%>
                                                                 <Columns>
-                                                                    <dx:GridViewCommandColumn VisibleIndex="0" />
-                                                                    <dx:GridViewDataTextColumn FieldName="RecordID" 
+                                                                    <dx:GridViewCommandColumn VisibleIndex="0" Visible="false" />
+                                                                    <dx:GridViewDataTextColumn FieldName="RecordID" Visible="false" 
                                                                         ReadOnly="True" VisibleIndex="1">
                                                                         <EditFormSettings Visible="False" />
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="UserID" 
-                                                                        VisibleIndex="2">
+                                                                        VisibleIndex="2" Visible="false">
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="n_skillid" 
-                                                                        ReadOnly="True" VisibleIndex="3">
+                                                                        ReadOnly="True" VisibleIndex="3" Visible="false">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_ShiftID" 
+                                                                    <dx:GridViewDataTextColumn FieldName="n_ShiftID" Visible="false" 
                                                                         VisibleIndex="4">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_PayCodeID" 
+                                                                    <dx:GridViewDataTextColumn FieldName="n_PayCodeID" Visible="false"
                                                                         ReadOnly="True" VisibleIndex="5">
                                                                     </dx:GridViewDataTextColumn>
-<dx:GridViewDataTextColumn FieldName="CrewMemberTextID" ShowInCustomizationForm="True" VisibleIndex="6">
+<dx:GridViewDataTextColumn FieldName="CrewMemberTextID" ShowInCustomizationForm="True" VisibleIndex="6" Width="150">
 </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="CrewMemberName" 
+                                                                    <dx:GridViewDataTextColumn FieldName="CrewMemberName" Width="200" 
                                                                         ReadOnly="True" VisibleIndex="7">
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="ShiftIDText" 
@@ -695,8 +704,7 @@
                                                                     <dx:GridViewDataTextColumn FieldName="SkillIDText" 
                                                                         VisibleIndex="10">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="SkillDesc" 
-                                                                        VisibleIndex="11">
+                                                                    <dx:GridViewDataTextColumn FieldName="SkillDesc" CellStyle-Wrap="False" VisibleIndex="11">
                                                                     </dx:GridViewDataTextColumn>
 <dx:GridViewDataTextColumn FieldName="ActualHrs" ShowInCustomizationForm="True" VisibleIndex="12">
 </dx:GridViewDataTextColumn>
@@ -716,7 +724,7 @@
                                                                     <dx:GridViewDataDateColumn FieldName="CertificationDateExpires" 
                                                                         ReadOnly="True" VisibleIndex="18">
                                                                     </dx:GridViewDataDateColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="n_laborclassid" 
+                                                                    <dx:GridViewDataTextColumn FieldName="n_laborclassid" Visible="false" 
                                                                         ReadOnly="True" VisibleIndex="19">
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="RateType" 
@@ -743,18 +751,18 @@
                                                                     ColumnResizeMode="NextColumn" />
                                         
 
-<SettingsCommandButton>
+         <%--                                                       <SettingsCommandButton>
 <ShowAdaptiveDetailButton ButtonType="Image"></ShowAdaptiveDetailButton>
 
 <HideAdaptiveDetailButton ButtonType="Image"></HideAdaptiveDetailButton>
 </SettingsCommandButton>
-                                                                
-                                                                <SettingsDataSecurity 
+                        --%>                                        
+                                                                <%--<SettingsDataSecurity 
                                                                     AllowDelete="False" 
                                                                     AllowInsert="True" 
-                                                                    AllowEdit="True"/>
+                                                                    AllowEdit="True"/>--%>
                                                                 <Settings 
-                                                                    VerticalScrollBarMode="Visible" 
+                                                                    VerticalScrollBarMode="Visible"  
                                                                     VerticalScrollBarStyle="Virtual" 
                                                                     VerticalScrollableHeight="350"  />
                                                                 <SettingsEditing Mode="PopupEditForm" 
@@ -773,7 +781,7 @@
                                                                     <dx:ASPxSummaryItem FieldName="ActualHrs"  SummaryType="Sum" />
                                                                 </TotalSummary>
                                                                 <SettingsPopup>
-                                                                    <EditForm Width="500px" Modal="false" AllowResize="true" />
+                                                                    <EditForm Width="500px" Modal="True" AllowResize="true" />
                                                                 </SettingsPopup>
                                                                 <Templates>
                                                                     <FooterRow>
@@ -787,10 +795,12 @@
                                                                         OnClick="btnDeleteCrew_Click" Theme="iOS" 
                                                                         Text="Delete Crew Member"></dx:ASPxButton>
                                                                 
-</FooterRow>
+                                                                </FooterRow>
+                                                                </Templates>
+                                                                <Templates>
                                                                     <EditForm>
                                                                         <div style="padding: 4px 4px 3px 4px">
-                                                                            <dx:ASPxFormLayout Width="98%" Theme="Mulberry" ID="CrewEditLayout" runat="server">
+                                                                            <dx:ASPxFormLayout Width="98%" Theme="iOS" ID="CrewEditLayout" runat="server">
                                                                                 <Items>
                                                                                     <dx:LayoutGroup Name="CrewEditGroup" Caption="Item Edit"  ColCount="4">
                                                                                         <Items>
@@ -802,7 +812,7 @@
                                                                                                                          ValueField="UserID" 
                                                                                                                          Value='<%# Bind("UserID") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="Username" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -848,7 +858,7 @@
                                                                                                                          ValueField="n_laborclassid" 
                                                                                                                          Value='<%# Bind("n_laborclassid") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="laborclassid" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -878,7 +888,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit  ID="txtCrewEstHrsEdit" 
                                                                                                                           ClientInstanceName="txtCrewEstHrsEdit"
-                                                                                                                          Theme="Mulberry"
+                                                                                                                          Theme="iOS"
                                                                                                                           runat="server" 
                                                                                                                           TextField = "EstHrs" 
                                                                                                                           ValueField = "EstHrs"
@@ -898,7 +908,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxSpinEdit ID="txtCrewActHrsEdit" 
                                                                                                                          ClientInstanceName="txtCrewActHrsEdit"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          runat="server" 
                                                                                                                          TextField = "ActualHrs" 
                                                                                                                          ValueField = "ActualHrs"
@@ -919,7 +929,7 @@
                                                                                                                            Width="98%" 
                                                                                                                            MaxLength="254"
                                                                                                                            ClientInstanceName="txtCrewNameEdit"
-                                                                                                                           Theme="Mulberry"
+                                                                                                                           Theme="iOS"
                                                                                                                            runat="server"
                                                                                                                            TextField = "CrewMemberName" 
                                                                                                                            ValueField = "CrewMemberName"
@@ -938,7 +948,7 @@
                                                                                                                          ValueField="RateType" 
                                                                                                                          Value='<%# Bind("RateType") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="Rate" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -975,7 +985,7 @@
                                                                                                                          ValueField="n_skillid" 
                                                                                                                          Value='<%# Bind("n_skillid") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="skillid" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -1008,7 +1018,7 @@
                                                                                                                          ValueField="n_paycodeid" 
                                                                                                                          Value='<%# Bind("n_paycodeid") %>'
                                                                                                                          DropDownStyle="DropDown" 
-                                                                                                                         Theme="Mulberry" 
+                                                                                                                         Theme="iOS" 
                                                                                                                          TextField="paycodeid" 
                                                                                                                          DisplayFormatString="{0}"
                                                                                                                          DropDownButton-Enabled="True" 
@@ -1038,7 +1048,7 @@
                                                                                                     <dx:LayoutItemNestedControlContainer>
                                                                                                         <dx:ASPxDateEdit ID="txtCrewDateWorkedEdit" 
                                                                                                                          ClientInstanceName="txtCrewDateWorkedEdit"
-                                                                                                                         Theme="Mulberry"
+                                                                                                                         Theme="iOS"
                                                                                                                          runat="server" 
                                                                                                                          TextField = "WorkDate" 
                                                                                                                          ValueField = "WorkDate"
@@ -1065,13 +1075,13 @@
                                                                             <dx:ASPxGridViewTemplateReplacement ID="CancelButton" OnInit="HideDefaultEditButtons" ReplacementType="EditFormCancelButton"
                                                                                                                 runat="server">
                                                                             </dx:ASPxGridViewTemplateReplacement>
-                                                                            <dx:ASPxButton ID="btnUpdateCrew" AutoPostBack="false" runat="server" CssClass="button" Text="Update" >
+                                                                            <dx:ASPxButton ID="btnUpdateCrew" AutoPostBack="false" runat="server" Text="Update" >
                                                                                 <ClientSideEvents Click="function (s, e) { OnCrewUpateClick(s, e); }" />                                                                                
-                                                                                <HoverStyle CssClass="hover"></HoverStyle>
+                                                                               
                                                                             </dx:ASPxButton>
-                                                                            <dx:ASPxButton ID="btnCancelCrew" AutoPostBack="False" runat="server" Text="Cancel" CssClass="button">
+                                                                            <dx:ASPxButton ID="btnCancelCrew" AutoPostBack="False" runat="server" Text="Cancel" >
                                                                                 <ClientSideEvents Click="function (s, e) { OnCrewCancelClick(s, e); }" />
-                                                                                <HoverStyle CssClass="hover"></HoverStyle>
+                                                                                
                                                                             </dx:ASPxButton>                                                                            
                                                                         </div>
                                                                     </EditForm>
@@ -1226,13 +1236,13 @@
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
         </dx:LayoutItem> <%--Gridview for Crew--%>
-        <dx:LayoutItem Caption="" >
+        <dx:LayoutItem Caption="" Width="100%" >
             <LayoutItemNestedControlCollection>
                 <dx:LayoutItemNestedControlContainer>
-                    <asp:UpdatePanel runat="server" ID="UpdatePanelMembers" OnUnload="UpdatePanel_Unload">
-                        <ContentTemplate>
+                    
+                        
                             <dx:ASPxGridView runat="server" ID="MemberGrid" Theme="iOS" KeyFieldName="n_JobOtherID" 
-                                ClientInstanceName="MemberGrid" AutoPostBack="true" EnableCallBacks="true" Width="95%" Settings-VerticalScrollableHeight="400" 
+                                ClientInstanceName="MemberGrid" AutoPostBack="true" EnableCallBacks="true" Width="100%" Settings-VerticalScrollableHeight="400" 
                                 Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" Caption="Add Member"
                                 SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" 
                                 DataSourceID="MemberDataSource" OnRowUpdating="MembersGrid_RowUpdating" OnDataBound="MemberGridBound">
@@ -1260,12 +1270,12 @@
                                         </dx:GridViewDataTextColumn>
                                         <dx:GridViewDataTextColumn FieldName="ObjectID" ReadOnly="True" Caption="Object ID" SortOrder="Ascending" Width="250px" VisibleIndex="5">
                                             <CellStyle Wrap="False"></CellStyle>
-                                            <DataItemTemplate>
-                                                <%--<dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="javascript:void(0)"
+                                            <%--<DataItemTemplate>
+                                                <dx:ASPxHyperLink ID="ASPxHyperLink1" runat="server" NavigateUrl="javascript:void(0)"
                                                     Text='<%# Eval("ObjectID") %>' Width="100%" Theme="Mulberry"> 
                                                     <ClientSideEvents Click="onHyperLinkClick" />
-                                                </dx:ASPxHyperLink>--%>
-                                            </DataItemTemplate>
+                                                </dx:ASPxHyperLink>
+                                            </DataItemTemplate>--%>
                                         </dx:GridViewDataTextColumn>
                                         <dx:GridViewDataTextColumn FieldName="ObjectDescription" ReadOnly="True" Caption="Description" Width="450px" VisibleIndex="6">
                                             <CellStyle Wrap="False"></CellStyle>
@@ -1291,7 +1301,7 @@
                                 <Templates>
                                     <EditForm>
                                         <div>
-                                            <dx:ASPxFormLayout runat="server" Theme="iOS">
+                                            <dx:ASPxFormLayout runat="server" Theme="iOS" ID="MemberEditLayout">
                                                 <Items>
                                                    <dx:LayoutGroup Name="MemberEditGroup" Caption="Item Edit" ColCount="3">
                                                        <Items>
@@ -1306,7 +1316,7 @@
                                                            <dx:LayoutItem Name="liMemberCompleted" Caption="Complted:" ColSpan="1" CaptionSettings-Location="Top">
                                                                <LayoutItemNestedControlCollection>
                                                                    <dx:LayoutItemNestedControlContainer>
-                                                                       <dx:ASPxCheckBox ID="txtMemberCompletedEdit" runat="server" ClientInstanceName="txtMembercompletedEdit" Theme="iOS" Checked='<%# Convert.ToBoolean(Eval("b_Complted")) %>'></dx:ASPxCheckBox>
+                                                                       <dx:ASPxCheckBox ID="txtMemberCompletedEdit" runat="server" ClientInstanceName="txtMembercompletedEdit" Theme="iOS" Checked='<%# Convert.ToBoolean(Eval("b_Completed")) %>'></dx:ASPxCheckBox>
                                                                    </dx:LayoutItemNestedControlContainer>
                                                                </LayoutItemNestedControlCollection>
                                                            </dx:LayoutItem>
@@ -1319,7 +1329,7 @@
                                                                    </dx:LayoutItemNestedControlContainer>
                                                                </LayoutItemNestedControlCollection>
                                                            </dx:LayoutItem>
-                                                           <dx:LayoutItem>
+                                                           <dx:LayoutItem Name="liMemberDesc" Caption="Description" ColSpan="3" CaptionSettings-Location="Top">
                                                                <LayoutItemNestedControlCollection>
                                                                    <dx:LayoutItemNestedControlContainer>
                                                                        <dx:ASPxButtonEdit runat="server" ID="txtMemberDesc" ClientInstanceName="txtMemberDesc" Theme="iOS" TextField="ObjectDescription" ValueField="ObjectDescription" Value='<%# Bind("ObjectDescription") %>' ValueType="System.String" ReadOnly="true" Height="50px" Width="100%" MaxLength="254">
@@ -1338,7 +1348,7 @@
                                             <dx:ASPxGridViewTemplateReplacement ID="UpdateButton" OnInit="HideDefaultEditButtons" ReplacementType="EditFormUpdateButton" runat="server" />
                                             <dx:ASPxGridViewTemplateReplacement ID="CancelButton" OnInit="HideDefaultEditButtons" ReplacementType="EditFormCancelButton" runat="server"/>
                                             <dx:ASPxButton ID="btnUpdateMember" AutoPostBack="false" runat="server" Text="Update">
-                                                <ClientSideEvents Click="function (s, e) { OnMemberUpdateClick(s, e);}" />
+                                                <ClientSideEvents Click="function (s, e) {  OnMemberUpateClick(s, e);}" />
                                             </dx:ASPxButton>
                                             <dx:ASPxButton ID="btnCancelMember" AutoPostBack="false" runat="server" Text="Cancel">
                                                 <ClientSideEvents Click="function (s, e) { OnMemberCancelClick(s, e); }" />
@@ -1389,8 +1399,8 @@
 
                             </asp:SqlDataSource>
                             
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
+                       
+                    
                 </dx:LayoutItemNestedControlContainer>
            </LayoutItemNestedControlCollection>
 
@@ -1815,7 +1825,7 @@
 
     <dx:ASPxPopupControl ID="AddMemberPopup" runat="server" Theme="IOS" Modal="true" 
         PopupAnimationType="Fade" CloseAnimationType="Fade" ClientInstanceName="AddMemberPopup" 
-        ShowCloseButton="true" ShowHeader="false" ShowFooter="true" CloseAction="None"
+        ShowCloseButton="true" ShowHeader="false" ShowFooter="true" CloseAction="CloseButton"
         PopupHorizontalAlign="WindowCenter" PopupVerticalAlig="WindowCenter" Width="600px">
         <ContentCollection>
             <dx:PopupControlContentControl>
