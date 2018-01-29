@@ -612,11 +612,11 @@
             <dx:LayoutItem Caption="" Name="txtAdditionalInfo" CaptionSettings-Location="Top">
                 <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
-                        <dx:ASPxMemo runat="server" ID="txtAdditionalInfo" Caption="Procedures" ReadOnly="true" Height="400px" Width="90%" Theme="iOS" ClientInstanceName="txtAdditionalInfo"></dx:ASPxMemo>
+                        <dx:ASPxMemo runat="server" ID="txtAdditionalInfo" Caption="Procedures" CaptionSettings-Position="Top" ReadOnly="true" Height="400px" Width="90%" Theme="iOS" ClientInstanceName="txtAdditionalInfo"></dx:ASPxMemo>
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
             </dx:LayoutItem>
-        
+        <dx:EmptyLayoutItem></dx:EmptyLayoutItem>
         <dx:LayoutItem Name="CrewGridViewLayoutItem" Caption="" CaptionSettings-Location="Top">
             <LayoutItemNestedControlCollection>
                     <dx:LayoutItemNestedControlContainer runat="server">
@@ -679,7 +679,7 @@
                                                                         <EditFormSettings Visible="False" />
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="UserID" 
-                                                                        VisibleIndex="2" Visible="false">
+                                                                        VisibleIndex="2" Visible="false" Width="150">
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="n_skillid" 
                                                                         ReadOnly="True" VisibleIndex="3" Visible="false">
@@ -690,57 +690,57 @@
                                                                     <dx:GridViewDataTextColumn FieldName="n_PayCodeID" Visible="false"
                                                                         ReadOnly="True" VisibleIndex="5">
                                                                     </dx:GridViewDataTextColumn>
-<dx:GridViewDataTextColumn FieldName="CrewMemberTextID" ShowInCustomizationForm="True" VisibleIndex="6" Width="150">
+<dx:GridViewDataTextColumn FieldName="CrewMemberTextID" ShowInCustomizationForm="True" VisibleIndex="6" Width="150" Caption="Crew Member ID">
 </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="CrewMemberName" Width="200" 
+                                                                    <dx:GridViewDataTextColumn FieldName="CrewMemberName" Width="250" Caption="Crew Member Name" 
                                                                         ReadOnly="True" VisibleIndex="7">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="ShiftIDText" 
-                                                                        VisibleIndex="8">
+                                                                    <dx:GridViewDataTextColumn FieldName="ShiftIDText" Caption="Shift" 
+                                                                        VisibleIndex="8" Width="150">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="ShiftIDDesc" 
-                                                                        VisibleIndex="9">
+                                                                    <dx:GridViewDataTextColumn FieldName="ShiftIDDesc" Caption="Shift Description" 
+                                                                        VisibleIndex="9" Width="250">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="SkillIDText" 
-                                                                        VisibleIndex="10">
+                                                                    <dx:GridViewDataTextColumn FieldName="SkillIDText" Caption="Skill" 
+                                                                        VisibleIndex="10" Width="150">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="SkillDesc" CellStyle-Wrap="False" VisibleIndex="11">
+                                                                    <dx:GridViewDataTextColumn FieldName="SkillDesc" Caption="Skill Description" CellStyle-Wrap="False" VisibleIndex="11" Width="250">
                                                                     </dx:GridViewDataTextColumn>
-<dx:GridViewDataTextColumn FieldName="ActualHrs" ShowInCustomizationForm="True" VisibleIndex="12">
+<dx:GridViewDataTextColumn FieldName="ActualHrs" ShowInCustomizationForm="True" VisibleIndex="12" Width="100" Caption="Actual Hrs">
 </dx:GridViewDataTextColumn>
-<dx:GridViewDataTextColumn FieldName="EstHrs" ShowInCustomizationForm="True" VisibleIndex="13">
+<dx:GridViewDataTextColumn FieldName="EstHrs" ShowInCustomizationForm="True" VisibleIndex="13" Width="100" Caption="Est Hrs">
 </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="PayRate" 
-                                                                        VisibleIndex="14">
+                                                                    <dx:GridViewDataTextColumn FieldName="PayRate" Caption="Pay Rate" 
+                                                                        VisibleIndex="14" Width="100">
                                                                     </dx:GridViewDataTextColumn>
-<dx:GridViewDataTextColumn FieldName="PayCodeText" ShowInCustomizationForm="True" VisibleIndex="15">
+<dx:GridViewDataTextColumn FieldName="PayCodeText" ShowInCustomizationForm="True" VisibleIndex="15" Width="200" Caption="Pay Code">
 </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataDateColumn FieldName="WorkDate" 
-                                                                        VisibleIndex="16" ReadOnly="True">
+                                                                    <dx:GridViewDataDateColumn FieldName="WorkDate" Caption="Work Date" 
+                                                                        VisibleIndex="16" ReadOnly="True" Width="150">
                                                                     </dx:GridViewDataDateColumn>     
-                                                                    <dx:GridViewDataDateColumn FieldName="CertificationDate" 
-                                                                        ReadOnly="True" VisibleIndex="17">
+                                                                    <dx:GridViewDataDateColumn FieldName="CertificationDate" Caption="Certification Date" 
+                                                                        ReadOnly="True" VisibleIndex="17" Width="150">
                                                                     </dx:GridViewDataDateColumn>
-                                                                    <dx:GridViewDataDateColumn FieldName="CertificationDateExpires" 
-                                                                        ReadOnly="True" VisibleIndex="18">
+                                                                    <dx:GridViewDataDateColumn FieldName="CertificationDateExpires" Caption="Certification Expires" 
+                                                                        ReadOnly="True" VisibleIndex="18" Width="150">
                                                                     </dx:GridViewDataDateColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="n_laborclassid" Visible="false" 
                                                                         ReadOnly="True" VisibleIndex="19">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="RateType" 
-                                                                        VisibleIndex="20">
+                                                                    <dx:GridViewDataTextColumn FieldName="RateType" Caption="Rate Type" 
+                                                                        VisibleIndex="20" Width="100">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="DMRKEY" 
-                                                                        VisibleIndex="21">
+                                                                    <dx:GridViewDataTextColumn FieldName="DMRKEY" Caption="DMR KEY" 
+                                                                        VisibleIndex="21" Width="100">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="LaborClassID" 
-                                                                        ShowInCustomizationForm="True" VisibleIndex="22">
+                                                                    <dx:GridViewDataTextColumn FieldName="LaborClassID" Caption="Labor Class" 
+                                                                        ShowInCustomizationForm="True" VisibleIndex="22" Width="125">
                                                                     </dx:GridViewDataTextColumn>
                                                                     <dx:GridViewDataTextColumn FieldName="RateTypeStr" 
-                                                                        ReadOnly="True" VisibleIndex="23">
+                                                                        ReadOnly="True" VisibleIndex="23" Width="125" Caption="Rate Type">
                                                                     </dx:GridViewDataTextColumn>
-                                                                    <dx:GridViewDataTextColumn FieldName="LinkedDMR" 
-                                                                        ReadOnly="True" VisibleIndex="24">
+                                                                    <dx:GridViewDataTextColumn FieldName="LinkedDMR" Caption="Linked DMR" 
+                                                                        ReadOnly="True"  VisibleIndex="24" Width="150">
                                                                     </dx:GridViewDataTextColumn>   
                                                                 </Columns>
                                     
@@ -1236,16 +1236,17 @@
                     </dx:LayoutItemNestedControlContainer>
                 </LayoutItemNestedControlCollection>
         </dx:LayoutItem> <%--Gridview for Crew--%>
-        <dx:LayoutItem Caption="" Width="100%" >
+        <dx:EmptyLayoutItem></dx:EmptyLayoutItem>
+        <dx:LayoutItem Caption="" CaptionSettings-Location="Top">
             <LayoutItemNestedControlCollection>
                 <dx:LayoutItemNestedControlContainer>
                     
                         
                             <dx:ASPxGridView runat="server" ID="MemberGrid" Theme="iOS" KeyFieldName="n_JobOtherID" 
                                 ClientInstanceName="MemberGrid" AutoPostBack="true" EnableCallBacks="true" Width="100%" Settings-VerticalScrollableHeight="400" 
-                                Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" Caption="Add Member"
+                                Settings-HorizontalScrollBarMode="Auto" SettingsPager-Mode="ShowPager" Caption="Add Route Member" EditFormLayoutProperties-SettingsItemCaptions-Location="Right"
                                 SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-ProcessFocusedRowChangedOnServer="true" 
-                                DataSourceID="MemberDataSource" OnRowUpdating="MembersGrid_RowUpdating" OnDataBound="MemberGridBound">
+                                DataSourceID="MemberDataSource" OnRowUpdating="MembersGrid_RowUpdating" OnDataBound="MemberGridBound" Border-BorderStyle="Solid" Border-BorderColor="Gray">
 
                                 <ClientSideEvents RowClick="function(s, e) {
                                                                         MemberGrid.GetRowValues(e.visibleIndex, 'n_JobOtherID', OnGetMemberRowId);
@@ -1404,7 +1405,7 @@
                 </dx:LayoutItemNestedControlContainer>
            </LayoutItemNestedControlCollection>
 
-        </dx:LayoutItem>
+        </dx:LayoutItem> <%-- Gridview for Route Members --%>
 
         </Items>
     </dx:ASPxFormLayout>
@@ -1823,22 +1824,22 @@
         </FooterTemplate>
     </dx:ASPxPopupControl>  
 
-    <dx:ASPxPopupControl ID="AddMemberPopup" runat="server" Theme="IOS" Modal="true" 
+    <dx:ASPxPopupControl ID="AddMemberPopup" runat="server" Theme="IOS" Modal="true"  
         PopupAnimationType="Fade" CloseAnimationType="Fade" ClientInstanceName="AddMemberPopup" 
-        ShowCloseButton="true" ShowHeader="false" ShowFooter="true" CloseAction="CloseButton"
-        PopupHorizontalAlign="WindowCenter" PopupVerticalAlig="WindowCenter" Width="600px">
+        ShowCloseButton="true" ShowHeader="false" ShowFooter="false" CloseAction="CloseButton"
+        PopupHorizontalAlign="WindowCenter" PopupVerticalAlig="Above" Width="600px" AllowResize="true" AllowDragging="true">
         <ContentCollection>
             <dx:PopupControlContentControl>
                 <dx:ASPxFormLayout runat="server">
                     <Items>
-                        <dx:LayoutGroup>
+                        <dx:LayoutGroup Caption="">
                             <Items>
-                                <dx:LayoutItem>
+                                <dx:LayoutItem Caption="Route Member Selection">
                                     <LayoutItemNestedControlCollection>
                                         <dx:LayoutItemNestedControlContainer>
                                             <dx:ASPxGridView runat="server" ID="MemberLookupGrid" Theme="iOS" KeyFieldName="n_objectid" 
                                                 Width="500px" ClientInstanceName="MemberLookupGrid" 
-                                                AutoPostBack="true" EnableCallBacks="true" Settings-HorizontalScrollBarMode="Auto" 
+                                                AutoPostBack="true" EnableCallBacks="true" Settings-HorizontalScrollBarMode="Auto" SettingsPager-PageSize="10"
                                                 SettingsPager-Mode="ShowPager" DataSourceID="MemberLookupDataSource" SelectionMode="Multiple" SettingsBehavior-AllowFocusedRow="true" SettingsBehavior-ProcessFocusedRowChangedOnServer="true"  >
                                                 <Columns>
                                                     <dx:GridViewCommandColumn ShowSelectCheckbox="True" VisibleIndex="0" />
@@ -1931,15 +1932,12 @@
                                             </asp:SqlDataSource>
                                             <div>
                                                 <dx:ASPxButton runat="server" ID="btnAddMember" AutoPostBack="true" Text="Add" OnClick="btnAddMember_Click"></dx:ASPxButton>
-                                                <dx:ASPxButton runat="server" ID="btnCancelMemberAdd" AutoPostBack="true" Text="Cancel">
-                                                    <ClientSideEvents Click="HidePopup" />
-                                                </dx:ASPxButton>
-                                                <dx:ASPxButton runat="server" ID="btnCloseMemberAdd" AutoPostBack="true" Text="Close">
+                                                <dx:ASPxButton runat="server" ID="btnCloseMemberAdd" AutoPostBack="true" Text="Cancel">
                                                     <ClientSideEvents Click="function(s, e) { top.AddMemberPopup.Hide(); window.MemberGrid.Refresh(); }" />
-                                                </dx:ASPxButton>
-                                                <dx:ASPxButton runat="server" ID="ASPxButton2" AutoPostBack="true" Text="Close2">
-                                                    <ClientSideEvents Click="function(s, e) { AddMemberPopup.Hide(); }" />
-                                                </dx:ASPxButton>
+                                                </dx:ASPxButton> 
+                                                <dx:ASPxButton runat="server" ID="ASPxButton2" AutoPostBack="true" Text="Close">
+                                                    <ClientSideEvents Click="function(s, e) { top.AddMemberPopup.Hide(); window.MemberGrid.Refresh(); }" />
+                                                </dx:ASPxButton> 
                                             </div>
                                         </dx:LayoutItemNestedControlContainer>
                                     </LayoutItemNestedControlCollection>

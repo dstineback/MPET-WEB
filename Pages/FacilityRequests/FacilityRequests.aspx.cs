@@ -222,7 +222,9 @@ namespace Pages.FacilityRequests
                         SqlConnection connection = new SqlConnection(_connectionString);
                         SqlCommand cmd = new SqlCommand();
                         Object returnValue;
-                        cmd.CommandText = "Declare  @userID int =" + userId + " SELECT [EmailAddress] FROM[dbo].[UserEmailAddresses] Where UserID = @userID";
+                        cmd.Parameters.Add("@userID", SqlDbType.Int);
+                        cmd.Parameters["@userID"].Value = userId;
+                        cmd.CommandText = "SELECT [EmailAddress] FROM[dbo].[UserEmailAddresses] Where UserID = @userID";
                         cmd.CommandType = System.Data.CommandType.Text;
                         cmd.Connection = connection;
                         connection.Open();

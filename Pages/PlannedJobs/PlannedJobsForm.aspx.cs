@@ -8331,6 +8331,9 @@ namespace Pages.PlannedJobs
 
                             //Clear Selection
                             MemberLookupGrid.Selection.UnselectAll();
+
+                            ScriptManager.RegisterStartupScript(this, GetType(), "showalert", "alert('Route member added.');", true);
+
                         }
                     } else
                     {

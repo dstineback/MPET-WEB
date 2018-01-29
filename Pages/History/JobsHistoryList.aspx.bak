@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="JobsHistoryList.aspx.cs" MasterPageFile="~/SiteBase.master" Inherits="Pages.History.JobsHistoryList" %>
-<%@ Register TagPrefix="dxe" Namespace="DevExpress.Web" Assembly="DevExpress.Web.v16.1, Version=16.1.8.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" %>
+<%@ Register TagPrefix="dxe" Namespace="DevExpress.Web" Assembly="DevExpress.Web.v17.1, Version=17.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" %>
 
 <%@ MasterType VirtualPath="~/SiteBase.master" %>
 <asp:Content runat="server" ContentPlaceHolderID="PageTitlePartPlaceHolder">Job History</asp:Content>
