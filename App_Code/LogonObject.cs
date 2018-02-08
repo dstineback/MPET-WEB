@@ -3,6 +3,8 @@ using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Web;
+using System.Web.UI;
+using DevExpress.Utils.OAuth.Provider;
 using MPETDSFactory;
 
 ///// <summary>
@@ -3413,6 +3415,10 @@ public class LogonObject
                 {
                     //An Error occured
                     _sLastError = oLogInUser.LastError;
+                    Page url = HttpContext.Current.Handler as Page;
+                    string script = "alert('could not connect to the DB');";
+                    ScriptManager.RegisterStartupScript(url, GetType(),
+                                          "ServerControlScript", script, true);
                 }
             }
             else
